@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+httpx
+tenacity
+instructor
+openai
+anthropic
+kuzu
+lancedb
+langgraph
+sentence-transformers
+pypdf
+playwright
+html2text
