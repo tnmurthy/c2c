@@ -1,0 +1,62 @@
+{
+  "candidate": {
+    "name": "Andrej Karpathy",
+    "summary": "Building a kind of JARVIS. Previously Director of AI at Tesla, Founding member at OpenAI. Expert in Deep Learning, Computer Vision, and LLMs."
+  },
+  "identity": {
+    "email": "andrej@example.com",
+    "linkedin_url": "https://www.linkedin.com/in/andrej-karpathy/",
+    "github_url": "https://github.com/karpathy",
+    "website_url": "https://karpathy.ai",
+    "city": "Stanford, CA"
+  },
+  "skills": [
+    { "name": "Python", "category": "language" },
+    { "name": "PyTorch", "category": "framework" },
+    { "name": "C", "category": "language" },
+    { "name": "CUDA", "category": "acceleration" },
+    { "name": "LLMs", "category": "ai" },
+    { "name": "Deep Learning", "category": "ai" },
+    { "name": "Computer Vision", "category": "ai" }
+  ],
+  "experience": [
+    {
+      "role": "Director of AI",
+      "company": "Tesla",
+      "period": "2017 – 2022",
+      "description": "Led the Autopilot Vision team. Developed the neural network architecture for Full Self-Driving (FSD)."
+    },
+    {
+      "role": "Research Scientist",
+      "company": "OpenAI",
+      "period": "2015 – 2017",
+      "description": "Founding member. Worked on Generative Models and Deep Reinforcement Learning."
+    }
+  ],
+  "projects": [
+    {
+      "title": "llm.c",
+      "stack": "C, CUDA",
+      "repo": "https://github.com/karpathy/llm.c",
+      "impact": "LLM training in simple, pure C/CUDA. 20k+ GitHub stars."
+    },
+    {
+      "title": "nanoGPT",
+      "stack": "Python, PyTorch",
+      "repo": "https://github.com/karpathy/nanoGPT",
+      "impact": "The simplest, fastest repository for training/finetuning medium-sized GPTs."
+    },
+    {
+      "title": "micrograd",
+      "stack": "Python",
+      "repo": "https://github.com/karpathy/micrograd",
+      "impact": "A tiny scalar-valued autograd engine and a neural net on top of it."
+    }
+  ],
+  "education": [
+    { "title": "PhD in Computer Science · Stanford University (2011–2016)" }
+  ],
+  "achievements": [
+    { "title": "Creator of CS231n: Convolutional Neural Networks for Visual Recognition at Stanford" }
+  ]
+}

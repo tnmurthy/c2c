@@ -23,6 +23,8 @@
 
 ### 🏗️ Monorepo Structure
 
+The **Makeover Talent Agency** monorepo organizes specialized AI services into cohesive business units.
+
 *   **/services/brand-optimizer:** [Interactive Branding] Nostalgic UI for modern portfolios.
 *   **/services/git-optimizer:** [Technical Presence] Optimizing GitHub profiles for impact.
 *   **/services/job-intel-desk:** [Market Intelligence] High-signal role matching and scraping.
@@ -36,7 +38,7 @@
 *   **GenAI Integration:** RAG Pipelines, Fine-tuning, Prompt Engineering.
 *   **Agentic Workflows:** LangGraph, CrewAI, AutoGen orchestration.
 *   **Technical Branding:** Portfolio optimization and GitHub profile engineering.
-*   **Market Analysis:** Automated job scraping and candidate matching logic.
+*   **Pipeline Development:** Bridging the gap for new technical talent.
 
 ---
 

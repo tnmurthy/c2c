@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Portfolio Configuration",
+  "type": "object",
+  "properties": {
+    "candidate": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "summary": { "type": "string" },
+        "roles": { "type": "array", "items": { "type": "string" } },
+        "linkedin": { "type": "string" },
+        "github": { "type": "string" }
+      },
+      "required": ["name", "summary", "roles"]
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "icon": { "type": "string", "enum": ["computer", "folder", "text", "video", "gear", "msn", "chart", "html", "world", "network", "camera", "certificate", "brain", "robot", "product", "strategy", "linkedin", "resume", "briefcase", "book", "database", "shield", "search", "finance", "terminal", "pipe"] },
+          "tooltip": { "type": "string" },
+          "stack": { "type": "string" },
+          "impact": { "type": "string" },
+          "url": { "type": "string" },
+          "repo": { "type": "string" },
+          "folder": { "type": "string" }
+        },
+        "required": ["id", "title", "icon", "impact"]
+      }
+    },
+    "folders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "icon": { "type": "string" },
+          "tooltip": { "type": "string" }
+        },
+        "required": ["id", "title", "icon"]
+      }
+    },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "issuer": { "type": "string" },
+          "year": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": ["candidate", "projects", "folders"]
+}
