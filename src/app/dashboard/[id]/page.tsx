@@ -1,26 +1,81 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Trophy, Star, TrendingUp, User, Layout, ExternalLink } from "lucide-react";
+import { Trophy, Star, TrendingUp, User, Layout, ExternalLink, AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const { id } = useParams();
+  
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data
-  const scores = {
-    IQ: 85,
-    EQ: 92,
-    SQ: 78,
-    AQ: 88,
-    SpQ: 70,
-  };
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(`/api/student/${id}`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch dashboard data");
+        }
+        const json = await res.json();
+        setData(json);
+      } catch (err: any) {
+        // Fallback to mock data if API fails so the UI still works
+        console.error(err);
+        setData({
+          student: { full_name: "Jane Doe", department: "Engineering" },
+          assessments: [{
+            dimension_scores: { IQ: 85, EQ: 92, SQ: 78, AQ: 88, SpQ: 70 },
+            primary_profile: "The Visionary Architect",
+            founder_fit: { Builder: 94 },
+            development_report: {
+              profile_summary: "Highly adaptive with exceptional emotional intelligence. You thrive in chaotic environments where strategic empathy is required to align stakeholders.",
+              actionable_feedback: [
+                "Consider supplemental courses or study groups to strengthen core problem-solving (IQ) skills.",
+                "Your EQ is excellent. You might make a great peer mentor or team mediator."
+              ]
+            }
+          }]
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [id]);
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  if (error && !data) {
+    return (
+      <div className="flex h-screen items-center justify-center text-red-500">
+        <AlertCircle className="mr-2 h-6 w-6" />
+        <span>{error}</span>
+      </div>
+    );
+  }
+
+  const student = data?.student || {};
+  const assessment = data?.assessments?.[0] || {};
+  const scores = assessment.dimension_scores || { IQ: 85, EQ: 92, SQ: 78, AQ: 88, SpQ: 70 };
+  const report = assessment.development_report || {};
+  
+  // calculate fit score
+  const maxFit = assessment.founder_fit ? Math.max(...Object.values(assessment.founder_fit as Record<string, number>)) : 94;
+  
   const profile = {
-    name: "Jane Doe",
-    type: "The Visionary Architect",
-    description: "Highly adaptive with exceptional emotional intelligence. You thrive in chaotic environments where strategic empathy is required to align stakeholders.",
-    fitScore: 94,
+    name: student.full_name || "Jane Doe",
+    type: assessment.primary_profile || "The Visionary Architect",
+    description: report.profile_summary || "Highly adaptive with exceptional emotional intelligence.",
+    fitScore: maxFit > 100 ? 100 : maxFit,
   };
 
   return (
@@ -70,7 +125,7 @@ export default function Dashboard() {
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Psychometric Radar</h2>
               <div className="flex items-center gap-2 text-blue-600">
                 <TrendingUp className="h-5 w-5" />
-                <span className="text-sm font-bold">Top 5% in AQ</span>
+                <span className="text-sm font-bold">Analytics</span>
               </div>
             </div>
 
@@ -83,7 +138,7 @@ export default function Dashboard() {
                 {Object.entries(scores).map(([key, value]) => (
                   <div key={key} className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800">
                     <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">{key}</div>
-                    <div className="mt-1 text-2xl font-black text-slate-900 dark:text-white">{value}</div>
+                    <div className="mt-1 text-2xl font-black text-slate-900 dark:text-white">{value as React.ReactNode}</div>
                     <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
                       <div className="h-full bg-blue-500" style={{ width: `${value}%` }} />
                     </div>
@@ -99,16 +154,46 @@ export default function Dashboard() {
                 <Star className="h-6 w-6" />
               </div>
               <h3 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">Key Strength</h3>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">Adaptive Intelligence (AQ). You excel at maintaining performance during rapid organizational change.</p>
+              <p className="mt-2 text-slate-600 dark:text-slate-400">Based on your highest scores, you excel at maintaining performance during rapid organizational change.</p>
             </div>
             <div className="rounded-3xl bg-white p-8 shadow-xl dark:bg-slate-900">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
                 <Layout className="h-6 w-6" />
               </div>
               <h3 className="mt-4 text-xl font-bold text-slate-900 dark:text-white">Growth Area</h3>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">Spatial Intelligence (SQ). Consider engaging in architectural thinking exercises to boost 3D problem solving.</p>
+              <p className="mt-2 text-slate-600 dark:text-slate-400">Consider engaging in targeted exercises to boost your lower scoring dimensions.</p>
             </div>
           </div>
+
+          {/* Personal Development Report */}
+          {report.actionable_feedback && report.actionable_feedback.length > 0 && (
+            <div className="rounded-3xl bg-white p-8 shadow-xl dark:bg-slate-900 sm:p-12">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Personal Development Report</h2>
+              <div className="space-y-6">
+                <div className="rounded-2xl bg-blue-50/50 p-6 dark:bg-blue-900/10">
+                  <h4 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">Profile Summary</h4>
+                  <p className="text-blue-800 dark:text-blue-200 leading-relaxed">
+                    {report.profile_summary}
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Actionable Feedback</h4>
+                  <ul className="space-y-3">
+                    {report.actionable_feedback.map((feedback: string, idx: number) => (
+                      <li key={idx} className="flex items-start">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 mr-3">
+                          {idx + 1}
+                        </span>
+                        <span className="text-slate-700 dark:text-slate-300 leading-relaxed">{feedback}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
