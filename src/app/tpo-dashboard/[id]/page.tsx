@@ -1,59 +1,51 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import type { Candidate } from "@/types";
+import { useParams } from "next/navigation";
 import { 
   Users, 
   Download, 
   Activity, 
-  PieChart, 
   ShieldAlert, 
   CheckCircle2, 
   TrendingDown, 
-  PersonStanding, 
-  History, 
   Calendar,
   ChevronDown,
-  ChevronRight,
   Plus,
   HelpCircle,
   LogOut,
   Home,
   LayoutDashboard,
   Zap,
-  Brain,
-  Rocket,
   ShieldCheck
 } from "lucide-react";
-import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import { useRequireAuth } from "@/hooks/useAuth";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
-const hanken = Hanken_Grotesk({ subsets: ["latin"] });
-const mono = JetBrains_Mono({ subsets: ["latin"] });
+interface TPOCohortData {
+  averages: {
+    IQ: number;
+    EQ: number;
+    SQ: number;
+    AQ: number;
+    SpQ: number;
+  };
+  founder_distribution: {
+    Builder: number;
+    Leader: number;
+    Rainmaker: number;
+    Anchor: number;
+  };
+  support_needs: string[];
+}
 
 export default function TPODashboard() {
   const { id } = useParams();
-  const router = useRouter();
-  const [data, setData] = useState<any>(null);
+  const { user, loading: authLoading } = useRequireAuth();
+  const [data, setData] = useState<TPOCohortData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [authLoading, setAuthLoading] = useState(true);
   const [interventionCollapsed, setInterventionCollapsed] = useState(false);
-
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError || !user) {
-          router.push("/login");
-          return;
-        }
-        setAuthLoading(false);
-      } catch (err) {
-        router.push("/login");
-      }
-    }
-    checkAuth();
-  }, [router]);
 
   useEffect(() => {
     if (authLoading) return;
@@ -67,7 +59,7 @@ export default function TPODashboard() {
         } else {
           throw new Error("Failed to fetch");
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error("Fetch error:", err);
         // Mock data fallback matching the UI export
         setData({
@@ -86,61 +78,17 @@ export default function TPODashboard() {
     fetchData();
   }, [id, authLoading]);
 
-  if (authLoading) {
-    return (
-      <div className="flex h-screen flex-col items-center justify-center bg-[#0e1416] text-[#8aebff]">
-        <div className="relative mb-8">
-          <div className="absolute inset-0 animate-ping rounded-full bg-[#8aebff]/20" />
-          <ShieldCheck className="relative h-16 w-16 text-[#8aebff] drop-shadow-[0_0_15px_rgba(138,235,255,0.8)]" />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <h2 className={`text-xl font-black uppercase tracking-[0.3em] ${mono.className}`}>Verifying Identity</h2>
-          <div className="flex items-center gap-2">
-            <div className="h-1.5 w-32 overflow-hidden rounded-full bg-white/5 border border-[#8aebff]/30">
-              <div className="h-full animate-pulse bg-[#8aebff] shadow-[0_0_8px_rgba(138,235,255,0.6)]" style={{ width: '60%' }} />
-            </div>
-            <span className={`text-[10px] text-[#8aebff]/50 uppercase tracking-widest ${mono.className}`}>Protocol_Secure_v4</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[#0e1416]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-[#8aebff]/20 border-t-[#8aebff] rounded-full animate-spin"></div>
-          <span className={`text-[#8aebff] text-sm tracking-[0.2em] font-medium animate-pulse ${mono.className}`}>SYNCING COHORT TELEMETRY...</span>
-        </div>
-      </div>
-    );
+  if (authLoading || loading || !data) {
+    return <LoadingScreen title="Syncing Cohort Telemetry" subtitle="Establishing connection to institutional node..." />;
   }
 
   return (
-    <div className={`min-h-screen bg-[#0e1416] text-[#dde4e5] ${hanken.className}`}>
-      {/* TopNavBar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0e1416]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(47,217,244,0.15)]">
-        <div className="flex items-center gap-12">
-          <span className={`text-3xl font-extrabold tracking-tighter text-[#8aebff] ${hanken.className}`}>c2c</span>
-          <nav className="hidden md:flex items-center gap-6">
-            <a className="text-sm text-[#bbc9cd] hover:text-[#8aebff] transition-colors" href="#">Assessment</a>
-            <a className="text-sm text-[#bbc9cd] hover:text-[#8aebff] transition-colors" href="#">Dashboard</a>
-            <a className="text-sm text-[#8aebff] border-b-2 border-[#8aebff] pb-1" href="#">Analytics</a>
-            <a className="text-sm text-[#bbc9cd] hover:text-[#8aebff] transition-colors" href="#">Employer View</a>
-          </nav>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="text-sm text-[#8aebff] border border-[#8aebff]/30 px-4 py-2 hover:bg-white/5 transition-all duration-300">Switch Profile</button>
-          <div className="w-10 h-10 rounded-full border border-white/20 overflow-hidden">
-            <img alt="User profile" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBylOle7xn7AmoLw4xAQ7_S-A5hJ-GQRCLX5UKbEcoYbcQmOczD75OG2C-HQptHcWjbcqzh_koixYgXxa0b3qEN75WI9CtBKhIUqT6_eD0Sm3sR1Z5CGThjquK4uoDa7gFlDDqD55HQcKbpDOqmxXTawPCxVgLdvCZuI_bPJH4FtXl_-WqFgZ37K1mxop14ND6rXvHOAu1iSOGQxhruVGig58HoYlbYqsdjceKei10jY_JCcqN-vgsAEevROE0RDF5tUedqJl9BhMAn"/>
-          </div>
-        </div>
-      </header>
+    <div className={`bg-[#0e1416] text-[#dde4e5] font-sans`}>
 
-      <div className="flex pt-[72px]">
+
+      <div className="flex ">
         {/* SideNavBar */}
-        <aside className="hidden lg:flex flex-col w-64 bg-[#1a2122]/90 backdrop-blur-2xl border-r border-white/5 h-[calc(100vh-72px)] sticky top-[72px]">
+        <aside className="hidden lg:flex flex-col w-64 bg-[#1a2122]/90 backdrop-blur-2xl border-r border-white/5 h-screen sticky top-0">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 bg-[#22d3ee]/20 flex items-center justify-center rounded">
@@ -148,22 +96,22 @@ export default function TPODashboard() {
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-[#8aebff]">TPO Command</h2>
-                <p className={`text-[10px] text-[#bbc9cd] opacity-70 font-bold tracking-[0.1em] ${mono.className}`}>ENTERPRISE TIER</p>
+                <p className={`text-[10px] text-[#bbc9cd] opacity-70 font-bold tracking-[0.1em] font-mono`}>ENTERPRISE TIER</p>
               </div>
             </div>
 
             <nav className="space-y-1">
               <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Home className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Home</span>
+                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Home</span>
               </a>
               <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Talent Pool</span>
+                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Talent Pool</span>
               </a>
               <a href="#" className="flex items-center gap-3 bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff] px-3 py-2 rounded-md">
                 <Calendar className="w-4 h-4" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Interviews</span>
+                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Interviews</span>
               </a>
             </nav>
           </div>
@@ -175,11 +123,11 @@ export default function TPODashboard() {
             <div className="space-y-1">
               <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 transition-colors">
                 <HelpCircle className="w-4 h-4" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Support</span>
+                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Support</span>
               </a>
               <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 transition-colors">
                 <LogOut className="w-4 h-4" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Logout</span>
+                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Logout</span>
               </a>
             </div>
           </div>
@@ -190,13 +138,13 @@ export default function TPODashboard() {
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <p className={`text-[#8aebff] text-[12px] font-bold tracking-[0.1em] mb-2 ${mono.className}`}>ADMINISTRATION COMMAND CENTER // COHORT 2024.B</p>
+              <p className={`text-[#8aebff] text-[12px] font-bold tracking-[0.1em] mb-2 font-mono`}>ADMINISTRATION COMMAND CENTER // COHORT 2024.B</p>
               <h1 className="text-5xl font-extrabold text-white tracking-tight">Institutional Analytics</h1>
             </div>
             <div className="flex gap-2">
               <div className="flex items-center bg-[#2f3638] px-4 py-2 border border-white/10">
                 <Calendar className="text-[#8aebff] w-4 h-4 mr-2" />
-                <span className={`text-[#dde4e5] text-xs font-medium tracking-[0.05em] ${mono.className}`}>MAY 2024 - JUNE 2024</span>
+                <span className={`text-[#dde4e5] text-xs font-medium tracking-[0.05em] font-mono`}>MAY 2024 - JUNE 2024</span>
               </div>
               <button className="bg-[#8aebff]/10 border border-[#8aebff]/40 text-[#8aebff] px-4 py-2 flex items-center gap-2 hover:bg-[#8aebff]/20 transition-all text-[12px] font-bold tracking-[0.1em] rounded">
                 <Download className="w-4 h-4" /> EXPORT REPORT
@@ -209,12 +157,12 @@ export default function TPODashboard() {
             <div className="bg-[#0f172a]/40 backdrop-blur-md p-6 border border-white/10 rounded-xl relative overflow-hidden group hover:border-[#8aebff]/40 transition-all">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#8aebff]/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
               <div className="flex justify-between items-start mb-4">
-                <span className={`text-[#bbc9cd] text-[10px] font-bold tracking-[0.1em] uppercase ${mono.className}`}>Total Enrolled Students</span>
+                <span className={`text-[#bbc9cd] text-[10px] font-bold tracking-[0.1em] uppercase font-mono`}>Total Enrolled Students</span>
                 <Users className="text-[#8aebff] w-5 h-5" />
               </div>
               <div className="flex items-baseline gap-2">
-                <h3 className={`text-4xl font-bold text-white ${mono.className}`}>4,282</h3>
-                <span className={`text-[#10b981] text-[10px] font-bold ${mono.className}`}>+12.4%</span>
+                <h3 className={`text-4xl font-bold text-white font-mono`}>4,282</h3>
+                <span className={`text-[#10b981] text-[10px] font-bold font-mono`}>+12.4%</span>
               </div>
               <div className="mt-4 w-full bg-[#1a2122] h-1 rounded-full overflow-hidden">
                 <div className="h-full bg-[#8aebff]" style={{ width: '78%' }}></div>
@@ -224,12 +172,12 @@ export default function TPODashboard() {
             <div className="bg-[#0f172a]/40 backdrop-blur-md p-6 border border-white/10 rounded-xl relative overflow-hidden group hover:border-[#c3c0ff]/40 transition-all">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#c3c0ff]/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
               <div className="flex justify-between items-start mb-4">
-                <span className={`text-[#bbc9cd] text-[10px] font-bold tracking-[0.1em] uppercase ${mono.className}`}>Average Cohort EQ</span>
+                <span className={`text-[#bbc9cd] text-[10px] font-bold tracking-[0.1em] uppercase font-mono`}>Average Cohort EQ</span>
                 <Activity className="text-[#c3c0ff] w-5 h-5" />
               </div>
               <div className="flex items-baseline gap-2">
-                <h3 className={`text-4xl font-bold text-white ${mono.className}`}>{data.averages.EQ.toFixed(1)}<span className="text-xl">/100</span></h3>
-                <span className={`text-[#10b981] text-[10px] font-bold ${mono.className}`}>▲ High</span>
+                <h3 className={`text-4xl font-bold text-white font-mono`}>{data.averages.EQ.toFixed(1)}<span className="text-xl">/100</span></h3>
+                <span className={`text-[#10b981] text-[10px] font-bold font-mono`}>▲ High</span>
               </div>
               <div className="mt-4 w-full bg-[#1a2122] h-1 rounded-full overflow-hidden">
                 <div className="h-full bg-[#c3c0ff]" style={{ width: `${data.averages.EQ}%` }}></div>
@@ -239,12 +187,12 @@ export default function TPODashboard() {
             <div className="bg-[#0f172a]/40 backdrop-blur-md p-6 border border-white/10 rounded-xl relative overflow-hidden group hover:border-[#ffd6a3]/40 transition-all">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#ffd6a3]/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
               <div className="flex justify-between items-start mb-4">
-                <span className={`text-[#bbc9cd] text-[10px] font-bold tracking-[0.1em] uppercase ${mono.className}`}>Placement Readiness %</span>
+                <span className={`text-[#bbc9cd] text-[10px] font-bold tracking-[0.1em] uppercase font-mono`}>Placement Readiness %</span>
                 <Zap className="text-[#ffd6a3] w-5 h-5" />
               </div>
               <div className="flex items-baseline gap-2">
-                <h3 className={`text-4xl font-bold text-white ${mono.className}`}>67.8<span className="text-xl">%</span></h3>
-                <span className={`text-[#bbc9cd] text-[10px] font-bold ${mono.className}`}>Target: 75%</span>
+                <h3 className={`text-4xl font-bold text-white font-mono`}>67.8<span className="text-xl">%</span></h3>
+                <span className={`text-[#bbc9cd] text-[10px] font-bold font-mono`}>Target: 75%</span>
               </div>
               <div className="mt-4 w-full bg-[#1a2122] h-1 rounded-full overflow-hidden">
                 <div className="h-full bg-[#ffd6a3]" style={{ width: '67.8%' }}></div>
@@ -263,15 +211,15 @@ export default function TPODashboard() {
                 <div className="flex gap-4">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#8aebff] rounded-sm"></div>
-                    <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-wider font-bold ${mono.className}`}>Builder</span>
+                    <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-wider font-bold font-mono`}>Builder</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#c3c0ff] rounded-sm"></div>
-                    <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-wider font-bold ${mono.className}`}>Leader</span>
+                    <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-wider font-bold font-mono`}>Leader</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#ffd6a3] rounded-sm"></div>
-                    <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-wider font-bold ${mono.className}`}>Anchor</span>
+                    <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-wider font-bold font-mono`}>Anchor</span>
                   </div>
                 </div>
               </div>
@@ -280,8 +228,8 @@ export default function TPODashboard() {
                 {/* Builder Profile */}
                 <div className="space-y-2">
                   <div className="flex justify-between items-end">
-                    <span className={`text-lg font-bold text-white ${mono.className}`}>BUILDER <span className="text-xs text-[#bbc9cd] opacity-60 font-normal">(Technical & Iterative)</span></span>
-                    <span className={`text-[#8aebff] font-bold ${mono.className}`}>{data.founder_distribution.Builder}% Density</span>
+                    <span className={`text-lg font-bold text-white font-mono`}>BUILDER <span className="text-xs text-[#bbc9cd] opacity-60 font-normal">(Technical & Iterative)</span></span>
+                    <span className={`text-[#8aebff] font-bold font-mono`}>{data.founder_distribution.Builder}% Density</span>
                   </div>
                   <div className="h-10 w-full flex bg-[#1a2122] rounded overflow-hidden border border-white/5">
                     <div className="h-full bg-[#8aebff] relative group" style={{ width: `${data.founder_distribution.Builder}%` }}>
@@ -295,8 +243,8 @@ export default function TPODashboard() {
                 {/* Leader Profile */}
                 <div className="space-y-2">
                   <div className="flex justify-between items-end">
-                    <span className={`text-lg font-bold text-white ${mono.className}`}>LEADER <span className="text-xs text-[#bbc9cd] opacity-60 font-normal">(Visionary & Strategic)</span></span>
-                    <span className={`text-[#c3c0ff] font-bold ${mono.className}`}>{data.founder_distribution.Leader}% Density</span>
+                    <span className={`text-lg font-bold text-white font-mono`}>LEADER <span className="text-xs text-[#bbc9cd] opacity-60 font-normal">(Visionary & Strategic)</span></span>
+                    <span className={`text-[#c3c0ff] font-bold font-mono`}>{data.founder_distribution.Leader}% Density</span>
                   </div>
                   <div className="h-10 w-full flex bg-[#1a2122] rounded overflow-hidden border border-white/5">
                     <div className="h-full bg-[#8aebff]" style={{ width: '25%' }}></div>
@@ -308,7 +256,7 @@ export default function TPODashboard() {
                 </div>
               </div>
 
-              <div className={`mt-8 pt-4 border-t border-white/5 flex justify-between text-[10px] font-bold text-[#bbc9cd] uppercase tracking-widest ${mono.className}`}>
+              <div className={`mt-8 pt-4 border-t border-white/5 flex justify-between text-[10px] font-bold text-[#bbc9cd] uppercase tracking-widest font-mono`}>
                 <span>0% Density</span>
                 <span>25%</span>
                 <span>50%</span>
@@ -330,7 +278,7 @@ export default function TPODashboard() {
                   Intervention Required
                 </h3>
                 <div className="flex items-center gap-4">
-                  <span className={`bg-[#93000a] text-[#ffdad6] border border-[#ffdad6]/20 px-3 py-1 text-xs font-bold uppercase ${mono.className}`}>3 Critical Alerts</span>
+                  <span className={`bg-[#93000a] text-[#ffdad6] border border-[#ffdad6]/20 px-3 py-1 text-xs font-bold uppercase font-mono`}>3 Critical Alerts</span>
                   <ChevronDown className={`text-[#bbc9cd] transition-transform ${interventionCollapsed ? '-rotate-90' : ''}`} />
                 </div>
               </button>
@@ -346,14 +294,14 @@ export default function TPODashboard() {
                             <TrendingDown className="text-[#ffb4ab] w-6 h-6" />
                           </div>
                           <div>
-                            <h4 className={`text-white font-bold ${mono.className}`}>{need.split(' - ')[0]}</h4>
+                            <h4 className={`text-white font-bold font-mono`}>{need.split(' - ')[0]}</h4>
                             <p className="text-sm text-[#bbc9cd] mt-1">{need.split(' - ')[1] || "Automated risk vector detection identifies potential dropout pattern."}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
                           <div className="text-right">
-                            <span className={`block text-[10px] text-[#bbc9cd] uppercase tracking-widest font-bold ${mono.className}`}>Priority Level</span>
-                            <span className={`font-bold ${mono.className} ${isCritical ? 'text-[#ffb4ab]' : 'text-[#ffd6a3]'}`}>{isCritical ? 'CRITICAL' : 'ELEVATED'}</span>
+                            <span className={`block text-[10px] text-[#bbc9cd] uppercase tracking-widest font-bold font-mono`}>Priority Level</span>
+                            <span className={`font-bold font-mono ${isCritical ? 'text-[#ffb4ab]' : 'text-[#ffd6a3]'}`}>{isCritical ? 'CRITICAL' : 'ELEVATED'}</span>
                           </div>
                           <button className={`px-4 py-2 font-bold text-[11px] tracking-[0.1em] rounded transition-all active:scale-95 ${isCritical ? 'bg-[#ffb4ab] text-[#690005] hover:brightness-110' : 'border border-[#ffd6a3]/40 text-[#ffd6a3] hover:bg-[#ffd6a3]/10'}`}>
                             {isCritical ? 'SCHEDULE INTERVENTION' : 'VIEW DOSSIER'}
@@ -373,8 +321,8 @@ export default function TPODashboard() {
                 <div className="relative pl-8 border-l-2 border-[#8aebff]/20">
                   <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#8aebff] shadow-[0_0_15px_rgba(47,217,244,0.5)]"></div>
                   <div className="flex justify-between items-center">
-                    <span className={`text-white font-bold text-xs ${mono.className}`}>Assessment</span>
-                    <span className={`text-[#8aebff] font-bold ${mono.className}`}>4,282</span>
+                    <span className={`text-white font-bold text-xs font-mono`}>Assessment</span>
+                    <span className={`text-[#8aebff] font-bold font-mono`}>4,282</span>
                   </div>
                   <div className="h-1.5 w-full bg-[#1a2122] mt-2 rounded-full overflow-hidden">
                     <div className="h-full bg-[#8aebff]" style={{ width: '100%' }}></div>
@@ -383,8 +331,8 @@ export default function TPODashboard() {
                 <div className="relative pl-8 border-l-2 border-[#8aebff]/20">
                   <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#8aebff]/60"></div>
                   <div className="flex justify-between items-center">
-                    <span className={`text-white font-bold text-xs ${mono.className}`}>Shortlisted</span>
-                    <span className={`text-[#8aebff] font-bold ${mono.className}`}>1,840</span>
+                    <span className={`text-white font-bold text-xs font-mono`}>Shortlisted</span>
+                    <span className={`text-[#8aebff] font-bold font-mono`}>1,840</span>
                   </div>
                   <div className="h-1.5 w-full bg-[#1a2122] mt-2 rounded-full overflow-hidden">
                     <div className="h-full bg-[#8aebff]/60" style={{ width: '43%' }}></div>
@@ -393,8 +341,8 @@ export default function TPODashboard() {
                 <div className="relative pl-8 border-l-2 border-[#8aebff]/20">
                   <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#c3c0ff]"></div>
                   <div className="flex justify-between items-center">
-                    <span className={`text-white font-bold text-xs ${mono.className}`}>Interviewing</span>
-                    <span className={`text-[#c3c0ff] font-bold ${mono.className}`}>612</span>
+                    <span className={`text-white font-bold text-xs font-mono`}>Interviewing</span>
+                    <span className={`text-[#c3c0ff] font-bold font-mono`}>612</span>
                   </div>
                   <div className="h-1.5 w-full bg-[#1a2122] mt-2 rounded-full overflow-hidden">
                     <div className="h-full bg-[#c3c0ff]" style={{ width: '14%' }}></div>
@@ -411,8 +359,8 @@ export default function TPODashboard() {
                   <p className="text-[#bbc9cd] text-xs mt-1">Daily active participation (Last 30 Days)</p>
                 </div>
                 <div className="text-right">
-                  <span className={`block text-2xl text-[#8aebff] font-bold ${mono.className}`}>88%</span>
-                  <span className={`text-[#10b981] text-[10px] font-bold ${mono.className}`}>+4.2% AVG</span>
+                  <span className={`block text-2xl text-[#8aebff] font-bold font-mono`}>88%</span>
+                  <span className={`text-[#10b981] text-[10px] font-bold font-mono`}>+4.2% AVG</span>
                 </div>
               </div>
               <div className="flex-grow flex items-end gap-1 h-32">
@@ -420,7 +368,7 @@ export default function TPODashboard() {
                   <div key={i} className="flex-grow bg-[#8aebff]/20 hover:bg-[#8aebff]/40 transition-all rounded-t-sm" style={{ height: `${h}%` }}></div>
                 ))}
               </div>
-              <div className={`mt-4 flex justify-between text-[10px] font-bold text-[#bbc9cd] uppercase tracking-widest ${mono.className}`}>
+              <div className={`mt-4 flex justify-between text-[10px] font-bold text-[#bbc9cd] uppercase tracking-widest font-mono`}>
                 <span>Day 1</span>
                 <span>Day 15</span>
                 <span>Today</span>
@@ -434,9 +382,9 @@ export default function TPODashboard() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             <span className="text-2xl font-black tracking-tighter text-[#bbc9cd]">c2c</span>
-            <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-[0.2em] font-bold ${mono.className}`}>Enterprise Core v2.4.0</span>
+            <span className={`text-[10px] text-[#bbc9cd] uppercase tracking-[0.2em] font-bold font-mono`}>Enterprise Core v2.4.0</span>
           </div>
-          <div className={`flex gap-8 text-[#bbc9cd] text-[10px] font-bold ${mono.className}`}>
+          <div className={`flex gap-8 text-[#bbc9cd] text-[10px] font-bold font-mono`}>
             <a className="hover:text-[#8aebff] transition-colors" href="#">SECURITY PROTOCOL</a>
             <a className="hover:text-[#8aebff] transition-colors" href="#">DATA PRIVACY</a>
             <a className="hover:text-[#8aebff] transition-colors" href="#">SYSTEM STATUS: OPERATIONAL</a>

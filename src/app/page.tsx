@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { 
-  Terminal, 
   Shield, 
   Zap, 
   Target, 
@@ -161,32 +160,40 @@ export default function Home() {
                   name: 'Market Scout', 
                   desc: 'Neural mapping of current industry demands and hidden leads.', 
                   icon: Globe,
-                  color: 'cyan'
+                  bgClass: 'bg-cyan-500/5 group-hover:bg-cyan-500/10',
+                  iconBg: 'bg-cyan-500/10 border-cyan-500/20',
+                  iconText: 'text-cyan-400'
                 },
                 { 
                   name: 'Skills Audit', 
                   desc: 'High-fidelity gap analysis against top-tier corporate benchmarks.', 
                   icon: Cpu,
-                  color: 'indigo'
+                  bgClass: 'bg-indigo-500/5 group-hover:bg-indigo-500/10',
+                  iconBg: 'bg-indigo-500/10 border-indigo-500/20',
+                  iconText: 'text-indigo-400'
                 },
                 { 
                   name: 'The Ordeal', 
                   desc: 'Stress-tested simulations designed to identify elite talent.', 
                   icon: Shield,
-                  color: 'indigo'
+                  bgClass: 'bg-indigo-500/5 group-hover:bg-indigo-500/10',
+                  iconBg: 'bg-indigo-500/10 border-indigo-500/20',
+                  iconText: 'text-indigo-400'
                 },
                 { 
                   name: 'Legend Status', 
                   desc: 'Immutable verification of your capabilities and market fit.', 
                   icon: Trophy,
-                  color: 'cyan'
+                  bgClass: 'bg-cyan-500/5 group-hover:bg-cyan-500/10',
+                  iconBg: 'bg-cyan-500/10 border-cyan-500/20',
+                  iconText: 'text-cyan-400'
                 },
               ].map((feature, i) => (
                 <div key={feature.name} className="relative p-8 bg-white/5 border border-white/10 rounded-2xl group hover:bg-white/[0.08] transition-all hover:-translate-y-2">
-                  <div className={`absolute top-0 right-0 w-24 h-24 bg-${feature.color}-500/5 blur-3xl group-hover:bg-${feature.color}-500/10 transition-colors`}></div>
+                  <div className={`absolute top-0 right-0 w-24 h-24 blur-3xl transition-colors ${feature.bgClass}`}></div>
                   <dt className="flex flex-col gap-4 relative z-10">
-                    <div className={`w-12 h-12 rounded-lg bg-${feature.color === 'cyan' ? 'cyan-500/10' : 'indigo-500/10'} flex items-center justify-center border border-${feature.color === 'cyan' ? 'cyan-500/20' : 'indigo-500/20'}`}>
-                      <feature.icon className={`h-6 w-6 text-${feature.color === 'cyan' ? 'cyan-400' : 'indigo-400'}`} />
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center border ${feature.iconBg}`}>
+                      <feature.icon className={`h-6 w-6 ${feature.iconText}`} />
                     </div>
                     <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest">Protocol_0{i+1}</div>
                     <span className="text-xl font-bold text-white tracking-tight">{feature.name}</span>

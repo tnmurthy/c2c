@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import type { Candidate } from "@/types";
 import { 
   Users, 
   LayoutGrid, 
@@ -14,82 +15,19 @@ import {
   HelpCircle, 
   LogOut,
   Plus,
-  CheckCircle,
-  Search
+  CheckCircle
 } from "lucide-react";
-import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 
-const hanken = Hanken_Grotesk({ subsets: ["latin"] });
-const mono = JetBrains_Mono({ subsets: ["latin"] });
 
-// High-fidelity Mock Data from Stitch
-const MOCK_CANDIDATES = [
-  {
-    id: "4421",
-    name: "Alex Vance",
-    role: "Senior Systems Arch",
-    cohort: "Cohort A",
-    match: 98,
-    iq: 142,
-    eq: 88,
-    aq: 94,
-    sq: 76,
-    skills: ["Dist. Systems", "Cloud Security", "Go / Rust"],
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAPw920PJwfJVAZ3gDOUcw9dhT4LzRNvwpw466ClpJrEOdSfGxJo1u5DH0SeuGlDnkGxusy7qE1AvimqJwkDcRBrtoxJEtZxUIx7OHVuBYB2AfNCPrE6HDjXiM0U5YtsBISs6hGqzLcEG1NofoHR_yHP3QZ41FvLfLMAlGrykK4eScwexMnc1bwAjLk3M_hEtKg-j78bD1fvnKyuMuTUDcrx62TRQ3vj5h5CkySJZUNQonQxDsyE4zMKv9UqYNT72T_5WEF2niiEo7g",
-    status: "online",
-    summary: "A rare talent combining deep systems architecture knowledge with the agility of a startup founder. Has a documented history of scaling infrastructure from 0 to 10M+ daily active users while maintaining 99.99% uptime."
-  },
-  {
-    id: "4422",
-    name: "Sarah Chen",
-    role: "ML Engineering",
-    cohort: "Cohort C",
-    match: 92,
-    iq: 155,
-    eq: 92,
-    aq: 88,
-    sq: 99,
-    skills: ["Deep Learning", "PyTorch", "LLM Ops"],
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC_YBhnRnetEnTnCpSXPQWEzKtAdIZkz7x9dj7kJQ3VT8-GhSZGU_67yFDWEfNXQHsxQfGcxf1ujgMcW323_hUh-cuBU6ZrwYcIjJ38VuUFG1uej6VWalLTP3YiMLuxXQqtJvFBnzYUd588BlzgLlbcZJ7pBvulOuYHZ2slMFuhATSdSxNsOZnbH-KghREa7hzM1BWhnCm6GvQIQ0MqwHvGkhi26DeXq4CF5PzZLaQry4HgQKHLU3jvsjiV28X5F5SU-BGg21i8WpQ7",
-    status: "away",
-    summary: "Machine Learning specialist with a focus on large-scale model deployment and optimization. Expert in neural network architecture and data pipeline engineering."
-  },
-  {
-    id: "4423",
-    name: "Jordan Miller",
-    role: "Fullstack Eng",
-    cohort: "Cohort B",
-    match: 89,
-    iq: 138,
-    eq: 95,
-    aq: 82,
-    sq: 91,
-    skills: ["TypeScript", "React / Next.js", "Node.js"],
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA9FQmcLDt5ZGEMNzgc5_RmPOFrcOEyHiNh1pIQPuvCBo_1kSr0K6rOrVC-BUbhYsZNhobnpCBS28b5B6OgsD5MTMDsKjcTO69eErktwgBXcoGGrb94S_MdTzBh8fnV0SSzJbaJGDengtdJhTd9ucWqRVnxPpQC4HlaRo0IJgDpbe8TC7fwP1aeTLrfey7xRW8n9PsOzR1nsApJMZEQlWAMdGz7PuQnR44b9L11nK9WSrOyoFs0Kfj-K1DJDEhzYswpoNSzko6i2noA",
-    status: "online",
-    summary: "Versatile fullstack developer with a passion for building intuitive user experiences and robust backend systems. Strong advocate for clean code and TDD."
-  },
-  {
-    id: "4424",
-    name: "Marcus Thorne",
-    role: "DevOps Lead",
-    cohort: "Cohort A",
-    match: 87,
-    iq: 135,
-    eq: 81,
-    aq: 96,
-    sq: 84,
-    skills: ["Kubernetes", "Terraform", "CI/CD Arch"],
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBuiCobdri_hZLcv281QILWRRMLv_ngZb4qUwQOZEyPbx63isyeisxjbT7Y_uF3Mk5ZcWOfGWPl88USJk-kSIPgHbz9p2-aoqkS1w82fMb6fvG9MgFlG-8moElp6a-mxYWol51MnAI5K0-Wd0k4bzy4Aow3sP3pcbN1YXTrXdemustn_cGyGVUd0sjjJHXQecInmqQoTpjq4g0pc0uKKPHDrh1z7sz5DMBDqgOutwJB_r2kIu35tc_xBaXaBAeh8W9p4xChw5lu7S3z",
-    status: "online",
-    summary: "Cloud infrastructure expert specializing in container orchestration and automated deployment pipelines. Proven track record in improving system reliability and developer productivity."
-  }
-];
+
+
+
+
 
 export default function EmployerPage() {
-  const [candidates, setCandidates] = useState<any[]>([]);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [panelVisible, setPanelVisible] = useState(false);
   const [strictFounderFit, setStrictFounderFit] = useState(false);
   const [minAQ, setMinAQ] = useState(82);
@@ -102,7 +40,7 @@ export default function EmployerPage() {
         const res = await fetch("/api/employer/candidates");
         if (res.ok) {
           const data = await res.json();
-          const mappedData = data.map((item: any, idx: number) => ({
+          const mappedData = data.map((item: any, idx: number): Candidate => ({
             id: item.id || `mock-${idx}`,
             name: item.name || "Unknown Candidate",
             role: item.primary_profile || "Software Engineer",
@@ -137,7 +75,7 @@ export default function EmployerPage() {
     return true;
   });
 
-  const togglePanel = (candidate?: any) => {
+  const togglePanel = (candidate?: Candidate) => {
     if (candidate) {
       setSelectedCandidate(candidate);
       setPanelVisible(true);
@@ -147,39 +85,22 @@ export default function EmployerPage() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#0e1416] text-[#dde4e5] overflow-hidden ${hanken.className}`}>
-      {/* TopNavBar */}
-      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0e1416]/80 backdrop-blur-xl border-b border-white/10">
-        <div className="flex items-center gap-12">
-          <span className={`text-3xl font-extrabold tracking-tighter text-[#8aebff] ${hanken.className}`}>c2c</span>
-          <div className="hidden md:flex gap-6">
-            <a className="text-sm text-[#bbc9cd] hover:text-[#8aebff] transition-colors" href="#">Assessment</a>
-            <a className="text-sm text-[#bbc9cd] hover:text-[#8aebff] transition-colors" href="#">Dashboard</a>
-            <a className="text-sm text-[#bbc9cd] hover:text-[#8aebff] transition-colors" href="#">Analytics</a>
-            <a className="text-sm text-[#8aebff] border-b-2 border-[#8aebff] pb-1" href="#">Employer View</a>
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="text-sm text-[#bbc9cd] hover:bg-white/5 px-4 py-2 rounded transition-all duration-300">Switch Profile</button>
-          <div className="w-10 h-10 rounded-full border border-[#8aebff]/20 overflow-hidden">
-            <img alt="User profile" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYAFKIYxGCtT7e5yefCAETX_pq16Cvr0wYmz30LnbDHXY6RiJdTlCme8ZoRmFWunCoIb7yAhmxTAiy_VqzzpJh0Bt5H75ol7OO1fKnmPfBbl9faZ-X6aTBuhJMYA35DkhWaCXUj1d_8b9M_9jPVOtwfVNUtIz0cIN0NCRk2uvAi8W6Tz_ILmhpyr5ImYTlJPxwsrDBAZIIJArB-FTkKEFriZhb15stMWf4ZDNfvsb6pVsh8fefAshK4uXfzXprcDwAebuXsgN0YkgW"/>
-          </div>
-        </div>
-      </nav>
+    <div className={`bg-[#0e1416] text-[#dde4e5] overflow-hidden font-sans`}>
 
-      <div className="flex h-screen pt-[72px]">
+
+      <div className="flex h-screen ">
         {/* Left Sidebar: Filters */}
         <aside className="hidden lg:flex flex-col w-80 bg-[#1a2122]/90 backdrop-blur-2xl border-r border-white/5 overflow-y-auto shrink-0">
           <div className="p-6 space-y-12">
             <div>
               <h2 className="text-2xl font-semibold text-[#8aebff] mb-1">Recruiter Console</h2>
-              <p className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] opacity-70 ${mono.className}`}>ENTERPRISE TIER</p>
+              <p className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] opacity-70 font-mono`}>ENTERPRISE TIER</p>
             </div>
 
             {/* Strict Founder Fit Toggle */}
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <label className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Strict Founder Fit</label>
+                <label className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Strict Founder Fit</label>
                 <button 
                   className={`w-10 h-5 rounded-full relative transition-colors ${strictFounderFit ? 'bg-[#8aebff]' : 'bg-[#8aebff]/20'}`} 
                   onClick={() => setStrictFounderFit(!strictFounderFit)}
@@ -194,8 +115,8 @@ export default function EmployerPage() {
             <div className="space-y-12">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Min AQ Score</span>
-                  <span className={`text-sm font-medium tracking-[0.05em] text-[#8aebff] ${mono.className}`}>{minAQ}</span>
+                  <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Min AQ Score</span>
+                  <span className={`text-sm font-medium tracking-[0.05em] text-[#8aebff] font-mono`}>{minAQ}</span>
                 </div>
                 <input 
                   className="w-full h-1 bg-[#2f3638] rounded-lg appearance-none cursor-pointer accent-[#8aebff]" 
@@ -206,8 +127,8 @@ export default function EmployerPage() {
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Min EQ Score</span>
-                  <span className={`text-sm font-medium tracking-[0.05em] text-[#8aebff] ${mono.className}`}>{minEQ}</span>
+                  <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Min EQ Score</span>
+                  <span className={`text-sm font-medium tracking-[0.05em] text-[#8aebff] font-mono`}>{minEQ}</span>
                 </div>
                 <input 
                   className="w-full h-1 bg-[#2f3638] rounded-lg appearance-none cursor-pointer accent-[#8aebff]" 
@@ -220,12 +141,12 @@ export default function EmployerPage() {
 
             {/* Advanced Skill Tags */}
             <div className="space-y-4">
-              <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Required Competencies</span>
+              <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Required Competencies</span>
               <div className="flex flex-wrap gap-1">
-                <span className={`px-2 py-1 bg-[#8aebff]/10 text-[#8aebff] text-[10px] font-medium tracking-[0.05em] rounded border border-[#8aebff]/20 ${mono.className}`}>TypeScript</span>
-                <span className={`px-2 py-1 bg-white/5 text-[#bbc9cd] text-[10px] font-medium tracking-[0.05em] rounded border border-white/10 ${mono.className}`}>Rust</span>
-                <span className={`px-2 py-1 bg-white/5 text-[#bbc9cd] text-[10px] font-medium tracking-[0.05em] rounded border border-white/10 ${mono.className}`}>LLM Fine-tuning</span>
-                <span className={`px-2 py-1 bg-white/5 text-[#bbc9cd] text-[10px] font-medium tracking-[0.05em] rounded border border-white/10 ${mono.className}`}>Solidity</span>
+                <span className={`px-2 py-1 bg-[#8aebff]/10 text-[#8aebff] text-[10px] font-medium tracking-[0.05em] rounded border border-[#8aebff]/20 font-mono`}>TypeScript</span>
+                <span className={`px-2 py-1 bg-white/5 text-[#bbc9cd] text-[10px] font-medium tracking-[0.05em] rounded border border-white/10 font-mono`}>Rust</span>
+                <span className={`px-2 py-1 bg-white/5 text-[#bbc9cd] text-[10px] font-medium tracking-[0.05em] rounded border border-white/10 font-mono`}>LLM Fine-tuning</span>
+                <span className={`px-2 py-1 bg-white/5 text-[#bbc9cd] text-[10px] font-medium tracking-[0.05em] rounded border border-white/10 font-mono`}>Solidity</span>
               </div>
             </div>
 
@@ -238,11 +159,11 @@ export default function EmployerPage() {
           <div className="mt-auto p-6 border-t border-white/5 space-y-2">
             <div className="flex items-center gap-4 text-[#bbc9cd] hover:text-white transition-colors cursor-pointer group">
               <HelpCircle className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-              <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Support</span>
+              <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Support</span>
             </div>
             <div className="flex items-center gap-4 text-[#bbc9cd] hover:text-white transition-colors cursor-pointer group">
               <LogOut className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              <span className={`text-[12px] font-bold tracking-[0.1em] ${mono.className}`}>Logout</span>
+              <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Logout</span>
             </div>
           </div>
         </aside>
@@ -256,7 +177,7 @@ export default function EmployerPage() {
                   <Users className="text-[#8aebff] w-6 h-6" />
                   <h1 className="text-3xl font-extrabold text-[#dde4e5] tracking-tight leading-none">Talent Pool</h1>
                 </div>
-                <p className={`text-[#bbc9cd] text-sm tracking-[0.05em] font-medium ${mono.className}`}>Displaying {filteredCandidates.length} elite matches for "Senior Systems Architect" • Cohort 2024.1</p>
+                <p className={`text-[#bbc9cd] text-sm tracking-[0.05em] font-medium font-mono`}>Displaying {filteredCandidates.length} elite matches for "Senior Systems Architect" • Cohort 2024.1</p>
               </div>
               <div className="flex gap-2">
                 <div className="flex items-center bg-[#1a2122] rounded-lg p-1 border border-white/10">
@@ -292,11 +213,11 @@ export default function EmployerPage() {
                         </div>
                         <div>
                           <h3 className="text-xl font-bold text-[#dde4e5] leading-tight group-hover:text-[#8aebff] transition-colors">{candidate.name}</h3>
-                          <p className={`text-[12px] text-[#bbc9cd] font-medium uppercase tracking-[0.05em] ${mono.className}`}>{candidate.role} • {candidate.cohort}</p>
+                          <p className={`text-[12px] text-[#bbc9cd] font-medium uppercase tracking-[0.05em] font-mono`}>{candidate.role} • {candidate.cohort}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className={`text-[10px] font-medium tracking-[0.05em] text-[#8aebff]/70 mb-0.5 ${mono.className}`}>MATCH</div>
+                        <div className={`text-[10px] font-medium tracking-[0.05em] text-[#8aebff]/70 mb-0.5 font-mono`}>MATCH</div>
                         <div className="text-2xl font-bold text-[#8aebff]">{candidate.match}%</div>
                       </div>
                     </div>
@@ -310,31 +231,31 @@ export default function EmployerPage() {
                           <polygon className="fill-[#2fd9f4]/30 stroke-[#2fd9f4] stroke-[1.5]" points="50,15 88,35 70,85 40,90 20,40" transform="scale(0.8) translate(12.5, 12.5)"></polygon>
                         </svg>
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <span className={`text-[8px] font-medium tracking-[0.05em] text-[#8aebff]/40 ${mono.className}`}>CORE</span>
+                          <span className={`text-[8px] font-medium tracking-[0.05em] text-[#8aebff]/40 font-mono`}>CORE</span>
                         </div>
                       </div>
                       <div className="flex-1 grid grid-cols-2 gap-x-4 gap-y-2">
                         <div className="flex flex-col">
-                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] ${mono.className}`}>TFI (TECH FIT)</span>
+                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] font-mono`}>TFI (TECH FIT)</span>
                           <span className="text-xs font-bold text-[#dde4e5]">{candidate.tech_fit_index?.toFixed(1)}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] ${mono.className}`}>SFI (SALES FIT)</span>
+                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] font-mono`}>SFI (SALES FIT)</span>
                           <span className="text-xs font-bold text-[#dde4e5]">{candidate.sales_fit_index?.toFixed(1)}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] ${mono.className}`}>AQ</span>
+                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] font-mono`}>AQ</span>
                           <span className="text-xs font-bold text-[#dde4e5]">{candidate.aq}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] ${mono.className}`}>EQ</span>
+                          <span className={`text-[9px] text-[#bbc9cd] font-bold tracking-[0.1em] font-mono`}>EQ</span>
                           <span className="text-xs font-bold text-[#dde4e5]">{candidate.eq}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <span className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] ${mono.className}`}>TOP SKILLS</span>
+                      <span className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>TOP SKILLS</span>
                       <div className="flex flex-wrap gap-1">
                         {candidate.skills.map((skill: string, idx: number) => (
                           <span key={idx} className="px-2 py-0.5 bg-[#3626ce]/20 text-[#c3c0ff] text-[10px] rounded border border-[#c3c0ff]/20">{skill}</span>
@@ -369,7 +290,7 @@ export default function EmployerPage() {
                   <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors" onClick={() => togglePanel()}>
                     <X className="w-5 h-5" />
                   </button>
-                  <span className={`text-[12px] font-bold tracking-[0.1em] text-[#8aebff] ${mono.className}`}>CANDIDATE DOSSIER</span>
+                  <span className={`text-[12px] font-bold tracking-[0.1em] text-[#8aebff] font-mono`}>CANDIDATE DOSSIER</span>
                   <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors">
                     <MoreVertical className="w-5 h-5 text-[#bbc9cd]" />
                   </button>
@@ -380,11 +301,11 @@ export default function EmployerPage() {
                       <img alt={selectedCandidate.name} className="w-full h-full rounded-full object-cover" src={selectedCandidate.image}/>
                     </div>
                     <h2 className="text-3xl font-extrabold text-[#dde4e5]">{selectedCandidate.name}</h2>
-                    <p className={`text-[#8aebff] text-sm font-medium tracking-[0.05em] ${mono.className}`}>Elite Candidate #{selectedCandidate.id} • Tier 1</p>
+                    <p className={`text-[#8aebff] text-sm font-medium tracking-[0.05em] font-mono`}>Elite Candidate #{selectedCandidate.id} • Tier 1</p>
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] ${mono.className}`}>Professional Legend</h4>
+                    <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>Professional Legend</h4>
                     <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg text-sm text-[#dde4e5] leading-relaxed border-l-2 border-[#8aebff] border-white/5">
                       "{selectedCandidate.summary}"
                     </div>
@@ -392,26 +313,26 @@ export default function EmployerPage() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg border border-white/5 text-center">
-                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 ${mono.className}`}>TECH FIT INDEX</p>
+                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 font-mono`}>TECH FIT INDEX</p>
                       <p className="text-2xl font-bold text-[#8aebff]">{selectedCandidate.tech_fit_index?.toFixed(1)}</p>
                     </div>
                     <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg border border-white/5 text-center">
-                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 ${mono.className}`}>SALES FIT INDEX</p>
+                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 font-mono`}>SALES FIT INDEX</p>
                       <p className="text-2xl font-bold text-[#c3c0ff]">{selectedCandidate.sales_fit_index?.toFixed(1)}</p>
                     </div>
                     <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg border border-white/5 text-center">
-                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 ${mono.className}`}>AQ SCORE</p>
+                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 font-mono`}>AQ SCORE</p>
                       <p className="text-2xl font-bold text-[#dde4e5]">{selectedCandidate.aq}</p>
                     </div>
                     <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg border border-white/5 text-center">
-                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 ${mono.className}`}>IQ SCORE</p>
+                      <p className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] mb-1 font-mono`}>IQ SCORE</p>
                       <p className="text-2xl font-bold text-[#dde4e5]">{selectedCandidate.iq}</p>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] ${mono.className}`}>Verified Skills</h4>
+                      <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>Verified Skills</h4>
                       <span className="text-[10px] text-[#8aebff] bg-[#8aebff]/10 px-2 py-0.5 rounded border border-[#8aebff]/20">Trust Level: HIGH</span>
                     </div>
                     <div className="space-y-2">

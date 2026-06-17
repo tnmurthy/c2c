@@ -1,81 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
-import { Users, Activity, CheckCircle2, AlertCircle, Server, Radio, Database, ShieldCheck } from "lucide-react";
+import { Users, Activity, CheckCircle2, AlertCircle, Server, Radio, Database } from "lucide-react";
+import { useRequireAuth } from "@/hooks/useAuth";
+import { useApiQuery } from "@/hooks/useApiQuery";
+import type { Lead } from "@/types";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import { StatCard } from "@/components/StatCard";
 
 export default function AdminDashboard() {
-  const router = useRouter();
-  const [leads, setLeads] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [authLoading, setAuthLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        
-        if (authError || !user) {
-          router.push("/login");
-          return;
-        }
-
-        // Optional: Check email domain
-        if (user.email && !user.email.endsWith("@taliatech.in")) {
-          // You might want to redirect to a 'not authorized' page, but for now /login is fine
-          // or just show an error. Let's redirect to login for simplicity.
-          router.push("/login");
-          return;
-        }
-
-        setAuthLoading(false);
-      } catch (err) {
-        router.push("/login");
-      }
-    }
-
-    checkAuth();
-  }, [router]);
-
-  useEffect(() => {
-    if (authLoading) return;
-
-    async function fetchLeads() {
-      try {
-        const res = await fetch("/api/leads");
-        if (!res.ok) throw new Error("Failed to fetch leads");
-        const data = await res.json();
-        setLeads(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchLeads();
-  }, [authLoading]);
+  const { user, loading: authLoading } = useRequireAuth({ requiredDomain: "@taliatech.in" });
+  const { data: leadsData, loading, error } = useApiQuery<Lead[]>(authLoading ? null : "/api/leads");
+  const leads = leadsData || [];
 
   if (authLoading) {
-    return (
-      <div className="flex h-screen flex-col items-center justify-center bg-slate-950 text-cyan-400">
-        <div className="relative mb-8">
-          <div className="absolute inset-0 animate-ping rounded-full bg-cyan-500/20" />
-          <ShieldCheck className="relative h-16 w-16 text-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]" />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <h2 className="font-mono text-xl font-black uppercase tracking-[0.3em]">Verifying Identity</h2>
-          <div className="flex items-center gap-2">
-            <div className="h-1.5 w-32 overflow-hidden rounded-full bg-slate-900 border border-cyan-900/30">
-              <div className="h-full animate-pulse bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]" style={{ width: '60%' }} />
-            </div>
-            <span className="font-mono text-[10px] text-cyan-500/50 uppercase tracking-widest">Secure_Auth_v2.4</span>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen title="Verifying Identity" subtitle="Secure_Auth_v2.4" />;
   }
 
   return (
@@ -99,46 +37,9 @@ export default function AdminDashboard() {
 
         {/* Stats Summary */}
         <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="group relative overflow-hidden rounded-xl border border-blue-900/30 bg-slate-900/50 p-6 shadow-[0_0_15px_rgba(59,130,246,0.05)] backdrop-blur-sm transition-all hover:border-blue-500/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
-            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl transition-all group-hover:bg-blue-500/20" />
-            <div className="flex items-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-blue-800 bg-blue-950/50 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.2)]">
-                <Server className="h-6 w-6" />
-              </div>
-              <div className="ml-5">
-                <p className="font-mono text-xs font-medium uppercase tracking-wider text-blue-400/70">Active Nodes</p>
-                <p className="mt-1 font-mono text-3xl font-bold text-blue-50 drop-shadow-[0_0_5px_rgba(59,130,246,0.5)]">1</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-xl border border-emerald-900/30 bg-slate-900/50 p-6 shadow-[0_0_15px_rgba(16,185,129,0.05)] backdrop-blur-sm transition-all hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]">
-            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-emerald-500/10 blur-2xl transition-all group-hover:bg-emerald-500/20" />
-            <div className="flex items-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-emerald-800 bg-emerald-950/50 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                <Users className="h-6 w-6" />
-              </div>
-              <div className="ml-5">
-                <p className="font-mono text-xs font-medium uppercase tracking-wider text-emerald-400/70">Users Verified</p>
-                <p className="mt-1 font-mono text-3xl font-bold text-emerald-50 drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">42</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-xl border border-purple-900/30 bg-slate-900/50 p-6 shadow-[0_0_15px_rgba(168,85,247,0.05)] backdrop-blur-sm transition-all hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
-            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-purple-500/10 blur-2xl transition-all group-hover:bg-purple-500/20" />
-            <div className="flex items-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-purple-800 bg-purple-950/50 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
-                <Database className="h-6 w-6" />
-              </div>
-              <div className="ml-5">
-                <p className="font-mono text-xs font-medium uppercase tracking-wider text-purple-400/70">Market Entities</p>
-                <p className="mt-1 font-mono text-3xl font-bold text-purple-50 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
-                  {loading ? <span className="animate-pulse">...</span> : leads.length}
-                </p>
-              </div>
-            </div>
-          </div>
+          <StatCard title="Active Nodes" value={1} icon={Server} theme="cyan" />
+          <StatCard title="Users Verified" value={42} icon={Users} theme="emerald" />
+          <StatCard title="Market Entities" value={leads.length} icon={Database} theme="purple" loading={loading} />
         </div>
 
         {/* Leads Table */}
