@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { 
-  Terminal, 
   Shield, 
   Zap, 
   Target, 
@@ -108,13 +107,13 @@ export default function Home() {
                 <path d="M200 120 L270 160 L270 240 L200 280 L130 240 L130 160 Z" fill="url(#grad1)" stroke="rgba(34, 211, 238, 0.5)" strokeWidth="2" className="animate-pulse" />
                 
                 {/* Data Points */}
-                <circle cx="200" cy="120" r="4" fill="#22d3ee" className="animate-ping" />
-                <circle cx="270" cy="240" r="4" fill="#4f46e5" className="animate-ping" style={{ animationDelay: '1s' }} />
-                <circle cx="130" cy="160" r="4" fill="#22d3ee" className="animate-ping" style={{ animationDelay: '2s' }} />
+                <circle cx="200" cy="120" r="4" fill="#22d3ee" className="animate-pulse" />
+                <circle cx="270" cy="240" r="4" fill="#4f46e5" className="animate-pulse" style={{ animationDelay: '1s' }} />
+                <circle cx="130" cy="160" r="4" fill="#22d3ee" className="animate-pulse" style={{ animationDelay: '2s' }} />
               </svg>
               
               {/* Floating Cards */}
-              <div className="absolute top-10 right-0 p-6 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl animate-bounce" style={{ animationDuration: '4s' }}>
+              <div className="absolute top-10 right-0 p-6 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl animate-float" style={{ animationDuration: '4s' }}>
                  <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center">
                        <Zap className="w-5 h-5 text-cyan-400" />
@@ -126,7 +125,7 @@ export default function Home() {
                  </div>
               </div>
 
-              <div className="absolute bottom-20 left-0 p-6 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl animate-bounce" style={{ animationDuration: '5s', animationDelay: '1s' }}>
+              <div className="absolute bottom-20 left-0 p-6 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl animate-float" style={{ animationDuration: '5s', animationDelay: '1s' }}>
                  <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center">
                        <Target className="w-5 h-5 text-indigo-400" />
@@ -161,32 +160,40 @@ export default function Home() {
                   name: 'Market Scout', 
                   desc: 'Neural mapping of current industry demands and hidden leads.', 
                   icon: Globe,
-                  color: 'cyan'
+                  bgClass: 'bg-cyan-500/5 group-hover:bg-cyan-500/10',
+                  iconBg: 'bg-cyan-500/10 border-cyan-500/20',
+                  iconText: 'text-cyan-400'
                 },
                 { 
                   name: 'Skills Audit', 
                   desc: 'High-fidelity gap analysis against top-tier corporate benchmarks.', 
                   icon: Cpu,
-                  color: 'indigo'
+                  bgClass: 'bg-indigo-500/5 group-hover:bg-indigo-500/10',
+                  iconBg: 'bg-indigo-500/10 border-indigo-500/20',
+                  iconText: 'text-indigo-400'
                 },
                 { 
                   name: 'The Ordeal', 
                   desc: 'Stress-tested simulations designed to identify elite talent.', 
                   icon: Shield,
-                  color: 'indigo'
+                  bgClass: 'bg-indigo-500/5 group-hover:bg-indigo-500/10',
+                  iconBg: 'bg-indigo-500/10 border-indigo-500/20',
+                  iconText: 'text-indigo-400'
                 },
                 { 
                   name: 'Legend Status', 
                   desc: 'Immutable verification of your capabilities and market fit.', 
                   icon: Trophy,
-                  color: 'cyan'
+                  bgClass: 'bg-cyan-500/5 group-hover:bg-cyan-500/10',
+                  iconBg: 'bg-cyan-500/10 border-cyan-500/20',
+                  iconText: 'text-cyan-400'
                 },
               ].map((feature, i) => (
                 <div key={feature.name} className="relative p-8 bg-white/5 border border-white/10 rounded-2xl group hover:bg-white/[0.08] transition-all hover:-translate-y-2">
-                  <div className={`absolute top-0 right-0 w-24 h-24 bg-${feature.color}-500/5 blur-3xl group-hover:bg-${feature.color}-500/10 transition-colors`}></div>
+                  <div className={`absolute top-0 right-0 w-24 h-24 blur-3xl transition-colors ${feature.bgClass}`}></div>
                   <dt className="flex flex-col gap-4 relative z-10">
-                    <div className={`w-12 h-12 rounded-lg bg-${feature.color === 'cyan' ? 'cyan-500/10' : 'indigo-500/10'} flex items-center justify-center border border-${feature.color === 'cyan' ? 'cyan-500/20' : 'indigo-500/20'}`}>
-                      <feature.icon className={`h-6 w-6 text-${feature.color === 'cyan' ? 'cyan-400' : 'indigo-400'}`} />
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center border ${feature.iconBg}`}>
+                      <feature.icon className={`h-6 w-6 ${feature.iconText}`} />
                     </div>
                     <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest">Protocol_0{i+1}</div>
                     <span className="text-xl font-bold text-white tracking-tight">{feature.name}</span>

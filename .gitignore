@@ -55,5 +55,20 @@ var/
 .installed.cfg
 *.egg
 
+# Generated artifacts
+GENERATED_PROJECTS.js
+FULL_PSYCHOMETRIC_BANK.json
+MARKET_INTELLIGENCE_FEED.json
+V2_ORDEAL_REPORT.json
+AGENT_TEST_RESULTS.json
+ORDEAL_PROMPT.md
+ORDEAL_PROMPT_PROTOTYPE.md
+
+# Environment files with secrets (nested)
+services/market-scout/.env
+
 # gemini tmp
 .gemini/tmp
+.gemini/
+
+

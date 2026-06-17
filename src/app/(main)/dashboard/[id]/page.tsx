@@ -2,14 +2,10 @@
 
 import { useParams } from "next/navigation";
 import { 
-  Trophy, 
   TrendingUp, 
-  User, 
   ExternalLink, 
   AlertCircle, 
   Loader2, 
-  Share2, 
-  Download, 
   ChevronRight,
   Shield,
   Zap,
@@ -18,23 +14,43 @@ import {
   Layers,
   Activity,
   Cpu,
-  Database,
-  Search,
-  MessageSquare
+  Database
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import GrowthRadar from "@/components/charts/GrowthRadar";
+import { useRequireAuth } from "@/hooks/useAuth";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import type { DimensionScores, Alert } from "@/types";
+
+interface DashboardData {
+  student: {
+    full_name: string;
+    department: string;
+  };
+  assessments: Array<{
+    dimension_scores?: DimensionScores;
+    primary_profile?: string;
+    founder_fit?: Record<string, number>;
+    development_report?: {
+      profile_summary?: string;
+      actionable_feedback?: string[];
+    };
+  }>;
+  peer_scores?: DimensionScores;
+}
 
 export default function Dashboard() {
   const { id } = useParams();
+  const { user, loading: authLoading } = useRequireAuth();
   
-  const [data, setData] = useState<any>(null);
-  const [alerts, setAlerts] = useState<any[]>([]);
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (authLoading) return;
     async function fetchData() {
       try {
         const res = await fetch(`/api/student/${id}`);
@@ -53,32 +69,15 @@ export default function Dashboard() {
         } catch (e) {
           console.error("Alerts fetch error", e);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error(err);
-        // Fallback for demo purposes
-        setData({
-          student: { full_name: "CYBER_NOMAD", department: "NEURAL_ENGINEERING" },
-          assessments: [{
-            dimension_scores: { Technical: 88, Product: 94, Leadership: 72, Communication: 91, Adaptability: 76 },
-            primary_profile: "THE_ARCHITECT",
-            founder_fit: { Builder: 96 },
-            development_report: {
-              profile_summary: "EXCEPTIONAL_ADAPTIVE_CAPACITY. ANALYTICAL_RIGOR_MATCHED_BY_STRATEGIC_EMPATHY. IDEAL_FOR_HIGH_STAKES_ORCHESTRATION.",
-              actionable_feedback: [
-                "OPTIMIZE_NEURAL_EFFICIENCY_IN_COGNITIVE_BLINDSPOTS.",
-                "LEVERAGE_HIGH_EQ_FOR_STAKEHOLDER_SYNCHRONIZATION.",
-                "INTENSIFY_STRESS_TESTING_IN_NON_LINEAR_ENVIRONMENTS."
-              ]
-            }
-          }],
-          peer_scores: { Technical: 75, Product: 82, Leadership: 88, Communication: 85, Adaptability: 90 }
-        });
+        setError("Failed to synchronize student metrics from the database node.");
       } finally {
         setLoading(false);
       }
     }
     fetchData();
-  }, [id]);
+  }, [id, authLoading]);
 
   const assessment = data?.assessments?.[0] || {};
   const scores = assessment.dimension_scores || { Technical: 85, Product: 92, Leadership: 78, Communication: 88, Adaptability: 70 };
@@ -86,23 +85,28 @@ export default function Dashboard() {
   const maxFitValue = assessment.founder_fit ? Math.max(...Object.values(assessment.founder_fit as Record<string, number>)) : 96;
   const founderFitType = assessment.founder_fit ? Object.keys(assessment.founder_fit)[0].toUpperCase() : "THE_BUILDER";
 
-  if (loading) {
+  if (error) {
     return (
-      <div className="min-h-screen bg-[#0e1416] flex items-center justify-center font-mono relative overflow-hidden">
-        <div className="absolute inset-0 bg-cyber-grid bg-[length:50px_50px] opacity-10"></div>
-        <div className="flex flex-col items-center gap-8 relative z-10">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-full border-4 border-cyan-500/10 scale-150"></div>
-            <Loader2 className="h-16 w-16 animate-spin text-cyan-400 opacity-20" />
-            <Loader2 className="absolute inset-0 h-16 w-16 animate-spin text-cyan-400 [animation-delay:150ms]" />
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="text-cyan-400 tracking-[0.6em] font-black animate-pulse text-sm uppercase">SYNCHRONIZING_MATRIX</div>
-            <div className="text-white/20 text-[10px] tracking-widest font-bold uppercase">Establishing_Secure_Datalink</div>
-          </div>
+      <div className="min-h-screen bg-[#0e1416] flex items-center justify-center p-6 font-mono text-center">
+        <div className="bg-black/60 border border-red-500/30 p-8 rounded-xl max-w-md">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4 animate-pulse" />
+          <h2 className="text-xl font-bold text-white mb-2 uppercase tracking-[0.2em]">Telemetry Connection Failed</h2>
+          <p className="text-[#bbc9cd] text-sm mb-6 leading-relaxed">
+            {error}
+          </p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-6 py-3 bg-red-950/40 border border-red-500/40 text-red-400 text-xs font-bold uppercase tracking-widest hover:bg-red-950/60 active:scale-95 transition-all"
+          >
+            Retry Connection
+          </button>
         </div>
       </div>
     );
+  }
+
+  if (authLoading || loading) {
+    return <LoadingScreen title="Synchronizing Matrix" subtitle="Establishing Secure Datalink" />;
   }
 
   return (
@@ -111,43 +115,7 @@ export default function Dashboard() {
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-cyan-500/5 blur-[150px] -z-10 pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-500/5 blur-[150px] -z-10 pointer-events-none"></div>
 
-      {/* Top Action Bar */}
-      <nav className="sticky top-0 z-[100] bg-[#0e1416]/80 backdrop-blur-2xl border-b border-white/5">
-        <div className="max-w-[1500px] mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-indigo-600 rounded-sm flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]">
-                <Zap className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-mono font-black tracking-tighter text-2xl text-white">C2C<span className="text-cyan-400">.OS</span></span>
-            </div>
-            <div className="hidden lg:flex h-8 w-[1px] bg-white/10"></div>
-            <div className="hidden lg:flex items-center gap-6 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
-              <span className="flex items-center gap-2 px-2 py-1 bg-white/5 rounded-sm"><Shield className="w-3 h-3 text-cyan-400" /> SECURE_LAYER_01</span>
-              <span className="flex items-center gap-2 px-2 py-1 bg-white/5 rounded-sm"><Activity className="w-3 h-3 text-green-500" /> DATA_STREAM_LIVE</span>
-            </div>
-          </div>
 
-          <div className="flex items-center gap-4">
-            <button className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-sm font-mono text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-all">
-              <Share2 className="w-4 h-4" /> Share_Profile
-            </button>
-            <button 
-              onClick={() => window.open(`/api/export/student/${id}`, '_blank')}
-              className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white border border-indigo-600/30 rounded-sm font-mono text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg hover:shadow-indigo-600/20"
-            >
-              <Download className="w-4 h-4" /> Export_Dossier
-            </button>
-            <div className="w-[1px] h-8 bg-white/10 mx-2"></div>
-            <div className="relative group cursor-pointer">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-indigo-600 rounded-sm blur opacity-40 group-hover:opacity-100 transition-opacity"></div>
-              <div className="relative w-10 h-10 rounded-sm bg-[#0e1416] flex items-center justify-center border border-white/20">
-                <User className="w-5 h-5 text-cyan-400" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
 
       <main className="max-w-[1500px] mx-auto px-6 pt-12">
         
@@ -220,7 +188,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
                 <div className="relative">
                   <div className="absolute inset-0 bg-cyan-400/5 blur-3xl rounded-full scale-75"></div>
-                  <GrowthRadar data={scores} peerData={data?.peer_scores} />
+                  <GrowthRadar data={scores as { [key: string]: number }} peerData={data?.peer_scores as { [key: string]: number } | undefined} />
                 </div>
                 
                 <div className="space-y-4">
@@ -261,7 +229,7 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-4">
-                {report.actionable_feedback.map((directive: string, i: number) => (
+                {(report.actionable_feedback || []).map((directive: string, i: number) => (
                   <div key={i} className="group/card relative">
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-indigo-600/20 rounded-xl blur opacity-0 group-hover/card:opacity-100 transition duration-500"></div>
                     <div className="relative bg-black/60 border border-white/5 p-6 rounded-xl flex items-start gap-6 backdrop-blur-md transition-all group-hover/card:bg-black/40 group-hover/card:translate-x-2">
