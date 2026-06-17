@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const hanken = Hanken_Grotesk({ 
   subsets: ["latin"],
@@ -15,8 +13,31 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://c2c.taliatech.in'),
   title: "c2c | Campus to Corporate",
   description: "The ultimate ordeal for future legends.",
+  openGraph: {
+    title: "c2c | Campus to Corporate",
+    description: "Bridge the gap between campus and corporate with neural-matched precision benchmarks.",
+    url: "https://c2c.taliatech.in",
+    siteName: "c2c Platform",
+    images: [
+      {
+        url: "/qa-screenshots/landing_page.png",
+        width: 1200,
+        height: 630,
+        alt: "c2c Platform Interface Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "c2c | Campus to Corporate",
+    description: "Bridge the gap between campus and corporate with neural-matched precision benchmarks.",
+    images: ["/qa-screenshots/landing_page.png"],
+  },
 };
 
 export default function RootLayout({
@@ -27,11 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${hanken.variable} ${jetbrains.variable}`}>
       <body className="font-sans antialiased bg-background text-slate-200">
-        <div className="flex min-h-screen flex-col bg-cyber-grid bg-[length:50px_50px]">
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </div>
+        {children}
       </body>
     </html>
   );

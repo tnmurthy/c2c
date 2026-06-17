@@ -2,20 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Terminal, Shield, AlertTriangle, ChevronRight, Zap, Activity, Cpu, Layers } from 'lucide-react';
-
-interface Question {
-  id: string;
-  text: string;
-  item_type: string;
-  options?: any;
-}
+import { Loader2, Terminal, Shield, AlertTriangle, ChevronRight, Zap, Activity, Cpu } from 'lucide-react';
+import { useRequireAuth } from '@/hooks/useAuth';
+import type { AssessmentQuestion, AssessmentOption, AssessmentResponse } from '@/types';
+import { LoadingScreen } from '@/components/LoadingScreen';
 
 export default function Assessment() {
   const router = useRouter();
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const { user, loading: authLoading } = useRequireAuth();
+  const [questions, setQuestions] = useState<AssessmentQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [responses, setResponses] = useState<Array<{ item_id: string; response: string | number }>>([]);
+  const [responses, setResponses] = useState<AssessmentResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -25,6 +22,8 @@ export default function Assessment() {
   const [syncProgress, setSyncProgress] = useState(0);
 
   useEffect(() => {
+    if (authLoading) return;
+
     const id = localStorage.getItem('student_id') || `stu-${Date.now()}`;
     setStudentId(id);
     localStorage.setItem('student_id', id);
@@ -51,15 +50,15 @@ export default function Assessment() {
         if (!res.ok) throw new Error('PROTOCOL_FETCH_FAILURE');
         const data = await res.json();
         setQuestions(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'PROTOCOL_FETCH_FAILURE');
       } finally {
         setLoading(false);
       }
     };
     
     fetchQuestions();
-  }, []);
+  }, [authLoading]);
 
   const handleResponse = async (answer: string | number) => {
     if (isTransitioning) return;
@@ -80,7 +79,7 @@ export default function Assessment() {
     }, 400);
   };
 
-  const submitAssessment = async (finalResponses: any) => {
+  const submitAssessment = async (finalResponses: AssessmentResponse[]) => {
     setSubmitting(true);
     try {
       const res = await fetch('/api/assessment/submit', {
@@ -95,11 +94,15 @@ export default function Assessment() {
       if (!res.ok) throw new Error('SUBMISSION_ERROR');
       
       router.push(`/dashboard/${studentId}`); 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'SUBMISSION_ERROR');
       setSubmitting(false);
     }
   };
+
+  if (authLoading) {
+    return <LoadingScreen title="Establishing Link" subtitle="Verifying Security Protocol..." />;
+  }
 
   if (loading) {
     return (
@@ -193,7 +196,7 @@ export default function Assessment() {
   const isLikert = currentQ.item_type.toLowerCase().includes('likert');
   const isSjt = currentQ.item_type.toLowerCase().includes('sjt');
   
-  let parsedOptions: any = null;
+  let parsedOptions: AssessmentOption[] | null = null;
   if (currentQ.options) {
       if (typeof currentQ.options === 'string') {
           try {
@@ -202,7 +205,7 @@ export default function Assessment() {
              parsedOptions = null;
           }
       } else {
-          parsedOptions = currentQ.options;
+          parsedOptions = currentQ.options as AssessmentOption[];
       }
   }
 
@@ -292,9 +295,9 @@ export default function Assessment() {
 
             {(isSjt || !isLikert) && parsedOptions && Array.isArray(parsedOptions) && (
               <div className="grid gap-5">
-                 {parsedOptions.map((opt: any, idx: number) => {
+                 {parsedOptions.map((opt: AssessmentOption, idx: number) => {
                     const val = opt.value || opt.id || String.fromCharCode(65 + idx);
-                    const label = opt.label || opt.text || opt;
+                    const label = opt.label || opt.text || '';
                     return (
                       <button
                         key={idx}

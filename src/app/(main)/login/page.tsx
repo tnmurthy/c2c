@@ -29,26 +29,19 @@ export default function LoginPage() {
         if (authError) throw authError;
 
         if (authData.user) {
-          // Check if user is a student or institution
-          const { data: student } = await supabase
-            .from("students")
-            .select("id")
-            .eq("email", email)
-            .single();
+          // Check if user is a student or institution in parallel
+          const [studentResult, institutionResult] = await Promise.allSettled([
+            supabase.from("students").select("id").eq("email", email).single(),
+            supabase.from("institutions").select("id").eq("email", email).single(),
+          ]);
 
-          if (student) {
-            router.push(`/dashboard/${student.id}`);
+          if (studentResult.status === "fulfilled" && studentResult.value.data) {
+            router.push(`/dashboard/${studentResult.value.data.id}`);
             return;
           }
 
-          const { data: institution } = await supabase
-            .from("institutions")
-            .select("id")
-            .eq("email", email)
-            .single();
-
-          if (institution) {
-            router.push(`/dashboard/${institution.id}`);
+          if (institutionResult.status === "fulfilled" && institutionResult.value.data) {
+            router.push(`/dashboard/${institutionResult.value.data.id}`);
             return;
           }
 
@@ -70,8 +63,8 @@ export default function LoginPage() {
           router.push("/onboard");
         }
       }
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -112,6 +105,8 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  aria-label="Email address"
                   className="block w-full pl-11 pr-4 py-3 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm"
                   placeholder="name@campus.edu"
                 />
@@ -129,6 +124,8 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  autoComplete={isLogin ? "current-password" : "new-password"}
+                  aria-label="Access key password"
                   className="block w-full pl-11 pr-4 py-3 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm"
                   placeholder="••••••••"
                 />
@@ -179,8 +176,8 @@ export default function LoginPage() {
 
         {/* Footer info */}
         <div className="mt-8 flex justify-center gap-6 text-[10px] font-mono uppercase tracking-[0.2em] text-[#dde4e5]/20">
-          <Link href="/privacy" className="hover:text-cyan-400/50 transition-colors underline decoration-white/5">Privacy_Protocols</Link>
-          <Link href="/terms" className="hover:text-cyan-400/50 transition-colors underline decoration-white/5">Terms_of_Service</Link>
+          <Link href="#" className="hover:text-cyan-400/50 transition-colors underline decoration-white/5">Privacy_Protocols</Link>
+          <Link href="#" className="hover:text-cyan-400/50 transition-colors underline decoration-white/5">Terms_of_Service</Link>
         </div>
       </div>
     </div>

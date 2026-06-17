@@ -89,11 +89,7 @@ export default function GrowthRadar({ data = DEFAULT_DATA, peerData }: GrowthRad
         <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full overflow-visible">
           {/* Defs for glowing effects */}
           <defs>
-            <filter id="glow-self" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-            <filter id="glow-peer" x="-20%" y="-20%" width="140%" height="140%">
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="3" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
@@ -147,7 +143,7 @@ export default function GrowthRadar({ data = DEFAULT_DATA, peerData }: GrowthRad
               fill="url(#self-poly-grad)"
               stroke="#2fd9f4"
               strokeWidth="1.5"
-              filter="url(#glow-self)"
+              filter="url(#glow)"
               className="transition-all duration-700 ease-in-out origin-center animate-[pulse_4s_easeInOut_infinite]"
               style={{ transformOrigin: "center" }}
             />
@@ -161,7 +157,7 @@ export default function GrowthRadar({ data = DEFAULT_DATA, peerData }: GrowthRad
               stroke="#d946ef"
               strokeWidth="2"
               strokeDasharray="4 4"
-              filter="url(#glow-peer)"
+              filter="url(#glow)"
               className="transition-all duration-700 ease-in-out"
             />
           )}
@@ -177,7 +173,7 @@ export default function GrowthRadar({ data = DEFAULT_DATA, peerData }: GrowthRad
                   fill="#0e1416"
                   stroke="#d946ef"
                   strokeWidth="1"
-                  className="transition-all duration-700 ease-in-out group-hover:r-3"
+                  className="transition-all duration-700 ease-in-out"
                 />
                 <circle 
                   cx={p.x} 
@@ -200,7 +196,7 @@ export default function GrowthRadar({ data = DEFAULT_DATA, peerData }: GrowthRad
                   fill="#0e1416"
                   stroke="#2fd9f4"
                   strokeWidth="1"
-                  className="transition-all duration-700 ease-in-out group-hover:r-3"
+                  className="transition-all duration-700 ease-in-out"
                 />
                 <circle 
                   cx={p.x} 

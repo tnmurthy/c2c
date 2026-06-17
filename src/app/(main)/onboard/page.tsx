@@ -5,9 +5,6 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { 
   UserPlus, 
-  Mail, 
-  Calendar, 
-  BookOpen, 
   ArrowRight, 
   Loader2, 
   AlertCircle,
@@ -16,7 +13,7 @@ import {
   Zap,
   Globe
 } from 'lucide-react';
-import Link from 'next/link';
+import { useRequireAuth } from '@/hooks/useAuth';
 
 export default function Onboard() {
   const router = useRouter();
@@ -26,38 +23,25 @@ export default function Onboard() {
     graduation_year: new Date().getFullYear(),
     department: '',
   });
+  const { user, loading } = useRequireAuth();
   const [authId, setAuthId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError || !user) {
-          router.push('/login');
-          return;
-        }
-        setAuthId(user.id);
-        if (user.email) {
-          setFormData(prev => ({ ...prev, email: user.email || '' }));
-        }
-      } catch (err) {
-        console.error('Auth check error:', err);
-        router.push('/login');
-      } finally {
-        setLoading(false);
+    if (user) {
+      setAuthId(user.id);
+      if (user.email) {
+        setFormData(prev => ({ ...prev, email: user.email || '' }));
       }
-    };
-    checkUser();
-  }, [router]);
+    }
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'graduation_year' ? parseInt(value) || value : value,
+      [name]: name === 'graduation_year' ? parseInt(value, 10) || new Date().getFullYear() : value,
     }));
   };
 
@@ -91,7 +75,7 @@ export default function Onboard() {
       if (result && result.length > 0 && result[0].id) {
          localStorage.setItem('student_id', result[0].id);
       } else {
-         localStorage.setItem('student_id', 'mock-student-id');
+         console.warn('[Onboard] No student ID returned from onboarding API');
       }
       
       router.push('/assessment');

@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-06-17T14:39:32.974Z",
+  "allPassed": true,
+  "results": [
+    {
+      "name": "Landing Page",
+      "path": "/",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "landing_page.png",
+      "success": true
+    },
+    {
+      "name": "Login Page",
+      "path": "/login",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "login_page.png",
+      "success": true
+    },
+    {
+      "name": "Employer Portal",
+      "path": "/employer",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "employer_portal.png",
+      "success": true
+    },
+    {
+      "name": "Onboard Page",
+      "path": "/onboard",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "onboard_page.png",
+      "success": true
+    },
+    {
+      "name": "Assessment Page",
+      "path": "/assessment",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "assessment_page.png",
+      "success": true
+    },
+    {
+      "name": "Student Dashboard",
+      "path": "/dashboard/mock-user-id",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "student_dashboard.png",
+      "success": true
+    },
+    {
+      "name": "TPO Dashboard",
+      "path": "/tpo-dashboard/mock-user-id",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "tpo_dashboard.png",
+      "success": true
+    },
+    {
+      "name": "Admin Panel",
+      "path": "/admin",
+      "statusCode": 200,
+      "title": "c2c | Campus to Corporate",
+      "hasExpectedText": true,
+      "screenshotName": "admin_panel.png",
+      "success": true
+    }
+  ]
+}

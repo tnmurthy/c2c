@@ -31,25 +31,9 @@
     @apply backdrop-blur-xl bg-slate-900/80 border border-white/10 shadow-cyan-glow;
   }
 
-  .cyber-button-primary {
-    @apply bg-secondary-dark text-white font-semibold py-2 px-6 rounded-md 
-           transition-all duration-200 hover:shadow-cyan-glow hover:scale-[1.02] 
-           active:scale-[0.98] border border-white/10;
-  }
-
-  .cyber-button-ghost {
-    @apply bg-transparent text-primary border border-slate-700 font-semibold py-2 px-6 rounded-md 
-           transition-all duration-200 hover:border-primary hover:text-white hover:bg-primary/10;
-  }
-
-  .cyber-input {
-    @apply bg-slate-950/50 border-b-2 border-slate-700 text-white px-4 py-2 
-           focus:outline-none focus:border-primary focus:shadow-cyan-glow transition-all;
-  }
-
   .segmented-progress {
     @apply relative h-2 bg-slate-800 rounded-full overflow-hidden;
-    background-image: linear-gradient(to right, transparent 90%, #0e1416 90%);
+    background-image: linear-gradient(to right, transparent 90%, hsl(var(--background)) 90%);
     background-size: 10% 100%;
   }
 }

@@ -1,13 +1,12 @@
-from fastapi import FastAPI, HTTPException, APIRouter
-from fastapi.responses import Response
-from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
 import os
 import sys
-import json
 import random
 import re
-from api.pdf_generator import generate_student_pdf
+import logging
+from typing import List, Dict, Any, Optional
+from fastapi import FastAPI, HTTPException, APIRouter, Depends
+from fastapi.responses import Response
+from pydantic import BaseModel
 
 # Add service directories to sys.path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,27 +14,34 @@ sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, "services", "job-intel-desk", "backend"))
 sys.path.append(os.path.join(BASE_DIR, "services", "market-scout"))
 
+# Setup logger
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
+logger = logging.getLogger("c2c_api")
+
+# Imports from modular files
+from api.constants import ICONS, RECOMMENDATION_MAPPING
+from api.deps import get_supabase_client, require_supabase
+from api.pdf_generator import generate_student_pdf
+
 try:
     from agents.scoring_engine import score_job_lead, analyze_candidate, analyze_posting
 except ImportError:
-    pass
+    logger.warning("agents.scoring_engine not found. AI scoring features will be disabled.")
 
-# Import Supabase client from existing service structure
 try:
-    from storage.supabase_sync import get_client
+    from scripts.c2c_orchestrator_v2 import C2C_Orchestrator_V2
 except ImportError:
-    def get_client(): return None
+    # Fallback to keep interface compatible if scripts/ module path isn't resolved yet
+    class C2C_Orchestrator_V2:
+        def __init__(self, candidate_name, audit_gaps):
+            self.candidate = candidate_name
+            self.gaps = audit_gaps
+            self.evidence_scores = {str(gap): 0 for gap in audit_gaps}
+            self.logs = []
+        def run_ordeal_session(self):
+            return {"candidate": self.candidate, "final_status": "CERTIFIED"}
 
 app = FastAPI()
-
-# --- CONSTANTS ---
-
-RECOMMENDATION_MAPPING = {
-    "Builder": ["Engineer", "Developer", "Researcher", "Architect"],
-    "Leader": ["Manager", "Lead", "Culture", "Director"],
-    "Rainmaker": ["Sales", "Partnership", "Advocate", "Growth"],
-    "Anchor": ["Operations", "QA", "SRE", "DevOps", "Analyst", "Data"]
-}
 
 # --- MODELS ---
 
@@ -128,80 +134,7 @@ def generate_development_report(scores: Dict[str, int], founder_profile: str) ->
         
     return report
 
-# --- ORCHESTRATOR LOGIC ---
-
-class C2C_Orchestrator_V2:
-    def __init__(self, candidate_name, audit_gaps):
-        self.candidate = candidate_name
-        self.gaps = audit_gaps
-        self.evidence_scores = {str(gap): 0 for gap in audit_gaps}
-        self.logs = []
-
-    def read_audit_gap(self, gap_id):
-        return f"Deep-dive data for {gap_id} shows lack of production experience."
-
-    def verify_code_claim(self, feature):
-        success = random.choice([True, False])
-        return "Found relevant commit history." if success else "No matching commits found."
-
-    def simulate_stress_test(self, gap, difficulty=3):
-        performance = random.randint(30, 95)
-        return performance
-
-    def run_ordeal_session(self):
-        for gap in self.gaps:
-            self.read_audit_gap(gap)
-            score = self.simulate_stress_test(gap, difficulty=4)
-            observation = {
-                "status": "success" if score > 70 else "warning",
-                "summary": f"Candidate tested on {gap}. Evidence Score: {score}",
-                "next_actions": ["Move to next gap"] if score > 70 else ["Re-test with higher difficulty"],
-                "evidence_score": score
-            }
-            self.evidence_scores[str(gap)] = score
-            self.logs.append(observation)
-        return self.finalize_session()
-
-    def finalize_session(self):
-        passed = all(score >= 70 for score in self.evidence_scores.values())
-        report = {
-            "candidate": self.candidate,
-            "final_status": "CERTIFIED" if passed else "REMEDIATION_REQUIRED",
-            "evidence_scores": self.evidence_scores,
-            "convergence_met": passed,
-            "logs": self.logs
-        }
-        return report
-
 def generate_portfolio_json(portfolio_data):
-    ICONS = {
-        'computer': 'https://win98icons.alexmeub.com/icons/png/computer_explorer-3.png',
-        'folder': 'https://win98icons.alexmeub.com/icons/png/directory_closed-4.png',
-        'text': 'https://win98icons.alexmeub.com/icons/png/notepad-5.png',
-        'video': 'https://win98icons.alexmeub.com/icons/png/media_player-0.png',
-        'gear': 'https://win98icons.alexmeub.com/icons/png/settings_gear-3.png',
-        'msn': 'https://win98icons.alexmeub.com/icons/png/msn.png',
-        'chart': 'https://win98icons.alexmeub.com/icons/png/chart1-0.png',
-        'html': 'https://win98icons.alexmeub.com/icons/png/html-1.png',
-        'world': 'https://win98icons.alexmeub.com/icons/png/world-0.png',
-        'network': 'https://win98icons.alexmeub.com/icons/png/world_network_directories-3.png',
-        'camera': 'https://win98icons.alexmeub.com/icons/png/camera-0.png',
-        'certificate': 'https://win98icons.alexmeub.com/icons/png/certificate-0.png',
-        'brain': 'https://win98icons.alexmeub.com/icons/png/entire_network_globe-3.png',
-        'robot': 'https://win98icons.alexmeub.com/icons/png/computer_gear.png',
-        'product': 'https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png',
-        'strategy': 'https://win98icons.alexmeub.com/icons/png/check-0.png',
-        'linkedin': 'https://win98icons.alexmeub.com/icons/png/msie1-2.png',
-        'resume': 'https://win98icons.alexmeub.com/icons/png/notepad-4.png',
-        'briefcase': 'https://win98icons.alexmeub.com/icons/png/briefcase-0.png',
-        'book': 'https://win98icons.alexmeub.com/icons/png/help_book_big-0.png',
-        'database': 'https://win98icons.alexmeub.com/icons/png/cylinder_database-1.png',
-        'shield': 'https://win98icons.alexmeub.com/icons/png/key_padlock-0.png',
-        'search': 'https://win98icons.alexmeub.com/icons/png/search_file-0.png',
-        'finance': 'https://win98icons.alexmeub.com/icons/png/chart1-0.png',
-        'terminal': 'https://win98icons.alexmeub.com/icons/png/ms_dos-0.png',
-        'pipe': 'https://win98icons.alexmeub.com/icons/png/recycle_bin_full-4.png'
-    }
     projects_list = []
     for proj in portfolio_data['projects']:
         content = f"<h3>{proj['title']}</h3><p>{proj['impact']}</p>"
@@ -226,20 +159,16 @@ def status():
     return {"status": "c2c api online"}
 
 @router.post("/onboard/institution")
-async def onboard_institution(inst: InstitutionOnboard):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def onboard_institution(inst: InstitutionOnboard, client = Depends(require_supabase)):
     try:
         res = client.table("institutions").upsert(inst.dict(), on_conflict="domain").execute()
         return res.data
     except Exception as e:
-        print(f"ERROR onboard_institution: {e}")
+        logger.error(f"ERROR onboard_institution: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/onboard/student")
-async def onboard_student(student: StudentOnboard):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def onboard_student(student: StudentOnboard, client = Depends(require_supabase)):
     domain = student.email.split("@")[-1]
     try:
         inst_res = client.table("institutions").select("*").eq("domain", domain).execute()
@@ -250,15 +179,14 @@ async def onboard_student(student: StudentOnboard):
         data["institution_id"] = inst_res.data[0]["id"]
         res = client.table("students").insert(data).execute()
         return res.data
-    except HTTPException: raise
+    except HTTPException:
+        raise
     except Exception as e:
-        print(f"ERROR onboard_student: {e}")
+        logger.error(f"ERROR onboard_student: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/assessment/generate")
-async def generate_assessment(num_per_section: int = 25):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def generate_assessment(num_per_section: int = 25, client = Depends(require_supabase)):
     dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
     final_items = []
     try:
@@ -270,13 +198,11 @@ async def generate_assessment(num_per_section: int = 25):
                 final_items.extend(random.sample(items, count))
         return final_items
     except Exception as e:
-        print(f"ERROR generate_assessment: {e}")
+        logger.error(f"ERROR generate_assessment: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/assessment/submit")
-async def submit_assessment(submit: AssessmentSubmit):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_supabase)):
     scores = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
     try:
         item_ids = [r["item_id"] for r in submit.responses]
@@ -289,19 +215,20 @@ async def submit_assessment(submit: AssessmentSubmit):
             val, dim = resp["response"], item["primary_dimension"]
             logic_raw = item.get("scoring_logic")
             logic_str = logic_raw.get("raw", "") if isinstance(logic_raw, dict) else str(logic_raw or "")
-            logic = parse_scoring_logic(logic_str, item["item_type"])
             
-            if item["item_type"].lower() == "likert":
-                try:
+            try:
+                logic = parse_scoring_logic(logic_str, item["item_type"])
+                if item["item_type"].lower() == "likert":
                     s = int(val)
                     if logic.get("direction") == "reverse": s = 6 - s
                     scores[dim] += s
-                except: pass
-            elif item["item_type"].lower() == "cognitive":
-                if str(val) == str(logic.get("correct_answer")): scores[dim] += 1
-            elif "sjt" in item["item_type"].lower():
-                m = logic.get("mapping") or {}
-                if val in m: scores[dim] += m[val]
+                elif item["item_type"].lower() == "cognitive":
+                    if str(val) == str(logic.get("correct_answer")): scores[dim] += 1
+                elif "sjt" in item["item_type"].lower():
+                    m = logic.get("mapping") or {}
+                    if val in m: scores[dim] += m[val]
+            except Exception as e:
+                logger.warning(f"Failed parsing scoring logic for item {resp['item_id']}: {e}")
         
         founder_fit = {
             "Builder": scores.get("IQ", 0) + scores.get("AQ", 0),
@@ -322,13 +249,11 @@ async def submit_assessment(submit: AssessmentSubmit):
         client.table("assessments").insert(payload).execute()
         return payload
     except Exception as e:
-        print(f"ERROR submit_assessment: {e}")
+        logger.error(f"ERROR submit_assessment: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/cohort/{institution_id}")
-async def get_cohort_report(institution_id: str):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def get_cohort_report(institution_id: str, client = Depends(require_supabase)):
     try:
         students_res = client.table("students").select("id").eq("institution_id", institution_id).execute()
         if not students_res.data: return {"averages": {}, "founder_distribution": {}, "support_needs": []}
@@ -354,24 +279,20 @@ async def get_cohort_report(institution_id: str):
             
         return {"averages": avgs, "founder_distribution": dist, "support_needs": needs}
     except Exception as e:
-        print(f"ERROR get_cohort_report: {e}")
+        logger.error(f"ERROR get_cohort_report: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/leads")
-async def get_leads():
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def get_leads(client = Depends(require_supabase)):
     try:
         res = client.table("market_leads").select("*").order("ai_score", desc=True).execute()
         return res.data
     except Exception as e:
-        print(f"ERROR get_leads: {e}")
+        logger.error(f"ERROR get_leads: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/student/{student_id}")
-async def get_student(student_id: str):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def get_student(student_id: str, client = Depends(require_supabase)):
     try:
         s_res = client.table("students").select("*").eq("id", student_id).execute()
         if not s_res.data: raise HTTPException(status_code=404, detail="Student not found")
@@ -387,15 +308,14 @@ async def get_student(student_id: str):
             peer_scores = {d: t / n for d, t in sums.items()}
 
         return {"student": s_res.data[0], "assessments": a_res.data, "peer_scores": peer_scores}
-    except HTTPException: raise
+    except HTTPException:
+        raise
     except Exception as e:
-        print(f"ERROR get_student: {e}")
+        logger.error(f"ERROR get_student: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/employer/candidates")
-async def get_employer_candidates():
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def get_employer_candidates(client = Depends(require_supabase)):
     try:
         s_res = client.table("students").select("*").execute()
         if not s_res.data: return []
@@ -419,35 +339,29 @@ async def get_employer_candidates():
             })
         return results
     except Exception as e:
-        print(f"ERROR get_employer_candidates: {e}")
+        logger.error(f"ERROR get_employer_candidates: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/feedback/submit")
-async def submit_feedback(submit: FeedbackSubmit):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def submit_feedback(submit: FeedbackSubmit, client = Depends(require_supabase)):
     try:
         res = client.table("peer_feedback").insert(submit.dict()).execute()
         return res.data
     except Exception as e:
-        print(f"ERROR submit_feedback: {e}")
+        logger.error(f"ERROR submit_feedback: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/alerts/student/{student_id}")
-async def get_student_alerts(student_id: str):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def get_student_alerts(student_id: str, client = Depends(require_supabase)):
     try:
         res = client.table("match_alerts").select("*, market_leads(*)").eq("student_id", student_id).order("created_at", desc=True).execute()
         return res.data
     except Exception as e:
-        print(f"ERROR get_student_alerts: {e}")
+        logger.error(f"ERROR get_student_alerts: {e}", exc_info=True)
         return []
 
 @router.get("/export/student/{student_id}")
-async def export_student_pdf(student_id: str):
-    client = get_client()
-    if not client: raise HTTPException(status_code=500, detail="Supabase client not initialized")
+async def export_student_pdf(student_id: str, client = Depends(require_supabase)):
     try:
         s_res = client.table("students").select("*").eq("id", student_id).execute()
         if not s_res.data: raise HTTPException(status_code=404, detail="Student not found")
@@ -456,7 +370,7 @@ async def export_student_pdf(student_id: str):
         pdf_bytes = generate_student_pdf(s_res.data[0], a_res.data[0])
         return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=c2c_legend_{student_id}.pdf"})
     except Exception as e:
-        print(f"ERROR export_student_pdf: {e}")
+        logger.error(f"ERROR export_student_pdf: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 app.include_router(router, prefix="/api")
