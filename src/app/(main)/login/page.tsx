@@ -29,6 +29,16 @@ export default function LoginPage() {
         if (authError) throw authError;
 
         if (authData.user) {
+          const role = authData.user.user_metadata?.role;
+          if (role === "employer") {
+            router.push("/employer");
+            return;
+          }
+          if (role === "admin") {
+            router.push("/admin");
+            return;
+          }
+
           // Check if user is a student or institution in parallel
           const [studentResult, institutionResult] = await Promise.allSettled([
             supabase.from("students").select("id").eq("email", email).single(),
@@ -41,7 +51,7 @@ export default function LoginPage() {
           }
 
           if (institutionResult.status === "fulfilled" && institutionResult.value.data) {
-            router.push(`/dashboard/${institutionResult.value.data.id}`);
+            router.push(`/tpo-dashboard/${institutionResult.value.data.id}`);
             return;
           }
 

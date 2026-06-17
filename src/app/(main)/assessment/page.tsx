@@ -9,7 +9,7 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 
 export default function Assessment() {
   const router = useRouter();
-  const { user, loading: authLoading } = useRequireAuth();
+  const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['student'] });
   const [questions, setQuestions] = useState<AssessmentQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [responses, setResponses] = useState<AssessmentResponse[]>([]);
@@ -24,9 +24,13 @@ export default function Assessment() {
   useEffect(() => {
     if (authLoading) return;
 
-    const id = localStorage.getItem('student_id') || `stu-${Date.now()}`;
-    setStudentId(id);
-    localStorage.setItem('student_id', id);
+    const profileId = user?.user_metadata?.profile_id;
+    if (!profileId) {
+      router.push('/onboard');
+      return;
+    }
+    setStudentId(profileId);
+    localStorage.setItem('student_id', profileId);
 
     const fetchQuestions = async () => {
       // Neural Syncing Animation
