@@ -14,7 +14,9 @@ import {
   Layers,
   Activity,
   Cpu,
-  Database
+  Database,
+  Copy,
+  Check
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -48,6 +50,14 @@ export default function Dashboard() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const copyFeedbackLink = () => {
+    const link = `${window.location.origin}/feedback/${id}`;
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -138,9 +148,48 @@ export default function Dashboard() {
                     {founderFitType}
                   </span>
                 </h1>
-                <p className="max-w-2xl text-lg md:text-2xl text-[#bbc9cd] font-medium leading-relaxed font-sans mt-10 border-l-4 border-cyan-500/30 pl-8">
+                <p className="max-w-2xl text-lg md:text-2xl text-[#bbc9cd] font-medium leading-relaxed font-sans mt-10 border-l-4 border-cyan-500/30 pl-8 mb-8">
                   {report.profile_summary}
                 </p>
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start border-l-4 border-transparent pl-8">
+                  <Link 
+                    href={`/portfolio/${id}`}
+                    target="_blank"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded-sm font-mono text-xs font-black text-cyan-400 uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[0_0_25px_rgba(6,182,212,0.2)]"
+                  >
+                    <Cpu className="w-4 h-4" /> Boot_Retro_Portfolio
+                  </Link>
+                  <a 
+                    href={`/api/export/student/${id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600/20 hover:bg-indigo-600/35 border border-indigo-500/30 rounded-sm font-mono text-xs font-black text-indigo-400 uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(99,102,241,0.1)] hover:shadow-[0_0_25px_rgba(99,102,241,0.2)]"
+                  >
+                    <Database className="w-4 h-4" /> Export_Dossier_PDF
+                  </a>
+                  <a 
+                    href={`/api/export/interview-guide/${id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600/20 hover:bg-emerald-600/35 border border-emerald-500/30 rounded-sm font-mono text-xs font-black text-emerald-400 uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)] hover:shadow-[0_0_25px_rgba(16,185,129,0.2)]"
+                  >
+                    <Shield className="w-4 h-4" /> Export_Interview_Guide
+                  </a>
+                  <button 
+                    onClick={copyFeedbackLink}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/30 rounded-sm font-mono text-xs font-black text-pink-400 uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(236,72,153,0.1)] hover:shadow-[0_0_25px_rgba(236,72,153,0.2)]"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-4 h-4" /> Link_Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-4 h-4" /> Get_360_Feedback_Link
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div className="shrink-0 relative group">
@@ -250,14 +299,29 @@ export default function Dashboard() {
               <div className="mt-12 p-8 bg-indigo-600/5 border border-indigo-600/20 rounded-xl text-center relative overflow-hidden group/cta">
                  <div className="absolute inset-0 bg-cyber-grid bg-[length:20px_20px] opacity-10"></div>
                  <div className="relative z-10">
-                    <h4 className="text-white font-mono font-black uppercase tracking-[0.3em] text-xs mb-4">Legend_Network_Access</h4>
-                    <p className="text-[11px] text-[#c3c0ff]/60 uppercase tracking-widest mb-8 leading-relaxed max-w-[200px] mx-auto font-bold">Bridge to verified high-impact opportunities</p>
-                    <Link 
-                      href="/onboard" 
-                      className="inline-flex items-center gap-3 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-sm font-mono text-[11px] font-black uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_40px_rgba(79,70,229,0.5)]"
-                    >
-                      Initialize_Career_Sync <ExternalLink className="w-4 h-4" />
-                    </Link>
+                    {data?.assessments && data.assessments.length > 0 ? (
+                      <>
+                        <h4 className="text-white font-mono font-black uppercase tracking-[0.3em] text-xs mb-4">Legend_Network_Access</h4>
+                        <p className="text-[11px] text-[#c3c0ff]/60 uppercase tracking-widest mb-8 leading-relaxed max-w-[200px] mx-auto font-bold font-mono">Bridge to verified high-impact opportunities</p>
+                        <Link 
+                          href="/employer" 
+                          className="inline-flex items-center gap-3 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-sm font-mono text-[11px] font-black uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_40px_rgba(79,70,229,0.5)]"
+                        >
+                          Explore_Career_Pool <ExternalLink className="w-4 h-4" />
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <h4 className="text-white font-mono font-black uppercase tracking-[0.3em] text-xs mb-4 text-cyan-400">Neural_Sync_Required</h4>
+                        <p className="text-[11px] text-[#c3c0ff]/60 uppercase tracking-widest mb-8 leading-relaxed max-w-[200px] mx-auto font-bold font-mono">Take the cognitive ordeal to map your skill quotients</p>
+                        <Link 
+                          href="/assessment" 
+                          className="inline-flex items-center gap-3 px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white rounded-sm font-mono text-[11px] font-black uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)]"
+                        >
+                          Initialize_The_Ordeal <ExternalLink className="w-4 h-4" />
+                        </Link>
+                      </>
+                    )}
                  </div>
               </div>
             </div>

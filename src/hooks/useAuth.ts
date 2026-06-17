@@ -8,7 +8,9 @@ import type { User } from '@supabase/supabase-js';
 interface UseAuthOptions {
   /** If set, only users with emails ending in this domain are allowed */
   requiredDomain?: string;
-  /** Where to redirect unauthenticated users (default: '/login') */
+  /** Allowed roles for this page (e.g. 'student', 'institution', 'employer') */
+  allowedRoles?: string[];
+  /** Where to redirect unauthenticated or unauthorized users (default: '/login') */
   redirectTo?: string;
 }
 
@@ -18,7 +20,7 @@ interface UseAuthReturn {
 }
 
 export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
-  const { requiredDomain, redirectTo = '/login' } = options;
+  const { requiredDomain, allowedRoles, redirectTo = '/login' } = options;
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,6 +40,18 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
           return;
         }
 
+        if (allowedRoles && allowedRoles.length > 0) {
+          const role = authUser.user_metadata?.role;
+          // Admins can bypass role restriction
+          const email = authUser.email || '';
+          const isAdmin = role === 'admin' || email.endsWith('@taliatech.in');
+          
+          if (!isAdmin && (!role || !allowedRoles.includes(role))) {
+            router.push(redirectTo);
+            return;
+          }
+        }
+
         setUser(authUser);
       } catch {
         router.push(redirectTo);
@@ -47,7 +61,7 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
     }
 
     checkAuth();
-  }, [router, requiredDomain, redirectTo]);
+  }, [router, requiredDomain, allowedRoles, redirectTo]);
 
   return { user, loading };
 }

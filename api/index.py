@@ -4,7 +4,7 @@ import random
 import re
 import logging
 from typing import List, Dict, Any, Optional
-from fastapi import FastAPI, HTTPException, APIRouter, Depends
+from fastapi import FastAPI, HTTPException, APIRouter, Depends, status
 from fastapi.responses import Response
 from pydantic import BaseModel
 
@@ -20,8 +20,8 @@ logger = logging.getLogger("c2c_api")
 
 # Imports from modular files
 from api.constants import ICONS, RECOMMENDATION_MAPPING
-from api.deps import get_supabase_client, require_supabase
-from api.pdf_generator import generate_student_pdf
+from api.deps import get_supabase_client, require_supabase, get_current_user, require_role
+from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 
 try:
     from agents.scoring_engine import score_job_lead, analyze_candidate, analyze_posting
@@ -57,6 +57,11 @@ class StudentOnboard(BaseModel):
     graduation_year: int
     department: str
     auth_id: Optional[str] = None
+
+class EmployerOnboard(BaseModel):
+    company_name: str
+    industry: str
+    contact_person: str
 
 class AssessmentSubmit(BaseModel):
     student_id: str
@@ -185,8 +190,13 @@ async def onboard_student(student: StudentOnboard, client = Depends(require_supa
         logger.error(f"ERROR onboard_student: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/onboard/employer")
+async def onboard_employer(employer: EmployerOnboard, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+    # Simple success endpoint for employer onboarding
+    return {"status": "success", "employer": employer.dict()}
+
 @router.get("/assessment/generate")
-async def generate_assessment(num_per_section: int = 25, client = Depends(require_supabase)):
+async def generate_assessment(num_per_section: int = 25, client = Depends(require_supabase), current_user = Depends(get_current_user)):
     dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
     final_items = []
     try:
@@ -202,7 +212,7 @@ async def generate_assessment(num_per_section: int = 25, client = Depends(requir
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/assessment/submit")
-async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_supabase)):
+async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_supabase), current_user = Depends(require_role(["student", "admin"]))):
     scores = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
     try:
         item_ids = [r["item_id"] for r in submit.responses]
@@ -246,20 +256,46 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_s
             "primary_profile": primary_profile,
             "development_report": dev_report
         }
-        client.table("assessments").insert(payload).execute()
+        assess_res = client.table("assessments").insert(payload).execute()
+        
+        # Save individual responses to assessment_responses table for Item Analysis
+        if assess_res.data:
+            assessment_id = assess_res.data[0]["id"]
+            responses_payload = []
+            for resp in submit.responses:
+                responses_payload.append({
+                    "student_id": submit.student_id,
+                    "assessment_id": assessment_id,
+                    "question_id": resp["item_id"],
+                    "response": str(resp["response"])
+                })
+            if responses_payload:
+                try:
+                    client.table("assessment_responses").insert(responses_payload).execute()
+                except Exception as ex_resp:
+                    logger.error(f"Failed to save assessment responses: {ex_resp}")
+                    
         return payload
     except Exception as e:
         logger.error(f"ERROR submit_assessment: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/cohort/{institution_id}")
-async def get_cohort_report(institution_id: str, client = Depends(require_supabase)):
+async def get_cohort_report(institution_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+    # Enforce RBAC
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+    if not (role == "admin" or email.endswith("@taliatech.in")):
+        if role != "institution" or str(metadata.get("profile_id")) != str(institution_id):
+            raise HTTPException(status_code=403, detail="Access denied: unauthorized institution telemetry access")
+            
     try:
         students_res = client.table("students").select("id").eq("institution_id", institution_id).execute()
-        if not students_res.data: return {"averages": {}, "founder_distribution": {}, "support_needs": []}
+        if not students_res.data: return {"averages": {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}, "founder_distribution": {"Builder": 0, "Leader": 0, "Rainmaker": 0, "Anchor": 0}, "support_needs": []}
         ids = [s["id"] for s in students_res.data]
         assess_res = client.table("assessments").select("*").in_("student_id", ids).execute()
-        if not assess_res.data: return {"averages": {}, "founder_distribution": {}, "support_needs": []}
+        if not assess_res.data: return {"averages": {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}, "founder_distribution": {"Builder": 0, "Leader": 0, "Rainmaker": 0, "Anchor": 0}, "support_needs": []}
         
         total = len(assess_res.data)
         sums = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
@@ -274,8 +310,8 @@ async def get_cohort_report(institution_id: str, client = Depends(require_supaba
         avgs = {d: t / total for d, t in sums.items()}
         dist = {p: (c / total) * 100 for p, c in counts.items()}
         needs = []
-        if avgs.get("AQ", 0) < 50: needs.append("Low AQ detected. Implement resilience workshops.")
-        if avgs.get("EQ", 0) < 50: needs.append("Low EQ detected. Encourage teamwork training.")
+        if avgs.get("AQ", 0) < 50: needs.append("Low AQ detected - Implement resilience workshops.")
+        if avgs.get("EQ", 0) < 50: needs.append("Low EQ detected - Encourage teamwork training.")
             
         return {"averages": avgs, "founder_distribution": dist, "support_needs": needs}
     except Exception as e:
@@ -283,7 +319,7 @@ async def get_cohort_report(institution_id: str, client = Depends(require_supaba
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/leads")
-async def get_leads(client = Depends(require_supabase)):
+async def get_leads(client = Depends(require_supabase), current_user = Depends(require_role(["admin"]))):
     try:
         res = client.table("market_leads").select("*").order("ai_score", desc=True).execute()
         return res.data
@@ -292,11 +328,31 @@ async def get_leads(client = Depends(require_supabase)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/student/{student_id}")
-async def get_student(student_id: str, client = Depends(require_supabase)):
+async def get_student(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+    
+    # Enforce RBAC
+    if role == "admin" or email.endswith("@taliatech.in"):
+        pass
+    elif role == "student":
+        if str(metadata.get("profile_id")) != str(student_id):
+            raise HTTPException(status_code=403, detail="Access denied: cannot view other student profiles")
+    elif role == "institution":
+        inst_id = metadata.get("profile_id")
+        student_check = client.table("students").select("institution_id").eq("id", student_id).execute()
+        if not student_check.data or str(student_check.data[0].get("institution_id")) != str(inst_id):
+            raise HTTPException(status_code=403, detail="Access denied: student does not belong to your institution")
+    elif role == "employer":
+        pass
+    else:
+        raise HTTPException(status_code=403, detail="Access denied: unauthorized profile view")
+
     try:
         s_res = client.table("students").select("*").eq("id", student_id).execute()
         if not s_res.data: raise HTTPException(status_code=404, detail="Student not found")
-        a_res = client.table("assessments").select("*").eq("student_id", student_id).execute()
+        a_res = client.table("assessments").select("*").eq("student_id", student_id).order("created_at", desc=True).execute()
         f_res = client.table("peer_feedback").select("*").eq("student_id", student_id).execute()
         
         peer_scores = None
@@ -315,7 +371,7 @@ async def get_student(student_id: str, client = Depends(require_supabase)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/employer/candidates")
-async def get_employer_candidates(client = Depends(require_supabase)):
+async def get_employer_candidates(client = Depends(require_supabase), current_user = Depends(require_role(["employer", "admin"]))):
     try:
         s_res = client.table("students").select("*").execute()
         if not s_res.data: return []
@@ -352,7 +408,14 @@ async def submit_feedback(submit: FeedbackSubmit, client = Depends(require_supab
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/alerts/student/{student_id}")
-async def get_student_alerts(student_id: str, client = Depends(require_supabase)):
+async def get_student_alerts(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+    if not (role == "admin" or email.endswith("@taliatech.in")):
+        if role != "student" or str(metadata.get("profile_id")) != str(student_id):
+            return []
+            
     try:
         res = client.table("match_alerts").select("*, market_leads(*)").eq("student_id", student_id).order("created_at", desc=True).execute()
         return res.data
@@ -361,7 +424,27 @@ async def get_student_alerts(student_id: str, client = Depends(require_supabase)
         return []
 
 @router.get("/export/student/{student_id}")
-async def export_student_pdf(student_id: str, client = Depends(require_supabase)):
+async def export_student_pdf(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+    
+    # Enforce RBAC
+    if role == "admin" or email.endswith("@taliatech.in"):
+        pass
+    elif role == "student":
+        if str(metadata.get("profile_id")) != str(student_id):
+            raise HTTPException(status_code=403, detail="Access denied: cannot export other student dossiers")
+    elif role == "institution":
+        inst_id = metadata.get("profile_id")
+        student_check = client.table("students").select("institution_id").eq("id", student_id).execute()
+        if not student_check.data or str(student_check.data[0].get("institution_id")) != str(inst_id):
+            raise HTTPException(status_code=403, detail="Access denied: student does not belong to your institution")
+    elif role == "employer":
+        pass
+    else:
+        raise HTTPException(status_code=403, detail="Access denied: unauthorized export view")
+
     try:
         s_res = client.table("students").select("*").eq("id", student_id).execute()
         if not s_res.data: raise HTTPException(status_code=404, detail="Student not found")
@@ -371,6 +454,140 @@ async def export_student_pdf(student_id: str, client = Depends(require_supabase)
         return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=c2c_legend_{student_id}.pdf"})
     except Exception as e:
         logger.error(f"ERROR export_student_pdf: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/export/interview-guide/{student_id}")
+async def export_interview_guide(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+    
+    # Enforce RBAC
+    if role == "admin" or email.endswith("@taliatech.in"):
+        pass
+    elif role == "student":
+        if str(metadata.get("profile_id")) != str(student_id):
+            raise HTTPException(status_code=403, detail="Access denied: cannot export other student interview guides")
+    elif role == "institution":
+        inst_id = metadata.get("profile_id")
+        student_check = client.table("students").select("institution_id").eq("id", student_id).execute()
+        if not student_check.data or str(student_check.data[0].get("institution_id")) != str(inst_id):
+            raise HTTPException(status_code=403, detail="Access denied: student does not belong to your institution")
+    elif role == "employer":
+        pass
+    else:
+        raise HTTPException(status_code=403, detail="Access denied: unauthorized export view")
+
+    try:
+        s_res = client.table("students").select("*").eq("id", student_id).execute()
+        if not s_res.data: raise HTTPException(status_code=404, detail="Student not found")
+        a_res = client.table("assessments").select("*").eq("student_id", student_id).order("created_at", desc=True).limit(1).execute()
+        if not a_res.data: raise HTTPException(status_code=404, detail="Assessment not found")
+        
+        pdf_bytes = generate_interview_guide_pdf(s_res.data[0], a_res.data[0])
+        return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=c2c_interview_guide_{student_id}.pdf"})
+    except Exception as e:
+        logger.error(f"ERROR export_interview_guide: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/admin/item-analysis")
+async def get_item_analysis(client = Depends(require_supabase), current_user = Depends(get_current_user)):
+    # Enforce admin domain or role
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+    if not (role == "admin" or email.endswith("@taliatech.in")):
+        raise HTTPException(status_code=403, detail="Access denied: unauthorized admin view")
+
+    try:
+        # Fetch psychometric items
+        items_res = client.table("psychometric_items").select("*").execute()
+        items = items_res.data or []
+
+        # Fetch assessment responses
+        resp_res = client.table("assessment_responses").select("*").execute()
+        responses = resp_res.data or []
+
+        # Group responses by question_id
+        from collections import defaultdict
+        resp_by_item = defaultdict(list)
+        for r in responses:
+            resp_by_item[r["question_id"]].append(r)
+
+        analysis = []
+        for item in items:
+            item_id = item["id"]
+            stem = item["stem"]
+            item_type = item["item_type"]
+            dim = item["primary_dimension"]
+            
+            item_resps = resp_by_item[item_id]
+            attempts = len(item_resps)
+            
+            if attempts == 0:
+                success_rate = 0.5  # default/neutral
+                status = "Optimal"
+                avg_score = 0.0
+            else:
+                # Calculate success rate / avg score
+                logic_raw = item.get("scoring_logic") or {}
+                logic_str = logic_raw.get("raw", "") if isinstance(logic_raw, dict) else str(logic_raw or "")
+                
+                try:
+                    logic = parse_scoring_logic(logic_str, item_type)
+                except Exception:
+                    logic = {}
+
+                if item_type.lower() == "cognitive":
+                    correct_ans = str(logic.get("correct_answer") or "")
+                    correct_attempts = sum(1 for r in item_resps if str(r["response"]) == correct_ans)
+                    success_rate = correct_attempts / attempts
+                    avg_score = success_rate
+                elif item_type.lower() == "likert":
+                    total_score = 0
+                    for r in item_resps:
+                        try:
+                            val = int(r["response"])
+                            if logic.get("direction") == "reverse":
+                                val = 6 - val
+                            total_score += val
+                        except ValueError:
+                            pass
+                    avg_score = total_score / attempts
+                    success_rate = avg_score / 5.0  # normalize Likert 1-5 scale to 0-1
+                else:  # sjt or other
+                    mapping = logic.get("mapping") or {}
+                    total_score = 0
+                    max_possible = max(mapping.values()) if mapping else 1
+                    if max_possible == 0: max_possible = 1
+                    for r in item_resps:
+                        val = r["response"]
+                        if val in mapping:
+                            total_score += mapping[val]
+                    avg_score = total_score / attempts
+                    success_rate = avg_score / max_possible
+
+                # Determine status
+                if success_rate < 0.35:
+                    status = "Too Hard"
+                elif success_rate > 0.85:
+                    status = "Too Easy"
+                else:
+                    status = "Optimal"
+
+            analysis.append({
+                "id": item_id,
+                "stem": stem[:60] + "..." if len(stem) > 60 else stem,
+                "item_type": item_type,
+                "dimension": dim,
+                "attempts": attempts,
+                "success_rate": round(success_rate * 100, 1),
+                "status": status
+            })
+
+        return analysis
+    except Exception as e:
+        logger.error(f"ERROR get_item_analysis: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 app.include_router(router, prefix="/api")

@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from 'next/link';
 import type { Candidate } from "@/types";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { 
   Users, 
   Download, 
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 import { useRequireAuth } from "@/hooks/useAuth";
 import { LoadingScreen } from "@/components/LoadingScreen";
+import { supabase } from "@/lib/supabase";
 
 interface TPOCohortData {
   averages: {
@@ -42,11 +44,17 @@ interface TPOCohortData {
 
 export default function TPODashboard() {
   const { id } = useParams();
-  const { user, loading: authLoading } = useRequireAuth();
+  const router = useRouter();
+  const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['institution'] });
   const [data, setData] = useState<TPOCohortData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [interventionCollapsed, setInterventionCollapsed] = useState(false);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -113,18 +121,18 @@ export default function TPODashboard() {
             </div>
 
             <nav className="space-y-1">
-              <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
+              <Link href="/" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Home className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Home</span>
-              </a>
-              <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
+              </Link>
+              <Link href="/employer" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Talent Pool</span>
-              </a>
-              <a href="#" className="flex items-center gap-3 bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff] px-3 py-2 rounded-md">
+              </Link>
+              <Link href="#" className="flex items-center gap-3 bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff] px-3 py-2 rounded-md">
                 <Calendar className="w-4 h-4" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Interviews</span>
-              </a>
+              </Link>
             </nav>
           </div>
 
@@ -137,10 +145,10 @@ export default function TPODashboard() {
                 <HelpCircle className="w-4 h-4" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Support</span>
               </a>
-              <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 transition-colors">
+              <button onClick={handleLogout} className="w-full flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 transition-colors text-left">
                 <LogOut className="w-4 h-4" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Logout</span>
-              </a>
+              </button>
             </div>
           </div>
         </aside>
@@ -274,6 +282,72 @@ export default function TPODashboard() {
                 <span>50%</span>
                 <span>75%</span>
                 <span>100% Saturation</span>
+              </div>
+            </div>
+          </section>
+
+          {/* National Benchmarks Widget */}
+          <section className="mb-12">
+            <div className="bg-[#0f172a]/40 backdrop-blur-md p-8 border border-white/10 rounded-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#8aebff]/5 blur-3xl rounded-full"></div>
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+                  <ShieldCheck className="text-[#8aebff]" /> National Benchmarks Comparison
+                </h3>
+                <p className="text-[#bbc9cd] text-sm mt-1">Comparing college cohort averages to national industry norms</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                {[
+                  { name: "Cognitive Quotient (IQ)", key: "IQ", norm: 75, color: "#8aebff" },
+                  { name: "Emotional Quotient (EQ)", key: "EQ", norm: 70, color: "#c3c0ff" },
+                  { name: "Social Quotient (SQ)", key: "SQ", norm: 68, color: "#ffd6a3" },
+                  { name: "Adversity Quotient (AQ)", key: "AQ", norm: 65, color: "#ffb4ab" },
+                  { name: "Spiritual Quotient (SpQ)", key: "SpQ", norm: 60, color: "#38bdf8" },
+                ].map((item) => {
+                  const cohortScore = data.averages[item.key as keyof typeof data.averages] || 0;
+                  const delta = cohortScore - item.norm;
+                  const isPositive = delta >= 0;
+
+                  return (
+                    <div key={item.key} className="bg-black/20 p-6 border border-white/5 rounded-lg hover:border-white/10 transition-all">
+                      <span className="block text-xs font-bold text-[#bbc9cd] uppercase tracking-wider font-mono mb-2">{item.name}</span>
+                      
+                      <div className="flex justify-between items-baseline mb-4">
+                        <div>
+                          <span className="text-3xl font-bold text-white font-mono">{cohortScore.toFixed(1)}</span>
+                          <span className="text-xs text-[#bbc9cd] font-mono">/100</span>
+                        </div>
+                        <span className={`text-[10px] font-mono font-bold ${isPositive ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                          {isPositive ? `▲ +${delta.toFixed(1)}` : `▼ ${delta.toFixed(1)}`}
+                        </span>
+                      </div>
+
+                      {/* Bar Visualization */}
+                      <div className="space-y-3">
+                        <div>
+                          <div className="flex justify-between text-[9px] text-[#bbc9cd] font-mono mb-1">
+                            <span>COHORT</span>
+                            <span>{cohortScore.toFixed(0)}%</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-[#1a2122] rounded-full overflow-hidden">
+                            <div className="h-full rounded-full" style={{ width: `${cohortScore}%`, backgroundColor: item.color }}></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-[9px] text-[#bbc9cd]/60 font-mono mb-1">
+                            <span>NATIONAL NORM</span>
+                            <span>{item.norm}%</span>
+                          </div>
+                          <div className="h-1 w-full bg-[#1a2122] rounded-full overflow-hidden">
+                            <div className="h-full bg-white/20 rounded-full" style={{ width: `${item.norm}%` }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>

@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import type { Candidate } from "@/types";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import { 
   Users, 
   LayoutGrid, 
@@ -21,8 +23,14 @@ import { useRequireAuth } from "@/hooks/useAuth";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
 export default function EmployerPage() {
-  const { user, loading: authLoading } = useRequireAuth();
+  const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['employer', 'admin'] });
+  const router = useRouter();
   const [candidates, setCandidates] = useState<Candidate[]>([]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+  };
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [panelVisible, setPanelVisible] = useState(false);
@@ -30,6 +38,7 @@ export default function EmployerPage() {
   const [minAQ, setMinAQ] = useState(82);
   const [minEQ, setMinEQ] = useState(75);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<'match' | 'tech' | 'sales'>('match');
 
   useEffect(() => {
     if (authLoading) return;
@@ -67,12 +76,18 @@ export default function EmployerPage() {
     fetchCandidates();
   }, [authLoading]);
 
-  const filteredCandidates = candidates.filter(c => {
-    if (c.aq < minAQ) return false;
-    if (c.eq < minEQ) return false;
-    if (strictFounderFit && c.tech_fit_index < 80 && c.sales_fit_index < 80) return false;
-    return true;
-  });
+  const filteredCandidates = candidates
+    .filter(c => {
+      if (c.aq < minAQ) return false;
+      if (c.eq < minEQ) return false;
+      if (strictFounderFit && c.tech_fit_index < 80 && c.sales_fit_index < 80) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'tech') return b.tech_fit_index - a.tech_fit_index;
+      if (sortBy === 'sales') return b.sales_fit_index - a.sales_fit_index;
+      return b.match - a.match;
+    });
 
   const togglePanel = (candidate?: Candidate) => {
     if (candidate) {
@@ -173,10 +188,10 @@ export default function EmployerPage() {
               <HelpCircle className="w-5 h-5 group-hover:rotate-12 transition-transform" />
               <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Support</span>
             </div>
-            <div className="flex items-center gap-4 text-[#bbc9cd] hover:text-white transition-colors cursor-pointer group">
+            <button onClick={handleLogout} className="w-full flex items-center gap-4 text-[#bbc9cd] hover:text-white transition-colors cursor-pointer group text-left">
               <LogOut className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Logout</span>
-            </div>
+            </button>
           </div>
         </aside>
 
@@ -203,12 +218,21 @@ export default function EmployerPage() {
                 </div>
                 <p className={`text-[#bbc9cd] text-sm tracking-[0.05em] font-medium font-mono`}>Displaying {filteredCandidates.length} elite matches for "Senior Systems Architect" • Cohort 2024.1</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 items-center">
+                <select 
+                  value={sortBy} 
+                  onChange={(e) => setSortBy(e.target.value as 'match' | 'tech' | 'sales')}
+                  className="bg-[#1a2122] border border-white/10 rounded-lg px-3 py-2 text-sm text-[#dde4e5] focus:outline-none focus:border-[#8aebff]/50 font-mono cursor-pointer"
+                >
+                  <option value="match">Rank by AI Match</option>
+                  <option value="tech">Rank by Tech Fit</option>
+                  <option value="sales">Rank by Sales Fit</option>
+                </select>
                 <div className="flex items-center bg-[#1a2122] rounded-lg p-1 border border-white/10">
-                  <button className="p-2 bg-[#8aebff]/20 text-[#8aebff] rounded-md">
+                  <button className="p-2 bg-[#8aebff]/20 text-[#8aebff] rounded-md" aria-label="Grid layout">
                     <LayoutGrid className="w-4 h-4" />
                   </button>
-                  <button className="p-2 text-[#bbc9cd] hover:text-[#dde4e5]">
+                  <button className="p-2 text-[#bbc9cd] hover:text-[#dde4e5]" aria-label="List layout">
                     <List className="w-4 h-4" />
                   </button>
                 </div>
