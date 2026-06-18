@@ -238,7 +238,7 @@ async def generate_assessment(num_per_section: int = 25, client = Depends(requir
     try:
         bank_data = []
         try:
-            with open("scripts/FULL_PSYCHOMETRIC_BANK.json", "r", encoding="utf-8") as f:
+            with open(os.path.join(os.path.dirname(__file__), "fallback_bank.json"), "r", encoding="utf-8") as f:
                 bank_data = json.load(f)
         except Exception:
             pass
@@ -272,7 +272,7 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_s
         
         if not items_map:
             try:
-                with open("scripts/FULL_PSYCHOMETRIC_BANK.json", "r", encoding="utf-8") as f:
+                with open(os.path.join(os.path.dirname(__file__), "fallback_bank.json"), "r", encoding="utf-8") as f:
                     bank_data = json.load(f)
                     items_map = {item["id"]: item for item in bank_data if item["id"] in item_ids}
             except Exception:
@@ -361,6 +361,11 @@ async def get_cohort_report(institution_id: str, client = Depends(require_supaba
             
         if not is_authorized:
             raise HTTPException(status_code=403, detail="Access denied: unauthorized institution telemetry access")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Authorization check failed: {e}")
+        raise HTTPException(status_code=403, detail="Access denied")
             
     try:
         students_res = client.table("students").select("id").eq("institution_id", institution_id).execute()
