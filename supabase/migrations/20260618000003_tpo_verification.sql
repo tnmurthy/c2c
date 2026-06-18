@@ -3,13 +3,13 @@
 
 -- 1. Add fields to students table
 ALTER TABLE students 
-ADD COLUMN IF NOT EXISTS institution_id UUID REFERENCES institutions(id) ON DELETE SET NULL,
+ADD COLUMN IF NOT EXISTS institution_id BIGINT REFERENCES institutions(id) ON DELETE SET NULL,
 ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE;
 
 -- 2. Create the institution_whitelist table
 CREATE TABLE IF NOT EXISTS institution_whitelist (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    institution_id UUID NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
+    institution_id BIGINT NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
     email TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(institution_id, email)
@@ -44,7 +44,7 @@ ON institution_whitelist USING (
 
 
 -- 4. Secure function for student onboarding to check whitelist without reading whole table
-CREATE OR REPLACE FUNCTION check_whitelist_email(inst_id UUID, check_email TEXT)
+CREATE OR REPLACE FUNCTION check_whitelist_email(inst_id BIGINT, check_email TEXT)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
