@@ -3,14 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { LogIn, UserPlus, Mail, Lock, AlertCircle, Loader2, ArrowRight } from "lucide-react";
+import { Mail, Lock, AlertCircle, Loader2, ArrowRight, User, School, Building } from "lucide-react";
 import Link from "next/link";
+
+type SignupRole = 'student' | 'institution' | 'employer';
 
 export default function LoginPage() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signupRole, setSignupRole] = useState<SignupRole>('student');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -30,40 +33,65 @@ export default function LoginPage() {
 
         if (authData.user) {
           const role = authData.user.user_metadata?.role;
-          if (role === "employer") {
-            router.push("/employer");
-            return;
-          }
+          const profileId = authData.user.user_metadata?.profile_id;
+
+          // Route by role metadata first (fastest path)
           if (role === "admin") {
             router.push("/admin");
             return;
           }
+          if (role === "employer") {
+            router.push("/employer");
+            return;
+          }
+          if (role === "student" && profileId) {
+            router.push(`/dashboard/${profileId}`);
+            return;
+          }
+          if (role === "institution" && profileId) {
+            router.push(`/tpo-dashboard/${profileId}`);
+            return;
+          }
 
-          // Check if user is a student or institution in parallel
+          // Fallback: DB lookup for users who haven't completed onboarding metadata
+          const domain = email.split("@")[1] || "";
           const [studentResult, institutionResult] = await Promise.allSettled([
             supabase.from("students").select("id").eq("email", email).single(),
-            supabase.from("institutions").select("id").eq("email", email).single(),
+            supabase.from("institutions").select("id").eq("domain", domain).single(),
           ]);
 
           if (studentResult.status === "fulfilled" && studentResult.value.data) {
+            // Backfill metadata for faster future logins
+            await supabase.auth.updateUser({
+              data: { role: 'student', profile_id: studentResult.value.data.id }
+            });
+            await supabase.auth.refreshSession();
             router.push(`/dashboard/${studentResult.value.data.id}`);
             return;
           }
 
           if (institutionResult.status === "fulfilled" && institutionResult.value.data) {
+            await supabase.auth.updateUser({
+              data: { role: 'institution', profile_id: institutionResult.value.data.id }
+            });
+            await supabase.auth.refreshSession();
             router.push(`/tpo-dashboard/${institutionResult.value.data.id}`);
             return;
           }
 
-          // Fallback if no record found
+          // No profile found — send to onboarding
           router.push("/onboard");
         }
       } else {
+        // SIGNUP: Store the selected role in user metadata immediately
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
+            data: {
+              role: signupRole,
+            },
           },
         });
 
@@ -79,6 +107,34 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  const handleGoogleAuth = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      });
+      if (error) throw error;
+      // It redirects to Google so no need to clear loading here unless it fails
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to authenticate with Google");
+      setLoading(false);
+    }
+  };
+
+  const roleOptions: { value: SignupRole; label: string; icon: React.ReactNode; desc: string }[] = [
+    { value: 'student', label: 'Student', icon: <User className="w-5 h-5" />, desc: 'Take assessments & get placed' },
+    { value: 'institution', label: 'Institution / TPO', icon: <School className="w-5 h-5" />, desc: 'Manage cohorts & placements' },
+    { value: 'employer', label: 'Company', icon: <Building className="w-5 h-5" />, desc: 'Recruit verified talent' },
+  ];
 
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 relative overflow-hidden">
@@ -104,6 +160,33 @@ export default function LoginPage() {
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent rounded-t-2xl" />
           
           <form onSubmit={handleAuth} className="space-y-6">
+            {/* Role Selector — only visible during signup */}
+            {!isLogin && (
+              <div className="space-y-3">
+                <label className="text-xs font-mono uppercase tracking-wider text-cyan-400/70 ml-1">Select_Role</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {roleOptions.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setSignupRole(opt.value)}
+                      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all text-center ${
+                        signupRole === opt.value
+                          ? 'bg-cyan-500/15 border-cyan-400/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                          : 'bg-[#0e1416]/50 border-white/10 text-white/40 hover:text-white/70 hover:border-white/20'
+                      }`}
+                    >
+                      {opt.icon}
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider leading-tight">{opt.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] font-mono text-white/30 text-center tracking-wider">
+                  {roleOptions.find(o => o.value === signupRole)?.desc}
+                </p>
+              </div>
+            )}
+
             <div className="space-y-2">
               <label className="text-xs font-mono uppercase tracking-wider text-cyan-400/70 ml-1">Email_Address</label>
               <div className="relative group">
@@ -118,7 +201,7 @@ export default function LoginPage() {
                   autoComplete="email"
                   aria-label="Email address"
                   className="block w-full pl-11 pr-4 py-3 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm"
-                  placeholder="name@campus.edu"
+                  placeholder="you@example.com"
                 />
               </div>
             </div>
@@ -164,6 +247,30 @@ export default function LoginPage() {
                   </>
                 )}
               </div>
+            </button>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/10"></div>
+              </div>
+              <div className="relative flex justify-center text-[10px] font-mono uppercase tracking-[0.2em]">
+                <span className="bg-[#1a2326] px-4 text-[#dde4e5]/40">Or_Use_External_Provider</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleAuth}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 bg-[#0e1416]/50 hover:bg-white/5 border border-white/10 text-white font-mono font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+              </svg>
+              AUTHENTICATE_WITH_GOOGLE
             </button>
           </form>
 

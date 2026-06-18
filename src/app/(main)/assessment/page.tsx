@@ -6,6 +6,7 @@ import { Loader2, Terminal, Shield, AlertTriangle, ChevronRight, Zap, Activity, 
 import { useRequireAuth } from '@/hooks/useAuth';
 import type { AssessmentQuestion, AssessmentOption, AssessmentResponse } from '@/types';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { authFetch } from '@/lib/authFetch';
 
 export default function Assessment() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function Assessment() {
       }
 
       try {
-        const res = await fetch('/api/assessment/generate?num_per_section=5');
+        const res = await authFetch('/api/assessment/generate?num_per_section=5');
         if (!res.ok) throw new Error('PROTOCOL_FETCH_FAILURE');
         const data = await res.json();
         setQuestions(data);
@@ -86,7 +87,7 @@ export default function Assessment() {
   const submitAssessment = async (finalResponses: AssessmentResponse[]) => {
     setSubmitting(true);
     try {
-      const res = await fetch('/api/assessment/submit', {
+      const res = await authFetch('/api/assessment/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

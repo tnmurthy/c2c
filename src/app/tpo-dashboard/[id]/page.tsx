@@ -24,6 +24,7 @@ import {
 import { useRequireAuth } from "@/hooks/useAuth";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { supabase } from "@/lib/supabase";
+import { authFetch } from '@/lib/authFetch';
 
 interface TPOCohortData {
   averages: {
@@ -61,7 +62,7 @@ export default function TPODashboard() {
 
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/cohort/${id}`);
+        const res = await authFetch(`/api/cohort/${id}`);
         if (res.ok) {
           const json = await res.json();
           setData(json);
@@ -124,6 +125,10 @@ export default function TPODashboard() {
               <Link href="/" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Home className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Home</span>
+              </Link>
+              <Link href={`/tpo-dashboard/${id}/students`} className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
+                <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Student Tracking</span>
               </Link>
               <Link href="/employer" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
