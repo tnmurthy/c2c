@@ -242,12 +242,27 @@ async def generate_assessment(num_per_section: int = 25, client = Depends(requir
     dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
     final_items = []
     try:
+        bank_data = []
+        try:
+            with open("scripts/FULL_PSYCHOMETRIC_BANK.json", "r", encoding="utf-8") as f:
+                bank_data = json.load(f)
+        except Exception:
+            pass
+
         for dim in dimensions:
             res = client.table("psychometric_items").select("*").eq("primary_dimension", dim).execute()
             items = res.data
+            
+            if not items and bank_data:
+                items = [item for item in bank_data if item.get("primary_dimension") == dim]
+
             if items:
                 count = min(len(items), random.randint(25, 30) if num_per_section == 25 else num_per_section)
                 final_items.extend(random.sample(items, count))
+                
+        if not final_items:
+            raise Exception("Database empty and fallback JSON missing")
+            
         return final_items
     except Exception as e:
         logger.error(f"ERROR generate_assessment: {e}", exc_info=True)
@@ -260,6 +275,14 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_s
         item_ids = [r["item_id"] for r in submit.responses]
         items_res = client.table("psychometric_items").select("*").in_("id", item_ids).execute()
         items_map = {item["id"]: item for item in items_res.data}
+        
+        if not items_map:
+            try:
+                with open("scripts/FULL_PSYCHOMETRIC_BANK.json", "r", encoding="utf-8") as f:
+                    bank_data = json.load(f)
+                    items_map = {item["id"]: item for item in bank_data if item["id"] in item_ids}
+            except Exception:
+                pass
         
         for resp in submit.responses:
             item = items_map.get(resp["item_id"])

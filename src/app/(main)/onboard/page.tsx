@@ -237,10 +237,28 @@ export default function Onboard() {
           
           <form className="space-y-8" onSubmit={handleSubmit}>
             {error && (
-              <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-mono animate-in fade-in slide-in-from-top-1">
-                <AlertCircle className="h-5 w-5 shrink-0" />
-                <p>{error}</p>
-              </div>
+              error.includes('students_email_key') || error.includes('already exists') ? (
+                <div className="flex flex-col items-center justify-center gap-4 p-6 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-center animate-in fade-in slide-in-from-top-1">
+                  <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center mb-2">
+                    <User className="h-6 w-6 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1">Account Already Exists</h3>
+                    <p className="text-sm text-[#bbc9cd]">It looks like an account with this email is already registered.</p>
+                  </div>
+                  <Link 
+                    href="/login"
+                    className="mt-2 w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-[#00363e] font-black uppercase tracking-[0.15em] text-xs rounded-lg transition-all text-center"
+                  >
+                    Proceed to Login
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-mono animate-in fade-in slide-in-from-top-1">
+                  <AlertCircle className="h-5 w-5 shrink-0" />
+                  <p>{error}</p>
+                </div>
+              )
             )}
 
             <div className="grid grid-cols-1 gap-8">
