@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { authFetch } from '@/lib/authFetch';
 
 interface UseApiQueryReturn<T> {
   data: T | null;
@@ -25,7 +26,7 @@ export function useApiQuery<T>(url: string | null): UseApiQueryReturn<T> {
     setLoading(true);
     setError(null);
 
-    fetch(url)
+    authFetch(url)
       .then((res) => {
         if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         return res.json();

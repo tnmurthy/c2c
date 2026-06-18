@@ -29,6 +29,11 @@ CREATE TABLE students (
     department TEXT NOT NULL,
     auth_id UUID UNIQUE,
     institution_id BIGINT REFERENCES institutions(id) ON DELETE SET NULL,
+    resume_url TEXT,
+    skills JSONB DEFAULT '[]'::jsonb,
+    bio TEXT,
+    phone TEXT,
+    linkedin_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -105,3 +110,18 @@ CREATE TABLE peer_feedback (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_peer_feedback_student_id ON peer_feedback (student_id);
+
+-- 9. Create job_postings table
+CREATE TABLE IF NOT EXISTS job_postings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    employer_id UUID REFERENCES employers(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    requirements JSONB DEFAULT '[]'::jsonb,
+    location TEXT,
+    is_remote BOOLEAN DEFAULT false,
+    salary_range TEXT,
+    status TEXT DEFAULT 'active',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);

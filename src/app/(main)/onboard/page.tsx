@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { 
   UserPlus, 
@@ -17,6 +18,7 @@ import {
   User
 } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/useAuth';
+import { authFetch } from '@/lib/authFetch';
 
 type Role = 'student' | 'institution' | 'employer';
 
@@ -92,7 +94,7 @@ export default function Onboard() {
 
     try {
       if (activeRole === 'student') {
-        const res = await fetch('/api/onboard/student', {
+        const res = await authFetch('/api/onboard/student', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -115,13 +117,14 @@ export default function Onboard() {
           await supabase.auth.updateUser({
             data: { role: 'student', profile_id: studentId }
           });
+          await supabase.auth.refreshSession();
           router.push(`/dashboard/${studentId}`);
         } else {
           throw new Error('No student profile ID returned from database.');
         }
 
       } else if (activeRole === 'institution') {
-        const res = await fetch('/api/onboard/institution', {
+        const res = await authFetch('/api/onboard/institution', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(institutionForm),
@@ -139,13 +142,14 @@ export default function Onboard() {
           await supabase.auth.updateUser({
             data: { role: 'institution', profile_id: instId }
           });
+          await supabase.auth.refreshSession();
           router.push(`/tpo-dashboard/${instId}`);
         } else {
           throw new Error('No institution profile ID returned from database.');
         }
 
       } else if (activeRole === 'employer') {
-        const res = await fetch('/api/onboard/employer', {
+        const res = await authFetch('/api/onboard/employer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(employerForm),
@@ -157,8 +161,9 @@ export default function Onboard() {
         }
 
         await supabase.auth.updateUser({
-          data: { role: 'employer' }
+          data: { role: 'employer' } // Profile ID can also be added here if needed, but employer dashboard uses current_user directly currently
         });
+        await supabase.auth.refreshSession();
         router.push('/employer');
       }
     } catch (err: any) {
@@ -233,10 +238,28 @@ export default function Onboard() {
           
           <form className="space-y-8" onSubmit={handleSubmit}>
             {error && (
-              <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-mono animate-in fade-in slide-in-from-top-1">
-                <AlertCircle className="h-5 w-5 shrink-0" />
-                <p>{error}</p>
-              </div>
+              error.includes('students_email_key') || error.includes('already exists') ? (
+                <div className="flex flex-col items-center justify-center gap-4 p-6 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-center animate-in fade-in slide-in-from-top-1">
+                  <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center mb-2">
+                    <User className="h-6 w-6 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1">Account Already Exists</h3>
+                    <p className="text-sm text-[#bbc9cd]">It looks like an account with this email is already registered.</p>
+                  </div>
+                  <Link 
+                    href="/login"
+                    className="mt-2 w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-[#00363e] font-black uppercase tracking-[0.15em] text-xs rounded-lg transition-all text-center"
+                  >
+                    Proceed to Login
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-mono animate-in fade-in slide-in-from-top-1">
+                  <AlertCircle className="h-5 w-5 shrink-0" />
+                  <p>{error}</p>
+                </div>
+              )
             )}
 
             <div className="grid grid-cols-1 gap-8">

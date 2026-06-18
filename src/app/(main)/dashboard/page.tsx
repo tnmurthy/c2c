@@ -32,9 +32,10 @@ export default function DashboardRedirect() {
         } else {
           // If no role or profile_id in metadata, look up database records in parallel
           const email = user.email || '';
+          const domain = email.split("@")[1] || "";
           const [studentResult, institutionResult] = await Promise.allSettled([
             supabase.from("students").select("id").eq("email", email).single(),
-            supabase.from("institutions").select("id").eq("email", email).single(),
+            supabase.from("institutions").select("id").eq("domain", domain).single(),
           ]);
 
           if (studentResult.status === "fulfilled" && studentResult.value.data) {
