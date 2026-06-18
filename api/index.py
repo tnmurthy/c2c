@@ -376,10 +376,19 @@ async def get_student(student_id: str, client = Depends(require_supabase), curre
     # Enforce RBAC
     if role == "admin" or email.endswith("@taliatech.in"):
         pass
-    elif role == "student":
-        if str(metadata.get("profile_id")) != str(student_id):
+    elif role == "student" or not role:
+        # If role is missing in metadata, strictly check if the requested student_id belongs to the current user's auth_id
+        student_check = client.table("students").select("auth_id").eq("id", student_id).execute()
+        is_owner = student_check.data and str(student_check.data[0].get("auth_id")) == str(current_user.id)
+        
+        if role == "student" and str(metadata.get("profile_id")) != str(student_id) and not is_owner:
             raise HTTPException(status_code=403, detail="Access denied: cannot view other student profiles")
-    elif role == "institution":
+        elif not role and not is_owner:
+            # Fall through to institution check if no role is explicitly set
+            pass
+        elif is_owner:
+            pass # Authorized
+    elif role == "institution" or not role:
         # Get the student's email to compare domains
         student_check = client.table("students").select("institution_id, email").eq("id", student_id).execute()
         if not student_check.data:

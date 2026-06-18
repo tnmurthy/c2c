@@ -65,6 +65,7 @@ export default function LoginPage() {
             await supabase.auth.updateUser({
               data: { role: 'student', profile_id: studentResult.value.data.id }
             });
+            await supabase.auth.refreshSession();
             router.push(`/dashboard/${studentResult.value.data.id}`);
             return;
           }
@@ -73,6 +74,7 @@ export default function LoginPage() {
             await supabase.auth.updateUser({
               data: { role: 'institution', profile_id: institutionResult.value.data.id }
             });
+            await supabase.auth.refreshSession();
             router.push(`/tpo-dashboard/${institutionResult.value.data.id}`);
             return;
           }

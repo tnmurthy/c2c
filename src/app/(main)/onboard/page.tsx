@@ -116,6 +116,7 @@ export default function Onboard() {
           await supabase.auth.updateUser({
             data: { role: 'student', profile_id: studentId }
           });
+          await supabase.auth.refreshSession();
           router.push(`/dashboard/${studentId}`);
         } else {
           throw new Error('No student profile ID returned from database.');
@@ -140,6 +141,7 @@ export default function Onboard() {
           await supabase.auth.updateUser({
             data: { role: 'institution', profile_id: instId }
           });
+          await supabase.auth.refreshSession();
           router.push(`/tpo-dashboard/${instId}`);
         } else {
           throw new Error('No institution profile ID returned from database.');
@@ -158,8 +160,9 @@ export default function Onboard() {
         }
 
         await supabase.auth.updateUser({
-          data: { role: 'employer' }
+          data: { role: 'employer' } // Profile ID can also be added here if needed, but employer dashboard uses current_user directly currently
         });
+        await supabase.auth.refreshSession();
         router.push('/employer');
       }
     } catch (err: any) {
