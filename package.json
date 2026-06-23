@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"next dev\" \".venv\\\\Scripts\\\\python -m uvicorn api.main:app --port 8000\"",
+    "dev:test": "concurrently \"next dev -p 3011\" \"call .venv\\\\Scripts\\\\activate.bat && python -m uvicorn api.main:app --port 8011\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e": "npx kill-port 3011 8011 && playwright test"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
     "clsx": "^2.1.1",
+    "concurrently": "^10.0.3",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
     "react": "^18",

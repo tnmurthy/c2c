@@ -96,7 +96,7 @@ export default function LoginPage() {
         });
 
         if (authError) throw authError;
-
+        console.log("Signup returned:", JSON.stringify(authData));
         if (authData.user) {
           router.push("/onboard");
         }

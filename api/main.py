@@ -7,6 +7,7 @@ from typing import List, Dict, Any, Optional
 from fastapi import FastAPI, HTTPException, APIRouter, Depends, status
 from fastapi.responses import Response
 from pydantic import BaseModel
+from dotenv import load_dotenv
 
 # Add service directories to sys.path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,9 +15,25 @@ sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, "services", "job-intel-desk", "backend"))
 sys.path.append(os.path.join(BASE_DIR, "services", "market-scout"))
 
+load_dotenv(os.path.join(BASE_DIR, ".env.local"))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
 # Setup logger
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
 logger = logging.getLogger("c2c_api")
+logger.setLevel(logging.INFO)
+
+# Create a file handler
+fh = logging.FileHandler(os.path.join(BASE_DIR, "backend.log"))
+fh.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s [%(name)s] %(levelname)s: %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
+# Also keep console output
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 # Imports from modular files
 from api.constants import ICONS, RECOMMENDATION_MAPPING
@@ -179,18 +196,25 @@ def status():
     return {"status": "c2c api online"}
 
 @router.post("/onboard/institution")
-async def onboard_institution(inst: InstitutionOnboard, client = Depends(require_supabase)):
+async def onboard_institution(inst: InstitutionOnboard, client = Depends(require_supabase), current_user = Depends(get_current_user)):
     try:
-        res = client.table("institutions").upsert(inst.dict(), on_conflict="domain").execute()
+        data = inst.dict()
+        data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
+        existing = client.table("institutions").select("id").eq("domain", data["domain"]).execute()
+        if existing.data:
+            res = client.table("institutions").update(data).eq("domain", data["domain"]).execute()
+        else:
+            res = client.table("institutions").insert(data).execute()
         return res.data
     except Exception as e:
         logger.error(f"ERROR onboard_institution: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/onboard/student")
-async def onboard_student(student: StudentOnboard, client = Depends(require_supabase)):
+async def onboard_student(student: StudentOnboard, client = Depends(require_supabase), current_user = Depends(get_current_user)):
     try:
         data = student.dict(exclude_unset=True)
+        data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
         is_verified = False
         inst_id = student.institution_id
         
@@ -202,13 +226,22 @@ async def onboard_student(student: StudentOnboard, client = Depends(require_supa
                 logger.warning(f"Whitelist check failed: {e}")
         else:
             domain = student.email.split("@")[-1]
-            inst_res = client.table("institutions").select("*").eq("domain", domain).execute()
-            if not inst_res.data:
-                sandbox_res = client.table("institutions").select("*").eq("domain", "sandbox.c2c.edu").execute()
-                if sandbox_res.data:
-                    inst_id = sandbox_res.data[0]["id"]
+            try:
+                inst_res = client.table("institutions").select("*").eq("domain", domain).execute()
+                inst_data = inst_res.data
+            except Exception as e:
+                logger.warning(f"Failed to fetch institutions for domain {domain}: {e}")
+                inst_data = None
+                
+            if not inst_data:
+                try:
+                    sandbox_res = client.table("institutions").select("*").eq("domain", "sandbox.c2c.edu").execute()
+                    if sandbox_res.data:
+                        inst_id = sandbox_res.data[0]["id"]
+                except Exception as e:
+                    logger.warning(f"Failed to fetch sandbox institution: {e}")
             else:
-                inst_id = inst_res.data[0]["id"]
+                inst_id = inst_data[0]["id"]
                 
         if inst_id:
             data["institution_id"] = inst_id
@@ -224,7 +257,7 @@ async def onboard_student(student: StudentOnboard, client = Depends(require_supa
 async def onboard_employer(employer: EmployerOnboard, client = Depends(require_supabase), current_user = Depends(get_current_user)):
     try:
         data = employer.dict()
-        data["auth_id"] = current_user.user.id
+        data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
         res = client.table("employers").insert(data).execute()
         return res.data
     except Exception as e:
@@ -244,8 +277,12 @@ async def generate_assessment(num_per_section: int = 25, client = Depends(requir
             pass
 
         for dim in dimensions:
-            res = client.table("psychometric_items").select("*").eq("primary_dimension", dim).execute()
-            items = res.data
+            items = []
+            try:
+                res = client.table("psychometric_items").select("*").eq("primary_dimension", dim).execute()
+                items = res.data
+            except Exception as e:
+                logger.warning(f"Failed to fetch psychometric_items for {dim}: {e}")
             
             if not items and bank_data:
                 items = [item for item in bank_data if item.get("primary_dimension") == dim]
@@ -267,8 +304,12 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_s
     scores = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
     try:
         item_ids = [r["item_id"] for r in submit.responses]
-        items_res = client.table("psychometric_items").select("*").in_("id", item_ids).execute()
-        items_map = {item["id"]: item for item in items_res.data}
+        items_map = {}
+        try:
+            items_res = client.table("psychometric_items").select("*").in_("id", item_ids).execute()
+            items_map = {item["id"]: item for item in items_res.data}
+        except Exception as e:
+            logger.warning(f"Failed to query psychometric_items: {e}")
         
         if not items_map:
             try:
@@ -398,8 +439,12 @@ async def get_cohort_report(institution_id: str, client = Depends(require_supaba
 @router.get("/leads")
 async def get_leads(client = Depends(require_supabase), current_user = Depends(require_role(["admin"]))):
     try:
-        res = client.table("market_leads").select("*").order("ai_score", desc=True).execute()
-        return res.data
+        try:
+            res = client.table("market_leads").select("*").order("ai_score", desc=True).execute()
+            return res.data
+        except Exception as e:
+            logger.warning(f"Failed to fetch market_leads: {e}")
+            return []
     except Exception as e:
         logger.error(f"ERROR get_leads: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
@@ -659,12 +704,20 @@ async def get_item_analysis(client = Depends(require_supabase), current_user = D
 
     try:
         # Fetch psychometric items
-        items_res = client.table("psychometric_items").select("*").execute()
-        items = items_res.data or []
+        try:
+            items_res = client.table("psychometric_items").select("*").execute()
+            items = items_res.data or []
+        except Exception as e:
+            logger.warning(f"Failed to fetch psychometric_items: {e}")
+            items = []
 
         # Fetch assessment responses
-        resp_res = client.table("assessment_responses").select("*").execute()
-        responses = resp_res.data or []
+        try:
+            resp_res = client.table("assessment_responses").select("*").execute()
+            responses = resp_res.data or []
+        except Exception as e:
+            logger.warning(f"Failed to fetch assessment_responses: {e}")
+            responses = []
 
         # Group responses by question_id
         from collections import defaultdict

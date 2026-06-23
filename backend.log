@@ -1,0 +1,113 @@
+2026-06-19 09:29:45,250 [c2c_api] ERROR: ERROR get_item_analysis: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.psychometric_items' in the schema cache"}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 682, in get_item_analysis
+    items_res = client.table("psychometric_items").select("*").execute()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.psychometric_items' in the schema cache"}
+2026-06-19 09:29:45,850 [c2c_api] ERROR: ERROR get_leads: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.market_leads' in the schema cache"}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 421, in get_leads
+    res = client.table("market_leads").select("*").order("ai_score", desc=True).execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.market_leads' in the schema cache"}
+2026-06-19 09:29:47,423 [c2c_api] ERROR: ERROR onboard_employer: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 248, in onboard_employer
+    res = client.table("employers").insert(data).execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+2026-06-19 09:31:38,128 [c2c_api] ERROR: ERROR get_item_analysis: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.psychometric_items' in the schema cache"}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 682, in get_item_analysis
+    items_res = client.table("psychometric_items").select("*").execute()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.psychometric_items' in the schema cache"}
+2026-06-19 09:31:39,726 [c2c_api] ERROR: ERROR onboard_employer: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 248, in onboard_employer
+    res = client.table("employers").insert(data).execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+2026-06-19 09:31:40,276 [c2c_api] ERROR: ERROR onboard_employer: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 248, in onboard_employer
+    res = client.table("employers").insert(data).execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+2026-06-19 09:31:41,354 [c2c_api] ERROR: ERROR onboard_employer: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 248, in onboard_employer
+    res = client.table("employers").insert(data).execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT, INSERT ON public.employers TO anon;', 'message': 'permission denied for table employers'}
+2026-06-19 09:31:42,130 [c2c_api] ERROR: ERROR onboard_student: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 225, in onboard_student
+    inst_res = client.table("institutions").select("*").eq("domain", domain).execute()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+2026-06-19 09:31:42,373 [c2c_api] ERROR: ERROR get_leads: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.market_leads' in the schema cache"}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 421, in get_leads
+    res = client.table("market_leads").select("*").order("ai_score", desc=True).execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': 'PGRST205', 'details': None, 'hint': None, 'message': "Could not find the table 'public.market_leads' in the schema cache"}
+2026-06-19 09:31:52,894 [c2c_api] ERROR: ERROR onboard_institution: {'code': '42P10', 'details': None, 'hint': None, 'message': 'there is no unique or exclusion constraint matching the ON CONFLICT specification'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 203, in onboard_institution
+    res = client.table("institutions").upsert(data, on_conflict="domain").execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42P10', 'details': None, 'hint': None, 'message': 'there is no unique or exclusion constraint matching the ON CONFLICT specification'}
+2026-06-19 09:32:56,555 [c2c_api] ERROR: ERROR onboard_student: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 225, in onboard_student
+    except Exception as e:
+               ^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+2026-06-19 09:32:57,044 [c2c_api] ERROR: ERROR onboard_student: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 225, in onboard_student
+    except Exception as e:
+               ^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+2026-06-19 09:32:57,333 [c2c_api] ERROR: ERROR onboard_student: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 225, in onboard_student
+    except Exception as e:
+               ^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': '42501', 'details': None, 'hint': 'Grant the required privileges to the current role with: GRANT SELECT ON public.institutions TO anon;', 'message': 'permission denied for table institutions'}
+2026-06-19 09:35:01,619 [c2c_api] ERROR: ERROR get_student_alerts: {'code': 'PGRST200', 'details': "Searched for a foreign key relationship between 'match_alerts' and 'market_leads' in the schema 'public', but no matches were found.", 'hint': "Perhaps you meant 'students' instead of 'match_alerts'.", 'message': "Could not find a relationship between 'match_alerts' and 'market_leads' in the schema cache"}
+Traceback (most recent call last):
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\api\main.py", line 623, in get_student_alerts
+    res = client.table("match_alerts").select("*, market_leads(*)").eq("student_id", student_id).order("created_at", desc=True).execute()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\tt-ai-stack\01_projects\makeover-talent-agency\.venv\Lib\site-packages\postgrest\_sync\request_builder.py", line 78, in execute
+    raise APIError(r.json())
+postgrest.exceptions.APIError: {'code': 'PGRST200', 'details': "Searched for a foreign key relationship between 'match_alerts' and 'market_leads' in the schema 'public', but no matches were found.", 'hint': "Perhaps you meant 'students' instead of 'match_alerts'.", 'message': "Could not find a relationship between 'match_alerts' and 'market_leads' in the schema cache"}
+2026-06-19 09:37:08,626 [c2c_api] ERROR: Auth verification failed: Unexpected failure, please check server logs for more information
