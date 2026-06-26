@@ -1,16 +1,16 @@
-# Graph Report - makeover-talent-agency  (2026-06-25)
+# Graph Report - makeover-talent-agency  (2026-06-26)
 
 ## Corpus Check
-- 1449 files · ~2,638,579 words
+- 1454 files · ~2,692,146 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 24315 nodes · 30322 edges · 1679 communities (1411 shown, 268 thin omitted)
+- 24353 nodes · 30366 edges · 1666 communities (1396 shown, 270 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 2075 edges (avg confidence: 0.78)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `aeda69c7`
+- Built from commit: `2d874d71`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -208,7 +208,6 @@
 - [[_COMMUNITY_Community 191|Community 191]]
 - [[_COMMUNITY_Community 192|Community 192]]
 - [[_COMMUNITY_Community 193|Community 193]]
-- [[_COMMUNITY_Community 194|Community 194]]
 - [[_COMMUNITY_Community 195|Community 195]]
 - [[_COMMUNITY_Community 196|Community 196]]
 - [[_COMMUNITY_Community 197|Community 197]]
@@ -218,20 +217,17 @@
 - [[_COMMUNITY_Community 201|Community 201]]
 - [[_COMMUNITY_Community 202|Community 202]]
 - [[_COMMUNITY_Community 203|Community 203]]
-- [[_COMMUNITY_Community 204|Community 204]]
 - [[_COMMUNITY_Community 205|Community 205]]
 - [[_COMMUNITY_Community 206|Community 206]]
 - [[_COMMUNITY_Community 207|Community 207]]
 - [[_COMMUNITY_Community 208|Community 208]]
 - [[_COMMUNITY_Community 209|Community 209]]
-- [[_COMMUNITY_Community 210|Community 210]]
 - [[_COMMUNITY_Community 211|Community 211]]
 - [[_COMMUNITY_Community 212|Community 212]]
 - [[_COMMUNITY_Community 213|Community 213]]
 - [[_COMMUNITY_Community 214|Community 214]]
 - [[_COMMUNITY_Community 215|Community 215]]
 - [[_COMMUNITY_Community 216|Community 216]]
-- [[_COMMUNITY_Community 217|Community 217]]
 - [[_COMMUNITY_Community 218|Community 218]]
 - [[_COMMUNITY_Community 219|Community 219]]
 - [[_COMMUNITY_Community 220|Community 220]]
@@ -564,7 +560,6 @@
 - [[_COMMUNITY_Amp Integration Rendering|Amp Integration Rendering]]
 - [[_COMMUNITY_Amp Audit Coverage|Amp Audit Coverage]]
 - [[_COMMUNITY_Agent Body Matching|Agent Body Matching]]
-- [[_COMMUNITY_Agent Audit Baseline|Agent Audit Baseline]]
 - [[_COMMUNITY_Node Eviction Logic|Node Eviction Logic]]
 - [[_COMMUNITY_Symbol Removal Updates|Symbol Removal Updates]]
 - [[_COMMUNITY_Deleted File Pruning|Deleted File Pruning]]
@@ -998,7 +993,6 @@
 - [[_COMMUNITY_Community 1009|Community 1009]]
 - [[_COMMUNITY_Community 1010|Community 1010]]
 - [[_COMMUNITY_Community 1011|Community 1011]]
-- [[_COMMUNITY_Community 1012|Community 1012]]
 - [[_COMMUNITY_Community 1013|Community 1013]]
 - [[_COMMUNITY_Community 1014|Community 1014]]
 - [[_COMMUNITY_Community 1015|Community 1015]]
@@ -1009,7 +1003,6 @@
 - [[_COMMUNITY_Community 1020|Community 1020]]
 - [[_COMMUNITY_Community 1021|Community 1021]]
 - [[_COMMUNITY_Community 1022|Community 1022]]
-- [[_COMMUNITY_Community 1023|Community 1023]]
 - [[_COMMUNITY_Community 1024|Community 1024]]
 - [[_COMMUNITY_Community 1025|Community 1025]]
 - [[_COMMUNITY_Community 1026|Community 1026]]
@@ -1034,7 +1027,6 @@
 - [[_COMMUNITY_Community 1045|Community 1045]]
 - [[_COMMUNITY_Community 1046|Community 1046]]
 - [[_COMMUNITY_Community 1047|Community 1047]]
-- [[_COMMUNITY_Community 1048|Community 1048]]
 - [[_COMMUNITY_Community 1049|Community 1049]]
 - [[_COMMUNITY_Community 1050|Community 1050]]
 - [[_COMMUNITY_Community 1051|Community 1051]]
@@ -1119,8 +1111,6 @@
 - [[_COMMUNITY_Community 1130|Community 1130]]
 - [[_COMMUNITY_Community 1131|Community 1131]]
 - [[_COMMUNITY_Community 1132|Community 1132]]
-- [[_COMMUNITY_Community 1133|Community 1133]]
-- [[_COMMUNITY_Community 1134|Community 1134]]
 - [[_COMMUNITY_Community 1135|Community 1135]]
 - [[_COMMUNITY_Community 1136|Community 1136]]
 - [[_COMMUNITY_Community 1137|Community 1137]]
@@ -1234,7 +1224,6 @@
 - [[_COMMUNITY_Community 1246|Community 1246]]
 - [[_COMMUNITY_Community 1247|Community 1247]]
 - [[_COMMUNITY_Community 1248|Community 1248]]
-- [[_COMMUNITY_Community 1249|Community 1249]]
 - [[_COMMUNITY_Community 1250|Community 1250]]
 - [[_COMMUNITY_Community 1251|Community 1251]]
 - [[_COMMUNITY_Community 1252|Community 1252]]
@@ -1577,7 +1566,6 @@
 - [[_COMMUNITY_Community 1590|Community 1590]]
 - [[_COMMUNITY_Community 1591|Community 1591]]
 - [[_COMMUNITY_Community 1592|Community 1592]]
-- [[_COMMUNITY_Community 1593|Community 1593]]
 - [[_COMMUNITY_Community 1594|Community 1594]]
 - [[_COMMUNITY_Community 1595|Community 1595]]
 - [[_COMMUNITY_Community 1596|Community 1596]]
@@ -1623,7 +1611,6 @@
 - [[_COMMUNITY_Community 1636|Community 1636]]
 - [[_COMMUNITY_Community 1637|Community 1637]]
 - [[_COMMUNITY_Community 1638|Community 1638]]
-- [[_COMMUNITY_Community 1639|Community 1639]]
 - [[_COMMUNITY_Community 1640|Community 1640]]
 - [[_COMMUNITY_Community 1663|Community 1663]]
 
@@ -1662,11 +1649,11 @@
 - **Recruitment Agent Swarm** — agent_harness_spec_psychologist_agent, agent_harness_spec_anthropologist_skill, agent_harness_spec_narratologist, ordeal_prompt_engineering_agent [EXTRACTED 0.95]
 - **C2C Service Units** — readme_brand_optimizer, readme_git_optimizer, readme_job_intel_desk, readme_agent_recruiters, readme_campus_to_corporate [EXTRACTED 1.00]
 
-## Communities (1679 total, 268 thin omitted)
+## Communities (1666 total, 270 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.04
-Nodes (88): _actuate(), add_experience_endpoint(), add_skill_endpoint(), _agent_event_action(), _asset_ready(), _broadcast_x_source_errors(), CandidateBody, cleanup_leads() (+80 more)
+Nodes (95): _actuate(), add_experience_endpoint(), add_skill_endpoint(), _agent_event_action(), _annotate_job_lead(), _asset_ready(), _broadcast_x_source_errors(), CandidateBody (+87 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.03
@@ -1681,36 +1668,36 @@ Cohesion: 0.01
 Nodes (141): 0.1.0 (2026-04-03), 0.1.1 (2026-04-04), 0.1.3 (2026-04-04), 0.1.4 (2026-04-05), 0.1.5 (2026-04-05), 0.1.6 (2026-04-05), 0.1.7 (2026-04-05), 0.1.8 (2026-04-05) (+133 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.03
-Nodes (104): collect_files(), extract_bash(), extract_json(), Extract functions, source imports, and cross-function calls from a .sh file., Extract structure and dependency edges from a *config/manifest* .json file., _semantic_reference_edge(), _source_location(), by_label_by_id() (+96 more)
+Cohesion: 0.02
+Nodes (144): _is_noise_dir(), Return True if this directory name looks like a venv, cache, or dep dir., collect_files(), extract_bash(), extract_json(), extract_python(), Extract functions, source imports, and cross-function calls from a .sh file., Extract structure and dependency edges from a *config/manifest* .json file. (+136 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.02
-Nodes (200): _apply_symbol_resolution_facts(), _augment_js_reexport_edges(), _augment_symbol_resolution_edges(), _augment_systemverilog_semantics(), _c_collect_type_refs(), _collect_js_symbol_resolution_facts(), _collect_python_symbol_resolution_facts(), _cpp_collect_type_refs() (+192 more)
+Nodes (226): _apply_symbol_resolution_facts(), _augment_js_reexport_edges(), _augment_symbol_resolution_edges(), _augment_systemverilog_semantics(), _c_collect_type_refs(), _collect_js_symbol_resolution_facts(), _collect_python_symbol_resolution_facts(), _cpp_collect_type_refs() (+218 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.05
-Nodes (76): _emb(), add_project_endpoint(), _annotate_job_lead(), create_manual_lead(), delete_experience_endpoint(), delete_lead_endpoint(), delete_project_endpoint(), delete_skill_endpoint() (+68 more)
+Nodes (73): _emb(), add_project_endpoint(), delete_experience_endpoint(), delete_lead_endpoint(), delete_project_endpoint(), delete_skill_endpoint(), due_followups(), _generate_one() (+65 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.03
-Nodes (124): _agents_install(), _agents_platform_install(), _agents_platform_uninstall(), _agents_uninstall(), _always_on(), _amp_install(), _amp_legacy_cleanup(), _amp_uninstall() (+116 more)
+Nodes (125): _custom_providers_path(), _agents_install(), _agents_platform_install(), _agents_platform_uninstall(), _agents_uninstall(), _always_on(), _amp_install(), _amp_legacy_cleanup() (+117 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.05
-Nodes (85): extract_js(), extract_svelte(), _load_tsconfig_aliases(), _package_entry_candidates(), Resolve a JS/TS/Svelte import target to a local file when it exists., Walk up from start_dir to find tsconfig.json and return compilerOptions.paths al, Extract classes, functions, arrow functions, and imports from a .js/.ts/.tsx fil, Extract imports from .svelte files: script-block via JS AST + template regex fal (+77 more)
+Cohesion: 0.04
+Nodes (97): extract_js(), extract_svelte(), _load_tsconfig_aliases(), Strip // line comments, /* */ block comments, and trailing commas from JSONC., Recursively read path aliases from a tsconfig, following extends chains., Walk up from start_dir to find tsconfig.json and return compilerOptions.paths al, Extract classes, functions, arrow functions, and imports from a .js/.ts/.tsx fil, Extract imports from .svelte files: script-block via JS AST + template regex fal (+89 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.03
-Nodes (142): _bfs(), _build_http_app(), _build_server(), _communities_from_graph(), _compute_idf(), _dfs(), _filter_blank_stdin(), _filter_graph_by_context() (+134 more)
+Nodes (146): build_graph(), Graph, _bfs(), _build_http_app(), _build_server(), _communities_from_graph(), _compute_idf(), _dfs() (+138 more)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.05
 Nodes (62): _azure_client(), _backend_env_keys(), _backend_supports_vision(), _bedrock_inference_config(), _build_image_refs(), _call_llm(), _claude_cli_envelope(), _community_label_lines() (+54 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.04
-Nodes (78): _cpp_preprocess(), extract_csharp(), extract_dmf(), extract_fortran(), extract_java(), extract_julia(), Extract windows and controls from a .dmf interface file., Extract classes, interfaces, methods, constructors, and imports from a .java fil (+70 more)
+Cohesion: 0.02
+Nodes (261): extract_apex(), extract_c(), extract_cpp(), extract_csharp(), extract_dm(), extract_elixir(), extract_fortran(), _extract_generic() (+253 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.04
@@ -1730,7 +1717,7 @@ Nodes (53): BaseException, extract_corpus_parallel(), _extract_with_adaptive_ret
 
 ### Community 16 - "Community 16"
 Cohesion: 0.04
-Nodes (46): _Lead, _Leads, Shared constants for the C2C API. Extracted from api/index.py to eliminate dupli, get_current_user(), get_supabase_client(), FastAPI dependencies for the C2C API., Create and return a Supabase client. Returns None if env vars are missing., FastAPI dependency that provides a Supabase client or raises 503. (+38 more)
+Nodes (66): _Lead, _Leads, Shared constants for the C2C API. Extracted from api/index.py to eliminate dupli, get_current_user(), get_supabase_client(), FastAPI dependencies for the C2C API., Create and return a Supabase client. Returns None if env vars are missing., FastAPI dependency that provides a Supabase client or raises 503. (+58 more)
 
 ### Community 17 - "Community 17"
 Cohesion: 0.07
@@ -1746,7 +1733,7 @@ Nodes (58): install.sh script, box_bot(), box_row(), box_top(), build_selection(
 
 ### Community 20 - "Community 20"
 Cohesion: 0.08
-Nodes (21): DataProcessor, Result, createProcessor(), GraphifyDemo, Logger, IProcessor, Processor, Result (+13 more)
+Nodes (20): DataProcessor, Result, createProcessor(), GraphifyDemo, IProcessor, Processor, Result, BaseProcessor (+12 more)
 
 ### Community 21 - "Community 21"
 Cohesion: 0.05
@@ -1765,19 +1752,19 @@ Cohesion: 0.09
 Nodes (43): _canonical_edge(), _count_extra(), diagnose_extraction(), diagnose_file(), _edge_list(), _exact_signature(), format_diagnostic_json(), format_diagnostic_report() (+35 more)
 
 ### Community 26 - "Community 26"
-Cohesion: 0.07
-Nodes (41): extract_csproj(), extract_razor(), extract_slnx(), _project_xml_is_safe(), Reject XML that declares DTDs or entities.      Stdlib ``xml.etree.ElementTree, Extract projects and inter-project dependencies from a .slnx file.      .slnx, Extract packages, project refs, and target framework from a .csproj/.fsproj/.vbp, Extract directives, component refs, and @code methods from .razor/.cshtml. (+33 more)
+Cohesion: 0.08
+Nodes (41): extract_csproj(), extract_razor(), extract_sln(), extract_slnx(), _project_xml_is_safe(), Reject XML that declares DTDs or entities.      Stdlib ``xml.etree.ElementTree, Extract projects and inter-project dependencies from a .sln file., Extract projects and inter-project dependencies from a .slnx file.      .slnx (+33 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.05
-Nodes (65): _extract_pascal_regex(), _extract_spock_fallback(), _pascal_find_body(), _pascal_split_bases(), _pascal_split_sections(), _pascal_split_uses(), _pascal_strip_comments(), Strip Pascal comments ({}, (* *), //) while preserving newlines. (+57 more)
+Nodes (70): extract_terraform(), _get_extractor(), Extract Terraform/HCL blocks and the references between them via tree-sitter., Return the correct extractor function for a file, or None if unsupported., _add_node(), _detect_package_from_args(), _emit_server(), extract_mcp_config() (+62 more)
 
 ### Community 28 - "Community 28"
 Cohesion: 0.05
-Nodes (49): _auto_follow_symlinks(), convert_office_file(), _could_contain_included_path(), count_words(), docx_to_markdown(), _env_command_args(), extract_pdf_text(), _file_within_size_cap() (+41 more)
+Nodes (47): _auto_follow_symlinks(), convert_office_file(), _could_contain_included_path(), count_words(), docx_to_markdown(), _env_command_args(), extract_pdf_text(), _file_within_size_cap() (+39 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.09
+Cohesion: 0.10
 Nodes (8): AsyncClient, BaseClient, Client, Asynchronous HTTP client., Shared implementation for Client and AsyncClient.     Handles auth, redirects,, Synchronous HTTP client., Response, delete()
 
 ### Community 30 - "Community 30"
@@ -1785,12 +1772,12 @@ Cohesion: 0.09
 Nodes (23): ErrorBoundary, Icon(), IconProps, OnboardingWizard(), NAV, Sidebar(), StatCard(), Topbar() (+15 more)
 
 ### Community 31 - "Community 31"
-Cohesion: 0.09
-Nodes (20): ConnectError, An error occurred at the transport layer., Failed to establish a connection., TimeoutException, TransportError, AsyncBaseTransport, AsyncHTTPTransport, BaseTransport (+12 more)
+Cohesion: 0.08
+Nodes (18): _require_token(), HTTPAuthorizationCredentials, Request, AsyncBaseTransport, AsyncHTTPTransport, BaseTransport, ConnectionPool, HTTPTransport (+10 more)
 
 ### Community 32 - "Community 32"
-Cohesion: 0.05
-Nodes (53): extract_apex(), extract_kotlin(), extract_ruby(), extract_swift(), Extract classes, methods, singleton methods, and calls from a .rb file., Extract classes, interfaces, enums, methods, and Salesforce constructs from, Extract classes, objects, functions, and imports from a .kt/.kts file., Extract classes, structs, protocols, functions, imports, and calls from a .swift (+45 more)
+Cohesion: 0.12
+Nodes (16): Block Diagram, C2C Platform — High-Level Design, Current State (Problem), Data Flow Per User Journey, Integration Patterns Per Service, Journey 1 — Student Onboards, Journey 2 — Student Completes Assessment, Journey 3 — Employer Posts a Job (+8 more)
 
 ### Community 33 - "Community 33"
 Cohesion: 0.10
@@ -1802,15 +1789,15 @@ Nodes (40): _community_article(), _cross_community_links(), _god_node_article(),
 
 ### Community 35 - "Community 35"
 Cohesion: 0.09
-Nodes (38): Graph, _cross_community_surprises(), _cross_file_surprises(), _file_category(), god_nodes(), graph_diff(), _is_concept_node(), _is_file_node() (+30 more)
+Nodes (34): _cross_community_surprises(), _cross_file_surprises(), _file_category(), god_nodes(), graph_diff(), _is_concept_node(), _is_file_node(), _node_community_map() (+26 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.03
-Nodes (87): _check_tree_sitter_version(), extract(), _extract_parallel(), _is_type_like_definition(), _merge_swift_extensions(), _node_label_key(), Raise a clear error if tree-sitter is too old for the new Language API., Extract uncached files in parallel using ProcessPoolExecutor.      Returns Tru (+79 more)
+Cohesion: 0.04
+Nodes (81): _check_tree_sitter_version(), extract(), _extract_parallel(), _merge_swift_extensions(), Raise a clear error if tree-sitter is too old for the new Language API., Extract uncached files in parallel using ProcessPoolExecutor.      Returns Tru, Extract AST nodes and edges from a list of code files.      Two-pass process:, Collapse cross-file Swift `extension Foo` nodes into the canonical `Foo`. (+73 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.12
-Nodes (39): _make_graph(), Integration tests for graphify export subcommands and CLI commands.  Each test, #1423: `graphify extract` honours GRAPHIFY_OUT for where it WRITES, not only, Build a minimal graph.json + analysis/labels files in tmp_path/graphify-out/., cluster-only must not crash with FileNotFoundError when graphify-out/ is absent, cluster-only must invoke remap_communities_to_previous so the existing     .gra, When .graphify_analysis.json is absent, export html should reconstruct     comm, Stronger assertion: the reconstructed `communities` dict should have the     SA (+31 more)
+Cohesion: 0.08
+Nodes (51): CompletedProcess, _make_graph(), Integration tests for graphify export subcommands and CLI commands.  Each test, #1423: `graphify extract` honours GRAPHIFY_OUT for where it WRITES, not only, Build a minimal graph.json + analysis/labels files in tmp_path/graphify-out/., cluster-only must not crash with FileNotFoundError when graphify-out/ is absent, cluster-only must invoke remap_communities_to_previous so the existing     .gra, When .graphify_analysis.json is absent, export html should reconstruct     comm (+43 more)
 
 ### Community 38 - "Community 38"
 Cohesion: 0.05
@@ -1825,8 +1812,8 @@ Cohesion: 0.07
 Nodes (38): _build_wheel_names(), fake_bundle(), _first_unbuilt_progressive_host(), _install(), Tests for the progressive-disclosure references/ sidecar install path.  The re, Reinstall swaps references/ in place, dropping a stale fragment., Uninstall rmtrees references/ before the dir walk so the tree is cleared., If SKILL.md links references/ but the dir is gone, warn to repair. (+30 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.19
-Nodes (43): _file_node_id(), File-level node ID matching the skill.md spec: ``{parent_dir}_{stem}`` —     on, _custom_providers_path(), check_update(), Check for pending semantic update flag and notify the user if set.      Cron-s, path, _extract_for(), _has_edge() (+35 more)
+Cohesion: 0.14
+Nodes (52): _file_node_id(), _find_workspace_root(), _load_workspace_packages(), _package_entry_candidates(), _pnpm_workspace_globs(), Resolve a JS/TS/Svelte import target to a local file when it exists., File-level node ID matching the skill.md spec: ``{parent_dir}_{stem}`` —     on, Resolve a markdown link target to the absolute path of a sibling document. (+44 more)
 
 ### Community 42 - "Community 42"
 Cohesion: 0.07
@@ -1849,32 +1836,32 @@ Cohesion: 0.03
 Nodes (71): Communities (141 total, 52 thin omitted), Community 0 - "Community 0", Community 10 - "Community 10", Community 11 - "Community 11", Community 12 - "Community 12", Community 13 - "Community 13", Community 14 - "Community 14", Community 15 - "Community 15" (+63 more)
 
 ### Community 47 - "Community 47"
-Cohesion: 0.08
-Nodes (17): Bool, AuthedHttpClient, token_, build_graph(), CacheManager, baseUrl_, tags_, RetryingHttpClient (+9 more)
+Cohesion: 0.09
+Nodes (17): AuthedHttpClient, token_, CacheManager, createClient(), baseUrl_, tags_, RetryingHttpClient, maxRetries (+9 more)
 
 ### Community 48 - "Community 48"
 Cohesion: 0.08
 Nodes (34): build_whisper_prompt(), download_audio(), _get_whisper(), _get_yt_dlp(), is_url(), _model_name(), Transcribe a video/audio file or URL to a .txt transcript.      If video_path, Transcribe a list of video/audio files or URLs, return paths to transcript .txt (+26 more)
 
 ### Community 49 - "Community 49"
-Cohesion: 0.08
-Nodes (41): extract_python(), Extract classes, functions, and imports from a .py file via tree-sitter AST., Call-graph pass must produce INFERRED calls edges., AST-resolved call edges are deterministic and should be EXTRACTED/1.0., All edge sources must reference a known node (targets may be external imports)., run_analysis() calls compute_score() - must appear as a calls edge., Analyzer.process() calls run_analysis() - cross class→function calls edge., Same caller→callee pair must appear only once even if called multiple times. (+33 more)
+Cohesion: 0.19
+Nodes (13): _make_extraction(), Tests for confidence_score on edges., Surprising connections section shows confidence score next to INFERRED edges., Return a minimal extraction dict with one edge of each confidence type., EXTRACTED edges must have confidence_score == 1.0., INFERRED edges must have confidence_score between 0.0 and 1.0., AMBIGUOUS edges must have confidence_score <= 0.4., confidence_score survives build_from_json → to_json → JSON parse round-trip. (+5 more)
 
 ### Community 50 - "Community 50"
 Cohesion: 0.03
 Nodes (106): _apply_resource_limits(), _canonical_graph_for_compare(), _canonical_topology_for_compare(), _changed_path_candidates(), _check_shrink(), _drain_pending(), _git_head(), _has_non_code() (+98 more)
 
 ### Community 51 - "Community 51"
-Cohesion: 0.07
-Nodes (36): extract_objc(), extract_scala(), extract_verilog(), Extract classes, objects, functions, and imports from a .scala file., Extract modules, functions, tasks, package imports, instantiations, and     Sys, Extract interfaces, implementations, protocols, methods, and imports from .m/.mm, _edge_labels(), test_objc_finds_imports() (+28 more)
+Cohesion: 0.23
+Nodes (8): UseAuthOptions, UseAuthReturn, useRequireAuth(), Onboard(), Role, DEPT_COLORS, Student, StudentTracking()
 
 ### Community 52 - "Community 52"
 Cohesion: 0.06
 Nodes (35): Comprehensive tests for graphify.scip_ingest., Cross-symbol relationship within ONE document resolves via the symbol index., `relative_path` as a non-string falls back to the function's source_file default, A symbol entry with `symbol: <int>` is silently skipped., `documentation` first entry that isn't a string yields empty description (not cr, A non-dict entry in `documents` is silently skipped., When symbol has no #, the label is the full symbol id., When two docs both have `F#`, a relationship from b.py's F# to F# must     reso (+27 more)
 
 ### Community 53 - "Community 53"
-Cohesion: 0.09
-Nodes (55): _ats_targets_from_watchlist(), _github_query(), _json_get(), run(), _scrape_ashby(), _scrape_direct_ats_url(), _scrape_github(), _scrape_greenhouse() (+47 more)
+Cohesion: 0.11
+Nodes (47): _ats_targets_from_watchlist(), _github_query(), _json_get(), run(), _scrape_ashby(), _scrape_direct_ats_url(), _scrape_github(), _scrape_greenhouse() (+39 more)
 
 ### Community 54 - "Community 54"
 Cohesion: 0.13
@@ -1889,20 +1876,20 @@ Cohesion: 0.09
 Nodes (24): _extract_project(), _fetch(), _gh_headers(), ingest_github(), Use LLM to extract structured project info from a repo + README., Fetch a GitHub user's top repos by stars, extract project data via LLM     from, _RepoExtract, _truncate() (+16 more)
 
 ### Community 57 - "Community 57"
-Cohesion: 0.03
-Nodes (51): Activate an Agent, Aider Integration, Install, Manual Usage, Regenerate, Activate a Skill, Antigravity Integration, File Format (+43 more)
+Cohesion: 0.04
+Nodes (46): Activate an Agent, Aider Integration, Install, Manual Usage, Regenerate, Activate a Skill, Antigravity Integration, File Format (+38 more)
 
 ### Community 58 - "Community 58"
 Cohesion: 0.03
-Nodes (123): build(), build_from_json(), build_merge(), dedupe_edges(), dedupe_nodes(), deduplicate_by_label(), edge_data(), edge_datas() (+115 more)
+Nodes (103): build(), build_from_json(), build_merge(), dedupe_edges(), dedupe_nodes(), deduplicate_by_label(), edge_data(), edge_datas() (+95 more)
 
 ### Community 59 - "Community 59"
-Cohesion: 0.05
-Nodes (77): _node_community_map(), Invert communities dict: node_id -> community_id., cluster(), Run Leiden community detection. Returns {community_id: [node_ids]}.      Commu, backup_if_protected(), _cap_filename(), _cypher_escape(), _cypher_label() (+69 more)
+Cohesion: 0.04
+Nodes (82): _node_community_map(), Invert communities dict: node_id -> community_id., cluster(), Run Leiden community detection. Returns {community_id: [node_ids]}.      Commu, backup_if_protected(), _cap_filename(), _cypher_escape(), _cypher_label() (+74 more)
 
 ### Community 60 - "Community 60"
-Cohesion: 0.06
-Nodes (35): Exception, CloseError, ConnectTimeout, CookieConflict, DecodingError, HTTPError, HTTPStatusError, InvalidURL (+27 more)
+Cohesion: 0.07
+Nodes (40): Exception, CloseError, ConnectError, ConnectTimeout, CookieConflict, DecodingError, HTTPError, HTTPStatusError (+32 more)
 
 ### Community 61 - "Community 61"
 Cohesion: 0.07
@@ -1913,8 +1900,8 @@ Cohesion: 0.15
 Nodes (24): ApprovalDrawer(), JobCard(), PipelineJobCard(), PipelineSkeleton(), LeadFilterBar(), cleanLeadText(), cleanRoleSegment(), getMark() (+16 more)
 
 ### Community 63 - "Community 63"
-Cohesion: 0.08
-Nodes (42): _cross_community_surprises(), _cross_file_surprises(), _cross_language(), _is_concept_node(), _is_file_node(), Graph analysis: god nodes (most connected), surprising connections (cross-commun, Return True if this node is a manually-injected semantic concept node     rathe, Return the first path component - used to detect cross-repo edges. (+34 more)
+Cohesion: 0.09
+Nodes (38): _cross_community_surprises(), _cross_file_surprises(), _is_concept_node(), _is_file_node(), Graph analysis: god nodes (most connected), surprising connections (cross-commun, Return True if this node is a manually-injected semantic concept node     rathe, Cross-file edges between real code/doc entities, ranked by a composite     surp, For single-source corpora: find edges that bridge different communities.     Th (+30 more)
 
 ### Community 64 - "Community 64"
 Cohesion: 0.07
@@ -1925,7 +1912,7 @@ Cohesion: 0.08
 Nodes (26): parse_linkedin_export(), Parse a LinkedIn data export ZIP.     Returns:       {         "candidate": {"n", Find and parse a CSV by filename pattern (case-insensitive)., _read_csv(), Resource-cap guards for parsing untrusted office/PDF files (F2).  .docx/.xlsx, A tiny file that expands far past the ratio threshold is rejected., The live converters bail out (return "") on a bomb before parsing., A normal multi-member office zip passes the streaming-ceiling pass. (+18 more)
 
 ### Community 66 - "Community 66"
-Cohesion: 0.17
+Cohesion: 0.19
 Nodes (27): _conn(), _dedupe(), _field(), _first_url(), _graph(), _h(), _heading_blocks(), ingest() (+19 more)
 
 ### Community 67 - "Community 67"
@@ -1954,7 +1941,7 @@ Nodes (22): AutomationSettings(), DiscoverySettings(), GlobalSettings(), KeyStat
 
 ### Community 73 - "Community 73"
 Cohesion: 0.08
-Nodes (31): Any, datetime, _ensure_dir(), _decay(), _dedupe_by_question(), _doc_community(), _empty_bucket(), _finalize_sources() (+23 more)
+Nodes (30): Any, datetime, _decay(), _dedupe_by_question(), _doc_community(), _empty_bucket(), _finalize_sources(), _load_known_nodes() (+22 more)
 
 ### Community 74 - "Community 74"
 Cohesion: 0.04
@@ -1990,7 +1977,7 @@ Nodes (44): Advanced Capabilities, Balance Cost and Quality, Build an Efficient 
 
 ### Community 82 - "Community 82"
 Cohesion: 0.07
-Nodes (27): _platform_artifacts(), windows: graphify-windows name, powershell install, troubleshooting tail., codex (was 4-value) and windows (was 5-value) now carry the superset., The extraction variant differs: codex compact, windows verbose., #1325: the unified query reference ships BOTH the vocab-expansion step and, No split host emits a trigger: field — not part of Agent Skills spec (#1180)., kilo gets the Kilo-specific rules tail before Honesty Rules., Each dispatch variant lands in the right host's B2 slot. (+19 more)
+Nodes (27): _platform_artifacts(), codex (was 4-value) and windows (was 5-value) now carry the superset., The extraction variant differs: codex compact, windows verbose., #1325: the unified query reference ships BOTH the vocab-expansion step and, No split host emits a trigger: field — not part of Agent Skills spec (#1180)., kilo gets the Kilo-specific rules tail before Honesty Rules., Each dispatch variant lands in the right host's B2 slot., kiro, pi, claw use the compact extraction body; the rest use verbose. (+19 more)
 
 ### Community 83 - "Community 83"
 Cohesion: 0.14
@@ -2010,7 +1997,7 @@ Nodes (23): _lsh_integrate(), _mh_coeffs(), MinHash, MinHashLSH, _optimal_lsh_pa
 
 ### Community 87 - "Community 87"
 Cohesion: 0.10
-Nodes (18): Auth, BasicAuth, BearerAuth, DigestAuth, NetRCAuth, Authentication handlers. Auth objects are callables that modify a request befor, Load credentials from ~/.netrc based on the request host., Base class for all authentication handlers. (+10 more)
+Nodes (14): Auth, BasicAuth, BearerAuth, DigestAuth, NetRCAuth, Authentication handlers. Auth objects are callables that modify a request befor, Load credentials from ~/.netrc based on the request host., Base class for all authentication handlers. (+6 more)
 
 ### Community 88 - "Community 88"
 Cohesion: 0.13
@@ -2033,8 +2020,8 @@ Cohesion: 0.08
 Nodes (23): Tests for the tools/skillgen generator and the claude lean-core split.  skillg, Every v8 heading single-homes for the cli-inline split hosts too., Every v8 heading lands in the lean core or exactly one reference., check + audit-coverage pass for every rendered progressive host., aider and devin render one inline body, no split and no references dir., Each monolith is diff-clean vs v8 except the file_type enum unification., Rendering twice yields byte-identical output (no timestamps/versions)., Every line that differs from pristine v8 is a sanctioned change-class.      Th (+15 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.09
-Nodes (26): generate_overview_graph(), generate_section_flowchart(), group_nodes_by_file(), mermaid_class_defs(), mermaid_init(), mermaid_section_id(), node_kind(), node_label() (+18 more)
+Cohesion: 0.11
+Nodes (24): generate_overview_graph(), generate_section_flowchart(), generate_section_intro(), group_nodes_by_file(), is_zh(), mermaid_class_defs(), mermaid_init(), node_kind() (+16 more)
 
 ### Community 94 - "Community 94"
 Cohesion: 0.11
@@ -2049,12 +2036,12 @@ Cohesion: 0.12
 Nodes (19): detect_backend(), _ollama_host_is_link_local_or_metadata(), True if *host* is, or resolves to, a link-local / cloud-metadata address., Warn if OLLAMA_BASE_URL looks unsafe; hard-block link-local/metadata (F3)., Return the name of whichever backend has an API key set, or None.      Priorit, _validate_ollama_base_url(), Tests for the Ollama backend additions in graphify/llm.py., Link-local / cloud-metadata Ollama targets fail closed (F3). (+11 more)
 
 ### Community 98 - "Community 98"
-Cohesion: 0.11
-Nodes (4): Cookies, Headers, Core data models: URL, Headers, Cookies, Request, Response. These are the centr, URL
+Cohesion: 0.09
+Nodes (7): Limits, The main Client and AsyncClient classes. BaseClient holds all shared logic. Cli, Timeout, Cookies, Headers, Core data models: URL, Headers, Cookies, Request, Response. These are the centr, URL
 
 ### Community 99 - "Community 99"
-Cohesion: 0.09
-Nodes (27): extract_php(), extract_sln(), Extract projects and inter-project dependencies from a .sln file., Extract classes, functions, methods, namespace uses, and calls from a .php file., Module-level arrow functions must still emit a node and capture their calls (#10, _relations(), test_js_module_level_arrow_produces_node_and_call_edges(), test_php_config_helper_target_matches_first_segment() (+19 more)
+Cohesion: 0.20
+Nodes (9): Communication Style, Core Mission, Critical Rules, Identity, Learning and Memory, Meeting Notes Specialist, Success Metrics, Technical Deliverables (+1 more)
 
 ### Community 100 - "Community 100"
 Cohesion: 0.03
@@ -2097,24 +2084,24 @@ Cohesion: 0.13
 Nodes (19): make_id(), normalize_id(), Single source of truth for node-ID normalization.  Three independent producers, r"""Normalize a single ID string to its canonical form.      Idempotent: ``nor, Build a canonical node ID from one or more name parts.      Parts are joined w, Drift guard for the node-ID normalization contract.  Three independent produce, The AST id-maker and the builder's reconciler must agree, char for char., Multi-part make_id == normalize_id of the joined parts (the builder only     ev (+11 more)
 
 ### Community 110 - "Community 110"
-Cohesion: 0.11
-Nodes (16): _ip_is_blocked(), _max_graph_file_bytes(), Resolve *host* once and return (family, validated_ip) for the first     address, HTTPConnection that resolves + validates DNS once, then connects to the     exa, HTTPSConnection variant of _SSRFGuardedHTTPConnection.      Connects to the va, urllib handler that routes http:// through _SSRFGuardedHTTPConnection., urllib handler that routes https:// through _SSRFGuardedHTTPSConnection., Return the graph.json size cap in bytes.      Honors the ``GRAPHIFY_MAX_GRAPH_ (+8 more)
+Cohesion: 0.10
+Nodes (18): _build_opener(), _ip_is_blocked(), _max_graph_file_bytes(), Resolve *host* once and return (family, validated_ip) for the first     address, HTTPConnection that resolves + validates DNS once, then connects to the     exa, HTTPSConnection variant of _SSRFGuardedHTTPConnection.      Connects to the va, urllib handler that routes http:// through _SSRFGuardedHTTPConnection., urllib handler that routes https:// through _SSRFGuardedHTTPSConnection. (+10 more)
 
 ### Community 111 - "Community 111"
 Cohesion: 0.11
 Nodes (18): _make_envelope(), Tests for `_parse_llm_json` robustness and the `_call_claude_cli` subprocess ar, The hollow-response root cause was --append-system-prompt     layering graphify, GRAPHIFY_CLAUDE_CLI_MODEL must be forwarded to claude -p --model., Default behaviour: when the env var is not set, --model is not     added so cla, Claude often prefixes the JSON with a short preamble before the     ```json fen, Some models return prose around bare JSON with no markdown fence.     The balan, Regression: clean JSON input (the original happy path) must keep     parsing ex (+10 more)
 
 ### Community 112 - "Community 112"
-Cohesion: 0.14
-Nodes (17): Counter, derive_flow_chain(), generate_overview_cards(), generate_section_cards(), generate_section_intro(), is_zh(), Aggregate inter-section edge counts and relation names., Derive a readable section flow from inter-section edges. (+9 more)
+Cohesion: 0.12
+Nodes (21): Counter, derive_flow_chain(), edge_score(), generate_section_cards(), node_degree_scores(), node_importance(), preferred_edges(), Aggregate inter-section edge counts and relation names. (+13 more)
 
 ### Community 113 - "Community 113"
-Cohesion: 0.29
-Nodes (7): extract_dmi(), Pull the BYOND metadata text out of a .dmi PNG, or empty string on failure., Extract icon state names from a .dmi (BYOND PNG icon sheet)., _read_dmi_description(), test_dmi_emits_state_nodes(), test_dmi_no_error(), test_dmi_state_contained_by_file()
+Cohesion: 0.33
+Nodes (8): _ensure_dir(), build_tree(), _common_root(), emit_html(), _make_truncation_leaf(), tree_html — emit a D3 v7 collapsible-tree HTML view of a graph.  A self-contai, Build a ``{name, total_count, children}`` hierarchy.      Each leaf is either, write_tree_html()
 
 ### Community 114 - "Community 114"
-Cohesion: 0.10
-Nodes (21): extract_markdown(), Extract structural nodes and edges from a Markdown file.      Produces nodes f, _md_link_fixture(), ### Database Migration is nested under ## Full Deploy., Fenced code blocks should NOT emit nodes (#1077).      They were always orphan, Headings should be connected via 'contains' edges (file->h, h->h)., A '## heading' inside a fenced block must not produce a heading node (#1077)., A hub doc linking to sibling docs, plus those docs (#1376). (+13 more)
+Cohesion: 0.15
+Nodes (14): extract_markdown(), Extract structural nodes and edges from a Markdown file.      Produces nodes f, _md_link_fixture(), Headings should be connected via 'contains' edges (file->h, h->h)., A hub doc linking to sibling docs, plus those docs (#1376)., Inline/wikilink markdown links to sibling docs become references edges (#1376)., External URLs, in-page anchors and images must not produce edges (#1376)., End-to-end: after extract()'s ID remap, link targets are real doc nodes,     so (+6 more)
 
 ### Community 115 - "Community 115"
 Cohesion: 0.10
@@ -2154,11 +2141,11 @@ Nodes (41): Advanced Analysis, 🚀 Advanced Capabilities, Asia, Australia & New
 
 ### Community 124 - "Community 124"
 Cohesion: 0.04
-Nodes (82): _absolutize_source_files_in(), _body_content(), cache_dir(), cached_files(), check_semantic_cache(), _cleanup_stale_ast_entries(), _ensure_stat_index(), file_hash() (+74 more)
+Nodes (88): _absolutize_source_files_in(), _body_content(), cache_dir(), cached_files(), check_semantic_cache(), _cleanup_stale_ast_entries(), _ensure_stat_index(), file_hash() (+80 more)
 
 ### Community 125 - "Community 125"
-Cohesion: 0.11
-Nodes (26): Save a Q&A result as markdown so it gets extracted into the graph on next --upda, save_query_result(), _load_known_nodes(), _load_node_community(), Build a lookup from node id AND node label -> community label, or None if the, The set of node ids AND labels in the current graph, or None if unavailable., Scan ``memory_dir``, write the lessons doc to ``out_path``, return (path, agg)., reflect() (+18 more)
+Cohesion: 0.09
+Nodes (30): Save a Q&A result as markdown so it gets extracted into the graph on next --upda, save_query_result(), parse_memory_doc(), Reverse the double-quoted escaping that ingest._yaml_str applies., Parse the frontmatter of a memory doc into a dict, or None if it has none., _yaml_unescape(), Tests for graphify.ingest.save_query_result, An outcome signal is written to both frontmatter (for `reflect`) and an     ## (+22 more)
 
 ### Community 126 - "Community 126"
 Cohesion: 0.15
@@ -2169,16 +2156,16 @@ Cohesion: 0.10
 Nodes (19): _enum_lines(), _is_cache_unlink_fix_line(), _is_chunk_cleanup_line(), _is_content_scope_fix_line(), _is_directed_fix_line(), _is_enum_line(), _is_frontmatter_description_line(), _is_manifest_root_fix_line() (+11 more)
 
 ### Community 128 - "Community 128"
-Cohesion: 0.19
-Nodes (14): _describe_node(), format_node_refs(), generate_call_table_rows(), pick_text(), Render node references as readable labels instead of internal IDs., Generate call table row scaffolding for a section's nodes., Heuristic tag suggestion based on label name and file type., Generate a compact human-readable description for a graph node. (+6 more)
+Cohesion: 0.18
+Nodes (14): _describe_node(), format_node_refs(), generate_call_table_rows(), generate_overview_cards(), pick_text(), Render node references as readable labels instead of internal IDs., Generate call table row scaffolding for a section's nodes., Heuristic tag suggestion based on label name and file type. (+6 more)
 
 ### Community 129 - "Community 129"
 Cohesion: 0.15
 Nodes (14): endpoint_id(), first_present(), load_labels(), load_sections(), normalize_edge(), normalize_node(), Return the first non-empty value for any candidate key., Normalize edge endpoints that may be strings or node-like objects. (+6 more)
 
 ### Community 130 - "Community 130"
-Cohesion: 0.11
-Nodes (20): extract_dm(), Extract types, procs, includes, and calls from a .dm/.dme file., _calls(), Regression test for the call-walker `simple_identifier` /     `identifier` rena, test_cuda_host_call_edges(), test_dm_ambiguous_member_call_left_unresolved(), test_dm_call_edges_have_call_context(), test_dm_emits_include_edge() (+12 more)
+Cohesion: 0.33
+Nodes (5): Logger, Processor, Result, HashMap, T
 
 ### Community 131 - "Community 131"
 Cohesion: 0.21
@@ -2197,8 +2184,8 @@ Cohesion: 0.05
 Nodes (39): Board-Level Oversight, CDP Response Structure, Community Investment Reporting, Core Competencies, 🚨 Critical Rules You Must Follow, Double Materiality Framework (CSRD-aligned), Emissions Factor Sources, ESG Governance Structure (+31 more)
 
 ### Community 135 - "Community 135"
-Cohesion: 0.04
-Nodes (84): DiGraph, _file_category(), find_import_cycles(), god_nodes(), graph_diff(), _is_json_key_node(), Return the top_n most-connected real entities - the core abstractions.      Fi, Find connections that are genuinely surprising - not obvious from file structure (+76 more)
+Cohesion: 0.03
+Nodes (106): DiGraph, _cross_language(), _file_category(), find_import_cycles(), god_nodes(), graph_diff(), _is_json_key_node(), Return the top_n most-connected real entities - the core abstractions.      Fi (+98 more)
 
 ### Community 136 - "Community 136"
 Cohesion: 0.16
@@ -2237,8 +2224,8 @@ Cohesion: 0.12
 Nodes (16): A provider whose base_url uses a non-http(s) scheme is skipped on load (F1)., provider_base_url_ok rejects bad schemes and warns on plaintext-http egress (F1), Custom providers appear after all built-ins in detect_backend() priority., Missing pricing field defaults to zero so estimate_cost doesn't blow up., Built-in provider names are protected from being overridden., Full round-trip: add → list → show → remove via providers.json., A project-local ./.graphify/providers.json is NOT loaded by default (F1)., With explicit opt-in the project-local file is honoured (F1). (+8 more)
 
 ### Community 145 - "Community 145"
-Cohesion: 0.18
-Nodes (16): _make_extraction_with_semantic_edge(), _make_graph_with_semantic_edge(), _make_report_with_semantic_surprise(), _make_two_edge_graph(), Tests for semantically_similar_to edge support., Two nodes in separate files connected by a semantically_similar_to edge., Non-semantic edges must not get the [semantically similar] tag., Graph with one semantically_similar_to edge and one references edge, both cross- (+8 more)
+Cohesion: 0.33
+Nodes (6): mermaid_section_id(), node_mermaid_id(), Build a Mermaid-safe ASCII identifier with a hash suffix to avoid collisions., Generate a safe Mermaid node ID from a graph node.      Mermaid IDs must match, Convert a section ID (like 'cli-entry') to a safe Mermaid ID (like 'CLI_ENTRY')., stable_ascii_id()
 
 ### Community 146 - "Community 146"
 Cohesion: 0.25
@@ -2261,32 +2248,32 @@ Cohesion: 0.05
 Nodes (38): 🚀 Advanced Capabilities, Blameless Culture, Build Incident Readiness, Chaos Engineering & Game Days, 🚨 Critical Rules You Must Follow, Cross-Organizational Incident Coordination, Drive Continuous Improvement Through Post-Mortems, During Active Incidents (+30 more)
 
 ### Community 151 - "Community 151"
-Cohesion: 0.14
-Nodes (10): extract_dart(), Extract classes, mixins, functions, imports, generic calls, and annotations from, Test that the universal parser successfully extracts generic relationships, anno, Test complex Dart 3+ syntax and precise Riverpod/Bloc mappings., Test that the parser successfully handles namespaces in extends/implements, and, Test typedefs, mixin on, factories, constructor DI types, and universal navigati, Test all 5 roadmap bug fixes (Bug A, B, C, D, E)., TestDart (+2 more)
+Cohesion: 0.09
+Nodes (20): extract_dart(), Extract classes, mixins, functions, imports, generic calls, and annotations from, Test that the universal parser successfully extracts generic relationships, anno, Test complex Dart 3+ syntax and precise Riverpod/Bloc mappings., Test that the parser successfully handles namespaces in extends/implements, and, Test typedefs, mixin on, factories, constructor DI types, and universal navigati, Test all 5 roadmap bug fixes (Bug A, B, C, D, E)., TestDart (+12 more)
 
 ### Community 152 - "Community 152"
 Cohesion: 0.17
 Nodes (15): handle_enrich(), Re-enrich a document to pick up new cross-references., enrich_document(), extract_keywords(), find_cross_references(), normalize_text(), process_and_save(), Processor module - transforms validated documents into enriched records ready f (+7 more)
 
 ### Community 153 - "Community 153"
-Cohesion: 0.14
-Nodes (16): CompletedProcess, _make_graph(), argparse `choices` rejects an unknown outcome before save_query_result runs., First run with no graphify-out/memory/ still succeeds and writes a valid doc., With a real graph.json present, reflect auto-detects it and groups lessons, Through reflect()/CLI with a real graph.json: a cited node that isn't in the, Build a minimal graph.json + analysis/labels in tmp_path/graphify-out/.      M, `reflect --if-stale` skips the rebuild when LESSONS.md is already current, (+8 more)
+Cohesion: 0.15
+Nodes (15): _make_graph(), argparse `choices` rejects an unknown outcome before save_query_result runs., First run with no graphify-out/memory/ still succeeds and writes a valid doc., With a real graph.json present, reflect auto-detects it and groups lessons, Through reflect()/CLI with a real graph.json: a cited node that isn't in the, Build a minimal graph.json + analysis/labels in tmp_path/graphify-out/.      M, `reflect --if-stale` skips the rebuild when LESSONS.md is already current,, _run() (+7 more)
 
 ### Community 154 - "Community 154"
-Cohesion: 0.22
-Nodes (11): LoadingScreen(), LoadingScreenProps, EmployerPage(), UseAuthOptions, UseAuthReturn, useRequireAuth(), TPOCohortData, TPODashboard() (+3 more)
+Cohesion: 0.25
+Nodes (6): LoadingScreen(), LoadingScreenProps, EmployerPage(), TPOCohortData, TPODashboard(), Candidate
 
 ### Community 155 - "Community 155"
 Cohesion: 0.05
 Nodes (38): 🚀 Advanced Capabilities, Blameless Culture, Build Incident Readiness, Chaos Engineering & Game Days, 🚨 Critical Rules You Must Follow, Cross-Organizational Incident Coordination, Drive Continuous Improvement Through Post-Mortems, During Active Incidents (+30 more)
 
 ### Community 156 - "Community 156"
-Cohesion: 0.17
-Nodes (13): _extract_sequential(), _extract_single_file(), _get_extractor(), _raise_recursion_limit(), Return the correct extractor function for a file, or None if unsupported., Worker function for parallel extraction. Runs in a subprocess.      Must be at, Extract uncached files sequentially (fallback for small batches)., _safe_extract() (+5 more)
+Cohesion: 0.40
+Nodes (5): 1. The Opportunity, How It Was Found, Sources, The Concept: Nexus Spatial, Why This Agency Is Uniquely Positioned
 
 ### Community 157 - "Community 157"
-Cohesion: 0.12
-Nodes (16): extract_cpp(), Extract functions, classes, and includes from a .cpp/.cc/.cxx/.hpp file., Regression for #915: `class Derived : public Base {}` should emit an inherits ed, Structs use the same `: Base` syntax as classes and must also emit inherits., test_cpp_class_inherits_edge(), test_cpp_field_and_template_argument_contexts(), test_cpp_finds_class(), test_cpp_finds_includes() (+8 more)
+Cohesion: 0.67
+Nodes (3): build(), build_from_json(), Merge multiple extraction results into one graph.
 
 ### Community 158 - "Community 158"
 Cohesion: 0.12
@@ -2316,16 +2303,12 @@ Nodes (14): convert_google_workspace_file(), _extract_file_id_from_url(), _extra
 Cohesion: 0.05
 Nodes (37): 1. Scene Architecture Design, 2. Signal Architecture, 3. Component Decomposition, 4. Static Typing Audit, 5. Autoload Hygiene, 6. Testing in Isolation, 🚀 Advanced Capabilities, Advanced Scene Architecture Patterns (+29 more)
 
-### Community 165 - "Community 165"
-Cohesion: 0.32
-Nodes (14): extract_terraform(), Extract Terraform/HCL blocks and the references between them via tree-sitter., _labels(), Tests for the Terraform/HCL extractor (graphify/extract.py, issue #187)., _rel_pairs(), test_cross_file_references_resolve_after_merge(), test_depends_on_edge(), test_empty_and_commentonly_files_are_safe() (+6 more)
-
 ### Community 166 - "Community 166"
 Cohesion: 0.21
 Nodes (14): anglicize(), extract_core_words(), format_entry(), load_data(), main(), match_score(), normalize(), Search for a company by name. Returns matching entries sorted by relevance. (+6 more)
 
 ### Community 167 - "Community 167"
-Cohesion: 0.16
+Cohesion: 0.18
 Nodes (4): navLinks, WindowState, supabase, SignupRole
 
 ### Community 168 - "Community 168"
@@ -2396,10 +2379,6 @@ Nodes (10): Processor, handle_delete(), handle_get(), handle_search(), handle_up
 Cohesion: 0.06
 Nodes (34): Burnout Diagnosis & Prevention, Burnout Prevention Interventions, Burnout Risk Assessment (Team-Level), Common Cognitive Biases in Teams, Competing Values Framework (Quinn & Rohrbaugh), Core Competencies, 🚨 Critical Rules You Must Follow, Culture Assessment Protocol (+26 more)
 
-### Community 185 - "Community 185"
-Cohesion: 0.13
-Nodes (15): extract_groovy(), _is_spock_file(), Return True when the file contains Spock-style ``def "feature"()`` methods, Extract classes, methods, constructors, and imports from a .groovy/.gradle file., test_groovy_finds_class(), test_groovy_finds_imports(), test_groovy_finds_methods(), test_groovy_import_edges_have_import_context() (+7 more)
-
 ### Community 186 - "Community 186"
 Cohesion: 0.32
 Nodes (5): _classify(), make_pr(), Build a minimal PRInfo with sensible defaults., TestClassify, timedelta
@@ -2409,8 +2388,8 @@ Cohesion: 0.17
 Nodes (13): Namespace, bless(), check(), _expected_path(), load_platforms(), main(), _parse_args(), Parse platforms.toml into Platform records, keyed by platform name. (+5 more)
 
 ### Community 189 - "Community 189"
-Cohesion: 0.18
-Nodes (11): Assessment(), ActionableFeedback, Alert, AssessmentOption, AssessmentQuestion, AssessmentResponse, AssessmentResult, CohortData (+3 more)
+Cohesion: 0.15
+Nodes (15): Assessment(), Application, Dashboard(), DashboardData, ActionableFeedback, Alert, AssessmentOption, AssessmentQuestion (+7 more)
 
 ### Community 190 - "Community 190"
 Cohesion: 0.24
@@ -2427,10 +2406,6 @@ Nodes (11): _append_rationale_attr(), _is_sentence_like_rationale_label(), load_
 ### Community 193 - "Community 193"
 Cohesion: 0.06
 Nodes (34): Article 30 Register Structure (Controllers), Breach Response Protocol, Breach Risk Scoring Matrix, Core Competencies, 🚨 Critical Rules You Must Follow, Cross-Border Data Transfers, Data Flow Mapping Process, Data Inventory & Records of Processing Activities (+26 more)
-
-### Community 194 - "Community 194"
-Cohesion: 0.27
-Nodes (11): _make_docs_corpus(), Integration tests for incremental graphify extract behavior., After a full extract run, manifest.json must exist (or run fails before writing, If manifest.json + graph.json exist, incremental mode message is shown., Without manifest.json, full scan message is shown (not incremental)., #1347: no-op incremental no-cluster extract must not overwrite graph.json., _run(), test_extract_no_cluster_incremental_noop_preserves_existing_graph() (+3 more)
 
 ### Community 195 - "Community 195"
 Cohesion: 0.06
@@ -2449,8 +2424,8 @@ Cohesion: 0.06
 Nodes (33): 10. Purpose Over Busy Work, 11. Impact Positioning — Outputs Go Where They Work, 1. The Filter — What Gets to the Boss, 2. Process Ownership — Consistency Is the Deliverable, 3. Cascading Updates — The Document Dependency Graph, 4. Output Routing — The Right Place, Ready to Use, 5. Never Take the Boss's Position, 6. Remember. Never Repeat. (+25 more)
 
 ### Community 199 - "Community 199"
-Cohesion: 0.18
-Nodes (14): _build_opener(), Fetch *url* and return raw bytes.      Protections applied:     - URL scheme, Fetch *url* and return decoded text (UTF-8, replacing bad bytes).      Wraps s, safe_fetch(), safe_fetch_text(), OpenerDirector, _make_mock_response(), test_safe_fetch_raises_on_non_2xx() (+6 more)
+Cohesion: 0.21
+Nodes (12): Fetch *url* and return raw bytes.      Protections applied:     - URL scheme, Fetch *url* and return decoded text (UTF-8, replacing bad bytes).      Wraps s, safe_fetch(), safe_fetch_text(), _make_mock_response(), test_safe_fetch_raises_on_non_2xx(), test_safe_fetch_raises_on_size_exceeded(), test_safe_fetch_rejects_file_url() (+4 more)
 
 ### Community 200 - "Community 200"
 Cohesion: 0.17
@@ -2467,10 +2442,6 @@ Nodes (8): apply_feedback_learning(), build_model(), _company_key(), _feature_we
 ### Community 203 - "Community 203"
 Cohesion: 0.24
 Nodes (3): Authenticator, ApiClient, BaseProcessor
-
-### Community 204 - "Community 204"
-Cohesion: 0.27
-Nodes (10): _ast_symbol_id(), _examples(), Drift guard for the node-ID spec shown to LLM semantic subagents.  `tools/skil, Reproduce the symbol ID the AST extractor emits for a file + symbol, using, Guard the guard: if the spec moves or the example format changes so nothing, The canonical spec warns against the filename-only and full-path ID forms., _spec_files(), test_cautionary_wrong_forms_are_actually_wrong() (+2 more)
 
 ### Community 205 - "Community 205"
 Cohesion: 0.35
@@ -2492,10 +2463,6 @@ Nodes (4): compute_pr_impact(), Return (communities_touched, nodes_affected) for
 Cohesion: 0.27
 Nodes (6): _detect_default_branch(), fetch_prs(), _gh(), Auto-detect the repo's default branch via gh, then git, then fall back to 'main', gh returns data but with no defaultBranchRef — should still fall back., TestDetectDefaultBranch
 
-### Community 210 - "Community 210"
-Cohesion: 0.18
-Nodes (11): parse_memory_doc(), Reverse the double-quoted escaping that ingest._yaml_str applies., Parse the frontmatter of a memory doc into a dict, or None if it has none., _yaml_unescape(), parse_memory_doc reads back exactly what save_query_result wrote, including, A plain markdown file with no frontmatter is skipped, not crashed on., save -> parse preserves tricky characters in the question, the correction,, test_parse_handles_crlf() (+3 more)
-
 ### Community 211 - "Community 211"
 Cohesion: 0.18
 Nodes (10): _NoFileRedirectHandler, Raise ValueError if *url* is not http or https, or targets a private/internal IP, Redirect handler that re-validates every redirect target.      Prevents open-r, validate_url(), test_validate_url_accepts_http(), test_validate_url_accepts_https(), test_validate_url_rejects_data(), test_validate_url_rejects_empty_scheme() (+2 more)
@@ -2503,10 +2470,6 @@ Nodes (10): _NoFileRedirectHandler, Raise ValueError if *url* is not http or htt
 ### Community 212 - "Community 212"
 Cohesion: 0.06
 Nodes (33): 🚀 Advanced Capabilities, Adversary-Informed Design, Build and Maintain High-Fidelity Detections, Compiled to Microsoft Sentinel KQL, Compiled to Splunk SPL, 🚨 Critical Rules You Must Follow, Detection-as-Code CI/CD Pipeline, Detection at Scale (+25 more)
-
-### Community 213 - "Community 213"
-Cohesion: 0.22
-Nodes (7): DEFAULT_DATA, GrowthRadarProps, Dashboard(), DashboardData, ProfileCompletionWidget(), ProfileCompletionWidgetProps, DimensionScores
 
 ### Community 214 - "Community 214"
 Cohesion: 0.24
@@ -2520,17 +2483,13 @@ Nodes (32): _anthropic_content(), _backend_pkg_hint(), _bedrock_content(), _call
 Cohesion: 0.31
 Nodes (7): BaseProcessor, Logger, Reader, ReaderLogger, NewServer(), Server, main()
 
-### Community 217 - "Community 217"
-Cohesion: 0.29
-Nodes (5): createClient(), BaseProcessor, Config, HttpClient, Loggable
-
 ### Community 218 - "Community 218"
 Cohesion: 0.24
 Nodes (9): Animal, -initWithName, -speak, Dog, -fetch, Foundation, NSObject, NSString (+1 more)
 
 ### Community 219 - "Community 219"
-Cohesion: 0.29
-Nodes (6): BaseClient, HttpClientFactory, Config, HttpClient, Int, Loggable
+Cohesion: 0.19
+Nodes (8): Bool, BaseClient, HttpClientFactory, Config, HttpClient, Config, Int, Loggable
 
 ### Community 220 - "Community 220"
 Cohesion: 0.24
@@ -2577,8 +2536,8 @@ Cohesion: 0.06
 Nodes (32): 1. Update `CLAUDE.md`, 2. Populate `01-candidate-profile.md` *(Path B and C; skip if Path A populated it)*, 3. Populate `02-behavioral-profile.md` *(Path B and C; skip if Path A populated it)*, 4. Update `04-job-evaluation.md` *(Path B and C; skip if Path A populated it)*, 5. Update `05-cv-templates.md` *(Path B and C; skip if Path A populated it)*, 6. Update `07-interview-prep.md` *(Path B and C; skip if Path A populated it)*, 7. Update `cv/main_example.tex`, 8. Generate `.claude/skills/job-scraper/search-queries.md` (+24 more)
 
 ### Community 231 - "Community 231"
-Cohesion: 0.31
-Nodes (6): AdminDashboard(), ItemAnalysis, StatCard(), StatCardProps, useApiQuery(), UseApiQueryReturn
+Cohesion: 0.38
+Nodes (5): AdminDashboard(), ItemAnalysis, StatCard(), StatCardProps, useApiQuery()
 
 ### Community 232 - "Community 232"
 Cohesion: 0.06
@@ -2593,8 +2552,8 @@ Cohesion: 0.33
 Nodes (3): run_pipeline(), generate_projects_js(), Unit 3: Portfolio Auto-Generator.     Converts refined candidate data into a fu
 
 ### Community 235 - "Community 235"
-Cohesion: 0.22
-Nodes (9): _dmm_type_path(), extract_dmm(), Extract type-path references from a .dmm map file's tile dictionary., _split_dmm_tile(), test_dmm_extracts_type_paths_as_uses_edges(), test_dmm_handles_multiline_tile_definition(), test_dmm_no_error(), test_dmm_skips_grid_section() (+1 more)
+Cohesion: 0.12
+Nodes (15): _dmm_type_path(), extract_dmm(), _is_type_like_definition(), _node_label_key(), Extract type-path references from a .dmm map file's tile dictionary., Map unresolved no-source stubs to a unique real definition with the same label., Resolve cross-file Swift member calls (``recv.method()``) to the real     defin, _resolve_swift_member_calls() (+7 more)
 
 ### Community 236 - "Community 236"
 Cohesion: 0.06
@@ -2625,8 +2584,8 @@ Cohesion: 0.18
 Nodes (13): first_list(), load_graph(), _node_link_payload(), Return the first list from a set of possible schema locations., Read current graphify graph.json via NetworkX's node-link parser., Load graph.json. Returns normalized (nodes, edges, hyperedges, metadata)., _make_graphify_out(), #F4: callflow_html.load_graph must refuse to read a graph.json that     exceeds (+5 more)
 
 ### Community 246 - "Community 246"
-Cohesion: 0.05
-Nodes (29): Core Capabilities, Decision Framework, Marketing Growth Hacker Agent, Role Definition, Specialized Skills, Success Metrics, Core Capabilities, Decision Framework (+21 more)
+Cohesion: 0.12
+Nodes (14): Core Capabilities, Decision Framework, Paid Media Paid Social Strategist Agent, Role Definition, Specialized Skills, Success Metrics, Tooling & Automation, Core Capabilities (+6 more)
 
 ### Community 247 - "Community 247"
 Cohesion: 0.25
@@ -3463,10 +3422,6 @@ Nodes (26): For /graphify add and --watch, For /graphify query, For the commit h
 ### Community 577 - "Agent Body Matching"
 Cohesion: 0.07
 Nodes (26): 1. Concept → Design Pillars, 2. Paper Prototype, 3. GDD Authorship, 4. Balancing Iteration, 5. Playtest & Iterate, 🚀 Advanced Capabilities, Advanced Economy Design, Balance Process (+18 more)
-
-### Community 578 - "Agent Audit Baseline"
-Cohesion: 0.08
-Nodes (27): extract_c(), extract_elixir(), Extract functions and includes from a .c/.h file., Extract modules, functions, imports, and calls from a .ex/.exs file., _edges_with_relation(), test_c_call_edges_have_call_context(), test_c_calls_are_extracted(), test_c_emits_calls() (+19 more)
 
 ### Community 579 - "Node Eviction Logic"
 Cohesion: 0.07
@@ -4318,7 +4273,7 @@ Nodes (18): Agent Activation Sequence, 🤖 AI Engineer — ML Architecture (if 
 
 ### Community 791 - "Community 791"
 Cohesion: 0.11
-Nodes (19): type, type, type, properties, folder, impact, issuer, repo (+11 more)
+Nodes (19): type, type, type, properties, folder, id, issuer, repo (+11 more)
 
 ### Community 792 - "Community 792"
 Cohesion: 0.11
@@ -4403,10 +4358,6 @@ Nodes (16): Building an ICP That Actually Works, Channel Selection by Persona, C
 ### Community 812 - "Community 812"
 Cohesion: 0.12
 Nodes (9): SampleUnit, TBaseProcessor, TDataProcessor, Process(), Reset(), IProcessor, IProcessor, TBaseProcessor (+1 more)
-
-### Community 813 - "Community 813"
-Cohesion: 0.14
-Nodes (6): SampleService, BaseProcessor, Processor, Result, List, Override
 
 ### Community 814 - "Community 814"
 Cohesion: 0.12
@@ -4689,8 +4640,8 @@ Cohesion: 0.17
 Nodes (11): Active Timers, Artifact Index, BRIEFING — 2026-06-18T16:40:00Z, Current Parent, 🔒 Key Constraints, Key Decisions Made, Mission, 🔒 My Identity (+3 more)
 
 ### Community 884 - "Community 884"
-Cohesion: 0.17
-Nodes (12): properties, required, type, type, type, type, candidate, github (+4 more)
+Cohesion: 0.18
+Nodes (11): properties, type, type, type, github, linkedin, name, roles (+3 more)
 
 ### Community 885 - "Community 885"
 Cohesion: 0.17
@@ -4769,8 +4720,8 @@ Cohesion: 0.18
 Nodes (10): 💬 Communication Style, 🔧 Critical Rules, Golden Signals, 🔥 Incident Response Integration, 🔭 Observability Stack, 📋 SLO Framework, SRE (Site Reliability Engineer) Agent, The Three Pillars (+2 more)
 
 ### Community 904 - "Community 904"
-Cohesion: 0.18
-Nodes (11): 10. Cross-Agent Synthesis, 1. The Opportunity, How It Was Found, Key Tensions to Resolve, Nexus Spatial: Full Agency Discovery Exercise, Points of Agreement Across All 8 Agents, Sources, Table of Contents (+3 more)
+Cohesion: 0.33
+Nodes (6): 10. Cross-Agent Synthesis, Key Tensions to Resolve, Nexus Spatial: Full Agency Discovery Exercise, Points of Agreement Across All 8 Agents, Table of Contents, What This Exercise Demonstrates
 
 ### Community 905 - "Community 905"
 Cohesion: 0.18
@@ -5200,10 +5151,6 @@ Nodes (5): TLabel, TSampleForm, TTimer, TButton, TPanel
 Cohesion: 0.25
 Nodes (7): compilerOptions, module, outDir, strict, target, extends, include
 
-### Community 1012 - "Community 1012"
-Cohesion: 0.25
-Nodes (8): edge_score(), node_degree_scores(), node_importance(), Convert graph numeric fields that may be serialized as strings., Rank edges by confidence and usefulness for diagrams., Score nodes by useful edge participation., Use graphify centrality fields when available., to_float()
-
 ### Community 1013 - "Community 1013"
 Cohesion: 0.25
 Nodes (7): Optional network calls, Reporting a Vulnerability, Security Model, Security Policy, Supported Versions, Threat Surface, What graphify does NOT do
@@ -5225,8 +5172,8 @@ Cohesion: 0.25
 Nodes (7): Code — clone these 3 repos, Corpus (52 files), How to run, Images — save these 4, Karpathy Repos Benchmark, Papers — download these 5 PDFs, What to expect
 
 ### Community 1018 - "Community 1018"
-Cohesion: 0.32
-Nodes (4): authFetch(), Onboard(), Role, ResumeUploadModalProps
+Cohesion: 0.19
+Nodes (5): UseApiQueryReturn, authFetch(), ROLE_TYPES, ProfileCompletionWidgetProps, ResumeUploadModalProps
 
 ### Community 1019 - "Community 1019"
 Cohesion: 0.25
@@ -5241,16 +5188,12 @@ Cohesion: 0.25
 Nodes (7): Core Capabilities, Decision Framework, Paid Media PPC Campaign Strategist Agent, Role Definition, Specialized Skills, Success Metrics, Tooling & Automation
 
 ### Community 1022 - "Community 1022"
-Cohesion: 0.25
-Nodes (7): Core Capabilities, Decision Framework, Paid Media Programmatic & Display Buyer Agent, Role Definition, Specialized Skills, Success Metrics, Tooling & Automation
-
-### Community 1023 - "Community 1023"
-Cohesion: 0.25
-Nodes (7): Core Capabilities, Decision Framework, Paid Media Search Query Analyst Agent, Role Definition, Specialized Skills, Success Metrics, Tooling & Automation
+Cohesion: 0.04
+Nodes (41): Communication Style, Core Mission, Critical Rules, 🗄️ Database Optimizer, Identity & Memory, Core Capabilities, Decision Framework, Marketing Content Creator Agent (+33 more)
 
 ### Community 1024 - "Community 1024"
-Cohesion: 0.29
-Nodes (8): items, type, required, items, type, properties, folders, projects
+Cohesion: 0.33
+Nodes (7): items, required, type, items, type, projects, items
 
 ### Community 1025 - "Community 1025"
 Cohesion: 0.25
@@ -5344,13 +5287,9 @@ Nodes (7): _hooks_dir(), Raise if a hooks path looks like a Windows absolute pat
 Cohesion: 0.29
 Nodes (6): 🇨🇳 Chinese (zh-CN) Localization, Files, How It Works, Notes, Result, Usage
 
-### Community 1048 - "Community 1048"
-Cohesion: 0.29
-Nodes (6): Core Capabilities, Decision Framework, Marketing Content Creator Agent, Role Definition, Specialized Skills, Success Metrics
-
 ### Community 1049 - "Community 1049"
-Cohesion: 0.29
-Nodes (7): items, type, type, certifications, roles, items, type
+Cohesion: 0.22
+Nodes (9): required, type, items, type, type, properties, candidate, certifications (+1 more)
 
 ### Community 1050 - "Community 1050"
 Cohesion: 0.29
@@ -5683,14 +5622,6 @@ Nodes (5): Design decisions, Document Pipeline Architecture, Extending the pipel
 ### Community 1132 - "Community 1132"
 Cohesion: 0.33
 Nodes (6): 🚀 Advanced Capabilities, CI/CD Security Pipeline Design, Dependency & SCA Analysis, Feature Threat Modeling, Multi-File Codebase Scan, Security Regression Testing
-
-### Community 1133 - "Community 1133"
-Cohesion: 0.33
-Nodes (5): Build cockpit-based immersive interfaces for XR users, 🛠️ What You Can Do, XR Cockpit Interaction Specialist Agent Personality, 🎯 Your Core Mission, 🧠 Your Identity & Memory
-
-### Community 1134 - "Community 1134"
-Cohesion: 0.33
-Nodes (5): Build immersive XR experiences across browsers and headsets, 🛠️ What You Can Do, XR Immersive Developer Agent Personality, 🎯 Your Core Mission, 🧠 Your Identity & Memory
 
 ### Community 1135 - "Community 1135"
 Cohesion: 0.33
@@ -6115,10 +6046,6 @@ Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphif
 ### Community 1248 - "Community 1248"
 Cohesion: 0.50
 Nodes (3): Agent Information (if adding/modifying an agent), Checklist, What does this PR do?
-
-### Community 1249 - "Community 1249"
-Cohesion: 0.50
-Nodes (4): Strip // line comments, /* */ block comments, and trailing commas from JSONC., Recursively read path aliases from a tsconfig, following extends chains., _read_tsconfig_aliases(), _strip_jsonc()
 
 ### Community 1250 - "Community 1250"
 Cohesion: 0.50
@@ -7037,24 +6964,24 @@ Cohesion: 0.67
 Nodes (3): 9.1 Active Agents (Ongoing), 9.2 Continuous Improvement Cycle, 9. Phase 6 — Operate & Evolve
 
 ## Knowledge Gaps
-- **12873 isolated node(s):** `$schema`, `title`, `type`, `type`, `type` (+12868 more)
+- **12890 isolated node(s):** `Knowledge Graph Navigation`, `graphify`, `Workflow: graphify`, `Current State (Problem)`, `Proposed Architecture` (+12885 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **268 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **270 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `path` connect `Community 41` to `Community 1`, `Community 2`, `Community 4`, `Community 5`, `Community 7`, `Community 8`, `Community 10`, `Community 11`, `Community 12`, `Community 13`, `Community 15`, `Community 17`, `Community 18`, `Community 21`, `Community 1046`, `Community 22`, `Community 24`, `Community 26`, `Community 27`, `Community 28`, `Community 32`, `Community 33`, `Community 34`, `Community 36`, `Community 37`, `Community 39`, `Community 40`, `Community 48`, `Community 49`, `Community 50`, `Community 51`, `Community 58`, `Community 59`, `Community 63`, `Community 64`, `Community 65`, `Agent Audit Baseline`, `Community 68`, `Community 69`, `Community 70`, `Community 73`, `Community 77`, `Community 80`, `Community 88`, `Community 90`, `Community 93`, `Community 94`, `Community 99`, `Community 100`, `Community 101`, `Community 102`, `Community 103`, `Community 104`, `Community 105`, `Community 113`, `Community 114`, `Community 115`, `Community 118`, `Community 120`, `Community 121`, `Community 124`, `Community 125`, `Community 129`, `Community 130`, `Community 142`, `Community 1170`, `Community 1172`, `Community 1173`, `Community 149`, `Community 151`, `Community 1174`, `Community 153`, `Community 156`, `Community 157`, `Community 158`, `Community 163`, `Community 165`, `Community 185`, `Community 188`, `Community 192`, `Community 194`, `Community 204`, `Community 205`, `Community 1249`, `Community 233`, `Community 235`, `Community 245`, `Community 259`, `Community 261`, `Community 269`, `Community 274`, `Community 280`?**
-  _High betweenness centrality (0.059) - this node is a cross-community bridge._
-- **Why does `reflect()` connect `Community 125` to `Community 73`, `Community 22`, `Community 41`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
-- **Why does `Graph` connect `Community 35` to `Community 33`, `Community 34`, `Community 135`, `Community 104`, `Community 9`, `Community 43`, `Community 47`, `Community 143`, `Community 208`, `Community 20`, `Community 54`, `Community 88`, `Community 58`, `Community 59`, `Community 220`, `Community 63`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+- **Why does `path` connect `Community 41` to `Community 1`, `Community 2`, `Community 4`, `Community 5`, `Community 7`, `Community 8`, `Community 10`, `Community 11`, `Community 12`, `Community 13`, `Community 15`, `Community 17`, `Community 18`, `Community 21`, `Community 1046`, `Community 22`, `Community 24`, `Community 26`, `Community 27`, `Community 28`, `Community 33`, `Community 34`, `Community 36`, `Community 37`, `Community 39`, `Community 40`, `Community 48`, `Community 50`, `Community 58`, `Community 59`, `Community 63`, `Community 64`, `Community 65`, `Community 68`, `Community 69`, `Community 70`, `Community 73`, `Community 77`, `Community 80`, `Community 88`, `Community 90`, `Community 93`, `Community 94`, `Community 100`, `Community 101`, `Community 102`, `Community 103`, `Community 104`, `Community 105`, `Community 113`, `Community 114`, `Community 115`, `Community 118`, `Community 120`, `Community 121`, `Community 124`, `Community 125`, `Community 129`, `Community 142`, `Community 1170`, `Community 1172`, `Community 1173`, `Community 149`, `Community 151`, `Community 1174`, `Community 153`, `Community 158`, `Community 163`, `Community 188`, `Community 192`, `Community 205`, `Community 233`, `Community 235`, `Community 245`, `Community 259`, `Community 261`, `Community 269`, `Community 274`, `Community 280`?**
+  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `reflect()` connect `Community 73` to `Community 41`, `Community 125`, `Community 22`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
+- **Why does `_require_token()` connect `Community 31` to `Community 0`?**
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **Are the 11 inferred relationships involving `path` (e.g. with `_amp_legacy_cleanup()` and `_kilo_uninstall_global()`) actually correct?**
   _`path` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 75 inferred relationships involving `ingest_scip_json()` (e.g. with `test_ambiguous_duplicate_target_across_docs_creates_stub()` and `test_document_entry_non_dict_is_skipped()`) actually correct?**
   _`ingest_scip_json()` has 75 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `$schema`, `title`, `type` to the rest of the system?**
-  _14761 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Knowledge Graph Navigation`, `graphify`, `Workflow: graphify` to the rest of the system?**
+  _14784 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.040606060606060604 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03826485628636925 - nodes in this community are weakly interconnected._
