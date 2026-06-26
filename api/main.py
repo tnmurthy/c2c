@@ -3,8 +3,9 @@ import sys
 import random
 import re
 import logging
+import json
 from typing import List, Dict, Any, Optional
-from fastapi import FastAPI, HTTPException, APIRouter, Depends, status
+from fastapi import FastAPI, HTTPException, APIRouter, Depends, status, BackgroundTasks
 from fastapi.responses import Response
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -94,6 +95,7 @@ class JobCreate(BaseModel):
     location: Optional[str] = None
     is_remote: bool = False
     salary_range: Optional[str] = None
+    role_type: Optional[str] = "tech"
 
 class AssessmentSubmit(BaseModel):
     student_id: str
@@ -118,6 +120,12 @@ class PortfolioRequest(BaseModel):
     candidate: Dict[str, Any]
     projects: List[Dict[str, Any]]
     folders: List[Dict[str, Any]]
+
+class ApplicationCreate(BaseModel):
+    job_id: str
+
+class JobMatchRequest(BaseModel):
+    role_type: Optional[str] = "tech"
 
 # --- HELPERS ---
 
@@ -187,6 +195,173 @@ def generate_portfolio_json(portfolio_data):
     }
     return {"projects": projects_list, "aboutMeContent": aboutMeContent}
 
+
+# --- 5Q MATCHING ENGINE ---
+
+ROLE_WEIGHTS: Dict[str, Dict[str, float]] = {
+    "tech":       {"IQ": 0.40, "AQ": 0.30, "EQ": 0.20, "SQ": 0.05, "SpQ": 0.05},
+    "sales":      {"IQ": 0.10, "AQ": 0.20, "EQ": 0.35, "SQ": 0.35, "SpQ": 0.00},
+    "ops":        {"IQ": 0.30, "AQ": 0.25, "EQ": 0.25, "SQ": 0.15, "SpQ": 0.05},
+    "leadership": {"IQ": 0.20, "AQ": 0.20, "EQ": 0.30, "SQ": 0.25, "SpQ": 0.05},
+}
+
+def calculate_match_score(dimension_scores: Dict[str, Any], role_type: str = "tech") -> float:
+    """Compute weighted 5Q match score (0-100) for a given role type."""
+    weights = ROLE_WEIGHTS.get(role_type, ROLE_WEIGHTS["tech"])
+    max_possible = sum(w * 100 for w in weights.values())
+    raw = sum(weights.get(dim, 0) * float(score) for dim, score in dimension_scores.items())
+    return round((raw / max_possible) * 100, 1) if max_possible > 0 else 0.0
+
+
+def normalize_bank_item(item: Dict[str, Any]) -> Dict[str, Any]:
+    """Normalize fallback_bank.json field names to match the psychometric_items DB schema.
+    
+    JSON uses: ID, type, options (dict), scoring_logic (str)
+    DB uses:   id, item_type, options (jsonb), scoring_logic ({raw: str})
+    """
+    normalized = dict(item)  # shallow copy
+    # ID -> id
+    if "ID" in normalized and "id" not in normalized:
+        normalized["id"] = normalized["ID"]
+    # type -> item_type
+    if "type" in normalized and "item_type" not in normalized:
+        normalized["item_type"] = normalized["type"]
+    # scoring_logic: string -> {raw: string}
+    sl = normalized.get("scoring_logic")
+    if isinstance(sl, str):
+        normalized["scoring_logic"] = {"raw": sl}
+    # options: dict with PSCustomObject -> plain dict (already correct from json.load)
+    return normalized
+
+
+def send_email_notification(email: str, full_name: str, student_id: str):
+    subject = "Your C2C Professional Portfolio is Ready!"
+    portfolio_url = f"http://localhost:3000/portfolio/{student_id}"
+    body = f"""
+============================================================
+[EMAIL DISPATCH]
+To: {email}
+Subject: {subject}
+------------------------------------------------------------
+Hello {full_name},
+
+Congratulations! Your Campus-to-Corporate (C2C) profile and 
+codebases have been successfully optimized by our AI agents.
+
+Your Windows 95 Retro Interactive Portfolio is now live and 
+ready to share with hiring managers!
+
+Access it here: {portfolio_url}
+
+Best regards,
+The C2C Placement Swarm
+============================================================
+"""
+    logger.info(body)
+    
+    # Optional SMTP Send
+    smtp_host = os.environ.get("SMTP_HOST")
+    smtp_port = os.environ.get("SMTP_PORT")
+    smtp_user = os.environ.get("SMTP_USER")
+    smtp_pass = os.environ.get("SMTP_PASSWORD")
+    
+    if smtp_host and smtp_port and smtp_user and smtp_pass:
+        try:
+            import smtplib
+            from email.mime.text import MIMEText
+            msg = MIMEText(body)
+            msg['Subject'] = subject
+            msg['From'] = smtp_user
+            msg['To'] = email
+            with smtplib.SMTP(smtp_host, int(smtp_port)) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+            logger.info(f"Successfully sent notification email to {email}")
+        except Exception as e:
+            logger.error(f"Failed to send email via SMTP: {e}")
+    else:
+        logger.info("SMTP credentials not configured. Email logged to console/log file.")
+
+async def run_student_profile_optimization(student_id: str, email: str, full_name: str, github_url: Optional[str] = None, linkedin_url: Optional[str] = None):
+    logger.info(f"🚀 [WORKER] Starting background profile optimization for {full_name} ({student_id})")
+    
+    client = get_supabase_client()
+    if not client:
+        logger.error("Database connection unavailable in background worker.")
+        return
+        
+    try:
+        # 1. Simulate git-optimizer README engineering
+        logger.info(f"  [git-optimizer] Auditing code claims for: {github_url or 'No GitHub URL'}")
+        readme_content = f"# Professional Legend: {full_name}\nRefined through the Campus-to-Corporate (C2C) Placement Swarm.\n\n## Core Expertise\n- Full-Stack Software Engineering\n- Automated Workflow Orchestration\n\n## Verified Technical Projects\n- **System Optimization Swarm:** Optimized UI rendering performance by 40% and wired real-time event buses.\n"
+        
+        try:
+            client.storage.from_("readmes").upload(
+                path=f"{student_id}/README.md",
+                file=bytes(readme_content, 'utf-8'),
+                file_options={"content-type": "text/markdown", "x-upsert": "true"}
+            )
+            logger.info("  [git-optimizer] Saved optimized README.md to Supabase Storage (readmes bucket)")
+        except Exception as e:
+            logger.warning(f"  [git-optimizer] Supabase Storage upload skipped or failed: {e}")
+
+        # 2. Simulate brand-optimizer portfolio generation
+        logger.info(f"  [brand-optimizer] Building Win95 interactive projects config...")
+        
+        student_res = client.table("students").select("*").eq("id", student_id).execute()
+        student_record = student_res.data[0] if student_res.data else {}
+        
+        skills = student_record.get("skills", [])
+        if not isinstance(skills, list):
+            skills = ["Software Engineer"]
+            
+        portfolio_data = {
+            "candidate": {
+                "name": full_name,
+                "summary": student_record.get("bio") or "AI-ready Talent focused on scalability and robust system architectures.",
+                "roles": skills,
+                "linkedin": linkedin_url or "#",
+                "github": github_url or "#"
+            },
+            "projects": [
+                {
+                    "id": "workflow-core",
+                    "title": "Agentic Workflow Core",
+                    "icon": "gear",
+                    "tooltip": "System optimization logic",
+                    "stack": "Python, FastAPI, Supabase",
+                    "impact": "Architected and integrated a real-time event-driven trigger system.",
+                    "folder": "featured"
+                }
+            ],
+            "folders": [
+                { "id": "featured", "title": "Featured Work", "icon": "folder", "tooltip": "Highlighted achievements" }
+            ]
+        }
+        
+        try:
+            from scripts.portfolio_generator import generate_projects_js
+            projects_js = generate_projects_js(portfolio_data)
+            
+            os.makedirs(os.path.join(BASE_DIR, "services", "brand-optimizer", "homepage"), exist_ok=True)
+            target_path = os.path.join(BASE_DIR, "services", "brand-optimizer", "homepage", "projects.js")
+            with open(target_path, "w", encoding="utf-8") as f:
+                f.write(projects_js)
+            logger.info(f"  [brand-optimizer] Portfolio projects.js successfully saved to {target_path}")
+        except Exception as e:
+            logger.error(f"  [brand-optimizer] Failed generating portfolio projects.js: {e}")
+
+        # 3. Mark optimization complete in students table
+        client.table("students").update({"bio": student_record.get("bio") or "AI-ready Talent (Profile Optimized)"}).eq("id", student_id).execute()
+        logger.info(f"✅ [WORKER] Profile optimization completed for {full_name}")
+
+        # 4. Dispatch Email Notification
+        send_email_notification(email, full_name, student_id)
+        
+    except Exception as e:
+        logger.error(f"Failed executing profile optimization task: {e}", exc_info=True)
+
 # --- API ROUTER ---
 
 router = APIRouter()
@@ -211,29 +386,50 @@ async def onboard_institution(inst: InstitutionOnboard, client = Depends(require
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/onboard/student")
-async def onboard_student(student: StudentOnboard, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def onboard_student(
+    student: StudentOnboard,
+    background_tasks: BackgroundTasks,
+    client = Depends(require_supabase),
+    current_user = Depends(get_current_user)
+):
     try:
         data = student.dict(exclude_unset=True)
-        data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
+        auth_id = current_user.user.id if hasattr(current_user, "user") else current_user.id
+        data["auth_id"] = auth_id
         is_verified = False
         inst_id = student.institution_id
-        
+
         if inst_id:
+            # Explicit institution provided — run whitelist check
             try:
                 rpc_res = client.rpc('check_whitelist_email', {'inst_id': inst_id, 'check_email': student.email}).execute()
                 is_verified = bool(rpc_res.data)
             except Exception as e:
                 logger.warning(f"Whitelist check failed: {e}")
         else:
-            domain = student.email.split("@")[-1]
+            email_domain = student.email.split("@")[-1]
+            inst_data = None
             try:
-                inst_res = client.table("institutions").select("*").eq("domain", domain).execute()
+                # 1st: exact domain match
+                inst_res = client.table("institutions").select("*").eq("domain", email_domain).execute()
                 inst_data = inst_res.data
             except Exception as e:
-                logger.warning(f"Failed to fetch institutions for domain {domain}: {e}")
-                inst_data = None
-                
+                logger.warning(f"Failed to fetch institutions for domain {email_domain}: {e}")
+
             if not inst_data:
+                # 2nd: subdomain match — e.g. cs.mit.edu should match mit.edu
+                try:
+                    all_insts_res = client.table("institutions").select("id, domain").execute()
+                    for inst in (all_insts_res.data or []):
+                        inst_domain = inst.get("domain", "")
+                        if inst_domain and (email_domain == inst_domain or email_domain.endswith("." + inst_domain)):
+                            inst_data = [inst]
+                            break
+                except Exception as e:
+                    logger.warning(f"Subdomain lookup failed: {e}")
+
+            if not inst_data:
+                # 3rd: fallback to sandbox institution
                 try:
                     sandbox_res = client.table("institutions").select("*").eq("domain", "sandbox.c2c.edu").execute()
                     if sandbox_res.data:
@@ -242,13 +438,30 @@ async def onboard_student(student: StudentOnboard, client = Depends(require_supa
                     logger.warning(f"Failed to fetch sandbox institution: {e}")
             else:
                 inst_id = inst_data[0]["id"]
-                
+
         if inst_id:
             data["institution_id"] = inst_id
         data["is_verified"] = is_verified
-        
+
         res = client.table("students").insert(data).execute()
-        return res.data
+        inserted = res.data
+
+        # 🚀 Trigger background profile optimization after successful onboarding
+        if inserted:
+            new_student = inserted[0]
+            new_student_id = new_student.get("id")
+            if new_student_id:
+                background_tasks.add_task(
+                    run_student_profile_optimization,
+                    student_id=new_student_id,
+                    email=student.email,
+                    full_name=student.full_name,
+                    github_url=None,
+                    linkedin_url=None,
+                )
+                logger.info(f"⚡ Background optimization queued for student {new_student_id}")
+
+        return inserted
     except Exception as e:
         logger.error(f"ERROR onboard_student: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
@@ -272,7 +485,8 @@ async def generate_assessment(num_per_section: int = 25, client = Depends(requir
         bank_data = []
         try:
             with open(os.path.join(os.path.dirname(__file__), "fallback_bank.json"), "r", encoding="utf-8") as f:
-                bank_data = json.load(f)
+                raw_bank = json.load(f)
+                bank_data = [normalize_bank_item(item) for item in raw_bank]
         except Exception:
             pass
 
@@ -314,8 +528,10 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_s
         if not items_map:
             try:
                 with open(os.path.join(os.path.dirname(__file__), "fallback_bank.json"), "r", encoding="utf-8") as f:
-                    bank_data = json.load(f)
-                    items_map = {item["id"]: item for item in bank_data if item["id"] in item_ids}
+                    raw_bank = json.load(f)
+                    # Normalize field names then index by the canonical 'id'
+                    normalized_bank = [normalize_bank_item(item) for item in raw_bank]
+                    items_map = {item["id"]: item for item in normalized_bank if item.get("id") in item_ids}
             except Exception:
                 pass
         
@@ -551,7 +767,7 @@ async def get_employer_candidates(client = Depends(require_supabase), current_us
                 "name": s["full_name"],
                 "role": s["department"],
                 "cohort": str(s["graduation_year"]),
-                "match": random.randint(85, 98),
+                "match": calculate_match_score(sc, "tech"),
                 "iq": sc.get("IQ", 0),
                 "eq": sc.get("EQ", 0),
                 "aq": sc.get("AQ", 0),
@@ -800,6 +1016,143 @@ async def get_item_analysis(client = Depends(require_supabase), current_user = D
     except Exception as e:
         logger.error(f"ERROR get_item_analysis: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+# --- PHASE 2: MATCHING + APPLICATIONS ENDPOINTS ---
+
+@router.post("/employer/jobs/{job_id}/match")
+async def run_job_matching(
+    job_id: str,
+    background_tasks: BackgroundTasks,
+    client = Depends(require_supabase),
+    current_user = Depends(require_role(["employer", "admin"]))
+):
+    """Score all students against a job posting and cache results."""
+    try:
+        job_res = client.table("job_postings").select("*").eq("id", job_id).execute()
+        if not job_res.data:
+            raise HTTPException(status_code=404, detail="Job not found")
+        job = job_res.data[0]
+        role_type = job.get("role_type") or "tech"
+
+        students_res = client.table("students").select("id, full_name, email").execute()
+        ids = [s["id"] for s in (students_res.data or [])]
+        if not ids:
+            return {"message": "No students to match", "matched": 0}
+
+        assess_res = client.table("assessments").select("student_id, dimension_scores, primary_profile").in_("student_id", ids).execute()
+        latest: Dict[str, Any] = {}
+        for a in (assess_res.data or []):
+            sid = a["student_id"]
+            if sid not in latest:
+                latest[sid] = a
+
+        match_scores_map: Dict[str, float] = {}
+        alert_inserts = []
+        ALERT_THRESHOLD = 75.0
+
+        for student in (students_res.data or []):
+            sid = student["id"]
+            assessment = latest.get(sid)
+            if not assessment:
+                continue
+            scores = assessment.get("dimension_scores") or {}
+            match_pct = calculate_match_score(scores, role_type)
+            match_scores_map[sid] = match_pct
+            if match_pct >= ALERT_THRESHOLD:
+                alert_inserts.append({"student_id": sid, "job_id": job_id, "score": match_pct})
+
+        client.table("job_postings").update({"match_scores": match_scores_map}).eq("id", job_id).execute()
+
+        if alert_inserts:
+            try:
+                client.table("match_alerts").upsert(alert_inserts, on_conflict="student_id,job_id").execute()
+            except Exception as e:
+                logger.warning(f"match_alerts upsert failed: {e}")
+
+        logger.info(f"Matched {len(match_scores_map)} students against job {job_id} (role={role_type})")
+        return {"message": "Matching complete", "matched": len(match_scores_map), "alerts_sent": len(alert_inserts)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"ERROR run_job_matching: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/employer/jobs/{job_id}/matches")
+async def get_job_matches(
+    job_id: str,
+    client = Depends(require_supabase),
+    current_user = Depends(require_role(["employer", "admin"]))
+):
+    """Return students ranked by cached match score for a given job."""
+    try:
+        job_res = client.table("job_postings").select("match_scores, role_type").eq("id", job_id).execute()
+        if not job_res.data:
+            raise HTTPException(status_code=404, detail="Job not found")
+        match_scores_map = job_res.data[0].get("match_scores") or {}
+        if not match_scores_map:
+            return []
+        student_ids = list(match_scores_map.keys())
+        s_res = client.table("students").select("id, full_name, department, graduation_year, skills").in_("id", student_ids).execute()
+        results = []
+        for s in (s_res.data or []):
+            sid = s["id"]
+            results.append({
+                "student_id": sid,
+                "name": s["full_name"],
+                "department": s["department"],
+                "graduation_year": s["graduation_year"],
+                "skills": s.get("skills", []),
+                "match_score": match_scores_map.get(sid, 0),
+                "image": f"https://api.dicebear.com/7.x/avataaars/svg?seed={s['full_name']}"
+            })
+        return sorted(results, key=lambda x: x["match_score"], reverse=True)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"ERROR get_job_matches: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/student/{student_id}/apply")
+async def apply_to_job(
+    student_id: str,
+    application: ApplicationCreate,
+    client = Depends(require_supabase),
+    current_user = Depends(require_role(["student", "admin"]))
+):
+    """Student expresses interest in a job posting."""
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    if role == "student" and str(metadata.get("profile_id")) != str(student_id):
+        raise HTTPException(status_code=403, detail="Access denied: can only apply as yourself")
+    try:
+        payload = {"student_id": student_id, "job_id": application.job_id, "status": "expressed_interest"}
+        res = client.table("applications").upsert(payload, on_conflict="student_id,job_id").execute()
+        return res.data[0] if res.data else payload
+    except Exception as e:
+        logger.error(f"ERROR apply_to_job: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/student/{student_id}/applications")
+async def get_student_applications(
+    student_id: str,
+    client = Depends(require_supabase),
+    current_user = Depends(require_role(["student", "employer", "admin"]))
+):
+    """Return all job applications for a student with job details."""
+    metadata = getattr(current_user, "user_metadata", {}) or {}
+    role = metadata.get("role")
+    if role == "student" and str(metadata.get("profile_id")) != str(student_id):
+        raise HTTPException(status_code=403, detail="Access denied")
+    try:
+        res = client.table("applications").select("*, job_postings(id, title, location, is_remote, salary_range, role_type, employers(company_name))").eq("student_id", student_id).order("applied_at", desc=True).execute()
+        return res.data or []
+    except Exception as e:
+        logger.error(f"ERROR get_student_applications: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 app.include_router(router, prefix="/api")
 

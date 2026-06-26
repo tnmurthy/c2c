@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Terminal, Shield, AlertTriangle, ChevronRight, Zap, Activity, Cpu } from 'lucide-react';
+import { Loader2, Terminal, Shield, AlertTriangle, ChevronRight, Zap, Activity, Cpu, CheckCircle, Mail, Sparkles } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/useAuth';
 import type { AssessmentQuestion, AssessmentOption, AssessmentResponse } from '@/types';
 import { LoadingScreen } from '@/components/LoadingScreen';
@@ -21,6 +21,9 @@ export default function Assessment() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [syncProgress, setSyncProgress] = useState(0);
+  const [optimizing, setOptimizing] = useState(false);
+  const [optimizingStep, setOptimizingStep] = useState(0);
+  const [resultProfile, setResultProfile] = useState<string | null>(null);
 
   useEffect(() => {
     if (authLoading) return;
@@ -97,8 +100,28 @@ export default function Assessment() {
       });
 
       if (!res.ok) throw new Error('SUBMISSION_ERROR');
-      
-      router.push(`/dashboard/${studentId}`); 
+      const data = await res.json();
+      setResultProfile(data.primary_profile || 'Builder');
+      setSubmitting(false);
+      setOptimizing(true);
+
+      // Animate the optimization steps
+      const steps = [
+        'COMPILING_LEGEND_MATRIX...',
+        'SCORING_5Q_DIMENSIONS...',
+        'TRIGGERING_GIT_OPTIMIZER...',
+        'BUILDING_BRAND_PORTFOLIO...',
+        'DISPATCHING_CONFIRMATION_EMAIL...',
+        'ALL_SYSTEMS_NOMINAL.',
+      ];
+      for (let i = 0; i < steps.length; i++) {
+        await new Promise(r => setTimeout(r, 800));
+        setOptimizingStep(i + 1);
+      }
+
+      // Navigate to dashboard after the final step
+      await new Promise(r => setTimeout(r, 1200));
+      router.push(`/dashboard/${studentId}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'SUBMISSION_ERROR');
       setSubmitting(false);
@@ -190,8 +213,87 @@ export default function Assessment() {
           <Shield className="absolute inset-0 m-auto w-12 h-12 text-cyan-400 animate-pulse" />
         </div>
         <div className="text-center z-10">
-           <p className="text-cyan-400 text-sm tracking-[0.5em] font-black uppercase animate-pulse mb-4">COMPILING_LEGEND_MATRIX...</p>
+           <p className="text-cyan-400 text-sm tracking-[0.5em] font-black uppercase animate-pulse mb-4">SUBMITTING_RESPONSES...</p>
            <p className="text-white/40 text-[10px] tracking-widest uppercase font-bold">Verifying integrity of responses</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (optimizing) {
+    const agentSteps = [
+      { label: 'Legend Matrix Compiled', icon: '🧠' },
+      { label: '5Q Dimensions Scored', icon: '📊' },
+      { label: 'Git Optimizer Running', icon: '⚙️' },
+      { label: 'Brand Portfolio Generated', icon: '🖥️' },
+      { label: 'Confirmation Email Sent', icon: '📧' },
+      { label: 'Profile Optimization Complete', icon: '✅' },
+    ];
+    return (
+      <div className="min-h-screen bg-[#0e1416] flex items-center justify-center p-6 font-mono relative overflow-hidden">
+        <div className="absolute inset-0 bg-cyber-grid bg-[length:50px_50px] opacity-10"></div>
+        {/* Glow orb */}
+        <div className="absolute w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div className="w-full max-w-2xl z-10">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-3 px-5 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full mb-6">
+              <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <span className="text-cyan-400 text-xs font-black tracking-[0.3em] uppercase">Swarm_Activated</span>
+            </div>
+            <h2 className="text-4xl font-black text-white tracking-tight uppercase mb-3">
+              {resultProfile ? (
+                <><span className="text-cyan-400">{resultProfile}</span> Profile Locked In</>
+              ) : 'Profile Optimizing...'}
+            </h2>
+            <p className="text-white/40 text-sm font-mono">AI agents are forging your professional legend</p>
+          </div>
+
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+            {/* Top progress bar */}
+            <div className="h-1 w-full bg-white/5">
+              <div
+                className="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 transition-all duration-700 shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+                style={{ width: `${(optimizingStep / agentSteps.length) * 100}%` }}
+              />
+            </div>
+            <div className="p-8 space-y-4">
+              {agentSteps.map((step, i) => {
+                const done = optimizingStep > i;
+                const active = optimizingStep === i + 1;
+                return (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-5 p-4 rounded-lg border transition-all duration-500 ${
+                      done
+                        ? 'border-cyan-500/20 bg-cyan-500/5'
+                        : active
+                        ? 'border-indigo-500/40 bg-indigo-500/10 shadow-[0_0_20px_rgba(79,70,229,0.1)]'
+                        : 'border-white/5 bg-transparent opacity-30'
+                    }`}
+                  >
+                    <span className="text-2xl w-8 text-center">{step.icon}</span>
+                    <span className={`flex-1 text-sm font-bold tracking-widest uppercase ${
+                      done ? 'text-cyan-400' : active ? 'text-white animate-pulse' : 'text-white/30'
+                    }`}>
+                      {step.label}
+                    </span>
+                    {done && <CheckCircle className="w-5 h-5 text-cyan-400 shrink-0" />}
+                    {active && <Loader2 className="w-5 h-5 text-indigo-400 animate-spin shrink-0" />}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Email nudge */}
+          {optimizingStep >= 5 && (
+            <div className="mt-6 flex items-center gap-4 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl animate-fade-in">
+              <Mail className="w-5 h-5 text-indigo-400 shrink-0" />
+              <p className="text-xs text-indigo-300/80 font-mono">
+                A confirmation email with your portfolio link is on its way. Redirecting to your dashboard&hellip;
+              </p>
+            </div>
+          )}
         </div>
       </div>
     );

@@ -106,7 +106,20 @@ export interface CohortData {
 
 export interface Alert {
   id: string;
-  message: string;
-  severity: 'info' | 'warning' | 'critical';
-  timestamp: string;
+  student_id?: string;
+  job_id?: string;
+  score?: number;
+  lead_url?: string;
+  created_at?: string;
+  market_leads?: {
+    id?: string;
+    name?: string;
+    company?: string;
+    ai_score?: number;
+    lead_url?: string;
+  };
+  // legacy fields
+  message?: string;
+  severity?: 'info' | 'warning' | 'critical';
+  timestamp?: string;
 }
