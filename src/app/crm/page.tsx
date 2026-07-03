@@ -1,8 +1,33 @@
 import React from 'react';
 import { ArrowUpRight, Users, Briefcase, TrendingUp } from 'lucide-react';
 import StatCard from '@/components/StatCard';
+import { supabase } from '@/lib/supabase';
 
-export default function CRMDashboard() {
+// Hardcoded for demo purposes
+const TENANT_ID = '3ee2a6e1-77b7-492e-95dd-dda9ab189d56';
+
+export default async function CRMDashboard() {
+  // Fetch real counts
+  const { count: totalLeads } = await supabase
+    .from('leads')
+    .select('*', { count: 'exact', head: true })
+    .eq('tenant_id', TENANT_ID);
+
+  const { count: activeOpps } = await supabase
+    .from('opportunities')
+    .select('*', { count: 'exact', head: true })
+    .eq('tenant_id', TENANT_ID)
+    .not('status', 'in', '("Closed Won","Closed Lost")');
+    
+  // For pipeline value, we need to sum expected_value
+  const { data: opps } = await supabase
+    .from('opportunities')
+    .select('expected_value')
+    .eq('tenant_id', TENANT_ID)
+    .not('status', 'in', '("Closed Won","Closed Lost")');
+    
+  const pipelineValue = opps?.reduce((sum, opp) => sum + (Number(opp.expected_value) || 0), 0) || 0;
+
   return (
     <div className="space-y-6">
       <div>
@@ -13,26 +38,26 @@ export default function CRMDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard 
           title="Total Leads" 
-          value="1,248" 
-          change="+12% this month" 
+          value={(totalLeads || 0).toString()} 
+          change="Real-time data" 
           icon={<Users className="w-5 h-5 text-blue-400" />} 
         />
         <StatCard 
           title="Active Opportunities" 
-          value="45" 
-          change="8 closing this week" 
+          value={(activeOpps || 0).toString()} 
+          change="Real-time data" 
           icon={<Briefcase className="w-5 h-5 text-emerald-400" />} 
         />
         <StatCard 
           title="Pipeline Value" 
-          value="$124,500" 
-          change="+5.2% from last month" 
+          value={`$${pipelineValue.toLocaleString()}`} 
+          change="Real-time data" 
           icon={<TrendingUp className="w-5 h-5 text-indigo-400" />} 
         />
         <StatCard 
           title="Conversion Rate" 
-          value="18.4%" 
-          change="+2.1% from last month" 
+          value="--" 
+          change="Pending analytics engine" 
           icon={<ArrowUpRight className="w-5 h-5 text-amber-400" />} 
         />
       </div>
