@@ -40,6 +40,7 @@ logger.addHandler(ch)
 from api.constants import ICONS, RECOMMENDATION_MAPPING
 from api.deps import get_supabase_client, require_supabase, require_admin_supabase, get_current_user, require_role
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
+from api.crm_router import router as crm_router
 
 try:
     from agents.scoring_engine import score_job_lead, analyze_candidate, analyze_posting
@@ -1231,6 +1232,7 @@ async def webhook_daily_sweep(request: Request, background_tasks: BackgroundTask
     return {"status": "received"}
 
 app.include_router(router, prefix="/api")
+app.include_router(crm_router, prefix="/api")
 
 @app.get("/")
 def root():
