@@ -19,6 +19,16 @@ export default async function CRMDashboard() {
     .eq('tenant_id', TENANT_ID)
     .not('status', 'in', '("Closed Won","Closed Lost")');
     
+  const { count: qualifiedLeads } = await supabase
+    .from('leads')
+    .select('*', { count: 'exact', head: true })
+    .eq('tenant_id', TENANT_ID)
+    .eq('status', 'qualified');
+
+  const conversionRate = totalLeads && totalLeads > 0 
+    ? ((qualifiedLeads || 0) / totalLeads) * 100 
+    : 0;
+    
   // For pipeline value, we need to sum expected_value
   const { data: opps } = await supabase
     .from('opportunities')
@@ -63,8 +73,8 @@ export default async function CRMDashboard() {
         />
         <StatCard 
           title="Conversion Rate" 
-          value="--" 
-          change="Pending analytics engine" 
+          value={`${conversionRate.toFixed(1)}%`} 
+          change="Real-time data" 
           icon={<ArrowUpRight className="w-5 h-5 text-amber-400" />} 
         />
       </div>
