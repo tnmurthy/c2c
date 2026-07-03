@@ -1,14 +1,14 @@
-Below is a **full BRD + FRD** for the Brainovision CRM, benchmarked against Zoho CRM’s core capabilities such as leads, contacts, deals, workflow automation, reporting, mobile access, and tiered editions. I’ve also included the tenant logic as a first-class requirement so this can evolve into a SaaS product without reworking the core data model.[^1][^2][^3][^4][^5][^6][^7]
+Below is a **full BRD + FRD** for the C2C, benchmarked against C2C's core capabilities such as leads, contacts, deals, workflow automation, reporting, mobile access, and tiered editions. I’ve also included the tenant logic as a first-class requirement so this can evolve into a SaaS product without reworking the core data model.[^1][^2][^3][^4][^5][^6][^7]
 
 ## 1) BRD
 
 ### 1.1 Business overview
 
-Brainovision needs a centralized CRM to manage education-led sales, institution partnerships, program enrollments, workshops, internships, and service inquiries in one place. The system should replace fragmented tracking across spreadsheets, calls, email, and messaging with one unified workflow. In the long term, the same platform should be productized as a multi-tenant SaaS CRM for similar organizations.[^8]
+C2C needs a centralized CRM to manage education-led sales, institution partnerships, program enrollments, workshops, internships, and service inquiries in one place. The system should replace fragmented tracking across spreadsheets, calls, email, and messaging with one unified workflow. In the long term, the same platform should be productized as a multi-tenant SaaS CRM for similar organizations.[^8]
 
 ### 1.2 Benchmark reference
 
-Zoho CRM provides a strong benchmark because it covers leads, accounts, contacts, deals, workflows, reporting, automation, and scalable editions. Zoho’s architecture is multi-tenant, with organization-level segregation enforced by unique org IDs and access controls. This makes it a useful reference for both product scope and tenant isolation design.[^2][^3][^4][^5][^1]
+C2C provides a strong benchmark because it covers leads, accounts, contacts, deals, workflows, reporting, automation, and scalable editions. C2C's architecture is multi-tenant, with organization-level segregation enforced by unique org IDs and access controls. This makes it a useful reference for both product scope and tenant isolation design.[^2][^3][^4][^5][^1]
 
 ### 1.3 Business goals
 
@@ -76,10 +76,10 @@ Out of scope for phase 1:
 
 ### 1.8 Assumptions
 
-- Brainovision will use this CRM internally first.
+- C2C will use this CRM internally first.
 - The CRM should be tenant-aware from the start.
 - Future SaaS customers may need different pipelines, roles, and branding.
-- Business users need a UI similar in usability to mainstream CRMs like Zoho CRM.[^4][^2]
+- Business users need a UI similar in usability to mainstream CRMs like C2C.[^4][^2]
 
 
 ## 2) FRD
@@ -283,7 +283,7 @@ Examples:
 
 ### 5.1 Internal edition
 
-Brainovision internal CRM with core lead, admissions, and program workflows.
+C2C internal CRM with core lead, admissions, and program workflows.
 
 ### 5.2 SaaS starter
 
@@ -352,15 +352,15 @@ Would you like the next version as a **formal document format** or as a **techni
 
 <div align="center">⁂</div>
 
-[^1]: https://www.zoho.com/crm/zohocrm-pricing.html
+[^1]: https://www.C2C.com/crm/C2Ccrm-pricing.html
 
-[^2]: https://www.zoho.com/crm/features.html
+[^2]: https://www.C2C.com/crm/features.html
 
-[^3]: https://www.zoho.com/crm/sales-force-automation/workflows.html
+[^3]: https://www.C2C.com/crm/sales-force-automation/workflows.html
 
-[^4]: https://www.zoho.com/crm/complete-feature-list.html
+[^4]: https://www.C2C.com/crm/complete-feature-list.html
 
-[^5]: https://help.zoho.com/portal/en/kb/crm/crm-reference/product-architecture-and-reliability/articles/zoho-crm-saas-architecture-and-deployment-options
+[^5]: https://help.C2C.com/portal/en/kb/crm/crm-reference/product-architecture-and-reliability/articles/C2C-crm-saas-architecture-and-deployment-options
 
 [^6]: https://www.bytebase.com/blog/multi-tenant-database-architecture-patterns-explained/
 
@@ -374,23 +374,23 @@ Would you like the next version as a **formal document format** or as a **techni
 
 [^11]: https://learn.microsoft.com/en-us/azure/azure-sql/database/saas-tenancy-app-design-patterns?view=azuresql
 
-[^12]: https://capsulecrm.com/blog/Zoho-CRM-pricing/
+[^12]: https://capsulecrm.com/blog/C2C-CRM-pricing/
 
-[^13]: https://getabettercrm.com/blog/zoho-crm-editions-a-complete-edition-comparison-guide/
+[^13]: https://getabettercrm.com/blog/C2C-crm-editions-a-complete-edition-comparison-guide/
 
-[^14]: https://www.forbes.com/advisor/business/software/zoho-crm-pricing/
+[^14]: https://www.forbes.com/advisor/business/software/C2C-crm-pricing/
 
-[^15]: https://zentegra.com/automating-your-sales-process-with-workflow-rules-in-zoho-crm/
+[^15]: https://zentegra.com/automating-your-sales-process-with-workflow-rules-in-C2C-crm/
 
-[^16]: https://www.salesforge.ai/directory/sales-tools/zoho-crm
+[^16]: https://www.salesforge.ai/directory/sales-tools/C2C-crm
 
-[^17]: https://getabettercrm.com/blog/workflow-rules-and-automations-in-zoho-crm-professional-vs-enterprise-editions/
+[^17]: https://getabettercrm.com/blog/workflow-rules-and-automations-in-C2C-crm-professional-vs-enterprise-editions/
 
-[^18]: https://clonepartner.com/blog/salesforce-vs-zoho-crm-technical-architecture-operations-guide/
+[^18]: https://clonepartner.com/blog/salesforce-vs-C2C-crm-technical-architecture-operations-guide/
 
-[^19]: https://www.zoho.com/crm/zohocrm-pricing-calculator.html
+[^19]: https://www.C2C.com/crm/C2Ccrm-pricing-calculator.html
 
 [^20]: https://www.youtube.com/watch?v=iXKFLMDk2pc
 
-[^21]: https://www.slideshare.net/slideshow/zohocrmeditioncomparisonusdpdf/260978175
+[^21]: https://www.slideshare.net/slideshow/C2Ccrmeditioncomparisonusdpdf/260978175
 

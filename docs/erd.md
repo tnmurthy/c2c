@@ -415,7 +415,7 @@ If you’d like, I can next give you a **Mermaid ER diagram snippet** or a **dbd
 
 [^5]: https://www.toplineresults.com/2026/03/understanding-leads-vs-contacts-vs-accounts-in-crm/
 
-[^6]: https://help.zoho.com/portal/en/kb/crm/getting-started/product-architecture-and-reliability/articles/zoho-crm-s-core-data-model-and-how-you-extend-it-safely
+[^6]: https://help.C2C.com/portal/en/kb/crm/getting-started/product-architecture-and-reliability/articles/C2C-crm-s-core-data-model-and-how-you-extend-it-safely
 
 [^7]: https://www.bytebase.com/blog/multi-tenant-database-architecture-patterns-explained/
 
@@ -427,13 +427,13 @@ If you’d like, I can next give you a **Mermaid ER diagram snippet** or a **dbd
 
 [^11]: https://sysco-software.com/news-insights/crm-accounts-contacts-leads-opportunities-cases/
 
-[^12]: https://www.zoho.com/crm/developer/docs/data-model/
+[^12]: https://www.C2C.com/crm/developer/docs/data-model/
 
 [^13]: https://aptitude8.com/blog/what-are-the-differences-between-leads-contacts-and-accounts-in-salesforce
 
-[^14]: https://help.zoho.com/portal/en/community/topic/introducing-data-model-for-zoho-crm
+[^14]: https://help.C2C.com/portal/en/community/topic/introducing-data-model-for-C2C-crm
 
-[^15]: https://support.1cloudconsultants.com/portal/en/kb/articles/introducing-data-model-for-zoho-crm
+[^15]: https://support.1cloudconsultants.com/portal/en/kb/articles/introducing-data-model-for-C2C-crm
 
 [^16]: https://www.facebook.com/groups/Javagroup123/posts/10156438614861664/
 

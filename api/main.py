@@ -24,8 +24,8 @@ logger = logging.getLogger("c2c_api")
 logger.setLevel(logging.INFO)
 
 # Create a file handler
-fh = logging.FileHandler(os.path.join(BASE_DIR, "backend.log"))
-fh.setLevel(logging.INFO)
+import sys
+fh = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter('%(asctime)s [%(name)s] %(levelname)s: %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
