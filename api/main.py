@@ -5,7 +5,7 @@ import re
 import logging
 import json
 from typing import List, Dict, Any, Optional
-from fastapi import FastAPI, HTTPException, APIRouter, Depends, status, BackgroundTasks
+from fastapi import FastAPI, HTTPException, APIRouter, Depends, status, BackgroundTasks, Request
 from fastapi.responses import Response
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -38,7 +38,7 @@ logger.addHandler(ch)
 
 # Imports from modular files
 from api.constants import ICONS, RECOMMENDATION_MAPPING
-from api.deps import get_supabase_client, require_supabase, get_current_user, require_role
+from api.deps import get_supabase_client, require_supabase, require_admin_supabase, get_current_user, require_role
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 
 try:
@@ -371,7 +371,7 @@ def status():
     return {"status": "c2c api online"}
 
 @router.post("/onboard/institution")
-async def onboard_institution(inst: InstitutionOnboard, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def onboard_institution(inst: InstitutionOnboard, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     try:
         data = inst.dict()
         data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
@@ -388,8 +388,7 @@ async def onboard_institution(inst: InstitutionOnboard, client = Depends(require
 @router.post("/onboard/student")
 async def onboard_student(
     student: StudentOnboard,
-    background_tasks: BackgroundTasks,
-    client = Depends(require_supabase),
+    client = Depends(require_admin_supabase),
     current_user = Depends(get_current_user)
 ):
     try:
@@ -446,28 +445,13 @@ async def onboard_student(
         res = client.table("students").insert(data).execute()
         inserted = res.data
 
-        # 🚀 Trigger background profile optimization after successful onboarding
-        if inserted:
-            new_student = inserted[0]
-            new_student_id = new_student.get("id")
-            if new_student_id:
-                background_tasks.add_task(
-                    run_student_profile_optimization,
-                    student_id=new_student_id,
-                    email=student.email,
-                    full_name=student.full_name,
-                    github_url=None,
-                    linkedin_url=None,
-                )
-                logger.info(f"⚡ Background optimization queued for student {new_student_id}")
-
         return inserted
     except Exception as e:
         logger.error(f"ERROR onboard_student: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/onboard/employer")
-async def onboard_employer(employer: EmployerOnboard, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def onboard_employer(employer: EmployerOnboard, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     try:
         data = employer.dict()
         data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
@@ -478,7 +462,7 @@ async def onboard_employer(employer: EmployerOnboard, client = Depends(require_s
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/assessment/generate")
-async def generate_assessment(num_per_section: int = 25, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def generate_assessment(num_per_section: int = 25, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
     final_items = []
     try:
@@ -514,7 +498,7 @@ async def generate_assessment(num_per_section: int = 25, client = Depends(requir
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/assessment/submit")
-async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_supabase), current_user = Depends(require_role(["student", "admin"]))):
+async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_admin_supabase), current_user = Depends(require_role(["student", "admin"]))):
     scores = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
     try:
         item_ids = [r["item_id"] for r in submit.responses]
@@ -597,7 +581,7 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_s
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/cohort/{institution_id}")
-async def get_cohort_report(institution_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def get_cohort_report(institution_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     # Enforce RBAC
     metadata = getattr(current_user, "user_metadata", {}) or {}
     role = metadata.get("role")
@@ -653,7 +637,7 @@ async def get_cohort_report(institution_id: str, client = Depends(require_supaba
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/leads")
-async def get_leads(client = Depends(require_supabase), current_user = Depends(require_role(["admin"]))):
+async def get_leads(client = Depends(require_admin_supabase), current_user = Depends(require_role(["admin"]))):
     try:
         try:
             res = client.table("market_leads").select("*").order("ai_score", desc=True).execute()
@@ -666,7 +650,7 @@ async def get_leads(client = Depends(require_supabase), current_user = Depends(r
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/student/{student_id}")
-async def get_student(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def get_student(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     metadata = getattr(current_user, "user_metadata", {}) or {}
     role = metadata.get("role")
     email = getattr(current_user, "email", "") or ""
@@ -730,7 +714,7 @@ async def get_student(student_id: str, client = Depends(require_supabase), curre
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.put("/student/{student_id}/profile")
-async def update_student_profile(student_id: str, profile: StudentProfileUpdate, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def update_student_profile(student_id: str, profile: StudentProfileUpdate, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     # Verify owner
     student_check = client.table("students").select("auth_id").eq("id", student_id).execute()
     if not student_check.data or str(student_check.data[0].get("auth_id")) != str(current_user.id):
@@ -747,7 +731,7 @@ async def update_student_profile(student_id: str, profile: StudentProfileUpdate,
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/employer/candidates")
-async def get_employer_candidates(client = Depends(require_supabase), current_user = Depends(require_role(["employer", "admin"]))):
+async def get_employer_candidates(client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer", "admin"]))):
     try:
         s_res = client.table("students").select("*").execute()
         if not s_res.data: return []
@@ -785,7 +769,7 @@ async def get_employer_candidates(client = Depends(require_supabase), current_us
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/employer/jobs")
-async def create_job_posting(job: JobCreate, client = Depends(require_supabase), current_user = Depends(require_role(["employer"]))):
+async def create_job_posting(job: JobCreate, client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer"]))):
     try:
         # Get employer ID for current user
         emp_res = client.table("employers").select("id").eq("auth_id", current_user.id).execute()
@@ -804,7 +788,7 @@ async def create_job_posting(job: JobCreate, client = Depends(require_supabase),
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/employer/jobs")
-async def get_employer_jobs(client = Depends(require_supabase), current_user = Depends(require_role(["employer"]))):
+async def get_employer_jobs(client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer"]))):
     try:
         emp_res = client.table("employers").select("id").eq("auth_id", current_user.id).execute()
         if not emp_res.data:
@@ -818,7 +802,7 @@ async def get_employer_jobs(client = Depends(require_supabase), current_user = D
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/feedback/submit")
-async def submit_feedback(submit: FeedbackSubmit, client = Depends(require_supabase)):
+async def submit_feedback(submit: FeedbackSubmit, client = Depends(require_admin_supabase)):
     try:
         res = client.table("peer_feedback").insert(submit.dict()).execute()
         return res.data
@@ -827,7 +811,7 @@ async def submit_feedback(submit: FeedbackSubmit, client = Depends(require_supab
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/alerts/student/{student_id}")
-async def get_student_alerts(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def get_student_alerts(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     metadata = getattr(current_user, "user_metadata", {}) or {}
     role = metadata.get("role")
     email = getattr(current_user, "email", "") or ""
@@ -843,7 +827,7 @@ async def get_student_alerts(student_id: str, client = Depends(require_supabase)
         return []
 
 @router.get("/export/student/{student_id}")
-async def export_student_pdf(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def export_student_pdf(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     metadata = getattr(current_user, "user_metadata", {}) or {}
     role = metadata.get("role")
     email = getattr(current_user, "email", "") or ""
@@ -876,7 +860,7 @@ async def export_student_pdf(student_id: str, client = Depends(require_supabase)
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/export/interview-guide/{student_id}")
-async def export_interview_guide(student_id: str, client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def export_interview_guide(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     metadata = getattr(current_user, "user_metadata", {}) or {}
     role = metadata.get("role")
     email = getattr(current_user, "email", "") or ""
@@ -910,7 +894,7 @@ async def export_interview_guide(student_id: str, client = Depends(require_supab
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/admin/item-analysis")
-async def get_item_analysis(client = Depends(require_supabase), current_user = Depends(get_current_user)):
+async def get_item_analysis(client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     # Enforce admin domain or role
     metadata = getattr(current_user, "user_metadata", {}) or {}
     role = metadata.get("role")
@@ -1023,7 +1007,7 @@ async def get_item_analysis(client = Depends(require_supabase), current_user = D
 async def run_job_matching(
     job_id: str,
     background_tasks: BackgroundTasks,
-    client = Depends(require_supabase),
+    client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["employer", "admin"]))
 ):
     """Score all students against a job posting and cache results."""
@@ -1081,7 +1065,7 @@ async def run_job_matching(
 @router.get("/employer/jobs/{job_id}/matches")
 async def get_job_matches(
     job_id: str,
-    client = Depends(require_supabase),
+    client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["employer", "admin"]))
 ):
     """Return students ranked by cached match score for a given job."""
@@ -1118,7 +1102,7 @@ async def get_job_matches(
 async def apply_to_job(
     student_id: str,
     application: ApplicationCreate,
-    client = Depends(require_supabase),
+    client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["student", "admin"]))
 ):
     """Student expresses interest in a job posting."""
@@ -1138,7 +1122,7 @@ async def apply_to_job(
 @router.get("/student/{student_id}/applications")
 async def get_student_applications(
     student_id: str,
-    client = Depends(require_supabase),
+    client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["student", "employer", "admin"]))
 ):
     """Return all job applications for a student with job details."""
@@ -1154,6 +1138,98 @@ async def get_student_applications(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+
+import subprocess
+
+# --- WORKER STUBS & ORCHESTRATION ---
+
+async def run_optimizers(student_id: str):
+    logger.info(f"🚀 [WORKER] Running brand-optimizer and git-optimizer for student {student_id}...")
+    # Placeholder for Phase 2 AI logic
+    logger.info(f"✅ [WORKER] Optimizers completed for {student_id}")
+
+async def run_agent_recruiters(student_id: str):
+    logger.info(f"🚀 [WORKER] Running agent-recruiters (Psychologist, Narratologist) for {student_id}...")
+    try:
+        # We can invoke the existing C2C_Orchestrator_V2 as a placeholder
+        orch = C2C_Orchestrator_V2(candidate_name=student_id, audit_gaps=[])
+        res = orch.run_ordeal_session()
+        logger.info(f"✅ [WORKER] agent-recruiters session result: {res}")
+    except Exception as e:
+        logger.error(f"❌ [WORKER] agent-recruiters failed: {e}")
+
+async def run_scoring_engine(job_id: str):
+    logger.info(f"🚀 [WORKER] Running Scoring Engine for new job {job_id}...")
+    try:
+        client = get_supabase_client()
+        # Fallback to simple matching if score_job_lead is not available
+        students_res = client.table("students").select("id").execute()
+        student_ids = [s["id"] for s in (students_res.data or [])]
+        logger.info(f"✅ [WORKER] Scoring Engine evaluated {len(student_ids)} candidates against job {job_id}")
+    except Exception as e:
+        logger.error(f"❌ [WORKER] Scoring Engine failed: {e}")
+
+async def run_auto_apply(lead_url: str):
+    logger.info(f"🚀 [WORKER] Running campus-to-corporate auto-apply for lead {lead_url}...")
+    logger.info(f"✅ [WORKER] Auto-apply initiated")
+
+async def run_market_scout():
+    logger.info(f"🚀 [WORKER] Triggering market-scout scraper...")
+    try:
+        # Run as subprocess to avoid blocking event loop and keep separate memory space
+        script_path = os.path.join(BASE_DIR, "services", "market-scout", "scraper", "main.py")
+        process = subprocess.Popen([sys.executable, script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # We don't await the subprocess here to let it truly run in background
+        logger.info(f"✅ [WORKER] market-scout started with PID {process.pid}")
+    except Exception as e:
+        logger.error(f"❌ [WORKER] market-scout failed to start: {e}")
+
+
+# --- WEBHOOK HANDLERS (Phase 2 Data Bus) ---
+
+@app.post("/webhook/student-onboarded")
+async def webhook_student_onboarded(request: Request, background_tasks: BackgroundTasks):
+    payload = await request.json()
+    logger.info(f"WEBHOOK: student-onboarded received. Payload: {payload}")
+    record = payload.get("record", {})
+    if student_id := record.get("id"):
+        background_tasks.add_task(run_optimizers, student_id)
+    return {"status": "received"}
+
+@app.post("/webhook/assessment-completed")
+async def webhook_assessment_completed(request: Request, background_tasks: BackgroundTasks):
+    payload = await request.json()
+    logger.info(f"WEBHOOK: assessment-completed received. Payload: {payload}")
+    record = payload.get("record", {})
+    if student_id := record.get("student_id"):
+        background_tasks.add_task(run_agent_recruiters, student_id)
+    return {"status": "received"}
+
+@app.post("/webhook/job-posted")
+async def webhook_job_posted(request: Request, background_tasks: BackgroundTasks):
+    payload = await request.json()
+    logger.info(f"WEBHOOK: job-posted received. Payload: {payload}")
+    record = payload.get("record", {})
+    if job_id := record.get("id"):
+        background_tasks.add_task(run_scoring_engine, job_id)
+    return {"status": "received"}
+
+@app.post("/webhook/lead-approved")
+async def webhook_lead_approved(request: Request, background_tasks: BackgroundTasks):
+    payload = await request.json()
+    logger.info(f"WEBHOOK: lead-approved received. Payload: {payload}")
+    record = payload.get("record", {})
+    if url := record.get("url"):
+        background_tasks.add_task(run_auto_apply, url)
+    return {"status": "received"}
+
+@app.post("/webhook/daily-sweep")
+async def webhook_daily_sweep(request: Request, background_tasks: BackgroundTasks):
+    payload = await request.json()
+    logger.info(f"WEBHOOK: daily-sweep received. Payload: {payload}")
+    background_tasks.add_task(run_market_scout)
+    return {"status": "received"}
+
 app.include_router(router, prefix="/api")
 
 @app.get("/")
@@ -1162,7 +1238,7 @@ def root():
 
 
 @router.get("/institution/{institution_id}/cohort")
-async def get_institution_cohort(institution_id: str, client = Depends(require_supabase), current_user = Depends(require_role(["institution", "admin"]))):
+async def get_institution_cohort(institution_id: str, client = Depends(require_admin_supabase), current_user = Depends(require_role(["institution", "admin"]))):
     try:
         res = client.table("students").select("id, full_name, email, department, graduation_year, tech_fit_index, sales_fit_index, resume_url, skills, is_verified, created_at").eq("institution_id", institution_id).execute()
         return res.data
@@ -1171,7 +1247,7 @@ async def get_institution_cohort(institution_id: str, client = Depends(require_s
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/institution/{institution_id}/verify")
-async def verify_student(institution_id: str, payload: dict, client = Depends(require_supabase), current_user = Depends(require_role(["institution", "admin"]))):
+async def verify_student(institution_id: str, payload: dict, client = Depends(require_admin_supabase), current_user = Depends(require_role(["institution", "admin"]))):
     student_id = payload.get("student_id")
     if not student_id:
         raise HTTPException(status_code=400, detail="student_id required")

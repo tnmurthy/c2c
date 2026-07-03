@@ -30,6 +30,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import type { DimensionScores, Alert } from "@/types";
 import { authFetch } from '@/lib/authFetch';
 import ProfileCompletionWidget from "@/components/profile/ProfileCompletionWidget";
+import { supabase } from "@/lib/supabase";
 
 interface Application {
   id: string;
@@ -112,7 +113,40 @@ export default function Dashboard() {
         setLoading(false);
       }
     }
+    
     fetchData();
+
+    // Supabase Realtime Subscriptions
+    const channel = supabase.channel('student-dashboard-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'applications' },
+        (payload) => {
+          console.log('Realtime update: applications', payload);
+          fetchData(); // Refetch to keep data consistent
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'leads' },
+        (payload) => {
+          console.log('Realtime update: leads', payload);
+          fetchData();
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'development_reports' },
+        (payload) => {
+          console.log('Realtime update: development_reports', payload);
+          fetchData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [id, authLoading]);
 
   const assessment = data?.assessments?.[0] || {};
