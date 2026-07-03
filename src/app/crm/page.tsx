@@ -45,6 +45,27 @@ export default async function CRMDashboard() {
     .eq('tenant_id', TENANT_ID)
     .order('created_at', { ascending: false })
     .limit(5);
+  // Fetch pipeline stages and their opportunity counts
+  const { data: pipelineStages } = await supabase
+    .from('pipeline_stages')
+    .select('*')
+    .eq('tenant_id', TENANT_ID)
+    .order('order_index');
+
+  const { data: allOpps } = await supabase
+    .from('opportunities')
+    .select('stage_id, expected_value')
+    .eq('tenant_id', TENANT_ID);
+
+  const stageStats = pipelineStages?.map(stage => {
+    const stageOpps = allOpps?.filter(o => o.stage_id === stage.id) || [];
+    const count = stageOpps.length;
+    const value = stageOpps.reduce((sum, o) => sum + (Number(o.expected_value) || 0), 0);
+    return { ...stage, count, value };
+  }) || [];
+  
+  const maxCount = Math.max(...stageStats.map(s => s.count), 1); // Avoid division by zero
+  
   return (
     <div className="space-y-6">
       <div>
@@ -81,9 +102,27 @@ export default async function CRMDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
         <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h3 className="text-lg font-medium text-white mb-4">Pipeline by Stage</h3>
-          <div className="h-64 flex items-center justify-center border-2 border-dashed border-slate-700 rounded-lg text-slate-500">
-            [Chart Component Placeholder]
+          <h3 className="text-lg font-medium text-white mb-6">Pipeline by Stage</h3>
+          <div className="space-y-5">
+            {stageStats.map(stage => (
+              <div key={stage.id} className="relative">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-slate-200 font-medium">{stage.name}</span>
+                  <span className="text-slate-400">
+                    <span className="text-white font-semibold">{stage.count}</span> opps · ${stage.value.toLocaleString()}
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-indigo-500 rounded-full transition-all duration-1000 ease-out" 
+                    style={{ width: `${(stage.count / maxCount) * 100}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+            {stageStats.length === 0 && (
+              <div className="text-slate-500 text-sm py-4">No pipeline stages found.</div>
+            )}
           </div>
         </div>
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
