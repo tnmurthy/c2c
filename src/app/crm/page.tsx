@@ -28,6 +28,13 @@ export default async function CRMDashboard() {
     
   const pipelineValue = opps?.reduce((sum, opp) => sum + (Number(opp.expected_value) || 0), 0) || 0;
 
+  // Fetch recent leads for activity feed
+  const { data: recentLeads } = await supabase
+    .from('leads')
+    .select('first_name, last_name, created_at')
+    .eq('tenant_id', TENANT_ID)
+    .order('created_at', { ascending: false })
+    .limit(5);
   return (
     <div className="space-y-6">
       <div>
@@ -72,15 +79,19 @@ export default async function CRMDashboard() {
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
           <h3 className="text-lg font-medium text-white mb-4">Recent Activities</h3>
           <div className="space-y-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex space-x-3">
-                <div className="w-2 h-2 mt-2 rounded-full bg-blue-500 flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-slate-200">New lead <span className="font-medium text-white">John Doe</span> assigned</p>
-                  <p className="text-xs text-slate-500">2 hours ago</p>
+            {recentLeads?.length ? (
+              recentLeads.map((lead, i) => (
+                <div key={i} className="flex space-x-3">
+                  <div className="w-2 h-2 mt-2 rounded-full bg-blue-500 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-slate-200">New lead <span className="font-medium text-white">{lead.first_name} {lead.last_name}</span> created</p>
+                    <p className="text-xs text-slate-500">{new Date(lead.created_at).toLocaleDateString()}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-slate-500">No recent activities.</p>
+            )}
           </div>
         </div>
       </div>
