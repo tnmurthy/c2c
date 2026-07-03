@@ -30,6 +30,53 @@ export default function OpportunitiesPage() {
   const [loading, setLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    amount: '',
+    stage_id: '',
+  });
+
+  // Set default stage when stages load
+  useEffect(() => {
+    if (stages.length > 0 && !formData.stage_id) {
+      setFormData(prev => ({ ...prev, stage_id: stages[0].stage_id }));
+    }
+  }, [stages]);
+
+  const handleAddOpportunity = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Fetch a tenant id and user id to attach (for demo purposes)
+    const { data: tenantData } = await supabase.from('tenants').select('tenant_id').limit(1).single();
+    const { data: userData } = await supabase.from('crm_users').select('user_id').limit(1).single();
+    
+    const newOpp = {
+      name: formData.name,
+      amount: Number(formData.amount) || 0,
+      stage_id: formData.stage_id,
+      tenant_id: tenantData?.tenant_id || '3ee2a6e1-77b7-492e-95dd-dda9ab189d56',
+      owner_id: userData?.user_id || 'd277d663-9f88-4201-a94f-3fee1ff87bce',
+      currency: 'USD',
+      expected_value: Number(formData.amount) || 0,
+    };
+
+    const { error } = await supabase.from('opportunities').insert([newOpp]);
+    
+    setIsSubmitting(false);
+    
+    if (error) {
+      console.error('Error adding opportunity:', error);
+      alert('Failed to add opportunity');
+    } else {
+      setIsDrawerOpen(false);
+      setFormData({ name: '', amount: '', stage_id: stages[0]?.stage_id || '' });
+      // Quick refresh page data
+      window.location.reload(); 
+    }
+  };
+
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD', maximumFractionDigits: 0 }).format(amount);
   };
@@ -183,35 +230,60 @@ export default function OpportunitiesPage() {
         onClose={() => setIsDrawerOpen(false)}
         title="Add New Opportunity"
       >
-        <div className="space-y-4">
+        <form onSubmit={handleAddOpportunity} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-400 mb-1">Opportunity Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Opportunity Name *</label>
             <input 
               type="text" 
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
+              required
+              value={formData.name}
+              onChange={e => setFormData({...formData, name: e.target.value})}
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. Enterprise License Deal"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-400 mb-1">Amount</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Stage *</label>
+            <select 
+              required
+              value={formData.stage_id}
+              onChange={e => setFormData({...formData, stage_id: e.target.value})}
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {stages.map(stage => (
+                <option key={stage.stage_id} value={stage.stage_id}>{stage.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Amount ($) *</label>
             <input 
-              type="number" 
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
+              type="number"
+              required
+              value={formData.amount}
+              onChange={e => setFormData({...formData, amount: e.target.value})}
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. 50000"
             />
           </div>
-          <div className="pt-4 flex justify-end space-x-3">
+          
+          <div className="pt-4 border-t border-gray-200 mt-6 flex justify-end space-x-3">
             <button 
+              type="button"
               onClick={() => setIsDrawerOpen(false)}
-              className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Cancel
             </button>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-              Save Opportunity
+            <button 
+              type="submit"
+              disabled={isSubmitting}
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+            >
+              {isSubmitting ? 'Saving...' : 'Save Opportunity'}
             </button>
           </div>
-        </div>
+        </form>
       </SlideOutDrawer>
     </div>
   );
