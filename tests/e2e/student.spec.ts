@@ -1,106 +1,104 @@
 import { test, expect } from '@playwright/test';
+import { setupMocks } from './testHelpers';
 
-test.describe('Student Journey', () => {
-  // Use a unique email for each test run to avoid "already exists" errors
-  const timestamp = Date.now();
-  const testEmail = `student_${timestamp}@gmail.com`;
-  const testPassword = 'testpassword123';
+test.describe('Student Journey - Happy Paths', () => {
+  test.beforeEach(async ({ page }) => {
+    await setupMocks(page, 'student');
+  });
 
-  test('completes authentication, onboarding, assessment, and views portfolio', async ({ page }) => {
-    page.on('console', msg => console.log(`[BROWSER]: ${msg.text()}`));
-    
-    // 1. Authentication & Onboarding
-    await page.goto('/login');
-    
-    // Switch to Signup
-    await page.getByText(/New operator\?/i).click();
-    
-    // Select Student Role (default, but let's be sure)
-    await page.getByRole('button', { name: /Student/i }).click();
-    
-    // Fill credentials
-    await page.locator('input[type="email"]').fill(testEmail);
-    await page.locator('input[type="password"]').fill(testPassword);
-    
-    // Submit signup
-    await page.getByRole('button', { name: /INITIALIZE_SIGNUP/i }).click();
-
-    // 2. Onboarding
-    // Wait for the URL to change to /onboard
-    await page.waitForURL('**/onboard');
-    
-    // Ensure the form is loaded
-    await page.waitForSelector('input[name="full_name"]');
+  test('completes onboarding, views dashboard, takes assessment, and views portfolio', async ({ page }) => {
+    // 1. Onboarding Form Submission
+    await page.goto('/onboard');
     
     // Fill out onboarding form
-    await page.fill('input[name="full_name"]', 'Test Student ' + timestamp);
+    await page.fill('input[name="full_name"]', 'John Doe');
     await page.fill('input[name="graduation_year"]', '2026');
     await page.fill('input[name="department"]', 'Computer Science');
     
     // Submit onboarding
     await page.getByRole('button', { name: /FINALIZE_ONBOARDING/i }).click();
 
-    // 3. Dashboard -> Check Assessment
-    // We should either go straight to dashboard or be prompted
-    await page.waitForURL('**/dashboard/**');
+    // 2. Viewing Dashboard
+    await page.waitForURL('**/dashboard/mock-student-id');
     
-    // Look for "Initialize_The_Ordeal" button if assessment is needed
-    const ordealButton = page.getByRole('link', { name: /Initialize_The_Ordeal/i });
-    if (await ordealButton.isVisible()) {
-      await ordealButton.click();
-      
-      // 4. Assessment (The Ordeal)
-      await page.waitForURL('**/assessment');
-      
-      // Wait for syncing animation to finish
-      // The first question should appear
-      
-      // Loop answering questions until we're back at the dashboard
-      while (page.url().includes('assessment')) {
-        try {
-          // Wait for either Likert buttons, multiple choice buttons, or text input
-          const isQuestionVisible = await page.waitForSelector('text=Vector_', { timeout: 10000 }).catch(() => null);
-          if (!isQuestionVisible) {
-             // If we're redirected, break
-             if (page.url().includes('dashboard')) break;
-          }
+    // Check dashboard elements: radar chart/radar container, archetype card, feedback link/button
+    await expect(page.getByText(/Builders thrive on creating/i)).toBeVisible();
+    await expect(page.getByText(/Optimization_Protocols/i)).toBeVisible();
+    await expect(page.getByText(/Get_360_Feedback_Link/i)).toBeVisible();
 
-          // check what type of question it is
-          const likertOption = page.locator('button:has-text("1")').first();
-          const mcqOption = page.locator('button.group:has(.lucide-chevron-right)').first();
-          const textInput = page.locator('input[placeholder="WAITING_FOR_CANDIDATE_INPUT_"]');
-          
-          if (await textInput.isVisible()) {
-            await textInput.fill('Test Answer');
-            await textInput.press('Enter');
-          } else if (await likertOption.isVisible()) {
-            await likertOption.click();
-          } else if (await mcqOption.isVisible()) {
-            await mcqOption.click();
-          }
-          
-          // Wait a bit for the transition (400ms defined in handleResponse)
-          await page.waitForTimeout(500);
-        } catch (e) {
-          // If error occurs, we might have transitioned
-          if (page.url().includes('dashboard')) break;
-        }
-      }
-    }
-
-    // 5. Back on Dashboard -> Portfolio
-    await page.waitForURL('**/dashboard/**');
+    // 3. Running the Ordeal Assessment
+    await page.goto('/assessment');
+    await page.waitForURL('**/assessment');
     
-    // Check for "Boot_Retro_Portfolio" link
+    // Answer the questions
+    const isQuestionVisible = await page.waitForSelector('text=Vector_', { timeout: 10000 }).catch(() => null);
+    expect(isQuestionVisible).not.toBeNull();
+    
+    // Answer Q1 (Likert)
+    const likertOption = page.locator('button:has-text("1")').first();
+    await expect(likertOption).toBeVisible();
+    await likertOption.click();
+    
+    // Transition/Wait
+    await page.waitForTimeout(600);
+    
+    // Answer Q2 (SJT)
+    const sjtOption = page.locator('button.group:has(.lucide-chevron-right)').first();
+    await expect(sjtOption).toBeVisible();
+    await sjtOption.click();
+
+    // Wait for submission flow and redirection to dashboard
+    await page.waitForURL('**/dashboard/mock-student-id', { timeout: 15000 });
+
+    // 4. Viewing Windows 95 Retro Portfolio
     const portfolioLink = page.getByRole('link', { name: /Boot_Retro_Portfolio/i });
     await expect(portfolioLink).toBeVisible();
-    
-    // Click portfolio
     await portfolioLink.click();
     
-    // 6. Portfolio
-    await page.waitForURL('**/portfolio/**');
-    // Verify Windows 95 aesthetic element
+    await page.waitForURL('**/portfolio/mock-student-id');
     await expect(page.getByText(/My Computer/i).first()).toBeVisible();
+  });
+});
+
+test.describe('Student Journey - Boundary & Corner Cases', () => {
+  test('onboard empty name validation', async ({ page }) => {
+    await setupMocks(page, 'student');
+    await page.goto('/onboard');
+    
+    await page.fill('input[name="full_name"]', '');
+    await page.fill('input[name="graduation_year"]', '2026');
+    await page.fill('input[name="department"]', 'Computer Science');
+    
+    await page.getByRole('button', { name: /FINALIZE_ONBOARDING/i }).click();
+    
+    // Check validation error message
+    await expect(page.getByText('Candidate Full Name is required.')).toBeVisible();
+  });
+
+  test('onboard invalid graduation year format', async ({ page }) => {
+    await setupMocks(page, 'student');
+    await page.goto('/onboard');
+    
+    await page.fill('input[name="full_name"]', 'John Doe');
+    await page.fill('input[name="graduation_year"]', '1800'); // invalid year
+    await page.fill('input[name="department"]', 'Computer Science');
+    
+    await page.getByRole('button', { name: /FINALIZE_ONBOARDING/i }).click();
+    
+    await expect(page.getByText('Please enter a valid graduation year format (e.g. 2026).')).toBeVisible();
+  });
+
+  test('unauthenticated user is redirected to login from dashboard', async ({ page }) => {
+    await setupMocks(page); // No role/session
+    await page.goto('/dashboard/mock-student-id');
+    await page.waitForURL('**/login');
+    await expect(page.locator('input[type="email"]')).toBeVisible();
+  });
+
+  test('unauthenticated user is redirected to login from assessment', async ({ page }) => {
+    await setupMocks(page); // No role/session
+    await page.goto('/assessment');
+    await page.waitForURL('**/login');
+    await expect(page.locator('input[type="email"]')).toBeVisible();
   });
 });

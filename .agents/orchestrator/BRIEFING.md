@@ -1,58 +1,74 @@
-# BRIEFING — 2026-06-18T16:40:00Z
+# BRIEFING — 2026-07-04T22:40:15+05:30
 
 ## Mission
-Map user journeys for Student, Employer, TPO/Institution, and Admin, and write Playwright E2E tests for them.
+Refactor the C2C Talent Platform backend and frontend codebases, audit DB and RLS, add opportunities-candidate linkage, and establish shared primitives.
 
 ## 🔒 My Identity
-- Archetype: orchestrator
+- Archetype: teamwork_preview_orchestrator
 - Roles: orchestrator, user_liaison, human_reporter, successor
-- Working directory: c:\tt-ai-stack\01_projects\makeover-talent-agency\.agents\orchestrator
-- Original parent: top-level
-- Original parent conversation ID: 8b41f850-c648-4f39-8bb3-25260db560b7
+- Working directory: C:\tt-ai-stack\01_projects\makeover-talent-agency\.agents\orchestrator
+- Original parent: parent
+- Original parent conversation ID: 73744698-4302-41f2-b537-7f505cfa13d4
 
 ## 🔒 My Workflow
 - **Pattern**: Project
-- **Scope document**: c:\tt-ai-stack\01_projects\makeover-talent-agency\.agents\orchestrator\PROJECT.md
-1. **Decompose**: Decompose the journeys mapping and E2E testing per role.
+- **Scope document**: C:\tt-ai-stack\01_projects\makeover-talent-agency\PROJECT.md
+1. **Decompose**: Split backend refactoring, frontend refactoring, database audit, and E2E testing into discrete, parallelizable milestones.
 2. **Dispatch & Execute**:
-   - Delegate (sub-orchestrator): Since this requires exploring the code and writing tests for 4 distinct roles, I will dispatch an explorer to write `user_journeys.md`, then workers to write the e2e tests.
-3. **On failure**: Retry, Replace, Skip, Redistribute, Redesign, Escalate.
-4. **Succession**: At 16 spawns, write handoff.md, spawn successor.
-- **Current phase**: 1
-- **Current focus**: Exploring the codebase to map journeys.
+   - **Delegate (sub-orchestrator)**: Spawn sub-orchestrators for complex milestones (Backend Split, Frontend Primitives, DB & Linkage, E2E Testing).
+3. **On failure** (in this order):
+   - Retry: nudge stuck agent or re-send task
+   - Replace: spawn fresh agent with partial progress
+   - Skip: proceed without (only if non-critical)
+   - Redistribute: split stuck agent's remaining work
+   - Redesign: re-partition decomposition
+   - Escalate: report to parent (sub-orchestrators only, last resort)
+4. **Succession**: Self-succeed at 16 spawns, write handoff.md, spawn successor.
+- **Work items**:
+  - M1: E2E Test Suite and Infrastructure [in-progress]
+  - M2: Database & RLS Audit and Linkage [in-progress]
+  - M3: Backend Monolith Router Split [pending]
+  - M4: Frontend Shared Primitives and Modularization [pending]
+  - M5: Integration and Final E2E Verification [pending]
+- **Current phase**: 2
+- **Current focus**: Executing E2E testing and DB audit tracks in parallel
 
 ## 🔒 Key Constraints
-- Never reuse a subagent after it has delivered its handoff — always spawn fresh
-- Do not write code directly.
+- NEVER write, modify, or create source code files directly.
+- NEVER run build/test commands yourself — require workers to do so.
+- You MAY use file-editing tools ONLY for metadata/state files (.md) in your .agents/ folder.
+- Never reuse a subagent after it has delivered its handoff — always spawn fresh.
+- Binary veto on integrity audits — if Forensic Auditor reports integrity violation, the milestone fails unconditionally.
 
 ## Current Parent
-- Conversation ID: 8b41f850-c648-4f39-8bb3-25260db560b7
-- Updated: 2026-06-18T16:40:00Z
+- Conversation ID: 73744698-4302-41f2-b537-7f505cfa13d4
+- Updated: not yet
 
 ## Key Decisions Made
-- Use an explorer to analyze Next.js app routes in `src/app` and produce `user_journeys.md`.
-- Dispatch E2E Testing orchestration to write tests.
+- Decomposed implementation into sequential stages (DB Audit -> Backend Monolith Split -> Frontend Primitives -> Integration).
+- Dispatched E2E Testing track in parallel with the first implementation milestone.
 
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |
 |-------|------|-----------|--------|---------|
-| a1413b5b | teamwork_preview_explorer | Map Journeys | completed | a1413b5b-165d-45da-8b9d-f8e681036055 |
-| 68608847 | teamwork_preview_worker | Student E2E | completed | 68608847-f16c-4b16-a699-88df90876ffc |
-| 888186fb | teamwork_preview_worker | Employer E2E | completed | 888186fb-527d-43fe-9b81-c3d1e22ff40a |
-| 8329f79c | teamwork_preview_worker | TPO E2E | completed | 8329f79c-0911-42c3-82ea-8be9545c9e3e |
-| a86e9537 | teamwork_preview_worker | Admin E2E | completed | a86e9537-f185-4db1-8e60-4b684fc4d9e9 |
+| sub_orch_e2e_testing | self | M1: E2E Test Suite and Infrastructure | in-progress | df687bdf-ffc0-47e7-895a-5c96cc1133ae |
+| sub_orch_db_audit | self | M2: Database & RLS Audit and Linkage | in-progress | ae65a057-bd49-43d6-a25f-7f50d8027286 |
 
 ## Succession Status
 - Succession required: no
-- Spawn count: 0 / 16
-- Pending subagents: none
+- Spawn count: 2 / 16
+- Pending subagents: df687bdf-ffc0-47e7-895a-5c96cc1133ae, ae65a057-bd49-43d6-a25f-7f50d8027286
 - Predecessor: none
 - Successor: not yet spawned
 
 ## Active Timers
-- Heartbeat cron: not started
+- Heartbeat cron: c78e61b4-0779-4953-a93f-972b169cbe2e/task-15
 - Safety timer: none
+- On succession: kill all timers before spawning successor
+- On context truncation: run `manage_task(Action="list")` — re-create if missing
 
 ## Artifact Index
-- c:\tt-ai-stack\01_projects\makeover-talent-agency\.agents\orchestrator\progress.md - Track progress
-- c:\tt-ai-stack\01_projects\makeover-talent-agency\.agents\orchestrator\PROJECT.md - Scoping document
+- C:\tt-ai-stack\01_projects\makeover-talent-agency\.agents\orchestrator\ORIGINAL_REQUEST.md — Original user request
+- C:\tt-ai-stack\01_projects\makeover-talent-agency\PROJECT.md — Global project index and roadmap
+- C:\tt-ai-stack\01_projects\makeover-talent-agency\TEST_INFRA.md — E2E test suite roadmap and feature list
+- C:\tt-ai-stack\01_projects\makeover-talent-agency\.agents\orchestrator\progress.md — Internal status tracker

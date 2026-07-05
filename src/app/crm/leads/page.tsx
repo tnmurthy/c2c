@@ -1,28 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, Plus, Filter, MoreHorizontal, Mail, Phone, User } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import SlideOutDrawer from '@/components/crm/SlideOutDrawer';
-
-interface Lead {
-  lead_id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone?: string;
-  source: string;
-  status: string;
-  interest_area: string;
-  account_name: string;
-  owner_id?: string;
-  tenant_id: string;
-}
+import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
+import DataState from '@/components/ui/DataState';
+import { CrmLead } from '@/types';
 
 export default function LeadsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(true);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,23 +25,13 @@ export default function LeadsPage() {
     account_name: ''
   });
 
-  const fetchLeads = async () => {
-    setLoading(true);
+  const { data: leads = [], loading, error, refetch: fetchLeads } = useSupabaseQuery<CrmLead[]>(async () => {
     const { data, error } = await supabase
       .from('leads')
       .select('*')
       .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching leads:', error);
-    } else if (data) {
-      setLeads(data);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchLeads();
+    if (error) throw error;
+    return data || [];
   }, []);
 
   const handleAddLead = async (e: React.FormEvent) => {
@@ -94,7 +71,7 @@ export default function LeadsPage() {
     }
   };
 
-  const filteredLeads = leads.filter(lead => 
+  const filteredLeads = (leads || []).filter(lead => 
     `${lead.first_name} ${lead.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (lead.email && lead.email.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -149,11 +126,21 @@ export default function LeadsPage() {
           <tbody className="divide-y divide-slate-800/50 text-sm">
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-slate-500">Loading leads...</td>
+                <td colSpan={6} className="px-6 py-8 text-center">
+                  <DataState state="loading" />
+                </td>
+              </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan={6} className="px-6 py-8 text-center">
+                  <DataState state="error" message={error instanceof Error ? error.message : String(error)} />
+                </td>
               </tr>
             ) : filteredLeads.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-slate-500">No leads found.</td>
+                <td colSpan={6} className="px-6 py-8 text-center">
+                  <DataState state="empty" message="No leads found." />
+                </td>
               </tr>
             ) : (
               filteredLeads.map((lead) => (

@@ -1,33 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Filter, MoreHorizontal, Loader2 } from 'lucide-react';
+import { Plus, Search, Filter, MoreHorizontal, Download, Star } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { authFetch } from '@/lib/authFetch';
 import SlideOutDrawer from '@/components/crm/SlideOutDrawer';
-
-interface PipelineStage {
-  stage_id: string;
-  name: string;
-  sequence: number;
-}
-
-interface Opportunity {
-  opportunity_id: string;
-  name: string;
-  stage_id: string;
-  amount: number;
-  currency: string;
-  accounts?: {
-    name: string;
-  };
-}
+import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
+import DataState from '@/components/ui/DataState';
+import { PipelineStage, CrmCandidate, CrmCandidateScore, CrmOpportunity } from '@/types';
 
 const STAGE_COLORS = ['bg-blue-500', 'bg-amber-500', 'bg-purple-500', 'bg-pink-500', 'bg-emerald-500'];
 
 export default function OpportunitiesPage() {
   const [stages, setStages] = useState<PipelineStage[]>([]);
-  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [opportunities, setOpportunities] = useState<CrmOpportunity[]>([]);
+  const [candidates, setCandidates] = useState<CrmCandidate[]>([]); // Added state to store candidates
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,6 +22,7 @@ export default function OpportunitiesPage() {
     name: '',
     amount: '',
     stage_id: '',
+    candidate_id: '', // Added candidate_id form state
   });
 
   // Set default stage when stages load
@@ -48,32 +36,76 @@ export default function OpportunitiesPage() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Fetch a tenant id and user id to attach (for demo purposes)
-    const { data: tenantData } = await supabase.from('tenants').select('tenant_id').limit(1).single();
-    const { data: userData } = await supabase.from('crm_users').select('user_id').limit(1).single();
+    // Get current user and their tenant_id
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      alert('You must be logged in to add an opportunity');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const { data: crmUser } = await supabase
+      .from('crm_users')
+      .select('tenant_id')
+      .eq('user_id', user.id)
+      .single();
+      
+    if (!crmUser?.tenant_id) {
+      alert('No tenant associated with your account');
+      setIsSubmitting(false);
+      return;
+    }
     
     const newOpp = {
       name: formData.name,
       amount: Number(formData.amount) || 0,
       stage_id: formData.stage_id,
-      tenant_id: tenantData?.tenant_id || '3ee2a6e1-77b7-492e-95dd-dda9ab189d56',
-      owner_id: userData?.user_id || 'd277d663-9f88-4201-a94f-3fee1ff87bce',
+      candidate_id: formData.candidate_id || null, // Added candidate_id database write
+      tenant_id: crmUser.tenant_id,
+      owner_id: user.id,
       currency: 'USD',
       expected_value: Number(formData.amount) || 0,
     };
 
-    const { error } = await supabase.from('opportunities').insert([newOpp]);
+    const { data: insertedData, error } = await supabase
+      .from('opportunities')
+      .insert([newOpp])
+      .select(`
+        opportunity_id,
+        name,
+        stage_id,
+        amount,
+        currency,
+        candidate_id,
+        accounts (
+          name
+        )
+      `)
+      .single();
     
     setIsSubmitting(false);
     
     if (error) {
       console.error('Error adding opportunity:', error);
       alert('Failed to add opportunity');
-    } else {
+    } else if (insertedData) {
       setIsDrawerOpen(false);
-      setFormData({ name: '', amount: '', stage_id: stages[0]?.stage_id || '' });
-      // Quick refresh page data
-      window.location.reload(); 
+      setFormData({ name: '', amount: '', stage_id: stages[0]?.stage_id || '', candidate_id: '' });
+      
+      const resolvedCandidate = candidates.find(c => c.id === insertedData.candidate_id);
+      
+      const newOppState: CrmOpportunity = {
+        opportunity_id: insertedData.opportunity_id,
+        name: insertedData.name,
+        stage_id: insertedData.stage_id,
+        amount: insertedData.amount,
+        currency: insertedData.currency,
+        candidate_id: insertedData.candidate_id,
+        accounts: Array.isArray(insertedData.accounts) ? insertedData.accounts[0] : (insertedData.accounts || undefined),
+        candidate: resolvedCandidate
+      };
+      
+      setOpportunities(prev => [...prev, newOppState]);
     }
   };
 
@@ -81,50 +113,89 @@ export default function OpportunitiesPage() {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD', maximumFractionDigits: 0 }).format(amount);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        // Get stages
-        const { data: stagesData, error: stagesError } = await supabase
-          .from('pipeline_stages')
-          .select('*')
-          .order('sequence', { ascending: true });
+  const downloadPDF = async (e: React.MouseEvent, studentId: string, type: 'profile' | 'interview-guide') => {
+    e.stopPropagation(); // Prevent card click
+    try {
+      const res = await authFetch(`/api/crm/candidates/${studentId}/pdf/${type}`);
+      if (!res.ok) throw new Error(`Failed to generate ${type} PDF`);
+      
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${type}_${studentId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (err) {
+      console.error(err);
+      alert(`Error downloading ${type} PDF`);
+    }
+  };
 
-        if (stagesError) throw stagesError;
-        setStages(stagesData || []);
+  const { loading, error } = useSupabaseQuery(async () => {
+    // Get current user and their tenant_id
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-        // Get opportunities with account name
-        const { data: oppsData, error: oppsError } = await supabase
-          .from('opportunities')
-          .select(`
-            opportunity_id,
-            name,
-            stage_id,
-            amount,
-            currency,
-            accounts (
-              name
-            )
-          `);
+    const { data: crmUser } = await supabase
+      .from('crm_users')
+      .select('tenant_id')
+      .eq('user_id', user.id)
+      .single();
 
-        if (oppsError) throw oppsError;
-        
-        // Map account array to single object if Supabase returns array for 1:N relations
-        const mappedOpps = (oppsData || []).map((opp: any) => ({
-          ...opp,
-          accounts: Array.isArray(opp.accounts) ? opp.accounts[0] : opp.accounts
-        }));
-        
-        setOpportunities(mappedOpps);
-      } catch (error) {
-        console.error('Error fetching opportunities data:', error);
-      } finally {
-        setLoading(false);
+    const currentTenantId = crmUser?.tenant_id;
+    if (!currentTenantId) return;
+
+    // Fetch candidates for actual association and selection dropdown
+    let candidatesData: CrmCandidate[] = [];
+    try {
+      const res = await authFetch('/api/crm/candidates');
+      if (res.ok) {
+        candidatesData = await res.json();
+        setCandidates(candidatesData); // Save to component state
       }
-    };
+    } catch (e) {
+      console.error("Failed to fetch candidates for opportunities view", e);
+    }
 
-    fetchData();
+    // Get stages for this tenant
+    const { data: stagesData, error: stagesError } = await supabase
+      .from('pipeline_stages')
+      .select('*')
+      .eq('tenant_id', currentTenantId)
+      .order('sequence', { ascending: true });
+
+    if (stagesError) throw stagesError;
+    setStages(stagesData || []);
+
+    // Get opportunities with account name and candidate_id for this tenant
+    const { data: oppsData, error: oppsError } = await supabase
+      .from('opportunities')
+      .select(`
+        opportunity_id,
+        name,
+        stage_id,
+        amount,
+        currency,
+        candidate_id,
+        accounts (
+          name
+        )
+      `)
+      .eq('tenant_id', currentTenantId);
+
+    if (oppsError) throw oppsError;
+    
+    // Map account array to single object and match candidate by candidate_id
+    const mappedOpps = (oppsData || []).map((opp: any) => ({
+      ...opp,
+      accounts: Array.isArray(opp.accounts) ? opp.accounts[0] : opp.accounts,
+      candidate: candidatesData.find(c => c.id === opp.candidate_id) // Resolved by ID instead of modulo
+    }));
+    
+    setOpportunities(mappedOpps);
   }, []);
 
   return (
@@ -169,9 +240,9 @@ export default function OpportunitiesPage() {
       {/* Kanban Board */}
       <div className="flex-1 overflow-x-auto overflow-y-hidden pt-2">
         {loading ? (
-          <div className="flex justify-center items-center h-full">
-             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-          </div>
+          <DataState state="loading" className="h-full" />
+        ) : error ? (
+          <DataState state="error" message={error instanceof Error ? error.message : String(error)} className="h-full" />
         ) : (
           <div className="flex space-x-4 h-full min-w-max pb-4">
             {stages.map((stage, index) => {
@@ -194,7 +265,7 @@ export default function OpportunitiesPage() {
                   {/* Stage Cards Container */}
                   <div className="flex-1 overflow-y-auto p-3 space-y-3">
                     {stageOpps.map(opp => (
-                      <div key={opp.opportunity_id} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-slate-700 transition-colors cursor-pointer group">
+                      <div key={opp.opportunity_id} className="bg-slate-950 border border-slate-800 p-4 rounded-lg hover:border-slate-700 transition-colors cursor-pointer group flex flex-col">
                         <div className="flex justify-between items-start mb-2">
                           <h4 className="text-white font-medium text-sm leading-tight group-hover:text-blue-400 transition-colors">{opp.name}</h4>
                           <button className="text-slate-600 hover:text-slate-300 transition-colors">
@@ -202,7 +273,47 @@ export default function OpportunitiesPage() {
                           </button>
                         </div>
                         <p className="text-slate-400 text-xs mb-3">{opp.accounts?.name || 'Unknown Account'}</p>
-                        <div className="flex justify-between items-center mt-2">
+                        
+                        {/* Psychometric Data Injection */}
+                        {opp.candidate && (
+                          <div className="mb-3 pt-3 border-t border-slate-800/60">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-xs text-slate-400 font-medium">Candidate Match</span>
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                <Star className="w-3 h-3" />
+                                {opp.candidate.archetype || 'N/A'}
+                              </span>
+                            </div>
+                            <div className="flex flex-wrap gap-1 mb-3">
+                               {['IQ', 'EQ', 'AQ', 'SQ', 'SpQ'].map(dim => {
+                                 const val = opp.candidate!.scores?.[dim as keyof CrmCandidateScore];
+                                 if (val === undefined) return null;
+                                 const isGap = val < 70;
+                                 return (
+                                   <div key={dim} className={`px-1.5 py-0.5 rounded text-[10px] font-mono border ${isGap ? 'border-amber-500/30 text-amber-400 bg-amber-500/10' : 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10'}`}>
+                                     {dim}:{val}
+                                   </div>
+                                 );
+                                })}
+                            </div>
+                            <div className="flex gap-2">
+                              <button 
+                                onClick={(e) => downloadPDF(e, opp.candidate!.id, 'profile')}
+                                className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition-colors text-[10px] font-medium"
+                              >
+                                <Download className="w-3 h-3" /> Profile
+                              </button>
+                              <button 
+                                onClick={(e) => downloadPDF(e, opp.candidate!.id, 'interview-guide')}
+                                className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 rounded border border-indigo-500/30 transition-colors text-[10px] font-medium"
+                              >
+                                <Download className="w-3 h-3" /> Guide
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-between items-center mt-auto pt-2">
                           <span className="text-emerald-400 font-medium text-sm">{formatCurrency(opp.amount, opp.currency)}</span>
                           <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-xs text-slate-300" title="Assigned">
                             OP
@@ -265,6 +376,21 @@ export default function OpportunitiesPage() {
               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. 50000"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Associate Candidate (Optional)</label>
+            <select 
+              value={formData.candidate_id}
+              onChange={e => setFormData({...formData, candidate_id: e.target.value})}
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">-- No Candidate --</option>
+              {candidates.map(candidate => (
+                <option key={candidate.id} value={candidate.id}>
+                  {candidate.full_name} ({candidate.archetype})
+                </option>
+              ))}
+            </select>
           </div>
           
           <div className="pt-4 border-t border-gray-200 mt-6 flex justify-end space-x-3">

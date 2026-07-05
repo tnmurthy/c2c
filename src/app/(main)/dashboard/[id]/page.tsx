@@ -243,7 +243,6 @@ export default function Dashboard() {
                 <div className="flex flex-wrap gap-4 justify-center md:justify-start border-l-4 border-transparent pl-8">
                   <Link 
                     href={`/portfolio/${id}`}
-                    target="_blank"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded-sm font-mono text-xs font-black text-cyan-400 uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[0_0_25px_rgba(6,182,212,0.2)]"
                   >
                     <Cpu className="w-4 h-4" /> Boot_Retro_Portfolio

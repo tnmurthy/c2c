@@ -1,25 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, Plus, Filter, MoreHorizontal, Building2, MapPin, Globe } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import SlideOutDrawer from '@/components/crm/SlideOutDrawer';
-
-interface Account {
-  account_id: string;
-  name: string;
-  type: string;
-  industry: string;
-  city: string;
-  website?: string;
-  owner_id?: string;
-  tenant_id: string;
-}
+import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
+import DataState from '@/components/ui/DataState';
+import { CrmAccount } from '@/types';
 
 export default function AccountsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const [loading, setLoading] = useState(true);
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,23 +22,13 @@ export default function AccountsPage() {
     website: ''
   });
 
-  const fetchAccounts = async () => {
-    setLoading(true);
+  const { data: accounts = [], loading, error, refetch: fetchAccounts } = useSupabaseQuery<CrmAccount[]>(async () => {
     const { data, error } = await supabase
       .from('accounts')
       .select('*')
       .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching accounts:', error);
-    } else if (data) {
-      setAccounts(data);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchAccounts();
+    if (error) throw error;
+    return data || [];
   }, []);
 
   const handleAddAccount = async (e: React.FormEvent) => {
@@ -79,7 +59,7 @@ export default function AccountsPage() {
     }
   };
 
-  const filteredAccounts = accounts.filter(acc => 
+  const filteredAccounts = (accounts || []).filter(acc => 
     acc.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -140,11 +120,21 @@ export default function AccountsPage() {
           <tbody className="divide-y divide-slate-800/50 text-sm">
             {loading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-slate-500">Loading accounts...</td>
+                <td colSpan={5} className="px-6 py-8 text-center">
+                  <DataState state="loading" />
+                </td>
+              </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan={5} className="px-6 py-8 text-center">
+                  <DataState state="error" message={error instanceof Error ? error.message : String(error)} />
+                </td>
               </tr>
             ) : filteredAccounts.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-slate-500">No accounts found.</td>
+                <td colSpan={5} className="px-6 py-8 text-center">
+                  <DataState state="empty" message="No accounts found." />
+                </td>
               </tr>
             ) : (
               filteredAccounts.map((account) => (
