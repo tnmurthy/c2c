@@ -2190,7 +2190,7 @@
     "semantic_hash": "1b99ee0d4e6636ae42d0ee0d5ad39fa8"
   },
   "test-results/.last-run.json": {
-    "mtime": 1783269809.9737902,
+    "mtime": 1783272150.304304,
     "ast_hash": "f196824657d8858bc7fa44eecbba38b1",
     "semantic_hash": ""
   },
@@ -4440,8 +4440,8 @@
     "semantic_hash": ""
   },
   "playwright-report/index.html": {
-    "mtime": 1783269809.9715319,
-    "ast_hash": "74365b18db074f930319c9657391cb61",
+    "mtime": 1783272150.302061,
+    "ast_hash": "ffe4a38d847a7fe33c9daef9ac31a58f",
     "semantic_hash": ""
   },
   "public/robots.txt": {
@@ -7740,8 +7740,8 @@
     "semantic_hash": ""
   },
   "api/routers/assessment_router.py": {
-    "mtime": 1783222511.0104866,
-    "ast_hash": "bf4964c5915ddc0fdb68c8922f78617a",
+    "mtime": 1783270904.0344195,
+    "ast_hash": "bce095f22e4f4c6a9e402735d0ce9f7b",
     "semantic_hash": ""
   },
   "api/routers/crm_router.py": {
@@ -7765,8 +7765,8 @@
     "semantic_hash": ""
   },
   "api/schemas/assessment.py": {
-    "mtime": 1783222457.0310984,
-    "ast_hash": "8786eefc5a7575daf4f5e32110866b72",
+    "mtime": 1783270856.3893578,
+    "ast_hash": "ba8754201c7b4250bfe9f094517324b3",
     "semantic_hash": ""
   },
   "api/schemas/employer.py": {
@@ -8267,6 +8267,16 @@
   "TEST_READY.md": {
     "mtime": 1783184947.9607043,
     "ast_hash": "14aaf626c0cd498f476a887a55cf0759",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260705000000_assessment_sessions.sql": {
+    "mtime": 1783270622.05014,
+    "ast_hash": "7097887df6ee40509cf0bb31bb627a82",
+    "semantic_hash": ""
+  },
+  "tests/test_assessment_endpoints.py": {
+    "mtime": 1783271386.7579045,
+    "ast_hash": "75461bae6fac7cb892bd4aee3166cd81",
     "semantic_hash": ""
   }
 }
