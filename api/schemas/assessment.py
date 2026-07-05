@@ -17,3 +17,11 @@ class FeedbackSubmit(BaseModel):
     reviewer_role: str
     dimension_scores: Dict[str, float]
     feedback_text: str
+
+class SessionStart(BaseModel):
+    student_id: str
+
+class AnswerSubmit(BaseModel):
+    item_id: str
+    response: str
+
