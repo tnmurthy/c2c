@@ -236,7 +236,7 @@ export default function Onboard() {
         <div className="bg-[#1a2326]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
           
-          <form className="space-y-8" onSubmit={handleSubmit}>
+          <form className="space-y-8" onSubmit={handleSubmit} noValidate>
             {error && (
               error.includes('students_email_key') || error.includes('already exists') ? (
                 <div className="flex flex-col items-center justify-center gap-4 p-6 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-center animate-in fade-in slide-in-from-top-1">

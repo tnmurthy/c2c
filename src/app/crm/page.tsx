@@ -1,12 +1,37 @@
 import React from 'react';
 import { ArrowUpRight, Users, Briefcase, TrendingUp } from 'lucide-react';
-import StatCard from '@/components/StatCard';
-import { supabase } from '@/lib/supabase';
-
-// Hardcoded for demo purposes
-const TENANT_ID = '3ee2a6e1-77b7-492e-95dd-dda9ab189d56';
+import { StatCard } from '@/components/StatCard';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
 export default async function CRMDashboard() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/crm-login');
+  }
+
+  // Fetch the CRM user profile which contains the tenant_id
+  const { data: crmUser } = await supabase
+    .from('crm_users')
+    .select('tenant_id')
+    .eq('user_id', user.id)
+    .single();
+
+  const TENANT_ID = crmUser?.tenant_id;
+
+  if (!TENANT_ID) {
+    return (
+      <div className="flex h-full items-center justify-center p-6">
+        <div className="text-center">
+          <h2 className="text-xl font-medium text-white mb-2">No Tenant Associated</h2>
+          <p className="text-slate-400">Your account is not linked to any CRM tenant. Please contact your administrator.</p>
+        </div>
+      </div>
+    );
+  }
+
   // Fetch real counts
   const { count: totalLeads } = await supabase
     .from('leads')
@@ -77,26 +102,26 @@ export default async function CRMDashboard() {
         <StatCard 
           title="Total Leads" 
           value={(totalLeads || 0).toString()} 
-          change="Real-time data" 
-          icon={<Users className="w-5 h-5 text-blue-400" />} 
+          icon={Users} 
+          theme="cyan"
         />
         <StatCard 
           title="Active Opportunities" 
           value={(activeOpps || 0).toString()} 
-          change="Real-time data" 
-          icon={<Briefcase className="w-5 h-5 text-emerald-400" />} 
+          icon={Briefcase} 
+          theme="emerald"
         />
         <StatCard 
           title="Pipeline Value" 
           value={`$${pipelineValue.toLocaleString()}`} 
-          change="Real-time data" 
-          icon={<TrendingUp className="w-5 h-5 text-indigo-400" />} 
+          icon={TrendingUp} 
+          theme="purple"
         />
         <StatCard 
           title="Conversion Rate" 
           value={`${conversionRate.toFixed(1)}%`} 
-          change="Real-time data" 
-          icon={<ArrowUpRight className="w-5 h-5 text-amber-400" />} 
+          icon={ArrowUpRight} 
+          theme="amber"
         />
       </div>
 

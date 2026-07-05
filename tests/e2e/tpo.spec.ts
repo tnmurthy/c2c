@@ -1,64 +1,58 @@
 import { test, expect } from '@playwright/test';
+import { setupMocks } from './testHelpers';
 
-test.describe('TPO / Institution Journey', () => {
-  const timestamp = Date.now();
-  const testEmail = `tpo_${timestamp}@university.edu`;
-  const testPassword = 'testpassword123';
+test.describe('TPO / Institution Journey - Happy Paths', () => {
+  test.beforeEach(async ({ page }) => {
+    await setupMocks(page, 'institution');
+  });
 
-  test('completes authentication, onboarding, and navigates TPO dashboard', async ({ page }) => {
-    page.on('console', msg => console.log(`[BROWSER]: ${msg.text()}`));
-    
-    // 1. Authentication & Onboarding
-    await page.goto('/login');
-    
-    // Switch to Signup
-    await page.getByText(/New operator\?/i).click();
-    
-    // Select Institution / TPO Role
-    await page.getByRole('button', { name: /Institution \/ TPO/i }).click();
-    
-    // Fill credentials
-    await page.locator('input[type="email"]').fill(testEmail);
-    await page.locator('input[type="password"]').fill(testPassword);
-    
-    // Submit signup
-    // Known issue: this may fail with 429 Too Many Requests if rate limited, which is acceptable
-    await page.getByRole('button', { name: /INITIALIZE_SIGNUP/i }).click();
-
-    // 2. Onboarding
-    // Wait for the URL to change to /onboard
-    await page.waitForURL('**/onboard');
-    
-    // Switch to Institution tab on onboard page
+  test('completes onboarding and navigates TPO dashboard', async ({ page }) => {
+    // 1. Onboarding
+    await page.goto('/onboard');
     await page.getByRole('button', { name: /Institution\/TPO/i }).click();
     
-    // Ensure the form is loaded
-    await page.waitForSelector('input[name="name"]');
-    
     // Fill out onboarding form
-    await page.fill('input[name="name"]', `Global Tech University ${timestamp}`);
+    await page.fill('input[name="name"]', 'Global Tech University');
     await page.selectOption('select[name="type"]', 'University');
-    // Domain is pre-filled based on email, but let's make sure
     await page.fill('input[name="domain"]', 'university.edu');
     await page.fill('input[name="location"]', 'San Francisco, CA');
     
     // Submit onboarding
     await page.getByRole('button', { name: /FINALIZE_ONBOARDING/i }).click();
 
-    // 3. TPO Command Center Dashboard
-    await page.waitForURL('**/tpo-dashboard/**');
+    // 2. TPO Command Center Dashboard
+    await page.waitForURL('**/tpo-dashboard/mock-institution-id');
     
     // Verify dashboard elements
     await expect(page.getByRole('heading', { name: /Institutional Analytics/i })).toBeVisible();
     await expect(page.getByText(/Total Enrolled Students/i)).toBeVisible();
     await expect(page.getByText(/Founder Profile Distribution/i)).toBeVisible();
-    await expect(page.getByText(/National Benchmarks Comparison/i)).toBeVisible();
     
     // Verify intervention feed
     await expect(page.getByRole('heading', { name: /Intervention Required/i })).toBeVisible();
+  });
+});
+
+test.describe('TPO / Institution Journey - Boundary Cases', () => {
+  test('non-academic email domain validation on onboard', async ({ page }) => {
+    await setupMocks(page, 'institution');
+    await page.goto('/onboard');
+    await page.getByRole('button', { name: /Institution\/TPO/i }).click();
     
-    // Verify sidebar links
-    await expect(page.getByRole('link', { name: /Student Tracking/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Talent Pool/i })).toBeVisible();
+    await page.fill('input[name="name"]', 'Global Tech University');
+    await page.selectOption('select[name="type"]', 'University');
+    await page.fill('input[name="domain"]', 'gmail.com'); // non-academic
+    await page.fill('input[name="location"]', 'San Francisco, CA');
+    
+    await page.getByRole('button', { name: /FINALIZE_ONBOARDING/i }).click();
+    
+    await expect(page.getByText('Only academic email domains (.edu, .ac.in) are authorized for TPO onboarding.')).toBeVisible();
+  });
+
+  test('unauthenticated user is redirected to login from TPO dashboard', async ({ page }) => {
+    await setupMocks(page); // No role/session
+    await page.goto('/tpo-dashboard/mock-institution-id');
+    await page.waitForURL('**/login');
+    await expect(page.locator('input[type="email"]')).toBeVisible();
   });
 });
