@@ -7,11 +7,15 @@ import SlideOutDrawer from '@/components/crm/SlideOutDrawer';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import DataState from '@/components/ui/DataState';
 import { CrmAccount } from '@/types';
+import { useAuthSession } from '@/hooks/useAuthSession';
 
 export default function AccountsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddDrawerOpen, setIsAddDrawerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { user, tenantId, loading: authLoading } = useAuthSession();
+  const userId = user?.id || null;
 
   // Form state
   const [formData, setFormData] = useState({
@@ -22,27 +26,33 @@ export default function AccountsPage() {
     website: ''
   });
 
-  const { data: accounts = [], loading, error, refetch: fetchAccounts } = useSupabaseQuery<CrmAccount[]>(async () => {
+  const { data: accounts = [], loading: queryLoading, error, refetch: fetchAccounts } = useSupabaseQuery<CrmAccount[]>(async () => {
+    if (!tenantId) return [];
     const { data, error } = await supabase
       .from('accounts')
       .select('*')
+      .eq('tenant_id', tenantId)
       .order('created_at', { ascending: false });
     if (error) throw error;
     return data || [];
-  }, []);
+  }, [tenantId]);
+
+  const loading = queryLoading || authLoading;
 
   const handleAddAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Fetch a tenant id and user id to attach (for demo purposes)
-    const { data: tenantData } = await supabase.from('tenants').select('tenant_id').limit(1).single();
-    const { data: userData } = await supabase.from('crm_users').select('user_id').limit(1).single();
+    if (!tenantId) {
+      alert('Error: Tenant info not loaded yet.');
+      setIsSubmitting(false);
+      return;
+    }
     
     const newAccount = {
       ...formData,
-      tenant_id: tenantData?.tenant_id || '3ee2a6e1-77b7-492e-95dd-dda9ab189d56',
-      owner_id: userData?.user_id || 'd277d663-9f88-4201-a94f-3fee1ff87bce'
+      tenant_id: tenantId,
+      owner_id: userId || undefined
     };
 
     const { error } = await supabase.from('accounts').insert([newAccount]);

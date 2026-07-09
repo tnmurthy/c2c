@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [signupRole, setSignupRole] = useState<SignupRole>('student');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,9 +97,13 @@ export default function LoginPage() {
         });
 
         if (authError) throw authError;
-        console.log("Signup returned:", JSON.stringify(authData));
-        if (authData.user) {
+
+        if (authData.session) {
+          // Email confirmation is disabled — user is immediately authenticated
           router.push("/onboard");
+        } else if (authData.user) {
+          // Email confirmation is required — show confirmation prompt
+          setSignupSuccess(true);
         }
       }
     } catch (err: unknown) {
@@ -136,6 +141,42 @@ export default function LoginPage() {
     { value: 'employer', label: 'Company', icon: <Building className="w-5 h-5" />, desc: 'Recruit verified talent' },
   ];
 
+  // Show email confirmation screen after successful sign-up
+  if (signupSuccess) {
+    return (
+      <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[120px]" />
+        </div>
+        <div className="w-full max-w-md relative z-10 text-center">
+          <div className="bg-[#1a2326]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-10 shadow-2xl relative">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent rounded-t-2xl" />
+            <div className="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-6">
+              <Mail className="w-8 h-8 text-cyan-400" />
+            </div>
+            <h2 className="text-2xl font-mono font-bold text-white mb-3 tracking-tight">
+              VERIFY_<span className="text-cyan-400">YOUR_EMAIL</span>
+            </h2>
+            <p className="text-[#dde4e5]/60 font-mono text-sm mb-1">
+              A confirmation link has been sent to
+            </p>
+            <p className="text-cyan-400 font-mono font-bold text-sm mb-6 break-all">{email}</p>
+            <p className="text-[#dde4e5]/40 font-mono text-xs mb-8 leading-relaxed">
+              Click the link in your email to activate your account. After confirming, you will be redirected to complete your profile setup.
+            </p>
+            <button
+              onClick={() => { setSignupSuccess(false); setIsLogin(true); setPassword(''); }}
+              className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-mono font-bold py-3 rounded-xl transition-all text-sm uppercase tracking-widest"
+            >
+              Back to Login
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 relative overflow-hidden">
       {/* Background Ornaments */}
@@ -158,6 +199,7 @@ export default function LoginPage() {
         <div className="bg-[#1a2326]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl relative">
           {/* Cyber Accent Line */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent rounded-t-2xl" />
+
           
           <form onSubmit={handleAuth} className="space-y-6">
             {/* Role Selector — only visible during signup */}

@@ -73,7 +73,7 @@ def convert_lead(lead_id: str, payload: Dict[str, Any], user: dict = Depends(req
         raise HTTPException(status_code=500, detail="Error converting lead")
 
 @router.get("/candidates")
-def get_candidates(user = Depends(get_current_user), supabase = Depends(require_admin_supabase)):
+def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
     """
     Returns all candidates for the CRM talent pool.
     """
@@ -118,7 +118,7 @@ def get_candidates(user = Depends(get_current_user), supabase = Depends(require_
         raise HTTPException(status_code=500, detail="Error fetching candidates")
 
 @router.get("/candidates/{student_id}/pdf/profile")
-def get_candidate_profile_pdf(student_id: str, user = Depends(get_current_user), supabase = Depends(require_admin_supabase)):
+def get_candidate_profile_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
     try:
         student_res = supabase.table("students").select("*").eq("id", student_id).single().execute()
         if not student_res.data:
@@ -137,7 +137,7 @@ def get_candidate_profile_pdf(student_id: str, user = Depends(get_current_user),
         raise HTTPException(status_code=500, detail="Error generating PDF")
 
 @router.get("/candidates/{student_id}/pdf/interview-guide")
-def get_candidate_interview_guide_pdf(student_id: str, user = Depends(get_current_user), supabase = Depends(require_admin_supabase)):
+def get_candidate_interview_guide_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
     try:
         student_res = supabase.table("students").select("*").eq("id", student_id).single().execute()
         if not student_res.data:

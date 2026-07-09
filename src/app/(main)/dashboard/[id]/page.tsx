@@ -59,7 +59,7 @@ interface DashboardData {
 
 export default function Dashboard() {
   const { id } = useParams();
-  const { user, loading: authLoading } = useRequireAuth();
+  const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['student'] });
   
   const [data, setData] = useState<DashboardData | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);

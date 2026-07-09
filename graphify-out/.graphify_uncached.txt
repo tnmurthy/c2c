@@ -1,3 +1,0 @@
-C:\tt-ai-stack\01_projects\makeover-talent-agency\docs\brd and frd.md
-C:\tt-ai-stack\01_projects\makeover-talent-agency\docs\erd mermaid script.md
-C:\tt-ai-stack\01_projects\makeover-talent-agency\docs\erd.md
