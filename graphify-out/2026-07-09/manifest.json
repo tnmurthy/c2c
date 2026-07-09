@@ -20,9 +20,9 @@
     "semantic_hash": "559977b90a3117d199be127b1d6cf3e0"
   },
   "api/main.py": {
-    "mtime": 1783406164.209738,
-    "ast_hash": "d5df5bb6e2e904b936e70fed97b982f4",
-    "semantic_hash": ""
+    "mtime": 1783319002.4273968,
+    "ast_hash": "e36a505591c144d14680184d9b1ad081",
+    "semantic_hash": "e36a505591c144d14680184d9b1ad081"
   },
   "api/pdf_generator.py": {
     "mtime": 1781790501.8510349,
@@ -8213,15 +8213,5 @@
     "mtime": 1783319128.770087,
     "ast_hash": "3821dbca22625b878c58b33d013c533d",
     "semantic_hash": "3821dbca22625b878c58b33d013c533d"
-  },
-  "api/routers/market_router.py": {
-    "mtime": 1783406124.294518,
-    "ast_hash": "6c1ba3d2b167606f9895b99fd56f626d",
-    "semantic_hash": ""
-  },
-  "scripts/jhm_daily_sweep.py": {
-    "mtime": 1783406159.8777778,
-    "ast_hash": "cd920590cc03cdf7998e084c2d24ae1e",
-    "semantic_hash": ""
   }
 }
