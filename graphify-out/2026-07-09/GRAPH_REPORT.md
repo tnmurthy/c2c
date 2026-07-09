@@ -1,13 +1,18 @@
-# Graph Report - .  (2026-07-06)
+# Graph Report - makeover-talent-agency  (2026-07-09)
 
 ## Corpus Check
-- 306 files · ~404,408 words
+- 194 files · ~378,122 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 424 nodes · 449 edges · 157 communities (21 shown, 136 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.58)
+- 517 nodes · 608 edges · 150 communities (23 shown, 127 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `72c18e05`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Portfolio Schema|Portfolio Schema]]
@@ -69,13 +74,8 @@
 - [[_COMMUNITY_Handoff Handoff 1|Handoff Handoff 1]]
 - [[_COMMUNITY_Handoff Handoff 2|Handoff Handoff 2]]
 - [[_COMMUNITY_Hooks Useapiquery Useapiquery|Hooks Useapiquery Useapiquery]]
-- [[_COMMUNITY_Hooks Useauth Userequireauth|Hooks Useauth Userequireauth]]
-- [[_COMMUNITY_Hooks Useauthsession Useauthsession|Hooks Useauthsession Useauthsession]]
-- [[_COMMUNITY_Hooks Useauthsession Useauthsessionretur|Hooks Useauthsession Useauthsessionretur]]
-- [[_COMMUNITY_Hooks Usesupabasequery Usesupabasequery|Hooks Usesupabasequery Usesupabasequery]]
 - [[_COMMUNITY_Investor Deck Investor Deck|Investor Deck Investor Deck]]
 - [[_COMMUNITY_Landing Page Landing Page|Landing Page Landing Page]]
-- [[_COMMUNITY_Lib Authfetch Authfetch|Lib Authfetch Authfetch]]
 - [[_COMMUNITY_Lib Utils Cn|Lib Utils Cn]]
 - [[_COMMUNITY_Lock Advisory Lock Advisory|Lock Advisory Lock Advisory]]
 - [[_COMMUNITY_Lock Deadlock Prevention Lock Deadlock P|Lock Deadlock Prevention Lock Deadlock P]]
@@ -87,7 +87,6 @@
 - [[_COMMUNITY_Monitor Explain Analyze Monitor Explain|Monitor Explain Analyze Monitor Explain ]]
 - [[_COMMUNITY_Monitor Pg Stat Statements Monitor Pg St|Monitor Pg Stat Statements Monitor Pg St]]
 - [[_COMMUNITY_Monitor Vacuum Analyze Monitor Vacuum An|Monitor Vacuum Analyze Monitor Vacuum An]]
-- [[_COMMUNITY_Onboard Page Onboard|Onboard Page Onboard]]
 - [[_COMMUNITY_Onboard Page Onboard Page|Onboard Page Onboard Page]]
 - [[_COMMUNITY_Original Request Original Request|Original Request Original Request]]
 - [[_COMMUNITY_Original Request Original Request 1|Original Request Original Request 1]]
@@ -133,7 +132,6 @@
 - [[_COMMUNITY_Supabase Client Createclient|Supabase Client Createclient]]
 - [[_COMMUNITY_Supabase Middleware Updatesession|Supabase Middleware Updatesession]]
 - [[_COMMUNITY_Supabase Postgres Best Practices Skill S|Supabase Postgres Best Practices Skill S]]
-- [[_COMMUNITY_Supabase Server Createclient|Supabase Server Createclient]]
 - [[_COMMUNITY_Test Ai Jd Test Ai Jd|Test Ai Jd Test Ai Jd]]
 - [[_COMMUNITY_Test Infra Test Infra|Test Infra Test Infra]]
 - [[_COMMUNITY_Test Ready Test Ready|Test Ready Test Ready]]
@@ -164,37 +162,37 @@
 2. `NotFoundError` - 19 edges
 3. `PermissionDeniedError` - 16 edges
 4. `compilerOptions` - 15 edges
-5. `C2C_Orchestrator_V2` - 13 edges
-6. `C2C_Orchestrator_V2` - 11 edges
-7. `get_supabase_client()` - 10 edges
-8. `APIException` - 9 edges
-9. `require_role()` - 8 edges
-10. `get_current_user()` - 7 edges
+5. `useAuthSession()` - 13 edges
+6. `C2C_Orchestrator_V2` - 13 edges
+7. `C2C_Orchestrator_V2` - 11 edges
+8. `get_supabase_client()` - 10 edges
+9. `APIException` - 9 edges
+10. `require_role()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `C2C_Orchestrator_V2` --uses--> `C2C_Orchestrator_V2`  [INFERRED]
   api/routers/assessment_router.py → scripts/c2c_orchestrator_v2.py
 - `run_agent_recruiters()` --calls--> `C2C_Orchestrator_V2`  [EXTRACTED]
   api/routers/assessment_router.py → scripts/c2c_orchestrator_v2.py
-- `C2C_Orchestrator_V2` --uses--> `APIException`  [INFERRED]
-  api/routers/assessment_router.py → api/exceptions.py
-- `C2C_Orchestrator_V2` --uses--> `DatabaseConnectionError`  [INFERRED]
-  api/routers/assessment_router.py → api/exceptions.py
-- `get_employer_jobs()` --calls--> `DatabaseConnectionError`  [EXTRACTED]
-  api/routers/employer_router.py → api/exceptions.py
+- `run_student_profile_optimization()` --calls--> `generate_projects_js()`  [EXTRACTED]
+  api/routers/student_router.py → scripts/portfolio_generator.py
+- `AccountsPage()` --calls--> `useAuthSession()`  [EXTRACTED]
+  src/app/crm/accounts/page.tsx → src/hooks/useAuthSession.ts
+- `ActivitiesPage()` --calls--> `useAuthSession()`  [EXTRACTED]
+  src/app/crm/activities/page.tsx → src/hooks/useAuthSession.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (157 total, 136 thin omitted)
+## Communities (150 total, 127 thin omitted)
 
 ### Community 0 - "Portfolio Schema"
 Cohesion: 0.05
-Nodes (40): items, type, type, items, type, enum, type, type (+32 more)
+Nodes (41): items, type, type, items, type, enum, type, type (+33 more)
 
 ### Community 1 - "API Exception Handling"
-Cohesion: 0.12
-Nodes (25): APIException, DatabaseConnectionError, NotFoundError, PermissionDeniedError, Raised when database connection fails or is unavailable., Raised when a requested resource is not found., Base exception class for custom API errors., Raised when permission is denied for the action. (+17 more)
+Cohesion: 0.08
+Nodes (47): Any, APIException, DatabaseConnectionError, NotFoundError, PermissionDeniedError, Raised when database connection fails or is unavailable., Raised when a requested resource is not found., Base exception class for custom API errors. (+39 more)
 
 ### Community 2 - "Frontend Package Config"
 Cohesion: 0.06
@@ -205,20 +203,20 @@ Cohesion: 0.09
 Nodes (22): get_current_user(), get_supabase_client(), FastAPI dependencies for the C2C API., Create and return a Supabase client. Returns None if env vars are missing., FastAPI dependency that provides a Supabase client or raises 503., FastAPI dependency to extract and verify JWT from Authorization header., FastAPI dependency factory to enforce RBAC constraints., require_admin_supabase() (+14 more)
 
 ### Community 4 - "Assessment Engine"
-Cohesion: 0.14
-Nodes (23): Any, BaseModel, C2C_Orchestrator_V2, generate_assessment(), generate_development_report(), get_assessment_bank(), get_item_analysis(), normalize_bank_item() (+15 more)
+Cohesion: 0.06
+Nodes (45): BaseModel, HTTPException, convert_lead(), get_candidate_interview_guide_pdf(), get_candidate_profile_pdf(), get_candidates(), Converts a Lead into an Account and Contact.     Optionally creates an Opportuni, Returns all candidates for the CRM talent pool. (+37 more)
 
 ### Community 5 - "Assessment Webhooks"
 Cohesion: 0.14
-Nodes (18): BackgroundTasks, Request, webhook_assessment_completed(), calculate_match_score(), create_job_posting(), get_employer_candidates(), get_employer_jobs(), get_leads() (+10 more)
+Nodes (16): api_exception_handler(), db_connection_error_handler(), http_exception_handler(), not_found_error_handler(), permission_denied_error_handler(), APIException, BackgroundTasks, DatabaseConnectionError (+8 more)
 
 ### Community 6 - "TypeScript Config"
 Cohesion: 0.11
 Nodes (18): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+10 more)
 
 ### Community 7 - "Portfolio Candidate Schema"
-Cohesion: 0.13
-Nodes (15): properties, required, type, type, type, type, candidate, github (+7 more)
+Cohesion: 0.14
+Nodes (14): properties, required, type, type, type, type, candidate, github (+6 more)
 
 ### Community 8 - "Student Profile & Notifs"
 Cohesion: 0.15
@@ -229,32 +227,40 @@ Cohesion: 0.19
 Nodes (6): C2C_Orchestrator_V2, Micro-tool: Retrieves detailed evidence for a specific gap., Micro-tool: Directly searches candidate GitHub., Macro-tool: Runs a high-pressure interview scenario., V2 Orchestrator implementing the AGENT_HARNESS_SPEC.     Moves from simple prom, Checks for convergence based on completion criteria.
 
 ### Community 10 - "E2E Test Suite"
-Cohesion: 0.24
-Nodes (10): Client, Smoke Test: Verify FastAPI backend is reachable., Scenario A: Test standard onboarding profile processing., Scenario B: Test edge case profile with missing data., Scenario C: High-Volume Lead Generation via Market Scout., supabase(), test_edge_case_profile_flow(), test_market_scout_flow() (+2 more)
+Cohesion: 0.13
+Nodes (17): Client, main(), market_daily_sweep.py — Native Market Intelligence Cron ========================, Run the native market intelligence daily sweep., Map C2C student row → native score_job_fit candidate schema., Execute the full job × student scoring matrix and upsert qualified leads.      R, run_sweep(), student_to_candidate() (+9 more)
 
 ### Community 12 - "Agent Test Simulation"
 Cohesion: 0.67
 Nodes (3): generate_test(), Generates a 25-question test (5 per dimension), simulate_agent()
 
+### Community 41 - "Components Statcard Statcard"
+Cohesion: 0.09
+Nodes (26): AccountsPage(), ActivitiesPage(), Activity, DropdownItem, StatCard, Account, Contact, ContactsPage() (+18 more)
+
+### Community 47 - "Crm Layout Crmlayout"
+Cohesion: 0.40
+Nodes (3): NavItem(), NavItemProps, createClient
+
 ## Knowledge Gaps
-- **205 isolated node(s):** `$schema`, `title`, `type`, `type`, `type` (+200 more)
+- **212 isolated node(s):** `Application`, `DashboardData`, `SignupRole`, `Role`, `Activity` (+207 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **136 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **127 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `DatabaseConnectionError` connect `API Exception Handling` to `Assessment Engine`, `Assessment Webhooks`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `C2C_Orchestrator_V2` connect `C2C Orchestrator Agent` to `Assessment Engine`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
-- **Why does `generate_projects_js()` connect `Student Profile & Notifs` to `API Exception Handling`?**
+- **Why does `C2C_Orchestrator_V2` connect `C2C Orchestrator Agent` to `API Exception Handling`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
-- **What connects `$schema`, `title`, `type` to the rest of the system?**
-  _232 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `generate_projects_js()` connect `Student Profile & Notifs` to `API Exception Handling`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **Why does `DatabaseConnectionError` connect `API Exception Handling` to `Assessment Engine`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **What connects `Extracts the tenant_id from the user metadata or database.`, `For the authenticated tenant, query leads, contacts, and opportunities tables.`, `Return total leads count, active opportunities value sum, win rate percentage, a` to the rest of the system?**
+  _255 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Portfolio Schema` be split into smaller, more focused modules?**
-  _Cohesion score 0.054878048780487805 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.053426248548199766 - nodes in this community are weakly interconnected._
 - **Should `API Exception Handling` be split into smaller, more focused modules?**
-  _Cohesion score 0.12436974789915967 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07936507936507936 - nodes in this community are weakly interconnected._
 - **Should `Frontend Package Config` be split into smaller, more focused modules?**
   _Cohesion score 0.0625 - nodes in this community are weakly interconnected._
