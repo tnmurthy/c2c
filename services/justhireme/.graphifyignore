@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+website/node_modules/
+backend/.venv/
+backend/.uv-cache/
+**/.uv-cache/
+**/__pycache__/
+**/site-packages/
+
+# Build output / artifacts
+dist/
+build/
+src-tauri/target/
+release-assets/
+release-assets*/
+.codex-temp-runtime-pack/
+src-tauri/resources/runtime-pack/
+src-tauri/resources/bin/
+src-tauri/resources/backend/
+
+# Generated schemas + config + scratch (noise, not architecture)
+src-tauri/gen/
+scratch/
+package.json
+website/package.json
+tsconfig*.json
+
+# Lockfiles (noise, not architecture)
+package-lock.json
+website/package-lock.json
+backend/uv.lock
+src-tauri/Cargo.lock
+
+# Secrets / local env
+.env
+.env.*
+*.local
+**/secrets*
+
+# Logs
+*.log
+
+# Graphify's own output + caches
+graphify-out/
+.git/
+
+# pytest local temp fallback
+backend/.pytest-basetemp/
+
+# Local caches / scratch (working-tree noise, not architecture)
+backend/.hf-cache/
+backend/build_cache/
+**/.tmp/
+.tmp/

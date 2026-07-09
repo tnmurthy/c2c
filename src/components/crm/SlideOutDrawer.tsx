@@ -60,17 +60,17 @@ export default function SlideOutDrawer({
       <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
         <div
           className={cn(
-            "w-screen bg-white shadow-xl flex flex-col transform transition-transform duration-300 ease-in-out sm:max-w-md",
+            "w-screen bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out sm:max-w-md",
             width,
             isOpen ? "translate-x-0" : "translate-x-full"
           )}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50/80 backdrop-blur-md">
-            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
+            <h2 className="text-lg font-semibold text-white">{title}</h2>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <span className="sr-only">Close panel</span>
               <X className="w-5 h-5" aria-hidden="true" />
@@ -78,7 +78,7 @@ export default function SlideOutDrawer({
           </div>
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto bg-white p-6">
+          <div className="flex-1 overflow-y-auto bg-slate-900/50 p-6 text-slate-200">
             {children}
           </div>
         </div>

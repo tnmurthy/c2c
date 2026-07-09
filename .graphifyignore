@@ -1,0 +1,44 @@
+# Graphify ignore file — keeps the knowledge graph scoped to this project only
+# External service repos unrelated to this platform
+services/
+graphify/
+makeover-talent-agency/
+
+# Ephemeral agent execution logs (UUID dirs and transient docs inside .agents/)
+.agents/*/BRIEFING.md
+.agents/*/ORIGINAL_REQUEST.md
+.agents/*/progress.md
+.agents/*/handoff.md
+.agents/*/plan.md
+.agents/*/critic_report.md
+.agents/*/review_report.md
+.agents/*/supabase-postgres-best-practices-SKILL.md
+# Keep agent definitions but skip UUID-named run dirs
+.agents/[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]-*
+
+# Node / Python build artifacts
+node_modules/
+.next/
+.venv/
+.pytest_cache/
+__pycache__/
+
+# Graphify own output & temp files
+graphify-out/
+
+# Git & IDE
+.git/
+.github/
+.gemini/
+.agents/workflows/
+
+# Playwright / test results
+playwright-report/
+test-results/
+
+# Log files
+*.log
+*.tsbuildinfo
+
+# Large lock files (not useful to graph)
+package-lock.json

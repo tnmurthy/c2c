@@ -1,7 +1,7 @@
 import os
 import sys
 import logging
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse, Response
 from dotenv import load_dotenv
 
@@ -81,6 +81,22 @@ async def permission_denied_error_handler(request: Request, exc: PermissionDenie
         }
     )
 
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code in (401, 403):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "error": True,
+                "code": str(exc.status_code),
+                "message": exc.detail
+            }
+        )
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail}
+    )
+
 # --- ROUTERS ---
 
 from api.routers.student_router import router as student_router
@@ -88,12 +104,16 @@ from api.routers.employer_router import router as employer_router
 from api.routers.assessment_router import router as assessment_router
 from api.routers.portfolio_router import router as portfolio_router
 from api.routers.crm_router import router as crm_router
+from api.routers.analytics_router import router as analytics_router
+from api.routers.market_router import router as market_router
 
 app.include_router(student_router, prefix="/api")
 app.include_router(employer_router, prefix="/api")
 app.include_router(assessment_router, prefix="/api")
 app.include_router(portfolio_router, prefix="/api")
 app.include_router(crm_router, prefix="/api")
+app.include_router(analytics_router, prefix="/api")
+app.include_router(market_router, prefix="/api")
 
 # --- ROOT & HEALTH ENDPOINTS ---
 

@@ -55,6 +55,13 @@ export default function Onboard() {
   useEffect(() => {
     if (user) {
       setAuthId(user.id);
+
+      // Pre-select the role tab based on what the user chose during sign-up
+      const metaRole = user.user_metadata?.role as Role | undefined;
+      if (metaRole && ['student', 'institution', 'employer'].includes(metaRole)) {
+        setActiveRole(metaRole);
+      }
+
       if (user.email) {
         setStudentForm(prev => ({ ...prev, email: user.email || '' }));
         // Extract domain name for TPO onboarding default

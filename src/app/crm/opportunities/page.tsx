@@ -8,6 +8,7 @@ import SlideOutDrawer from '@/components/crm/SlideOutDrawer';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import DataState from '@/components/ui/DataState';
 import { PipelineStage, CrmCandidate, CrmCandidateScore, CrmOpportunity } from '@/types';
+import { useAuthSession } from '@/hooks/useAuthSession';
 
 const STAGE_COLORS = ['bg-blue-500', 'bg-amber-500', 'bg-purple-500', 'bg-pink-500', 'bg-emerald-500'];
 
@@ -25,6 +26,8 @@ export default function OpportunitiesPage() {
     candidate_id: '', // Added candidate_id form state
   });
 
+  const { user, tenantId, loading: authLoading } = useAuthSession();
+
   // Set default stage when stages load
   useEffect(() => {
     if (stages.length > 0 && !formData.stage_id) {
@@ -36,21 +39,13 @@ export default function OpportunitiesPage() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Get current user and their tenant_id
-    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       alert('You must be logged in to add an opportunity');
       setIsSubmitting(false);
       return;
     }
 
-    const { data: crmUser } = await supabase
-      .from('crm_users')
-      .select('tenant_id')
-      .eq('user_id', user.id)
-      .single();
-      
-    if (!crmUser?.tenant_id) {
+    if (!tenantId) {
       alert('No tenant associated with your account');
       setIsSubmitting(false);
       return;
@@ -61,7 +56,7 @@ export default function OpportunitiesPage() {
       amount: Number(formData.amount) || 0,
       stage_id: formData.stage_id,
       candidate_id: formData.candidate_id || null, // Added candidate_id database write
-      tenant_id: crmUser.tenant_id,
+      tenant_id: tenantId,
       owner_id: user.id,
       currency: 'USD',
       expected_value: Number(formData.amount) || 0,
@@ -134,19 +129,8 @@ export default function OpportunitiesPage() {
     }
   };
 
-  const { loading, error } = useSupabaseQuery(async () => {
-    // Get current user and their tenant_id
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { data: crmUser } = await supabase
-      .from('crm_users')
-      .select('tenant_id')
-      .eq('user_id', user.id)
-      .single();
-
-    const currentTenantId = crmUser?.tenant_id;
-    if (!currentTenantId) return;
+  const { loading: queryLoading, error } = useSupabaseQuery(async () => {
+    if (!tenantId) return;
 
     // Fetch candidates for actual association and selection dropdown
     let candidatesData: CrmCandidate[] = [];
@@ -164,7 +148,7 @@ export default function OpportunitiesPage() {
     const { data: stagesData, error: stagesError } = await supabase
       .from('pipeline_stages')
       .select('*')
-      .eq('tenant_id', currentTenantId)
+      .eq('tenant_id', tenantId)
       .order('sequence', { ascending: true });
 
     if (stagesError) throw stagesError;
@@ -184,7 +168,7 @@ export default function OpportunitiesPage() {
           name
         )
       `)
-      .eq('tenant_id', currentTenantId);
+      .eq('tenant_id', tenantId);
 
     if (oppsError) throw oppsError;
     
@@ -196,7 +180,9 @@ export default function OpportunitiesPage() {
     }));
     
     setOpportunities(mappedOpps);
-  }, []);
+  }, [tenantId]);
+
+  const loading = queryLoading || authLoading;
 
   return (
     <div className="space-y-6 flex flex-col h-[calc(100vh-8rem)]">

@@ -1,14 +1,23 @@
 import React from 'react';
 import Link from 'next/link';
-import { Home, Users, Briefcase, FileText, Settings, BarChart2 } from 'lucide-react';
+import { Home, Users, Briefcase, FileText, Settings, BarChart2, Contact, Calendar } from 'lucide-react';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import NavItem from '@/components/crm/NavItem';
 
 export default async function CRMLayout({ children }: { children: React.ReactNode }) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
+    redirect('/crm-login');
+  }
+
+  const role = user.user_metadata?.role;
+  const isAdmin = role === 'admin' || (user.email || '').endsWith('@taliatech.in');
+  const isCrmUser = role === 'tenant_admin' || role === 'sales_exec' || isAdmin;
+  
+  if (!isCrmUser) {
     redirect('/crm-login');
   }
 
@@ -22,6 +31,10 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
     `)
     .eq('user_id', user.id)
     .single();
+
+  if (!crmUser && !isAdmin) {
+    redirect('/crm-login');
+  }
 
   const tenantName = (Array.isArray(crmUser?.tenants) 
     ? crmUser?.tenants[0]?.name 
@@ -41,8 +54,10 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
           <NavItem href="/crm" icon={<Home className="w-5 h-5" />} label="Dashboard" />
           <NavItem href="/crm/candidates" icon={<Users className="w-5 h-5" />} label="Talent Pool" />
           <NavItem href="/crm/leads" icon={<Users className="w-5 h-5" />} label="Leads" />
+          <NavItem href="/crm/contacts" icon={<Contact className="w-5 h-5" />} label="Contacts" />
           <NavItem href="/crm/accounts" icon={<Briefcase className="w-5 h-5" />} label="Accounts" />
           <NavItem href="/crm/opportunities" icon={<BarChart2 className="w-5 h-5" />} label="Opportunities" />
+          <NavItem href="/crm/activities" icon={<Calendar className="w-5 h-5" />} label="Activities" />
           <NavItem href="/crm/reports" icon={<FileText className="w-5 h-5" />} label="Reports" />
         </nav>
 
@@ -69,17 +84,5 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
         </div>
       </main>
     </div>
-  );
-}
-
-function NavItem({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
-  return (
-    <Link 
-      href={href}
-      className="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
-    >
-      {icon}
-      <span className="font-medium">{label}</span>
-    </Link>
   );
 }

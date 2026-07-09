@@ -1,0 +1,257 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - codex-local-microservices
+      - "codex/**"
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # pip-audit currently reports no fixed versions for these transitive ML advisories.
+  # Keep the audit strict for all other packages; remove entries as upstream fixes land.
+  PIP_AUDIT_IGNORE_VULNS: >-
+    PYSEC-2024-277 PYSEC-2026-89
+    PYSEC-2025-210 PYSEC-2025-194 PYSEC-2025-196 PYSEC-2025-195 PYSEC-2025-193 PYSEC-2025-192
+    PYSEC-2026-139 PYSEC-2025-191 PYSEC-2025-197 PYSEC-2025-189 PYSEC-2025-190
+    PYSEC-2025-217 PYSEC-2025-214 PYSEC-2025-218 PYSEC-2025-211 PYSEC-2025-212 PYSEC-2025-213
+    PYSEC-2025-215 PYSEC-2025-216
+
+jobs:
+  dependency-audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Audit frontend dependencies
+        run: npm audit --audit-level=moderate
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Audit backend dependencies
+        run: |
+          cd backend
+          uv sync --dev --frozen
+          audit_args=()
+          for vuln in $PIP_AUDIT_IGNORE_VULNS; do
+            audit_args+=(--ignore-vuln "$vuln")
+          done
+          uv run --with pip-audit pip-audit "${audit_args[@]}"
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Audit Rust dependencies
+        run: |
+          cargo install cargo-audit --locked
+          cd src-tauri
+          cargo audit
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run version:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:behavioral
+      - run: npm run test:coverage
+      - run: npm run build
+
+  website:
+    name: Website
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: astral-sh/setup-uv@v8.1.0
+      - run: cd backend && uv sync --dev --frozen
+      - run: cd backend && uv run ruff check .
+      - run: cd backend && uv run mypy . --ignore-missing-imports
+      - run: cd backend && uv run python -m pytest tests/test_import_boundaries.py -q
+      - run: cd backend && uv run python -m pytest tests -q --cov=. --cov-report=term-missing --cov-fail-under=60
+
+  release-smoke:
+    name: Release smoke (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-latest
+            platform: linux
+          - name: Windows
+            os: windows-latest
+            platform: windows
+          - name: macOS
+            os: macos-latest
+            platform: macos
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Tauri Linux system dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            curl \
+            file \
+            libayatana-appindicator3-dev \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            librsvg2-dev \
+            libssl-dev \
+            libwebkit2gtk-4.1-dev \
+            libxdo-dev \
+            pkg-config \
+            patchelf \
+            wget
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - uses: astral-sh/setup-uv@v8.1.0
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install backend dependencies
+        run: cd backend && uv sync --dev --frozen
+
+      - name: Run release smoke
+        run: npm run release:smoke
+
+  backend-domains:
+    name: Backend domain tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        domain:
+          - core
+          - data
+          - profile
+          - discovery
+          - ranking
+          - generation
+          - api
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: astral-sh/setup-uv@v8.1.0
+      - run: cd backend && uv sync --dev --frozen
+      - name: Run focused domain tests
+        run: |
+          cd backend
+          files=$(ls tests/test_${{ matrix.domain }}*.py 2>/dev/null || true)
+          if [ -n "$files" ]; then
+            uv run python -m pytest tests/test_import_boundaries.py $files -q
+          else
+            uv run python -m pytest tests/test_import_boundaries.py -q
+          fi
+
+  rust:
+    name: Rust check
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Tauri Linux system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            curl \
+            file \
+            libayatana-appindicator3-dev \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            librsvg2-dev \
+            libssl-dev \
+            libwebkit2gtk-4.1-dev \
+            libxdo-dev \
+            pkg-config \
+            patchelf \
+            wget
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+      - run: |
+          triple=$(rustc -vV | grep 'host:' | awk '{print $2}')
+          mkdir -p src-tauri/resources/backend
+          touch "src-tauri/resources/backend/jhm-sidecar-next-${triple}"
+          chmod +x "src-tauri/resources/backend/jhm-sidecar-next-${triple}"
+          # Stub the bundled sidecar manifest so the exact-path bundle resource
+          # in tauri.conf.json validates without a full sidecar build.
+          echo '{"runtimePackVersion":""}' > src-tauri/resources/backend/sidecar-manifest.json
+      - run: cd src-tauri && cargo test --lib
+      - run: cd src-tauri && cargo check
