@@ -4,22 +4,31 @@ import os
 import time
 import threading
 
+# Get script directory and project root directory dynamically
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
 def run_backend():
     print("🚀 Starting FastAPI Backend (Port 8000)...")
-    # Using uvicorn to run the api/index.py app
-    # We need to make sure the working directory is root so sys.path logic works
-    subprocess.run(["uvicorn", "api.index:app", "--host", "127.0.0.1", "--port", "8000", "--reload"])
+    # Using uvicorn to run the api/main.py app with the same Python interpreter
+    # Force working directory to project root so module resolution works
+    subprocess.run(
+        [sys.executable, "-m", "uvicorn", "api.main:app", "--host", "127.0.0.1", "--port", "8000", "--reload"],
+        cwd=PROJECT_ROOT
+    )
 
 def run_frontend():
     print("⚛️ Starting Next.js Frontend (Port 3000)...")
-    subprocess.run(["npm", "run", "dev"], shell=True)
+    # Run next dev directly inside the project root directory
+    subprocess.run(["npx", "next", "dev"], shell=True, cwd=PROJECT_ROOT)
 
 if __name__ == "__main__":
     print("👔 CAMPUS2CORPORATE (C2C) LOCAL DEPLOYMENT")
     print("-" * 40)
     
-    # Check for .env.local
-    if not os.path.exists(".env.local"):
+    # Check for .env.local in project root
+    env_local_path = os.path.join(PROJECT_ROOT, ".env.local")
+    if not os.path.exists(env_local_path):
         print("⚠️ Warning: .env.local not found. Supabase Auth/DB may not work.")
         print("Run the setup or create .env.local with your Supabase keys.")
     

@@ -5,11 +5,11 @@ import random
 from pathlib import Path
 
 # Add project root to path
-PROJECT_ROOT = Path(__file__).parent
+PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.append(str(PROJECT_ROOT))
 
 # Load the full bank
-BANK_FILE = PROJECT_ROOT / "FULL_PSYCHOMETRIC_BANK.json"
+BANK_FILE = PROJECT_ROOT / "api" / "fallback_bank.json"
 with open(BANK_FILE, "r", encoding="utf-8") as f:
     bank = json.load(f)
 

@@ -33,8 +33,8 @@ export default function LoginPage() {
         if (authError) throw authError;
 
         if (authData.user) {
-          const role = authData.user.user_metadata?.role;
-          const profileId = authData.user.user_metadata?.profile_id;
+          const role = authData.user.app_metadata?.role;
+          const profileId = authData.user.app_metadata?.profile_id;
 
           // Route by role metadata first (fastest path)
           if (role === "admin") {
@@ -51,32 +51,6 @@ export default function LoginPage() {
           }
           if (role === "institution" && profileId) {
             router.push(`/tpo-dashboard/${profileId}`);
-            return;
-          }
-
-          // Fallback: DB lookup for users who haven't completed onboarding metadata
-          const domain = email.split("@")[1] || "";
-          const [studentResult, institutionResult] = await Promise.allSettled([
-            supabase.from("students").select("id").eq("email", email).single(),
-            supabase.from("institutions").select("id").eq("domain", domain).single(),
-          ]);
-
-          if (studentResult.status === "fulfilled" && studentResult.value.data) {
-            // Backfill metadata for faster future logins
-            await supabase.auth.updateUser({
-              data: { role: 'student', profile_id: studentResult.value.data.id }
-            });
-            await supabase.auth.refreshSession();
-            router.push(`/dashboard/${studentResult.value.data.id}`);
-            return;
-          }
-
-          if (institutionResult.status === "fulfilled" && institutionResult.value.data) {
-            await supabase.auth.updateUser({
-              data: { role: 'institution', profile_id: institutionResult.value.data.id }
-            });
-            await supabase.auth.refreshSession();
-            router.push(`/tpo-dashboard/${institutionResult.value.data.id}`);
             return;
           }
 

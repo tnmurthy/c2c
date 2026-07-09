@@ -35,8 +35,8 @@ export function useAuthSession(): UseAuthSessionReturn {
       }
 
       const activeUser = activeSession.user;
-      const userRole = activeUser.user_metadata?.role || null;
-      let resolvedTenantId = activeUser.user_metadata?.tenant_id || null;
+      const userRole = activeUser.app_metadata?.role || null;
+      let resolvedTenantId = activeUser.app_metadata?.tenant_id || null;
 
       if (!resolvedTenantId && activeUser) {
         // 1. Try to resolve from crm_users profile

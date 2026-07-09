@@ -567,10 +567,9 @@ async def submit_feedback(submit: FeedbackSubmit, client = Depends(require_admin
 
 @router.get("/admin/item-analysis")
 async def get_item_analysis(client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
-    email = getattr(current_user, "email", "") or ""
-    if not (role == "admin" or email.endswith("@taliatech.in")):
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    if role != "admin":
         raise PermissionDeniedError("Access denied: unauthorized admin view")
 
     try:

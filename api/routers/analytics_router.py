@@ -15,10 +15,10 @@ def get_tenant_id_from_user(user, supabase) -> str:
     if isinstance(user, dict):
         tenant_id = user.get("tenant_id")
         if not tenant_id:
-            metadata = user.get("user_metadata", {}) or {}
+            metadata = user.get("app_metadata", {}) or {}
             tenant_id = metadata.get("tenant_id")
     else:
-        metadata = getattr(user, "user_metadata", {}) or {}
+        metadata = getattr(user, "app_metadata", {}) or {}
         tenant_id = metadata.get("tenant_id") or getattr(user, "tenant_id", None)
         
     if not tenant_id:

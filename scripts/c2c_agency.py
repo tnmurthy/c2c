@@ -8,15 +8,21 @@ import threading
 import time
 import json
 
-# Ensure project root is in path
-sys.path.append(os.path.join(os.getcwd(), "services", "job-intel-desk", "backend"))
+# Get the directory of the current script (scripts)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Get the project root directory
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+# Add project root and other necessary backend paths to sys.path
+sys.path.append(PROJECT_ROOT)
+sys.path.append(os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend"))
 
 try:
-    from ORCHESTRATOR import generate_ordeal_prompt
-    from PORTFOLIO_GENERATOR import generate_projects_js
-except ImportError:
+    from scripts.orchestrator import generate_ordeal_prompt
+    from scripts.portfolio_generator import generate_projects_js
+except ImportError as e:
     # If not in path, we'll try to import relatively
-    print("Warning: Direct imports failed. Ensure you are in the project root.")
+    print(f"Warning: Direct imports failed: {e}. Ensure you are in the project root.")
 
 def run_pipeline(candidate_file, jd_file):
     print("👔 STARTING campus2corporate (c2c) PIPELINE...")
@@ -34,7 +40,7 @@ def run_pipeline(candidate_file, jd_file):
     # 2. Phase 1 & 2: Audit -> Ordeal
     print("🔍 Auditing candidate and generating Ordeal Mission...")
     ordeal_prompt = generate_ordeal_prompt(candidate_data, jd_text)
-    with open("ORDEAL_PROMPT.md", "w", encoding="utf-8") as f:
+    with open(os.path.join(PROJECT_ROOT, "ORDEAL_PROMPT.md"), "w", encoding="utf-8") as f:
         f.write(ordeal_prompt)
     print("✅ Ordeal Prompt generated: ORDEAL_PROMPT.md")
 
@@ -70,7 +76,7 @@ def run_pipeline(candidate_file, jd_file):
     # 4. Phase 4: Launch (Deploy to brand-optimizer)
     print("🚀 Deploying to Brand Optimizer...")
     js_content = generate_projects_js(portfolio_data)
-    target_path = os.path.join("services", "brand-optimizer", "homepage", "projects.js")
+    target_path = os.path.join(PROJECT_ROOT, "services", "brand-optimizer", "homepage", "projects.js")
     
     # Backup original
     if os.path.exists(target_path) and not os.path.exists(target_path + ".bak"):
@@ -84,7 +90,7 @@ def run_pipeline(candidate_file, jd_file):
 
 def serve_portfolio():
     PORT = 9595
-    DIRECTORY = os.path.join("services", "brand-optimizer", "homepage")
+    DIRECTORY = os.path.join(PROJECT_ROOT, "services", "brand-optimizer", "homepage")
     
     class Handler(http.server.SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
@@ -107,11 +113,12 @@ if __name__ == "__main__":
         serve_portfolio()
     else:
         # Default run with sample data if no files provided
-        sample_cand = "services/job-intel-desk/backend/data/profile_schema_example.json"
+        sample_cand = os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend", "data", "profile_schema_example.json")
         
         # Create a dummy JD for the demo
-        with open("DEMO_JD.txt", "w") as f:
+        demo_jd_path = os.path.join(PROJECT_ROOT, "DEMO_JD.txt")
+        with open(demo_jd_path, "w") as f:
             f.write("Full-Stack Engineer with Python and React experience.")
             
-        run_pipeline(sample_cand, "DEMO_JD.txt")
+        run_pipeline(sample_cand, demo_jd_path)
         print("\n💡 Run 'python C2C_AGENCY.py serve' to view the portfolio.")

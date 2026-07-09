@@ -5,12 +5,12 @@ import random
 from datetime import datetime, timedelta
 
 # Add parent directory to path so we can import modules if needed, or we just load .env directly
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
-load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env.local"))
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), ".env.local"))
 
 url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
 key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") # Use service role for seeding

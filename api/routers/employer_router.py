@@ -61,9 +61,22 @@ async def run_market_scout():
 async def onboard_employer(employer: EmployerOnboard, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     try:
         data = employer.dict()
-        data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
+        auth_id = current_user.user.id if hasattr(current_user, "user") else current_user.id
+        data["auth_id"] = auth_id
         res = client.table("employers").insert(data).execute()
-        return res.data
+        
+        inserted = res.data
+        if inserted:
+            emp_id = inserted[0]["id"]
+            try:
+                client.auth.admin.update_user_by_id(
+                    auth_id,
+                    attributes={"app_metadata": {"role": "employer", "profile_id": emp_id}}
+                )
+                logger.info(f"Successfully bound app_metadata role and profile_id for employer {auth_id}")
+            except Exception as e:
+                logger.error(f"Failed to update app_metadata for employer {auth_id}: {e}")
+        return inserted
     except Exception as e:
         logger.error(f"ERROR onboard_employer: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))

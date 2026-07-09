@@ -158,6 +158,18 @@ async def onboard_institution(inst: InstitutionOnboard, client = Depends(require
             res = client.table("institutions").update(data).eq("domain", data["domain"]).execute()
         else:
             res = client.table("institutions").insert(data).execute()
+        
+        inserted = res.data
+        if inserted:
+            inst_id = inserted[0]["id"]
+            try:
+                client.auth.admin.update_user_by_id(
+                    auth_id,
+                    attributes={"app_metadata": {"role": "institution", "profile_id": inst_id}}
+                )
+                logger.info(f"Successfully bound app_metadata role and profile_id for institution {auth_id}")
+            except Exception as e:
+                logger.error(f"Failed to update app_metadata for institution {auth_id}: {e}")
         return res.data
     except Exception as e:
         logger.error(f"ERROR onboard_institution: {e}", exc_info=True)
@@ -218,6 +230,16 @@ async def onboard_student(
 
         res = client.table("students").insert(data).execute()
         inserted = res.data
+        if inserted:
+            student_id = inserted[0]["id"]
+            try:
+                client.auth.admin.update_user_by_id(
+                    auth_id,
+                    attributes={"app_metadata": {"role": "student", "profile_id": student_id}}
+                )
+                logger.info(f"Successfully bound app_metadata role and profile_id for student {auth_id}")
+            except Exception as e:
+                logger.error(f"Failed to update app_metadata for student {auth_id}: {e}")
 
         return inserted
     except Exception as e:
@@ -226,8 +248,8 @@ async def onboard_student(
 
 @router.get("/cohort/{institution_id}")
 async def get_cohort_report(institution_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
     email = getattr(current_user, "email", "") or ""
     
     try:
@@ -236,9 +258,9 @@ async def get_cohort_report(institution_id: str, client = Depends(require_admin_
         email_domain = email.split("@")[-1] if email else ""
         
         is_authorized = False
-        if role == "admin" or email.endswith("@taliatech.in"):
+        if role == "admin":
             is_authorized = True
-        elif role == "institution" and str(metadata.get("profile_id")) == str(institution_id):
+        elif role == "institution" and str(app_metadata.get("profile_id")) == str(institution_id):
             is_authorized = True
         elif inst_domain and email_domain == inst_domain:
             is_authorized = True
@@ -283,17 +305,17 @@ async def get_cohort_report(institution_id: str, client = Depends(require_admin_
 
 @router.get("/student/{student_id}")
 async def get_student(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
     email = getattr(current_user, "email", "") or ""
     
-    if role == "admin" or email.endswith("@taliatech.in"):
+    if role == "admin":
         pass
     elif role == "student" or not role:
         student_check = client.table("students").select("auth_id").eq("id", student_id).execute()
         is_owner = student_check.data and str(student_check.data[0].get("auth_id")) == str(current_user.id)
         
-        if role == "student" and str(metadata.get("profile_id")) != str(student_id) and not is_owner:
+        if role == "student" and str(app_metadata.get("profile_id")) != str(student_id) and not is_owner:
             raise PermissionDeniedError("Access denied: cannot view other student profiles")
         elif not role and not is_owner:
             pass
@@ -308,7 +330,7 @@ async def get_student(student_id: str, client = Depends(require_admin_supabase),
         s_domain = s_email.split("@")[-1] if s_email else ""
         tpo_domain = email.split("@")[-1] if email else ""
         
-        inst_id = metadata.get("profile_id")
+        inst_id = app_metadata.get("profile_id")
         is_owner = inst_id and str(student_check.data[0].get("institution_id")) == str(inst_id)
         is_domain_match = tpo_domain and s_domain == tpo_domain
         
@@ -360,11 +382,10 @@ async def update_student_profile(student_id: str, profile: StudentProfileUpdate,
 
 @router.get("/alerts/student/{student_id}")
 async def get_student_alerts(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
-    email = getattr(current_user, "email", "") or ""
-    if not (role == "admin" or email.endswith("@taliatech.in")):
-        if role != "student" or str(metadata.get("profile_id")) != str(student_id):
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    if role != "admin":
+        if role != "student" or str(app_metadata.get("profile_id")) != str(student_id):
             return []
             
     try:
@@ -376,17 +397,16 @@ async def get_student_alerts(student_id: str, client = Depends(require_admin_sup
 
 @router.get("/export/student/{student_id}")
 async def export_student_pdf(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
-    email = getattr(current_user, "email", "") or ""
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
     
-    if role == "admin" or email.endswith("@taliatech.in"):
+    if role == "admin":
         pass
     elif role == "student":
-        if str(metadata.get("profile_id")) != str(student_id):
+        if str(app_metadata.get("profile_id")) != str(student_id):
             raise PermissionDeniedError("Access denied: cannot export other student dossiers")
     elif role == "institution":
-        inst_id = metadata.get("profile_id")
+        inst_id = app_metadata.get("profile_id")
         student_check = client.table("students").select("institution_id").eq("id", student_id).execute()
         if not student_check.data or str(student_check.data[0].get("institution_id")) != str(inst_id):
             raise PermissionDeniedError("Access denied: student does not belong to your institution")
@@ -410,17 +430,16 @@ async def export_student_pdf(student_id: str, client = Depends(require_admin_sup
 
 @router.get("/export/interview-guide/{student_id}")
 async def export_interview_guide(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
-    email = getattr(current_user, "email", "") or ""
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
     
-    if role == "admin" or email.endswith("@taliatech.in"):
+    if role == "admin":
         pass
     elif role == "student":
-        if str(metadata.get("profile_id")) != str(student_id):
+        if str(app_metadata.get("profile_id")) != str(student_id):
             raise PermissionDeniedError("Access denied: cannot export other student interview guides")
     elif role == "institution":
-        inst_id = metadata.get("profile_id")
+        inst_id = app_metadata.get("profile_id")
         student_check = client.table("students").select("institution_id").eq("id", student_id).execute()
         if not student_check.data or str(student_check.data[0].get("institution_id")) != str(inst_id):
             raise PermissionDeniedError("Access denied: student does not belong to your institution")
@@ -450,9 +469,9 @@ async def apply_to_job(
     client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["student", "admin"]))
 ):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
-    if role == "student" and str(metadata.get("profile_id")) != str(student_id):
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    if role == "student" and str(app_metadata.get("profile_id")) != str(student_id):
         raise PermissionDeniedError("Access denied: can only apply as yourself")
     try:
         payload = {"student_id": student_id, "job_id": application.job_id, "status": "expressed_interest"}
@@ -468,9 +487,9 @@ async def get_student_applications(
     client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["student", "employer", "admin"]))
 ):
-    metadata = getattr(current_user, "user_metadata", {}) or {}
-    role = metadata.get("role")
-    if role == "student" and str(metadata.get("profile_id")) != str(student_id):
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    if role == "student" and str(app_metadata.get("profile_id")) != str(student_id):
         raise PermissionDeniedError("Access denied")
     try:
         res = client.table("applications").select("*, job_postings(id, title, location, is_remote, salary_range, role_type, employers(company_name))").eq("student_id", student_id).order("applied_at", desc=True).execute()

@@ -4,8 +4,14 @@ import sys
 import json
 from datetime import datetime, timezone
 
-# Add backend to path
-sys.path.append(os.path.join(os.getcwd(), "services", "job-intel-desk", "backend"))
+# Get the directory of the current script (scripts)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Get the project root directory
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+# Add project root and backend to path
+sys.path.append(PROJECT_ROOT)
+sys.path.append(os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend"))
 
 # Mocking the scout services since we don't have all dependencies (like kuzu) in this environment
 class MockScout:
@@ -92,7 +98,7 @@ async def run_market_intelligence(queries):
     print(f"✅ Filtered down to {len(ai_leads)} high-signal AI roles.")
     
     # 4. Save to Market Intelligence Feed
-    feed_file = "MARKET_INTELLIGENCE_FEED.json"
+    feed_file = os.path.join(PROJECT_ROOT, "MARKET_INTELLIGENCE_FEED.json")
     with open(feed_file, "w", encoding="utf-8") as f:
         json.dump(ai_leads, f, indent=2)
     

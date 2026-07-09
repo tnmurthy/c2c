@@ -41,10 +41,9 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
         }
 
         if (allowedRoles && allowedRoles.length > 0) {
-          const role = authUser.user_metadata?.role;
+          const role = authUser.app_metadata?.role;
           // Admins can bypass role restriction
-          const email = authUser.email || '';
-          const isAdmin = role === 'admin' || email.endsWith('@taliatech.in');
+          const isAdmin = role === 'admin';
           
           if (!isAdmin && (!role || !allowedRoles.includes(role))) {
             router.push(redirectTo);
