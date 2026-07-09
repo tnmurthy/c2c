@@ -5,13 +5,16 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # Add the market-scout directory to path for imports
-PROJECT_ROOT = Path(__file__).parent / "services" / "market-scout"
-sys.path.append(str(PROJECT_ROOT))
+SCRIPT_DIR = Path(__file__).parent
+REAL_PROJECT_ROOT = SCRIPT_DIR.parent.parent
+MARKET_SCOUT_DIR = REAL_PROJECT_ROOT / "services" / "market-scout"
+
+sys.path.append(str(MARKET_SCOUT_DIR))
 
 # Load the local .env
-load_dotenv(PROJECT_ROOT / ".env")
+load_dotenv(MARKET_SCOUT_DIR / ".env")
 
-BANK_FILE = Path(__file__).parent / "FULL_PSYCHOMETRIC_BANK.json"
+BANK_FILE = REAL_PROJECT_ROOT / "api" / "fallback_bank.json"
 
 def bulk_upload():
     if not BANK_FILE.exists():

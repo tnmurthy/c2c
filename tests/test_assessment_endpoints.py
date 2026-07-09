@@ -22,6 +22,7 @@ class MockUser:
         self.id = id
         self.email = email
         self.user_metadata = {"role": role, "profile_id": id}
+        self.app_metadata = {"role": role, "profile_id": id}
 
 def get_mock_student_user():
     return MockUser("test-student-uuid", "test_student@example.com", "student")

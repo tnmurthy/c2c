@@ -1,7 +1,13 @@
+import os
 import json
 import random
 
-with open('FULL_PSYCHOMETRIC_BANK.json', 'r', encoding='utf-8') as f:
+# Get the project root directory
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))
+
+bank_path = os.path.join(PROJECT_ROOT, "api", "fallback_bank.json")
+with open(bank_path, 'r', encoding='utf-8') as f:
     bank = json.load(f)
 
 # Quick uniqueness check

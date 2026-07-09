@@ -85,8 +85,10 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  const path = request.nextUrl.pathname
+
   // Protect /crm routes
-  if (request.nextUrl.pathname.startsWith('/crm') && !request.nextUrl.pathname.startsWith('/crm-login')) {
+  if (path.startsWith('/crm') && !path.startsWith('/crm-login')) {
     if (!user) {
       // no user, redirect to login page
       const url = request.nextUrl.clone()
@@ -96,10 +98,81 @@ export async function updateSession(request: NextRequest) {
   }
 
   // If user is logged in and trying to access login page, redirect to dashboard
-  if (request.nextUrl.pathname.startsWith('/crm-login') && user) {
+  if (path.startsWith('/crm-login') && user) {
     const url = request.nextUrl.clone()
     url.pathname = '/crm'
     return NextResponse.redirect(url)
+  }
+
+  // Protect C2C routes
+  const isAuthProtected = 
+    path.startsWith('/admin') ||
+    path.startsWith('/assessment') ||
+    path.startsWith('/onboard') ||
+    path.startsWith('/employer') ||
+    path.startsWith('/dashboard') ||
+    path.startsWith('/tpo-dashboard');
+
+  if (isAuthProtected) {
+    if (!user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    const role = user.app_metadata?.role;
+
+    // Admin authorization check
+    if (path.startsWith('/admin') && role !== 'admin') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    // Student authorization check
+    if (path.startsWith('/dashboard') && role !== 'student' && role !== 'admin' && role !== 'institution') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    // Institution authorization check
+    if (path.startsWith('/tpo-dashboard') && role !== 'institution' && role !== 'admin') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    // Employer authorization check
+    if (path.startsWith('/employer') && role !== 'employer' && role !== 'admin') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // Redirect to dashboard if logged in and accessing /login
+  if (path === '/login' && user) {
+    const role = user.app_metadata?.role;
+    const profileId = user.app_metadata?.profile_id;
+    const url = request.nextUrl.clone()
+
+    if (role === 'admin') {
+      url.pathname = '/admin'
+      return NextResponse.redirect(url)
+    } else if (role === 'employer') {
+      url.pathname = '/employer'
+      return NextResponse.redirect(url)
+    } else if (role === 'student' && profileId) {
+      url.pathname = `/dashboard/${profileId}`
+      return NextResponse.redirect(url)
+    } else if (role === 'institution' && profileId) {
+      url.pathname = `/tpo-dashboard/${profileId}`
+      return NextResponse.redirect(url)
+    } else {
+      url.pathname = '/onboard'
+      return NextResponse.redirect(url)
+    }
   }
 
   return supabaseResponse

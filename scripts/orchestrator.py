@@ -2,8 +2,14 @@ import os
 import sys
 import json
 
-# Add the backend to path so we can import the scoring engine
-sys.path.append(os.path.join(os.getcwd(), "services", "job-intel-desk", "backend"))
+# Get the directory of the current script (scripts)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Get the project root directory
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+# Add project root and backend to path so we can import the scoring engine
+sys.path.append(PROJECT_ROOT)
+sys.path.append(os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend"))
 
 try:
     from agents.scoring_engine import score_job_lead, analyze_candidate, analyze_posting
@@ -74,6 +80,6 @@ if __name__ == "__main__":
     print(ordeal_prompt)
     
     # Save to file for Unit 2 confirmation
-    with open("ORDEAL_PROMPT_PROTOTYPE.md", "w", encoding="utf-8") as f:
+    with open(os.path.join(PROJECT_ROOT, "ORDEAL_PROMPT_PROTOTYPE.md"), "w", encoding="utf-8") as f:
         f.write(ordeal_prompt)
     print("\n✅ Prototype saved to ORDEAL_PROMPT_PROTOTYPE.md")
