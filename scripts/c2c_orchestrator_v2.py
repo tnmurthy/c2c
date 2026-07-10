@@ -1,6 +1,13 @@
 import json
 import random
 import time
+import sys
+
+# Reconfigure stdout/stderr to support Unicode (emojis) in Windows terminals
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
 
 class C2C_Orchestrator_V2:
     """

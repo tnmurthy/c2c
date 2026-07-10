@@ -6,6 +6,12 @@ from datetime import datetime, timedelta
 import psycopg2
 from psycopg2.extras import execute_values
 
+# Reconfigure stdout/stderr to support Unicode (emojis) in Windows terminals
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
 DB_URL = "postgresql://postgres:s7r1h6s6p5!@db.onsmkbwqucvbzggugmmn.supabase.co:5432/postgres"
 
 def seed_data():

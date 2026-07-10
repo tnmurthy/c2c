@@ -4,6 +4,12 @@ import sys
 import json
 from datetime import datetime, timezone
 
+# Reconfigure stdout/stderr to support Unicode (emojis) in Windows terminals
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
 # Get the directory of the current script (scripts)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Get the project root directory

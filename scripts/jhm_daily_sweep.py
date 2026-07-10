@@ -18,10 +18,22 @@ Env vars needed (in .env.local):
 
 from __future__ import annotations
 
-import logging
 import os
+import sys
 import time
+import logging
 from datetime import datetime, timezone
+
+# Reconfigure stdout/stderr to support Unicode in Windows terminals
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
+# Add project root to sys.path to resolve services imports
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.append(PROJECT_ROOT)
 
 from dotenv import load_dotenv
 from supabase import Client, create_client
@@ -46,19 +58,21 @@ log = logging.getLogger(__name__)
 
 # ─── Profile mapper ────────────────────────────────────────────────────────────
 
-def student_to_candidate(student: dict) -> dict:
-    """Map C2C student row → native score_job_fit candidate schema."""
+def student_to_candidate(assessment: dict) -> dict:
+    """Map C2C assessment & student data → native score_job_fit candidate schema."""
+    student = assessment.get("students") or {}
+    scores = assessment.get("dimension_scores") or {}
     return {
         "full_name": student.get("full_name", ""),
         "skills": student.get("skills") or [],
         "department": student.get("department", ""),
-        "target_roles": student.get("target_roles") or [],
-        "location": student.get("location", ""),
+        "target_roles": [],
+        "location": "",
         "experience_years": 0,  # fresh graduates
-        "iq_score": student.get("iq_score"),
-        "eq_score": student.get("eq_score"),
-        "aq_score": student.get("aq_score"),
-        "archetype": student.get("archetype"),
+        "iq_score": scores.get("IQ"),
+        "eq_score": scores.get("EQ"),
+        "aq_score": scores.get("AQ"),
+        "archetype": assessment.get("primary_profile"),
     }
 
 
@@ -74,24 +88,23 @@ def run_sweep(supabase: Client) -> dict:
 
     # 1. Fetch active jobs
     log.info("Fetching active jobs from Supabase…")
-    jobs_res = supabase.table("jobs").select(
-        "id, title, description, employer_id, tenant_id, location, requirements"
+    jobs_res = supabase.table("job_postings").select(
+        "id, title, description, employer_id, location, requirements"
     ).eq("status", "active").execute()
     jobs = jobs_res.data or []
     stats["jobs"] = len(jobs)
     log.info("Found %d active jobs", stats["jobs"])
 
-    # 2. Fetch assessed students
-    log.info("Fetching assessed students from Supabase…")
-    students_res = supabase.table("students").select(
-        "id, tenant_id, full_name, skills, department, location, target_roles, "
-        "iq_score, eq_score, aq_score, archetype, placement_readiness_score"
-    ).eq("assessment_complete", True).execute()
-    students = students_res.data or []
-    stats["students"] = len(students)
+    # 2. Fetch assessed students via assessments table
+    log.info("Fetching completed assessments from Supabase…")
+    assessments_res = supabase.table("assessments").select(
+        "student_id, primary_profile, dimension_scores, students (id, tenant_id, full_name, skills, department)"
+    ).execute()
+    assessments = assessments_res.data or []
+    stats["students"] = len(assessments)
     log.info("Found %d assessed students", stats["students"])
 
-    if not jobs or not students:
+    if not jobs or not assessments:
         log.warning("Nothing to process — stopping early")
         return stats
 
@@ -103,10 +116,13 @@ def run_sweep(supabase: Client) -> dict:
             f"{job.get('description', '')} "
             f"{job.get('requirements', '')}"
         )
-        for student in students:
+        for assessment in assessments:
+            student = assessment.get("students")
+            if not student:
+                continue
             stats["pairs_evaluated"] += 1
             try:
-                data = score_job_fit(posting_text, student_to_candidate(student))
+                data = score_job_fit(posting_text, student_to_candidate(assessment))
                 score = data.get("score", 0)
 
                 if score >= MIN_SCORE:

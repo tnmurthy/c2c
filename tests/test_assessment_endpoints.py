@@ -183,5 +183,29 @@ class TestAssessmentHardened(unittest.TestCase):
             except Exception:
                 pass
 
+    def test_generate_items_admin(self):
+        # Override user as admin
+        app.dependency_overrides[get_current_user] = lambda: MockUser("test-admin-uuid", "admin@example.com", "admin")
+        
+        try:
+            payload = {
+                "dimension": "EQ",
+                "item_type": "SJT",
+                "context": "conflict resolution",
+                "count": 1
+            }
+            response = client.post("/api/admin/generate-items", json=payload)
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertEqual(data["status"], "success")
+            self.assertTrue(len(data["generated_items"]) > 0)
+            
+            # Clean up the generated item from DB
+            generated_id = data["generated_items"][0]["id"]
+            db_client = require_admin_supabase()
+            db_client.table("psychometric_items").delete().eq("id", generated_id).execute()
+        finally:
+            app.dependency_overrides[get_current_user] = get_mock_student_user
+
 if __name__ == "__main__":
     unittest.main()
