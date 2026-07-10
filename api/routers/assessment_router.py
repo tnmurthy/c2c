@@ -509,18 +509,27 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_a
         dev_report = generate_development_report(normalized_scores, primary_profile)
         dev_report["percentile_bands"] = percentile_bands
         
+        from api.routers.employer_router import calculate_match_score
+        tech_fit_index = calculate_match_score(normalized_scores, "tech")
+        sales_fit_index = calculate_match_score(normalized_scores, "sales")
+
         # Save to database
         db_payload = {
             "student_id": submit.student_id, 
             "dimension_scores": normalized_scores, 
             "founder_fit": founder_fit,
             "primary_profile": primary_profile,
-            "development_report": dev_report
+            "development_report": dev_report,
+            "tech_fit_index": tech_fit_index,
+            "sales_fit_index": sales_fit_index
         }
-        assess_res = client.table("assessments").insert(db_payload).execute()
+        assess_res = client.table("assessment_attempts").insert(db_payload).execute()
         
         if assess_res.data:
-            assessment_id = assess_res.data[0]["id"]
+            assessment_id = None
+            synced_res = client.table("assessments").select("id").eq("student_id", submit.student_id).execute()
+            if synced_res.data:
+                assessment_id = synced_res.data[0]["id"]
             responses_payload = []
             for resp in submit.responses:
                 responses_payload.append({
@@ -676,3 +685,43 @@ async def webhook_assessment_completed(request: Request, background_tasks: Backg
     if student_id := record.get("student_id"):
         background_tasks.add_task(run_agent_recruiters, student_id)
     return {"status": "received"}
+
+from pydantic import BaseModel
+
+class ItemGenerateRequest(BaseModel):
+    dimension: str
+    item_type: str
+    context: str
+    count: int = 1
+
+@router.post("/admin/generate-items")
+async def generate_items_endpoint(req: ItemGenerateRequest, client = Depends(require_admin_supabase), current_user = Depends(require_role(["admin"]))):
+    """
+    Admin-only endpoint to generate psychometric items using LLM and insert them into the database.
+    """
+    from api.item_generator import generate_llm_item
+    
+    generated_items = []
+    for _ in range(req.count):
+        try:
+            item = generate_llm_item(req.dimension, req.item_type, req.context)
+            db_payload = {
+                "id": item["id"],
+                "stem": item["stem"],
+                "item_type": item["item_type"],
+                "primary_dimension": item["primary_dimension"],
+                "secondary_dimensions": item.get("secondary_dimensions", []),
+                "tags": item.get("tags", []),
+                "options": item.get("options"),
+                "scoring_logic": item["scoring_logic"],
+                "intended_audience": "general"
+            }
+            res = client.table("psychometric_items").insert(db_payload).execute()
+            if res.data:
+                generated_items.append(res.data[0])
+        except Exception as e:
+            logger.error(f"Failed to generate and save item: {e}")
+            raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
+            
+    return {"status": "success", "generated_items": generated_items}
+

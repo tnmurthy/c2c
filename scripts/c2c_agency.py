@@ -8,6 +8,12 @@ import threading
 import time
 import json
 
+# Reconfigure stdout/stderr to support Unicode (emojis) in Windows terminals
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
 # Get the directory of the current script (scripts)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Get the project root directory
@@ -15,14 +21,19 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 
 # Add project root and other necessary backend paths to sys.path
 sys.path.append(PROJECT_ROOT)
+sys.path.append(SCRIPT_DIR)
 sys.path.append(os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend"))
 
 try:
     from scripts.orchestrator import generate_ordeal_prompt
     from scripts.portfolio_generator import generate_projects_js
-except ImportError as e:
-    # If not in path, we'll try to import relatively
-    print(f"Warning: Direct imports failed: {e}. Ensure you are in the project root.")
+except ImportError:
+    try:
+        from orchestrator import generate_ordeal_prompt
+        from portfolio_generator import generate_projects_js
+    except ImportError as e:
+        print(f"Error: Direct imports failed: {e}. Ensure you are in the project root.")
+        raise
 
 def run_pipeline(candidate_file, jd_file):
     print("👔 STARTING campus2corporate (c2c) PIPELINE...")
