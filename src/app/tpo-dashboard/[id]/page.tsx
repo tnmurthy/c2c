@@ -155,20 +155,20 @@ export default function TPODashboard() {
             </div>
 
             <nav className="space-y-1">
-              <Link href="/" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
-                <Home className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <Link href={`/tpo-dashboard/${id}`} className="flex items-center gap-3 bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff] px-3 py-2 rounded-md">
+                <Home className="w-4 h-4 text-[#8aebff]" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Home</span>
               </Link>
               <Link href={`/tpo-dashboard/${id}/students`} className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Student Tracking</span>
               </Link>
-              <Link href="/employer" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
+              <Link href={`/tpo-dashboard/${id}/students`} className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
                 <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Talent Pool</span>
               </Link>
-              <Link href="#" className="flex items-center gap-3 bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff] px-3 py-2 rounded-md">
-                <Calendar className="w-4 h-4" />
+              <Link href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
+                <Calendar className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Interviews</span>
               </Link>
             </nav>
