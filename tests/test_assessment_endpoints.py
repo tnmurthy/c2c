@@ -171,7 +171,7 @@ class TestAssessmentHardened(unittest.TestCase):
             except Exception:
                 pass
             try:
-                db_client.table("assessments").delete().eq("student_id", student_id).execute()
+                db_client.table("assessment_attempts").delete().eq("student_id", student_id).execute()
             except Exception:
                 pass
             try:
@@ -206,6 +206,238 @@ class TestAssessmentHardened(unittest.TestCase):
             db_client.table("psychometric_items").delete().eq("id", generated_id).execute()
         finally:
             app.dependency_overrides[get_current_user] = get_mock_student_user
+
+    def test_get_student_history(self):
+        db_client = require_admin_supabase()
+        student_id = str(uuid.uuid4())
+        tenant_id = str(uuid.uuid4())
+        
+        # 1. Seed a test tenant
+        tenant_payload = {
+            "tenant_id": tenant_id,
+            "name": "E2E History Test Tenant",
+            "slug": f"history-test-{uuid.uuid4().hex[:6]}",
+            "status": "active"
+        }
+        db_client.table("tenants").insert(tenant_payload).execute()
+        
+        # 2. Seed a test student linked to this tenant
+        student_payload = {
+            "id": student_id,
+            "full_name": "Test History Student",
+            "email": f"history_student_{uuid.uuid4().hex[:6]}@example.com",
+            "graduation_year": 2026,
+            "department": "Computer Science",
+            "tenant_id": tenant_id
+        }
+        db_client.table("students").insert(student_payload).execute()
+        
+        # Override the mock student user metadata to use our seeded student_id
+        def get_current_history_student():
+            return MockUser(student_id, student_payload["email"], "student")
+            
+        app.dependency_overrides[get_current_user] = get_current_history_student
+        
+        # Insert a mock student attempt manually
+        try:
+            db_payload = {
+                "student_id": student_id,
+                "dimension_scores": {"IQ": 80, "EQ": 70, "SQ": 60, "AQ": 50, "SpQ": 40},
+                "founder_fit": {"Builder": 130, "Leader": 130, "Rainmaker": 110, "Anchor": 150},
+                "primary_profile": "Anchor",
+                "development_report": {"notes": "Test feedback"}
+            }
+            db_client.table("assessment_attempts").insert(db_payload).execute()
+            
+            # Query the history endpoint
+            response = client.get(f"/api/student/{student_id}/history")
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertTrue(len(data) > 0)
+            self.assertIn("attempt_number", data[0])
+            self.assertIn("dimension_scores", data[0])
+        finally:
+            app.dependency_overrides[get_current_user] = get_mock_student_user
+            try:
+                db_client.table("assessment_attempts").delete().eq("student_id", student_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("students").delete().eq("id", student_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("tenants").delete().eq("tenant_id", tenant_id).execute()
+            except Exception:
+                pass
+
+    def test_get_student_history_unauthorized(self):
+        db_client = require_admin_supabase()
+        student_id = str(uuid.uuid4())
+        tenant_id = str(uuid.uuid4())
+        
+        # 1. Seed a test tenant
+        tenant_payload = {
+            "tenant_id": tenant_id,
+            "name": "E2E History Neg Test Tenant",
+            "slug": f"history-neg-test-{uuid.uuid4().hex[:6]}",
+            "status": "active"
+        }
+        db_client.table("tenants").insert(tenant_payload).execute()
+        
+        # 2. Seed a test student linked to this tenant
+        student_payload = {
+            "id": student_id,
+            "full_name": "Test History Neg Student",
+            "email": f"history_neg_student_{uuid.uuid4().hex[:6]}@example.com",
+            "graduation_year": 2026,
+            "department": "Computer Science",
+            "tenant_id": tenant_id
+        }
+        db_client.table("students").insert(student_payload).execute()
+        
+        try:
+            # Overriding user to a different student to expect 403
+            def get_unauthorized_student():
+                return MockUser("different-student-uuid", "unauthorized_student@example.com", "student")
+                
+            app.dependency_overrides[get_current_user] = get_unauthorized_student
+            
+            # Query the history endpoint of student_id
+            response = client.get(f"/api/student/{student_id}/history")
+            self.assertEqual(response.status_code, 403)
+            
+            # Overriding user to an employer role to expect 403
+            def get_employer_user():
+                return MockUser("employer-uuid", "employer@example.com", "employer")
+                
+            app.dependency_overrides[get_current_user] = get_employer_user
+            
+            response_emp = client.get(f"/api/student/{student_id}/history")
+            self.assertEqual(response_emp.status_code, 403)
+            
+            # Overriding user to an empty role to expect 403
+            def get_empty_role_user():
+                return MockUser("different-uuid", "no_role@example.com", None)
+                
+            app.dependency_overrides[get_current_user] = get_empty_role_user
+            
+            response_empty = client.get(f"/api/student/{student_id}/history")
+            self.assertEqual(response_empty.status_code, 403)
+            
+        finally:
+            app.dependency_overrides[get_current_user] = get_mock_student_user
+            try:
+                db_client.table("assessment_attempts").delete().eq("student_id", student_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("students").delete().eq("id", student_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("tenants").delete().eq("tenant_id", tenant_id).execute()
+            except Exception:
+                pass
+
+    def test_admin_match_debugger(self):
+        db_client = require_admin_supabase()
+        student_id = str(uuid.uuid4())
+        tenant_id = str(uuid.uuid4())
+        employer_id = str(uuid.uuid4())
+        job_id = str(uuid.uuid4())
+        
+        # 1. Seed a test tenant
+        tenant_payload = {
+            "tenant_id": tenant_id,
+            "name": "E2E Debugger Test Tenant",
+            "slug": f"debugger-test-{uuid.uuid4().hex[:6]}",
+            "status": "active"
+        }
+        db_client.table("tenants").insert(tenant_payload).execute()
+        
+        # 2. Seed a test student linked to this tenant
+        student_payload = {
+            "id": student_id,
+            "full_name": "Test Debugger Student",
+            "email": f"debugger_student_{uuid.uuid4().hex[:6]}@example.com",
+            "graduation_year": 2026,
+            "department": "Computer Science",
+            "tenant_id": tenant_id
+        }
+        db_client.table("students").insert(student_payload).execute()
+        
+        # 3. Seed a test assessment attempt
+        attempt_payload = {
+            "student_id": student_id,
+            "dimension_scores": {"IQ": 80, "EQ": 70, "SQ": 60, "AQ": 50, "SpQ": 40},
+            "founder_fit": {"Builder": 130, "Leader": 130, "Rainmaker": 110, "Anchor": 150},
+            "primary_profile": "Anchor",
+            "development_report": {"notes": "Test feedback"}
+        }
+        db_client.table("assessment_attempts").insert(attempt_payload).execute()
+
+        # 4. Seed a test employer
+        employer_payload = {
+            "id": employer_id,
+            "company_name": "Debugger Test Corp",
+            "industry": "Tech",
+            "contact_person": "Jane Doe"
+        }
+        db_client.table("employers").insert(employer_payload).execute()
+
+        # 5. Seed a test job posting
+        job_payload = {
+            "id": job_id,
+            "title": "Software engineer",
+            "employer_id": employer_id,
+            "description": "Looking for a software engineer",
+            "role_type": "tech",
+            "status": "open"
+        }
+        db_client.table("job_postings").insert(job_payload).execute()
+        
+        try:
+            # Override current user as admin
+            app.dependency_overrides[get_current_user] = lambda: MockUser("test-admin-uuid", "admin@example.com", "admin")
+            
+            # Query debugger
+            response = client.get(f"/api/admin/match-debugger?student_id={student_id}&job_id={job_id}")
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertEqual(data["student_id"], student_id)
+            self.assertEqual(data["job_id"], job_id)
+            self.assertEqual(data["role_type"], "tech")
+            self.assertIn("formula", data)
+            self.assertIn("contributions", data)
+            
+            # Override current user as student (should return 403)
+            app.dependency_overrides[get_current_user] = get_mock_student_user
+            response_stud = client.get(f"/api/admin/match-debugger?student_id={student_id}&job_id={job_id}")
+            self.assertEqual(response_stud.status_code, 403)
+            
+        finally:
+            app.dependency_overrides[get_current_user] = get_mock_student_user
+            try:
+                db_client.table("job_postings").delete().eq("id", job_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("employers").delete().eq("id", employer_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("assessment_attempts").delete().eq("student_id", student_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("students").delete().eq("id", student_id).execute()
+            except Exception:
+                pass
+            try:
+                db_client.table("tenants").delete().eq("tenant_id", tenant_id).execute()
+            except Exception:
+                pass
 
 if __name__ == "__main__":
     unittest.main()

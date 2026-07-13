@@ -11,8 +11,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends, Response
 from pydantic import BaseModel
+from api.deps import get_supabase_client
+
 
 from services.market_intelligence import (
     evaluate_lead_quality,
@@ -54,6 +56,7 @@ class DiscoveryRunRequest(BaseModel):
 class GenerateResumeRequest(BaseModel):
     lead_id: str
     candidate: dict[str, Any]
+    posting: str = ""
 
 
 class GenerateCoverLetterRequest(BaseModel):
@@ -161,12 +164,83 @@ async def list_leads(status: str = "all", limit: int = 50):
 async def generate_resume(body: GenerateResumeRequest):
     """Generate resume context for a candidate and job posting."""
     try:
-        # job dict must be passed; lead_id is for reference only
-        job = {"title": "", "description": "", "lead_id": body.lead_id}
+        posting = body.posting
+        company = ""
+        title = ""
+        lead_id = body.lead_id
+        
+        if not posting and lead_id and lead_id != "custom":
+            client = get_supabase_client()
+            if client:
+                try:
+                    lead_bigint = int(lead_id)
+                    res = client.table("market_leads").select("*").eq("id", lead_bigint).execute()
+                    if res.data:
+                        lead_data = res.data[0]
+                        posting = lead_data.get("ai_summary") or lead_data.get("ai_notes") or ""
+                        company = lead_data.get("company") or ""
+                        title = lead_data.get("name") or ""
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Invalid lead_id for bigint cast: {lead_id}, error: {e}")
+                    
+        job = {
+            "title": title,
+            "description": posting,
+            "company": company,
+            "lead_id": lead_id
+        }
         return build_resume_context(body.candidate, job)
     except Exception as exc:
         logger.exception("generate/resume error")
         raise HTTPException(500, f"build_resume_context failed: {exc}") from exc
+
+
+@router.post("/download/resume")
+async def download_resume(body: GenerateResumeRequest):
+    """
+    Generate tailored resume context and return the PDF file stream.
+    """
+    try:
+        posting = body.posting
+        company = ""
+        title = ""
+        lead_id = body.lead_id
+        
+        if not posting and lead_id and lead_id != "custom":
+            client = get_supabase_client()
+            if client:
+                try:
+                    lead_bigint = int(lead_id)
+                    res = client.table("market_leads").select("*").eq("id", lead_bigint).execute()
+                    if res.data:
+                        lead_data = res.data[0]
+                        posting = lead_data.get("ai_summary") or lead_data.get("ai_notes") or ""
+                        company = lead_data.get("company") or ""
+                        title = lead_data.get("name") or ""
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Invalid lead_id for bigint cast: {lead_id}, error: {e}")
+                    
+        job = {
+            "title": title,
+            "description": posting,
+            "company": company,
+            "lead_id": lead_id
+        }
+        context = build_resume_context(body.candidate, job)
+        
+        from api.pdf_generator import generate_tailored_resume_pdf
+        pdf_bytes = generate_tailored_resume_pdf(context)
+        
+        filename = f"tailored_resume_{body.candidate.get('full_name', 'candidate').replace(' ', '_')}.pdf"
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except Exception as exc:
+        logger.exception("download/resume error")
+        raise HTTPException(500, f"generate_tailored_resume_pdf failed: {exc}") from exc
+
 
 
 @router.post("/generate/cover-letter")

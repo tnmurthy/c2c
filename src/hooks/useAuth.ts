@@ -25,10 +25,19 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Join the allowed roles array into a stable string to prevent infinite loops
+  // when inline array references are passed to the hook.
+  const allowedRolesStr = allowedRoles?.join(',');
+
   useEffect(() => {
     async function checkAuth() {
       try {
-        const { data: { user: authUser }, error } = await supabase.auth.getUser();
+        // Use getSession() (reads from cookie storage) instead of getUser()
+        // (which makes a Supabase network call on every protected page load).
+        // Security is enforced server-side by the Next.js middleware which
+        // validates the JWT via createServerClient on every request.
+        const { data: { session }, error } = await supabase.auth.getSession();
+        const authUser = session?.user ?? null;
 
         if (error || !authUser) {
           router.push(redirectTo);
@@ -40,19 +49,19 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
           return;
         }
 
-        if (allowedRoles && allowedRoles.length > 0) {
-          const role = authUser.app_metadata?.role;
-          // Admins can bypass role restriction
+        if (allowedRolesStr) {
+          const role = authUser.app_metadata?.role || authUser.user_metadata?.role;
           const isAdmin = role === 'admin';
+          const rolesList = allowedRolesStr.split(',');
           
-          if (!isAdmin && (!role || !allowedRoles.includes(role))) {
+          if (!isAdmin && (!role || !rolesList.includes(role))) {
             router.push(redirectTo);
             return;
           }
         }
 
         setUser(authUser);
-      } catch {
+      } catch (err) {
         router.push(redirectTo);
       } finally {
         setLoading(false);
@@ -60,7 +69,9 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
     }
 
     checkAuth();
-  }, [router, requiredDomain, allowedRoles, redirectTo]);
+  }, [router, requiredDomain, allowedRolesStr, redirectTo]);
+
 
   return { user, loading };
 }
+

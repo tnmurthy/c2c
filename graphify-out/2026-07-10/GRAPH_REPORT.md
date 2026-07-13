@@ -1,16 +1,16 @@
-# Graph Report - makeover-talent-agency  (2026-07-10)
+# Graph Report - makeover-talent-agency  (2026-07-09)
 
 ## Corpus Check
-- 205 files · ~383,350 words
+- 198 files · ~380,469 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 616 nodes · 730 edges · 171 communities (41 shown, 130 thin omitted)
-- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 26 edges (avg confidence: 0.68)
+- 581 nodes · 672 edges · 168 communities (38 shown, 130 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4af9db5c`
+- Built from commit: `3709f780`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -166,9 +166,6 @@
 - [[_COMMUNITY_Community 162|Community 162]]
 - [[_COMMUNITY_Community 163|Community 163]]
 - [[_COMMUNITY_Community 164|Community 164]]
-- [[_COMMUNITY_Community 168|Community 168]]
-- [[_COMMUNITY_Community 169|Community 169]]
-- [[_COMMUNITY_Community 170|Community 170]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `DatabaseConnectionError` - 33 edges
@@ -177,47 +174,47 @@
 4. `compilerOptions` - 15 edges
 5. `C2C_Orchestrator_V2` - 13 edges
 6. `useAuthSession()` - 13 edges
-7. `C2C_Orchestrator_V2` - 12 edges
-8. `calculate_match_score()` - 12 edges
-9. `validate_item_schema()` - 11 edges
-10. `get_supabase_client()` - 10 edges
+7. `calculate_match_score()` - 12 edges
+8. `C2C_Orchestrator_V2` - 11 edges
+9. `get_supabase_client()` - 10 edges
+10. `APIException` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `C2C_Orchestrator_V2` --uses--> `C2C_Orchestrator_V2`  [INFERRED]
   api/routers/assessment_router.py → scripts/c2c_orchestrator_v2.py
-- `ItemGenerateRequest` --uses--> `C2C_Orchestrator_V2`  [INFERRED]
-  api/routers/assessment_router.py → scripts/c2c_orchestrator_v2.py
+- `run_student_profile_optimization()` --calls--> `generate_projects_js()`  [EXTRACTED]
+  api/routers/student_router.py → scripts/portfolio_generator.py
+- `C2C_Orchestrator_V2` --uses--> `DatabaseConnectionError`  [INFERRED]
+  api/routers/assessment_router.py → api/exceptions.py
+- `C2C_Orchestrator_V2` --uses--> `PermissionDeniedError`  [INFERRED]
+  api/routers/assessment_router.py → api/exceptions.py
 - `run_agent_recruiters()` --calls--> `C2C_Orchestrator_V2`  [EXTRACTED]
   api/routers/assessment_router.py → scripts/c2c_orchestrator_v2.py
-- `test_live_fire()` --calls--> `run_pipeline()`  [INFERRED]
-  scripts/dev-only/live_fire_test.py → scripts/c2c_agency.py
-- `test_live_fire()` --calls--> `run_pipeline()`  [INFERRED]
-  scripts/live_fire_test.py → scripts/c2c_agency.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (171 total, 130 thin omitted)
+## Communities (168 total, 130 thin omitted)
 
 ### Community 0 - "Portfolio Schema"
 Cohesion: 0.11
 Nodes (19): type, type, type, type, properties, folder, id, impact (+11 more)
 
 ### Community 1 - "API Exception Handling"
-Cohesion: 0.07
-Nodes (54): AnswerSubmit, APIException, DatabaseConnectionError, NotFoundError, PermissionDeniedError, Raised when database connection fails or is unavailable., Raised when a requested resource is not found., Base exception class for custom API errors. (+46 more)
+Cohesion: 0.08
+Nodes (38): DatabaseConnectionError, PermissionDeniedError, Raised when database connection fails or is unavailable., Raised when permission is denied for the action., generate_interview_guide_pdf(), generate_student_pdf(), ApplicationCreate, EmployerOnboard (+30 more)
 
 ### Community 2 - "Frontend Package Config"
 Cohesion: 0.06
 Nodes (31): dependencies, clsx, concurrently, lucide-react, next, react, react-dom, @supabase/ssr (+23 more)
 
 ### Community 3 - "API Auth & Dependencies"
-Cohesion: 0.07
-Nodes (23): get_current_user(), get_supabase_client(), FastAPI dependencies for the C2C API., Create and return a Supabase client. Returns None if env vars are missing., FastAPI dependency that provides a Supabase client or raises 503., FastAPI dependency to extract and verify JWT from Authorization header., FastAPI dependency factory to enforce RBAC constraints using app_metadata., require_admin_supabase() (+15 more)
+Cohesion: 0.09
+Nodes (22): get_current_user(), get_supabase_client(), FastAPI dependencies for the C2C API., Create and return a Supabase client. Returns None if env vars are missing., FastAPI dependency that provides a Supabase client or raises 503., FastAPI dependency to extract and verify JWT from Authorization header., FastAPI dependency factory to enforce RBAC constraints using app_metadata., require_admin_supabase() (+14 more)
 
 ### Community 4 - "Assessment Engine"
 Cohesion: 0.08
-Nodes (37): BaseModel, HTTPException, convert_lead(), get_candidate_interview_guide_pdf(), get_candidate_profile_pdf(), get_candidates(), Converts a Lead into an Account and Contact.     Optionally creates an Opportuni, Returns all candidates for the CRM talent pool. (+29 more)
+Nodes (38): BaseModel, HTTPException, convert_lead(), get_candidate_interview_guide_pdf(), get_candidate_profile_pdf(), get_candidates(), Converts a Lead into an Account and Contact.     Optionally creates an Opportuni, Returns all candidates for the CRM talent pool. (+30 more)
 
 ### Community 5 - "Assessment Webhooks"
 Cohesion: 0.14
@@ -232,16 +229,16 @@ Cohesion: 0.17
 Nodes (12): properties, required, type, type, type, type, candidate, github (+4 more)
 
 ### Community 8 - "Student Profile & Notifs"
-Cohesion: 0.17
-Nodes (9): test_live_fire(), run_student_profile_optimization(), send_email_notification(), run_pipeline(), test_live_fire(), generate_ordeal_prompt(), Unit 2: Automates the handoff from Audit to Ordeal.     Transforms audit findin, generate_projects_js() (+1 more)
+Cohesion: 0.19
+Nodes (7): test_live_fire(), run_pipeline(), test_live_fire(), generate_ordeal_prompt(), Unit 2: Automates the handoff from Audit to Ordeal.     Transforms audit findin, generate_projects_js(), Unit 3: Portfolio Auto-Generator.     Converts refined candidate data into a fu
 
 ### Community 9 - "C2C Orchestrator Agent"
-Cohesion: 0.21
-Nodes (6): C2C_Orchestrator_V2, V2 Orchestrator implementing the AGENT_HARNESS_SPEC.     Moves from simple prom, Micro-tool: Retrieves detailed evidence for a specific gap., Micro-tool: Directly searches candidate GitHub., Macro-tool: Runs a high-pressure interview scenario., Checks for convergence based on completion criteria.
+Cohesion: 0.08
+Nodes (32): AnswerSubmit, Any, APIException, NotFoundError, Raised when a requested resource is not found., Base exception class for custom API errors., AssessmentSubmit, Exception (+24 more)
 
 ### Community 10 - "E2E Test Suite"
 Cohesion: 0.13
-Nodes (17): Client, main(), market_daily_sweep.py — Native Market Intelligence Cron ========================, Run the native market intelligence daily sweep., Map C2C assessment & student data → native score_job_fit candidate schema., Execute the full job × student scoring matrix and upsert qualified leads.      R, run_sweep(), student_to_candidate() (+9 more)
+Nodes (17): Client, main(), market_daily_sweep.py — Native Market Intelligence Cron ========================, Run the native market intelligence daily sweep., Map C2C student row → native score_job_fit candidate schema., Execute the full job × student scoring matrix and upsert qualified leads.      R, run_sweep(), student_to_candidate() (+9 more)
 
 ### Community 12 - "Agent Test Simulation"
 Cohesion: 0.67
@@ -260,8 +257,8 @@ Cohesion: 0.17
 Nodes (11): 1. Configuration (`vercel.json`), 2. Environment Variables, ⚖️ 5Q Match Engine Weighting, 📂 AGENCY SERVICE DIRECTORY, Campus to Corporate (c2c) 👔, 📫 Connect with the Agency, 🧠 Core Competencies, 🔌 Database Connection Pooling (+3 more)
 
 ### Community 66 - "Community 66"
-Cohesion: 0.13
-Nodes (11): EmployerOnboard, calculate_match_score(), get_employer_candidates(), get_employer_jobs(), get_leads(), onboard_employer(), Compute weighted 5Q match score (0-100) for a given role type., EmployerOnboard (+3 more)
+Cohesion: 0.33
+Nodes (3): calculate_match_score(), Compute weighted 5Q match score (0-100) for a given role type., TestScoringEngine
 
 ### Community 67 - "Community 67"
 Cohesion: 0.29
@@ -283,37 +280,25 @@ Nodes (3): generate_test(), Generates a 25-question test (5 per dimension), simu
 Cohesion: 0.67
 Nodes (3): enum, type, icon
 
-### Community 168 - "Community 168"
-Cohesion: 0.19
-Nodes (11): Any, generate_fallback_item(), generate_llm_item(), Generates a psychometric item using Gemini API and validates it against the sche, Validates that the generated item meets all required database and schema structu, Generates a deterministic validated mock item if LLM fails or is unconfigured., validate_item_schema(), generate_items_endpoint() (+3 more)
-
-### Community 169 - "Community 169"
-Cohesion: 0.29
-Nodes (6): 1. The Core Wedge: High-Volume, Low-Cost Placement Analytics, 2. Product Focus Decisions, 3. Core Structural Advantages, Deferrals: FutureHub Marketplace, Out-of-Scope: Coding Sandboxes, Product Positioning Strategy — Campus to Corporate (c2c)
-
-### Community 170 - "Community 170"
-Cohesion: 0.83
-Nodes (3): generate_batch(), generate_dimension(), main()
-
 ## Knowledge Gaps
-- **226 isolated node(s):** `1. The Core Wedge: High-Volume, Low-Cost Placement Analytics`, `Out-of-Scope: Coding Sandboxes`, `Deferrals: FutureHub Marketplace`, `3. Core Structural Advantages`, `📂 AGENCY SERVICE DIRECTORY` (+221 more)
+- **222 isolated node(s):** `📂 AGENCY SERVICE DIRECTORY`, `🏗️ Monorepo Structure`, `🧠 Core Competencies`, `1. Configuration (`vercel.json`)`, `2. Environment Variables` (+217 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **130 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `DatabaseConnectionError` connect `API Exception Handling` to `Community 66`?**
+- **Why does `DatabaseConnectionError` connect `API Exception Handling` to `C2C Orchestrator Agent`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **Why does `generate_projects_js()` connect `Student Profile & Notifs` to `API Exception Handling`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `C2C_Orchestrator_V2` connect `C2C Orchestrator Agent` to `Community 168`, `API Exception Handling`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
-- **What connects `Generates a psychometric item using Gemini API and validates it against the sche`, `Validates that the generated item meets all required database and schema structu`, `Generates a deterministic validated mock item if LLM fails or is unconfigured.` to the rest of the system?**
-  _273 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `📂 AGENCY SERVICE DIRECTORY`, `🏗️ Monorepo Structure`, `🧠 Core Competencies` to the rest of the system?**
+  _266 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Portfolio Schema` be split into smaller, more focused modules?**
   _Cohesion score 0.10526315789473684 - nodes in this community are weakly interconnected._
 - **Should `API Exception Handling` be split into smaller, more focused modules?**
-  _Cohesion score 0.06672519754170325 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0797872340425532 - nodes in this community are weakly interconnected._
 - **Should `Frontend Package Config` be split into smaller, more focused modules?**
   _Cohesion score 0.0625 - nodes in this community are weakly interconnected._
+- **Should `API Auth & Dependencies` be split into smaller, more focused modules?**
+  _Cohesion score 0.08870967741935484 - nodes in this community are weakly interconnected._

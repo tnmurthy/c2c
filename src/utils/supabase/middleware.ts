@@ -120,7 +120,7 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    const role = user.app_metadata?.role;
+    const role = user.app_metadata?.role || user.user_metadata?.role;
 
     // Admin authorization check
     if (path.startsWith('/admin') && role !== 'admin') {
@@ -153,8 +153,8 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect to dashboard if logged in and accessing /login
   if (path === '/login' && user) {
-    const role = user.app_metadata?.role;
-    const profileId = user.app_metadata?.profile_id;
+    const role = user.app_metadata?.role || user.user_metadata?.role;
+    const profileId = user.app_metadata?.profile_id || user.user_metadata?.profile_id;
     const url = request.nextUrl.clone()
 
     if (role === 'admin') {

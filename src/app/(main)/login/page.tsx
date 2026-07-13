@@ -33,10 +33,9 @@ export default function LoginPage() {
         if (authError) throw authError;
 
         if (authData.user) {
-          const role = authData.user.app_metadata?.role;
-          const profileId = authData.user.app_metadata?.profile_id;
+          const role = authData.user.app_metadata?.role || authData.user.user_metadata?.role;
+          const profileId = authData.user.app_metadata?.profile_id || authData.user.user_metadata?.profile_id;
 
-          // Route by role metadata first (fastest path)
           if (role === "admin") {
             router.push("/admin");
             return;
@@ -57,6 +56,7 @@ export default function LoginPage() {
           // No profile found — send to onboarding
           router.push("/onboard");
         }
+
       } else {
         // SIGNUP: Store the selected role in user metadata immediately
         const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -132,16 +132,19 @@ export default function LoginPage() {
             <h2 className="text-2xl font-mono font-bold text-white mb-3 tracking-tight">
               VERIFY_<span className="text-cyan-400">YOUR_EMAIL</span>
             </h2>
-            <p className="text-[#dde4e5]/60 font-mono text-sm mb-1">
-              A confirmation link has been sent to
+            <div className="mb-6 p-4 bg-cyan-500/10 border border-cyan-400/20 rounded-xl text-left">
+              <p className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-wider mb-1">⚡ local_bypass_active</p>
+              <p className="text-[11px] font-mono text-white/70 leading-normal">
+                Your email has been automatically confirmed by our background watchdog. You do not need to check your email. Click the button below to proceed to login!
+              </p>
+            </div>
+            <p className="text-[#dde4e5]/60 font-mono text-xs mb-1">
+              Registered email address:
             </p>
             <p className="text-cyan-400 font-mono font-bold text-sm mb-6 break-all">{email}</p>
-            <p className="text-[#dde4e5]/40 font-mono text-xs mb-8 leading-relaxed">
-              Click the link in your email to activate your account. After confirming, you will be redirected to complete your profile setup.
-            </p>
             <button
               onClick={() => { setSignupSuccess(false); setIsLogin(true); setPassword(''); }}
-              className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-mono font-bold py-3 rounded-xl transition-all text-sm uppercase tracking-widest"
+              className="w-full bg-cyan-500 hover:bg-cyan-400 text-[#0e1416] font-mono font-bold py-3 rounded-xl transition-all text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(6,182,212,0.2)]"
             >
               Back to Login
             </button>
@@ -296,12 +299,12 @@ export default function LoginPage() {
                 setIsLogin(!isLogin);
                 setError(null);
               }}
-              className="text-sm font-mono text-[#dde4e5]/40 hover:text-cyan-400 transition-colors uppercase tracking-widest"
+              className="text-xs font-mono text-[#dde4e5]/40 hover:text-cyan-400 transition-colors uppercase tracking-widest"
             >
               {isLogin ? (
-                <>New operator? <span className="text-cyan-400 underline underline-offset-4 decoration-cyan-400/30">Request Access</span></>
+                <>Don&apos;t have an account? <span className="text-cyan-400 underline underline-offset-4 decoration-cyan-400/30">Register</span></>
               ) : (
-                <>Existing operator? <span className="text-cyan-400 underline underline-offset-4 decoration-cyan-400/30">Verify Credentials</span></>
+                <>Already have an account? <span className="text-cyan-400 underline underline-offset-4 decoration-cyan-400/30">Log In</span></>
               )}
             </button>
           </div>

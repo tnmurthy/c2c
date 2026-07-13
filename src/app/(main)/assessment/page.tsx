@@ -28,7 +28,9 @@ export default function Assessment() {
   useEffect(() => {
     if (authLoading) return;
 
-    const profileId = user?.user_metadata?.profile_id;
+    // profile_id is set in app_metadata by the onboarding backend.
+    // Fall back to user_metadata for compatibility.
+    const profileId = user?.app_metadata?.profile_id || user?.user_metadata?.profile_id;
     if (!profileId) {
       router.push('/onboard');
       return;
@@ -307,14 +309,33 @@ export default function Assessment() {
   if (currentQ.options) {
       if (typeof currentQ.options === 'string') {
           try {
-             parsedOptions = JSON.parse(currentQ.options);
+             const parsed = JSON.parse(currentQ.options);
+             if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                 parsedOptions = Object.entries(parsed).map(([key, val]) => ({
+                     id: key,
+                     value: key,
+                     label: String(val)
+                 }));
+             } else {
+                 parsedOptions = parsed;
+             }
           } catch(e) {
              parsedOptions = null;
           }
-      } else {
-          parsedOptions = currentQ.options as AssessmentOption[];
+      } else if (typeof currentQ.options === 'object') {
+          const optObj = currentQ.options as Record<string, any>;
+          if (Array.isArray(optObj)) {
+              parsedOptions = optObj as AssessmentOption[];
+          } else {
+              parsedOptions = Object.entries(optObj).map(([key, val]) => ({
+                  id: key,
+                  value: key,
+                  label: String(val)
+              }));
+          }
       }
   }
+
 
   const progressPercentage = ((currentIndex) / questions.length) * 100;
 
@@ -374,7 +395,7 @@ export default function Assessment() {
 
           <h1 className="text-3xl md:text-5xl font-black text-white mb-20 leading-tight font-sans tracking-tight">
             <span className="text-cyan-400 font-mono mr-6 opacity-30 select-none text-4xl">[{String(currentIndex + 1).padStart(2, '0')}]</span>
-            {currentQ.text}
+            {currentQ.text || currentQ.stem}
           </h1>
 
           <div className="grid gap-8">

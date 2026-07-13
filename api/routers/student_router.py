@@ -151,8 +151,9 @@ async def run_optimizers(student_id: str):
 @router.post("/onboard/institution")
 async def onboard_institution(inst: InstitutionOnboard, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     try:
+        auth_id = current_user.user.id if hasattr(current_user, "user") else current_user.id
         data = inst.dict()
-        data["auth_id"] = current_user.user.id if hasattr(current_user, "user") else current_user.id
+        data["auth_id"] = auth_id
         existing = client.table("institutions").select("id").eq("domain", data["domain"]).execute()
         if existing.data:
             res = client.table("institutions").update(data).eq("domain", data["domain"]).execute()
@@ -314,14 +315,11 @@ async def get_student(student_id: str, client = Depends(require_admin_supabase),
     elif role == "student" or not role:
         student_check = client.table("students").select("auth_id").eq("id", student_id).execute()
         is_owner = student_check.data and str(student_check.data[0].get("auth_id")) == str(current_user.id)
+        is_profile_match = str(app_metadata.get("profile_id")) == str(student_id)
         
-        if role == "student" and str(app_metadata.get("profile_id")) != str(student_id) and not is_owner:
+        if not (is_owner or is_profile_match):
             raise PermissionDeniedError("Access denied: cannot view other student profiles")
-        elif not role and not is_owner:
-            pass
-        elif is_owner:
-            pass
-    elif role == "institution" or not role:
+    elif role == "institution":
         student_check = client.table("students").select("institution_id, email").eq("id", student_id).execute()
         if not student_check.data:
             raise NotFoundError("Student not found")
@@ -360,6 +358,54 @@ async def get_student(student_id: str, client = Depends(require_admin_supabase),
         raise
     except Exception as e:
         logger.error(f"ERROR get_student: {e}", exc_info=True)
+        raise DatabaseConnectionError(str(e))
+
+@router.get("/student/{student_id}/history")
+async def get_assessment_history(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+    
+    if role == "admin":
+        pass
+    elif role == "student" or not role:
+        student_check = client.table("students").select("auth_id").eq("id", student_id).execute()
+        is_owner = student_check.data and str(student_check.data[0].get("auth_id")) == str(current_user.id)
+        is_profile_match = str(app_metadata.get("profile_id")) == str(student_id)
+        
+        if not (is_owner or is_profile_match):
+            raise PermissionDeniedError("Access denied: cannot view other student profiles")
+    elif role == "institution":
+        student_check = client.table("students").select("institution_id, email").eq("id", student_id).execute()
+        if not student_check.data:
+            raise NotFoundError("Student not found")
+        
+        s_email = student_check.data[0].get("email") or ""
+        s_domain = s_email.split("@")[-1] if s_email else ""
+        tpo_domain = email.split("@")[-1] if email else ""
+        
+        inst_id = app_metadata.get("profile_id")
+        is_owner = inst_id and str(student_check.data[0].get("institution_id")) == str(inst_id)
+        is_domain_match = tpo_domain and s_domain == tpo_domain
+        
+        if not (is_owner or is_domain_match):
+            raise PermissionDeniedError("Access denied: student does not belong to your institution")
+    elif role == "employer":
+        raise PermissionDeniedError("Access denied: employers are not permitted to view historical score trends")
+    else:
+        raise PermissionDeniedError("Access denied: unauthorized profile view")
+
+    try:
+        res = (
+            client.table("assessment_attempts")
+            .select("attempt_number, dimension_scores, created_at")
+            .eq("student_id", student_id)
+            .order("attempt_number")
+            .execute()
+        )
+        return res.data
+    except Exception as e:
+        logger.error(f"ERROR get_assessment_history: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
 @router.put("/student/{student_id}/profile")

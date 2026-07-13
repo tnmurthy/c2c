@@ -244,6 +244,89 @@ async def get_job_matches(
         logger.error(f"ERROR get_job_matches: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
+@router.get("/admin/match-debugger")
+async def match_debugger(
+    student_id: str,
+    job_id: str,
+    client = Depends(require_admin_supabase),
+    current_user = Depends(require_role(["admin", "institution"]))
+):
+    try:
+        # 1. Fetch student assessment scores
+        assessment_res = (
+            client.table("assessment_attempts")
+            .select("dimension_scores, primary_profile")
+            .eq("student_id", student_id)
+            .order("attempt_number", desc=True)
+            .limit(1)
+            .execute()
+        )
+        if not assessment_res.data:
+            old_assess_res = client.table("assessments").select("dimension_scores, primary_profile").eq("student_id", student_id).execute()
+            if not old_assess_res.data:
+                raise NotFoundError("No assessment scores found for this student")
+            scores = old_assess_res.data[0].get("dimension_scores") or {}
+            profile = old_assess_res.data[0].get("primary_profile") or "N/A"
+        else:
+            scores = assessment_res.data[0].get("dimension_scores") or {}
+            profile = assessment_res.data[0].get("primary_profile") or "N/A"
+
+        # 2. Fetch job details
+        job_res = client.table("job_postings").select("id, title, role_type").eq("id", job_id).execute()
+        if not job_res.data:
+            raise NotFoundError("Job posting not found")
+        job = job_res.data[0]
+        role_type = job.get("role_type") or "tech"
+
+        # 3. Compute weights and contributions
+        weights = ROLE_WEIGHTS.get(role_type, ROLE_WEIGHTS["tech"])
+        contributions = {}
+        formula_terms = []
+        raw_sum = 0.0
+        
+        for dim, w in weights.items():
+            val = float(scores.get(dim, 0))
+            weighted_val = val * w
+            raw_sum += weighted_val
+            contributions[dim] = {
+                "raw_score": val,
+                "weight": w,
+                "contribution": round(weighted_val, 2)
+            }
+            formula_terms.append(f"{dim}({val} * {w})")
+
+        max_possible = sum(w * 100 for w in weights.values())
+        final_score = round((raw_sum / max_possible) * 100, 1) if max_possible > 0 else 0.0
+
+        # Archetype behavioral penalty check
+        archetype_penalty = 0.0
+        penalty_explanation = "None"
+        if role_type == "leadership" and profile not in ("Leader", "Rainmaker"):
+            archetype_penalty = 15.0
+            final_score = max(0.0, final_score - archetype_penalty)
+            penalty_explanation = f"Archetype misfit penalty (-15.0 pts) applied because candidate archetype is {profile} (expected Leader/Rainmaker for Leadership positions)."
+
+        return {
+            "student_id": student_id,
+            "job_id": job_id,
+            "job_title": job.get("title"),
+            "role_type": role_type,
+            "archetype": profile,
+            "weights": weights,
+            "contributions": contributions,
+            "formula": " + ".join(formula_terms) + (f" - archetype_penalty({archetype_penalty})" if archetype_penalty > 0 else ""),
+            "raw_weighted_sum": round(raw_sum, 2),
+            "max_possible": max_possible,
+            "archetype_penalty": archetype_penalty,
+            "penalty_explanation": penalty_explanation,
+            "final_score": final_score
+        }
+    except (NotFoundError, PermissionDeniedError):
+        raise
+    except Exception as e:
+        logger.error(f"ERROR match_debugger: {e}", exc_info=True)
+        raise DatabaseConnectionError(str(e))
+
 @router.get("/leads")
 async def get_leads(client = Depends(require_admin_supabase), current_user = Depends(require_role(["admin"]))):
     try:

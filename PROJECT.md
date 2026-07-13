@@ -50,6 +50,7 @@ src/
 | M3 | Backend | Backend Monolith Split | Split api/main.py into modular routers (assessment, student, employer, portfolio), create api/schemas/ and api/exceptions.py, remove duplicate imports, register GET /health. | M2 | PLANNED |
 | M4 | Frontend | Frontend Shared Primitives | Extract TS types to src/types/, create DataState.tsx, implement useSupabaseQuery helper, and eliminate window.location.reload() in opportunities Kanban. | M2, M3 | PLANNED |
 | M5 | Integration | Integration & Final E2E Pass | Verify Next.js build, FastAPI startup, pass 100% of the E2E tests, run Forensic Auditor, and perform adversarial coverage hardening. | M1, M3, M4 | PLANNED |
+| M6 | Integration | CV Tailor Feature | Implement backend endpoints, PDF generation, frontend workspace window, shortcuts, and E2E verification test. | M5 | PLANNED |
 
 ## Interface Contracts
 ### API Routers ↔ FastAPI App
@@ -62,6 +63,10 @@ src/
 - The `opportunities` table must include a `candidate_id` UUID foreign key referencing `students(id)`.
 - Frontend opportunities components must resolve and display candidate details (name, department) via this relation rather than hardcoded array index mock-ups.
 
+### CV Tailor ↔ Backend / PDF
+- Backend `/api/market/generate/resume` receives a `GenerateResumeRequest` including a `posting` string, returning the tailored resume context.
+- Backend `/api/market/download/resume` generates PDF bytes from the tailored resume context using `api.pdf_generator` and returns a PDF stream.
+
 ## Code Layout
 - Frontend types: `src/types/*.ts`
 - Frontend reusable state components: `src/components/ui/DataState.tsx`
@@ -69,3 +74,5 @@ src/
 - Backend schemas: `api/schemas/*.py`
 - Backend exception handling: `api/exceptions.py`
 - Database Migrations: `supabase/migrations/*_refactor_changes.sql`
+- CV Tailor backend files: `api/routers/market_router.py` and `api/pdf_generator.py`
+
