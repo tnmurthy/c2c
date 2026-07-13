@@ -45,6 +45,28 @@ export default function EmployerPage() {
   const [sortBy, setSortBy] = useState<'match' | 'tech' | 'sales'>('match');
   const [activeTab, setActiveTab] = useState<'discover' | 'jobs'>('discover');
 
+  // Custom Weight Sandbox state
+  const [customWeightsMode, setCustomWeightsMode] = useState(false);
+  const [wIQ, setWIQ] = useState(40);
+  const [wAQ, setWAQ] = useState(30);
+  const [wEQ, setWEQ] = useState(20);
+  const [wSQ, setWSQ] = useState(5);
+  const [wSpQ, setWSpQ] = useState(5);
+
+  const getCandidateMatchScore = (c: Candidate) => {
+    if (!customWeightsMode) return c.match;
+    const totalWeight = wIQ + wAQ + wEQ + wSQ + wSpQ;
+    if (totalWeight === 0) return 0;
+    const spq = Math.round((c.iq + c.eq) / 2);
+    const score = (c.iq * wIQ + c.aq * wAQ + c.eq * wEQ + c.sq * wSQ + spq * wSpQ) / totalWeight;
+    return Math.round(score);
+  };
+
+  const handlePrintDossier = () => {
+    if (!selectedCandidate) return;
+    window.print();
+  };
+
   useEffect(() => {
     if (authLoading) return;
     const fetchCandidates = async () => {
@@ -56,19 +78,19 @@ export default function EmployerPage() {
           const mappedData = data.map((item: any, idx: number): Candidate => ({
             id: item.id || `mock-${idx}`,
             name: item.name || "Unknown Candidate",
-            role: item.primary_profile || "Software Engineer",
-            cohort: "Cohort 2024.1",
-            match: Math.round(item.tech_fit_index || 0),
-            iq: item.dimension_scores?.IQ || 0,
-            eq: item.dimension_scores?.EQ || 0,
-            aq: item.dimension_scores?.AQ || 0,
-            sq: item.dimension_scores?.SQ || 0,
+            role: item.role || item.primary_profile || "Software Engineer",
+            cohort: item.cohort || "Cohort 2024.1",
+            match: Math.round(item.match || item.tech_fit_index || 0),
+            iq: item.iq || item.dimension_scores?.IQ || 0,
+            eq: item.eq || item.dimension_scores?.EQ || 0,
+            aq: item.aq || item.dimension_scores?.AQ || 0,
+            sq: item.sq || item.dimension_scores?.SQ || 0,
             tech_fit_index: item.tech_fit_index || 0,
             sales_fit_index: item.sales_fit_index || 0,
             skills: ["Problem Solving", "Adaptability", "Teamwork"],
             image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${item.id}`,
             status: idx % 2 === 0 ? "online" : "away",
-            summary: `A candidate matching the ${item.primary_profile} profile with strong foundational skills.`
+            summary: item.summary || `A candidate matching the ${item.role || item.primary_profile || "Software Engineer"} profile with strong foundational skills.`
           }));
           setCandidates(mappedData);
         }
@@ -97,14 +119,20 @@ export default function EmployerPage() {
     fetchJobs();
   }, [authLoading]);
 
-  const filteredCandidates = candidates
+  const processedCandidates = candidates.map(c => ({
+    ...c,
+    match: getCandidateMatchScore(c)
+  }));
+
+  const filteredCandidates = processedCandidates
     .filter(c => {
       if (c.aq < minAQ) return false;
       if (c.eq < minEQ) return false;
-      if (strictFounderFit && c.tech_fit_index < 80 && c.sales_fit_index < 80) return false;
+      if (strictFounderFit && (customWeightsMode ? c.match < 80 : (c.tech_fit_index < 80 && c.sales_fit_index < 80))) return false;
       return true;
     })
     .sort((a, b) => {
+      if (customWeightsMode) return b.match - a.match;
       if (sortBy === 'tech') return b.tech_fit_index - a.tech_fit_index;
       if (sortBy === 'sales') return b.sales_fit_index - a.sales_fit_index;
       return b.match - a.match;
@@ -184,36 +212,112 @@ export default function EmployerPage() {
                 <p className="text-[11px] text-[#bbc9cd] leading-tight">Prioritize candidates with high adaptability and high-growth potential scores.</p>
               </div>
 
+              {/* Custom Weight Sandbox Toggle */}
+              <div className="space-y-4 border-t border-white/5 pt-4">
+                <div className="flex justify-between items-center">
+                  <label className={`text-[12px] font-bold tracking-[0.1em] font-mono text-[#8aebff]`}>Custom Weight Sandbox</label>
+                  <button 
+                    className={`w-10 h-5 rounded-full relative transition-colors ${customWeightsMode ? 'bg-[#8aebff]' : 'bg-[#8aebff]/20'}`} 
+                    onClick={() => setCustomWeightsMode(!customWeightsMode)}
+                  >
+                    <span className={`absolute top-1 w-3 h-3 bg-[#8aebff] rounded-full transition-all ${customWeightsMode ? 'right-1' : 'left-1 bg-white'}`}></span>
+                  </button>
+                </div>
+                <p className="text-[11px] text-[#bbc9cd] leading-tight">Define custom quotients scoring weights to re-rank candidates in real-time.</p>
+              </div>
+
               {/* Sliders */}
-              <div className="space-y-12">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-end">
-                    <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>MINIMUM AQ</label>
-                    <span className="text-[#8aebff] font-bold font-mono text-xl">{minAQ}</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="50" 
-                    max="100" 
-                    value={minAQ} 
-                    onChange={(e) => setMinAQ(parseInt(e.target.value))}
-                    className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#8aebff] cursor-pointer"
-                  />
-                </div>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-end">
-                    <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>MINIMUM EQ</label>
-                    <span className="text-[#c3c0ff] font-bold font-mono text-xl">{minEQ}</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="50" 
-                    max="100" 
-                    value={minEQ} 
-                    onChange={(e) => setMinEQ(parseInt(e.target.value))}
-                    className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#c3c0ff] cursor-pointer"
-                  />
-                </div>
+              <div className="space-y-6">
+                {customWeightsMode ? (
+                  <>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-end">
+                        <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>IQ WEIGHT</label>
+                        <span className="text-[#8aebff] font-bold font-mono text-sm">{wIQ}%</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="100" value={wIQ} 
+                        onChange={(e) => setWIQ(parseInt(e.target.value))}
+                        className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#8aebff] cursor-pointer"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-end">
+                        <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>AQ WEIGHT</label>
+                        <span className="text-[#8aebff] font-bold font-mono text-sm">{wAQ}%</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="100" value={wAQ} 
+                        onChange={(e) => setWAQ(parseInt(e.target.value))}
+                        className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#8aebff] cursor-pointer"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-end">
+                        <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>EQ WEIGHT</label>
+                        <span className="text-[#c3c0ff] font-bold font-mono text-sm">{wEQ}%</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="100" value={wEQ} 
+                        onChange={(e) => setWEQ(parseInt(e.target.value))}
+                        className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#c3c0ff] cursor-pointer"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-end">
+                        <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>SQ WEIGHT</label>
+                        <span className="text-[#ffd6a3] font-bold font-mono text-sm">{wSQ}%</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="100" value={wSQ} 
+                        onChange={(e) => setWSQ(parseInt(e.target.value))}
+                        className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#ffd6a3] cursor-pointer"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-end">
+                        <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>SpQ WEIGHT</label>
+                        <span className="text-[#ffb4ab] font-bold font-mono text-sm">{wSpQ}%</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="100" value={wSpQ} 
+                        onChange={(e) => setWSpQ(parseInt(e.target.value))}
+                        className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#ffb4ab] cursor-pointer"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-end">
+                        <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>MINIMUM AQ</label>
+                        <span className="text-[#8aebff] font-bold font-mono text-xl">{minAQ}</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="50" 
+                        max="100" 
+                        value={minAQ} 
+                        onChange={(e) => setMinAQ(parseInt(e.target.value))}
+                        className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#8aebff] cursor-pointer"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-end">
+                        <label className={`text-[10px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>MINIMUM EQ</label>
+                        <span className="text-[#c3c0ff] font-bold font-mono text-xl">{minEQ}</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="50" 
+                        max="100" 
+                        value={minEQ} 
+                        onChange={(e) => setMinEQ(parseInt(e.target.value))}
+                        className="w-full h-1 bg-white/10 rounded-full appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#c3c0ff] cursor-pointer"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             
@@ -397,6 +501,63 @@ export default function EmployerPage() {
                     </div>
                   </div>
 
+                  {/* Dimension Fit Matrix */}
+                  <div className="space-y-4">
+                    <h4 className="text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono">Dimension Fit Matrix</h4>
+                    <div className="bg-[#0f172a]/20 border border-white/5 rounded-lg p-5 space-y-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs text-white/40 uppercase tracking-widest font-mono">
+                          Weight Model: {customWeightsMode ? 'CUSTOM SANDBOX' : sortBy === 'sales' ? 'SALES FIT' : 'TECH FIT'}
+                        </span>
+                      </div>
+                      
+                      {(() => {
+                        const totalW = wIQ + wAQ + wEQ + wSQ + wSpQ;
+                        const activeWeights = customWeightsMode 
+                          ? { 
+                              IQ: totalW > 0 ? wIQ / totalW : 0, 
+                              AQ: totalW > 0 ? wAQ / totalW : 0, 
+                              EQ: totalW > 0 ? wEQ / totalW : 0, 
+                              SQ: totalW > 0 ? wSQ / totalW : 0, 
+                              SpQ: totalW > 0 ? wSpQ / totalW : 0 
+                            }
+                          : sortBy === 'sales' 
+                            ? { IQ: 0.10, AQ: 0.20, EQ: 0.35, SQ: 0.35, SpQ: 0.00 }
+                            : { IQ: 0.40, AQ: 0.30, EQ: 0.20, SQ: 0.05, SpQ: 0.05 };
+                          
+                        const dimScores = {
+                          IQ: selectedCandidate.iq,
+                          EQ: selectedCandidate.eq,
+                          AQ: selectedCandidate.aq,
+                          SQ: selectedCandidate.sq,
+                          SpQ: Math.round((selectedCandidate.iq + selectedCandidate.eq) / 2)
+                        };
+
+                        return Object.entries(activeWeights).map(([dim, weight]) => {
+                          const rawScore = (dimScores as any)[dim] || 0;
+                          const contribution = rawScore * weight;
+                          const maxContrib = 100 * weight;
+                          const fillPercent = maxContrib > 0 ? (contribution / maxContrib) * 100 : 0;
+                          
+                          return (
+                            <div key={dim} className="space-y-1.5">
+                              <div className="flex justify-between text-xs font-mono">
+                                <span className="text-white font-bold">{dim} ({Math.round(weight * 100)}%)</span>
+                                <span className="text-[#8aebff] font-bold">{rawScore} pts &rarr; +{contribution.toFixed(1)} match pts</span>
+                              </div>
+                              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden flex">
+                                <div 
+                                  className="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-full"
+                                  style={{ width: `${fillPercent}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>Verified Skills</h4>
@@ -418,14 +579,21 @@ export default function EmployerPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-6 border-t border-white/5 bg-[#2f3638]/50">
-                  <button className="w-full bg-[#8aebff] text-[#00363e] py-6 text-[12px] font-bold tracking-[0.1em] rounded hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(47,217,244,0.3)] mb-3 flex items-center justify-center gap-2">
+                <div className="p-6 border-t border-white/5 bg-[#2f3638]/50 space-y-3">
+                  <button className="w-full bg-[#8aebff] text-[#00363e] py-6 text-[12px] font-bold tracking-[0.1em] rounded hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(47,217,244,0.3)] flex items-center justify-center gap-2">
                     <Zap className="w-5 h-5 fill-[#00363e]" />
                     REQUEST INTRODUCTION
                   </button>
                   <button className="w-full border border-white/10 text-[#dde4e5] py-4 text-[12px] font-bold tracking-[0.1em] rounded hover:bg-white/5 transition-all flex items-center justify-center gap-2">
                     <Plus className="w-4 h-4" />
                     SAVE TO TALENT POOL
+                  </button>
+                  <button 
+                    onClick={handlePrintDossier}
+                    className="w-full border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 py-4 text-[12px] font-bold tracking-[0.1em] rounded transition-all flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    EXPORT DOSSIER (PDF)
                   </button>
                 </div>
               </>
@@ -503,6 +671,95 @@ export default function EmployerPage() {
         </div>
         )}
       </main>
+
+      {/* Print Stylesheet Overrides */}
+      <style>{`
+        @media print {
+          body {
+            background-color: white !important;
+            color: black !important;
+          }
+          body > *:not(#printable-dossier-root) {
+            display: none !important;
+          }
+          #printable-dossier-root {
+            display: block !important;
+            background-color: white !important;
+            color: black !important;
+            padding: 40px !important;
+          }
+        }
+      `}</style>
+
+      {selectedCandidate && (
+        <div id="printable-dossier-root" className="hidden p-10 font-sans max-w-4xl mx-auto border-2 border-slate-200 rounded-lg">
+          <div className="flex justify-between items-center border-b-2 border-slate-900 pb-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-black tracking-tight text-slate-900">CAMPUS TO CORPORATE (C2C)</h1>
+              <p className="text-xs uppercase tracking-widest text-slate-500 font-mono">Elite Talent Behavioral Scorecard</p>
+            </div>
+            <div className="text-right">
+              <span className="text-xs text-slate-400 font-mono">Report generated on {new Date().toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-8 mb-8">
+            <img 
+              alt={selectedCandidate.name} 
+              className="w-24 h-24 rounded-full border border-slate-300"
+              src={selectedCandidate.image}
+            />
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900">{selectedCandidate.name}</h2>
+              <p className="text-md text-slate-600 font-mono mb-2">{selectedCandidate.role} ({selectedCandidate.cohort})</p>
+              <div className="inline-block px-3 py-1 bg-slate-100 border border-slate-200 rounded text-xs font-mono font-bold text-slate-700">
+                Primary Profile Archetype: {selectedCandidate.role}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-4 gap-4 mb-8">
+            <div className="border border-slate-200 p-4 rounded text-center">
+              <span className="text-[10px] font-mono text-slate-400 uppercase block mb-1">Match Index</span>
+              <span className="text-xl font-bold text-slate-800">{selectedCandidate.match}%</span>
+            </div>
+            <div className="border border-slate-200 p-4 rounded text-center">
+              <span className="text-[10px] font-mono text-slate-400 uppercase block mb-1">IQ Score</span>
+              <span className="text-xl font-bold text-slate-800">{selectedCandidate.iq}</span>
+            </div>
+            <div className="border border-slate-200 p-4 rounded text-center">
+              <span className="text-[10px] font-mono text-slate-400 uppercase block mb-1">EQ Score</span>
+              <span className="text-xl font-bold text-slate-800">{selectedCandidate.eq}</span>
+            </div>
+            <div className="border border-slate-200 p-4 rounded text-center">
+              <span className="text-[10px] font-mono text-slate-400 uppercase block mb-1">AQ Score</span>
+              <span className="text-xl font-bold text-slate-800">{selectedCandidate.aq}</span>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h3 className="text-sm font-bold text-slate-900 uppercase font-mono border-b pb-2 mb-3">Professional Dossier Overview</h3>
+            <p className="text-sm text-slate-700 leading-relaxed italic">
+              "{selectedCandidate.summary}"
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 uppercase font-mono border-b pb-2 mb-3">Verified Core Strengths</h3>
+            <div className="flex flex-wrap gap-2">
+              {selectedCandidate.skills.map((skill, idx) => (
+                <span key={idx} className="px-3 py-1 bg-slate-100 border border-slate-200 rounded text-xs text-slate-800 font-medium">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-slate-200 text-center text-[10px] text-slate-400 font-mono">
+            CONFIDENTIAL RECRUITMENT INSIGHTS // INTENDED ONLY FOR ENTERPRISE SUBSCRIBER RECRUITERS
+          </div>
+        </div>
+      )}
     </div>
   );
 }

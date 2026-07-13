@@ -25,12 +25,22 @@ import {
 import Link from "next/link";
 import React, { useEffect, useState, useCallback } from "react";
 import GrowthRadar from "@/components/charts/GrowthRadar";
+import TrendLineChart from "@/components/charts/TrendLineChart";
 import { useRequireAuth } from "@/hooks/useAuth";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import type { DimensionScores, Alert } from "@/types";
+import { useApiQuery } from "@/hooks/useApiQuery";
+
 import { authFetch } from '@/lib/authFetch';
 import ProfileCompletionWidget from "@/components/profile/ProfileCompletionWidget";
+import UserJourneyWidget from "@/components/dashboard/UserJourneyWidget";
 import { supabase } from "@/lib/supabase";
+
+interface HistoryPoint {
+  attempt_number: number;
+  dimension_scores: DimensionScores;
+  created_at: string;
+}
 
 interface Application {
   id: string;
@@ -60,7 +70,6 @@ interface DashboardData {
 export default function Dashboard() {
   const { id } = useParams();
   const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['student'] });
-  
   const [data, setData] = useState<DashboardData | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
@@ -68,6 +77,14 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [activeMatrixTab, setActiveMatrixTab] = useState<"radar" | "trend">("radar");
+
+
+  const { data: historyData } = useApiQuery<HistoryPoint[]>(
+    authLoading || !data || !data.assessments || data.assessments.length === 0
+      ? null
+      : `/api/student/${id}/history`
+  );
 
   const copyFeedbackLink = () => {
     const link = `${window.location.origin}/feedback/${id}`;
@@ -218,6 +235,17 @@ export default function Dashboard() {
           />
         )}
 
+        {data?.student && (
+          <UserJourneyWidget 
+            studentProfile={data.student}
+            hasAssessment={data.assessments && data.assessments.length > 0}
+            hasPeerFeedback={!!data.peer_scores}
+            hasApplications={applications.length > 0}
+            feedbackLinkCopied={copied}
+            onCopyFeedbackLink={copyFeedbackLink}
+          />
+        )}
+
         {/* Profile Hero Section */}
         <section className="mb-12">
           <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-16 overflow-hidden">
@@ -317,38 +345,63 @@ export default function Dashboard() {
                   </h2>
                   <p className="text-[10px] text-cyan-400/50 uppercase tracking-[0.4em] font-black mt-3">360°_NEURAL_CAPACITY_BENCHMARKS</p>
                 </div>
-                <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-black/40 border border-white/10 rounded-sm font-mono text-[10px] text-white/40 uppercase tracking-widest font-bold">
-                  <Database className="w-3.5 h-3.5" /> ARCHIVE_STABLE_001
+                <div className="flex bg-black/40 border border-white/10 rounded-sm p-0.5">
+                  <button
+                    onClick={() => setActiveMatrixTab("radar")}
+                    className={`px-3 py-1.5 font-mono text-[9px] uppercase font-black tracking-wider transition-all rounded-sm ${
+                      activeMatrixTab === "radar"
+                        ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
+                        : "text-white/40 hover:text-white/60 border border-transparent"
+                    }`}
+                  >
+                    Radar Matrix
+                  </button>
+                  <button
+                    onClick={() => setActiveMatrixTab("trend")}
+                    className={`px-3 py-1.5 font-mono text-[9px] uppercase font-black tracking-wider transition-all rounded-sm ${
+                      activeMatrixTab === "trend"
+                        ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
+                        : "text-white/40 hover:text-white/60 border border-transparent"
+                    }`}
+                  >
+                    Historical Trend
+                  </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-cyan-400/5 blur-3xl rounded-full scale-75"></div>
-                  <GrowthRadar data={scores as { [key: string]: number }} peerData={data?.peer_scores as { [key: string]: number } | undefined} />
-                </div>
-                
-                <div className="space-y-4">
-                  <h4 className="font-mono text-[10px] text-white/20 uppercase tracking-[0.4em] font-black mb-6">Vector_Decomposition</h4>
-                  {Object.entries(scores).map(([key, value]) => (
-                    <div key={key} className="bg-white/5 border border-white/5 p-6 rounded-xl group hover:border-cyan-500/30 transition-all">
-                      <div className="flex justify-between items-end mb-4">
-                        <span className="font-mono text-[11px] font-black text-white/40 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">{key}</span>
-                        <div className="flex items-baseline gap-1">
-                           <span className="text-3xl font-black text-white tracking-tighter">{value as number}</span>
-                           <span className="text-[10px] font-bold text-white/20 uppercase">PTS</span>
+              {activeMatrixTab === "radar" ? (
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-cyan-400/5 blur-3xl rounded-full scale-75"></div>
+                    <GrowthRadar data={scores as { [key: string]: number }} peerData={data?.peer_scores as { [key: string]: number } | undefined} />
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-mono text-[10px] text-white/20 uppercase tracking-[0.4em] font-black mb-6">Vector_Decomposition</h4>
+                    {Object.entries(scores).map(([key, value]) => (
+                      <div key={key} className="bg-white/5 border border-white/5 p-6 rounded-xl group hover:border-cyan-500/30 transition-all">
+                        <div className="flex justify-between items-end mb-4">
+                          <span className="font-mono text-[11px] font-black text-white/40 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">{key}</span>
+                          <div className="flex items-baseline gap-1">
+                             <span className="text-3xl font-black text-white tracking-tighter">{value as number}</span>
+                             <span className="text-[10px] font-bold text-white/20 uppercase">PTS</span>
+                          </div>
+                        </div>
+                        <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-cyan-500 to-indigo-600 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(6,182,212,0.4)]" 
+                            style={{ width: `${value}%` }}
+                          ></div>
                         </div>
                       </div>
-                      <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-cyan-500 to-indigo-600 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(6,182,212,0.4)]" 
-                          style={{ width: `${value}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="animate-fadeIn mt-8">
+                  <TrendLineChart history={historyData} />
+                </div>
+              )}
             </div>
           </div>
 

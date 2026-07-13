@@ -18,8 +18,8 @@ export default function DashboardRedirect() {
           return;
         }
 
-        const role = user.user_metadata?.role;
-        const profileId = user.user_metadata?.profile_id;
+        const role = user.app_metadata?.role || user.user_metadata?.role;
+        const profileId = user.app_metadata?.profile_id || user.user_metadata?.profile_id;
 
         if (role === 'employer') {
           router.push('/employer');

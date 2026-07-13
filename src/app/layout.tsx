@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import UserJourneyGuide from "@/components/UserJourneyGuide";
 
 const hanken = Hanken_Grotesk({ 
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
     <html lang="en" className={`${hanken.variable} ${jetbrains.variable}`}>
       <body className="font-sans antialiased bg-background text-slate-200">
         {children}
+        <UserJourneyGuide />
       </body>
     </html>
   );

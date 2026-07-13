@@ -1,6 +1,6 @@
-from fpdf import FPDF
 
 def generate_student_pdf(student_data: dict, assessment_data: dict) -> bytes:
+    from fpdf import FPDF
     class PDF(FPDF):
         def header(self):
             self.set_font("helvetica", "B", 15)
@@ -80,6 +80,7 @@ def generate_student_pdf(student_data: dict, assessment_data: dict) -> bytes:
     return bytes(pdf.output())
 
 def generate_interview_guide_pdf(student_data: dict, assessment_data: dict) -> bytes:
+    from fpdf import FPDF
     class PDF(FPDF):
         def header(self):
             self.set_font("helvetica", "B", 15)
@@ -178,3 +179,102 @@ def generate_interview_guide_pdf(student_data: dict, assessment_data: dict) -> b
         pdf.cell(0, 6, "No significant competency gaps detected. General screening questions are recommended.", new_x="LMARGIN", new_y="NEXT")
 
     return bytes(pdf.output())
+
+
+def generate_tailored_resume_pdf(context: dict) -> bytes:
+    from fpdf import FPDF
+    class PDF(FPDF):
+        def header(self):
+            self.set_font("helvetica", "B", 14)
+            self.cell(0, 10, "C2C Tailored Resume Dossier", align="C", new_x="LMARGIN", new_y="NEXT")
+            self.ln(5)
+
+        def footer(self):
+            self.set_y(-15)
+            self.set_font("helvetica", "I", 8)
+            self.cell(0, 10, f"Page {self.page_no()}/{{nb}}", align="C")
+
+    pdf = PDF()
+    pdf.add_page()
+    pdf.set_font("helvetica", size=11)
+
+    # 1. Title/Header Info
+    pdf.set_font("helvetica", "B", 12)
+    pdf.cell(0, 8, "CANDIDATE INFORMATION", new_x="LMARGIN", new_y="NEXT")
+    pdf.line(pdf.get_x(), pdf.get_y(), pdf.get_x() + 190, pdf.get_y())
+    pdf.ln(2)
+    
+    pdf.set_font("helvetica", size=10)
+    pdf.cell(50, 6, "Candidate Name:", new_x="NONE")
+    pdf.cell(0, 6, context.get("candidate_name") or "Unknown", new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.cell(50, 6, "Department:", new_x="NONE")
+    pdf.cell(0, 6, context.get("department") or "Unknown", new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.cell(50, 6, "Location:", new_x="NONE")
+    pdf.cell(0, 6, context.get("location") or "Unknown", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(4)
+
+    # 2. Professional Profile & Strategy
+    pdf.set_font("helvetica", "B", 12)
+    pdf.cell(0, 8, "PROFESSIONAL PROFILE & STRATEGY", new_x="LMARGIN", new_y="NEXT")
+    pdf.line(pdf.get_x(), pdf.get_y(), pdf.get_x() + 190, pdf.get_y())
+    pdf.ln(2)
+    
+    pdf.set_font("helvetica", "B", 10)
+    pdf.cell(0, 6, "Profile Summary:", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("helvetica", size=10)
+    pdf.multi_cell(0, 5, context.get("archetype_summary") or "A highly motivated software engineer.")
+    pdf.ln(2)
+    
+    pdf.set_font("helvetica", "B", 10)
+    pdf.cell(0, 6, "Voice Hook & Strategy:", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("helvetica", size=10)
+    pdf.multi_cell(0, 5, context.get("voice_hook") or "Eager to contribute immediately.")
+    pdf.ln(4)
+
+    # 3. Primary Skills & Competency Vectors
+    pdf.set_font("helvetica", "B", 12)
+    pdf.cell(0, 8, "PRIMARY SKILLS & COMPETENCY VECTORS", new_x="LMARGIN", new_y="NEXT")
+    pdf.line(pdf.get_x(), pdf.get_y(), pdf.get_x() + 190, pdf.get_y())
+    pdf.ln(2)
+    
+    top_skills = context.get("top_skills") or []
+    if top_skills:
+        pdf.set_font("helvetica", size=10)
+        pdf.multi_cell(0, 5, f"Top Skills: {', '.join(top_skills)}")
+        pdf.ln(2)
+    else:
+        pdf.set_font("helvetica", size=10)
+        pdf.cell(0, 6, "No top skills specified.", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(2)
+
+    # 4. Role Alignment Insights
+    pdf.set_font("helvetica", "B", 12)
+    pdf.cell(0, 8, "ROLE ALIGNMENT INSIGHTS", new_x="LMARGIN", new_y="NEXT")
+    pdf.line(pdf.get_x(), pdf.get_y(), pdf.get_x() + 190, pdf.get_y())
+    pdf.ln(2)
+    
+    role_title = context.get("role_title") or "Target Role"
+    company = context.get("company") or "Target Company"
+    pdf.set_font("helvetica", "B", 10)
+    pdf.cell(50, 6, "Target Role:", new_x="NONE")
+    pdf.set_font("helvetica", size=10)
+    pdf.cell(0, 6, role_title, new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.set_font("helvetica", "B", 10)
+    pdf.cell(50, 6, "Target Company:", new_x="NONE")
+    pdf.set_font("helvetica", size=10)
+    pdf.cell(0, 6, company, new_x="LMARGIN", new_y="NEXT")
+    
+    matched_tech = context.get("matched_tech") or []
+    if matched_tech:
+        pdf.set_font("helvetica", "B", 10)
+        pdf.cell(0, 6, "Matched Technologies:", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("helvetica", size=10)
+        pdf.multi_cell(0, 5, ", ".join(matched_tech))
+    
+    pdf.ln(4)
+
+    return bytes(pdf.output())
+

@@ -41,14 +41,14 @@ def bulk_upload():
             normalized_batch = []
             for q in batch:
                 normalized_batch.append({
-                    "id": q.get("ID"),
-                    "stem": q.get("stem"),
-                    "item_type": q.get("type"),
-                    "primary_dimension": q.get("primary_dimension"),
-                    "secondary_dimensions": q.get("secondary_dimensions"),
-                    "tags": q.get("tags"),
-                    "options": q.get("options"),
-                    "scoring_logic": {"raw": q.get("scoring_logic")} if isinstance(q.get("scoring_logic"), str) else q.get("scoring_logic")
+                    "id": q.get("ID") or q.get("id"),
+                    "stem": q.get("stem") or q.get("STEM"),
+                    "item_type": q.get("item_type") or q.get("type") or q.get("TYPE"),
+                    "primary_dimension": q.get("primary_dimension") or q.get("PRIMARY_DIMENSION"),
+                    "secondary_dimensions": q.get("secondary_dimensions") or q.get("SECONDARY_DIMENSIONS"),
+                    "tags": q.get("tags") or q.get("TAGS"),
+                    "options": q.get("options") or q.get("OPTIONS"),
+                    "scoring_logic": {"raw": q.get("scoring_logic")} if isinstance(q.get("scoring_logic"), str) else (q.get("scoring_logic") or q.get("SCORING_LOGIC"))
                 })
             
             try:

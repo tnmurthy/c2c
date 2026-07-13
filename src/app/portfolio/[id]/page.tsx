@@ -56,6 +56,7 @@ export default function RetroPortfolio() {
     { id: 'projects', title: 'Competency Vectors', icon: '📁', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 150, y: 110, width: 400, height: 280 },
     { id: 'dos', title: 'MS-DOS Prompt', icon: '📟', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 80, y: 120, width: 500, height: 350 },
     { id: 'scores', title: 'Cognitive Matrix', icon: '📊', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 200, y: 150, width: 400, height: 320 },
+    { id: 'cv_tailor', title: 'CV Tailor', icon: '👔', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 220, y: 180, width: 550, height: 480 },
   ]);
 
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
@@ -64,6 +65,163 @@ export default function RetroPortfolio() {
   // Dragging states
   const [draggedWindow, setDraggedWindow] = useState<string | null>(null);
   const dragOffset = useRef({ x: 0, y: 0 });
+
+  // CV Tailor State
+  const [alerts, setAlerts] = useState<any[]>([]);
+  const [selectedLeadId, setSelectedLeadId] = useState<string>('');
+  const [jobDescription, setJobDescription] = useState<string>('');
+  const [isCustomJd, setIsCustomJd] = useState<boolean>(false);
+  const [tailorLoading, setTailorLoading] = useState<boolean>(false);
+  const [tailoredResults, setTailoredResults] = useState<any>(null);
+
+  // Fetch student alerts
+  useEffect(() => {
+    async function fetchAlerts() {
+      try {
+        const response = await fetch(`/api/alerts/student/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setAlerts(data || []);
+          if (data && data.length > 0) {
+            const firstLead = data.find((a: any) => a.market_leads);
+            if (firstLead) {
+              setSelectedLeadId(String(firstLead.market_leads.id));
+              setJobDescription(firstLead.market_leads.ai_summary || firstLead.market_leads.ai_notes || '');
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch student alerts:', err);
+      }
+    }
+    if (id) {
+      fetchAlerts();
+    }
+  }, [id]);
+
+  const handleLeadChange = (leadId: string) => {
+    setSelectedLeadId(leadId);
+    if (leadId === 'custom') {
+      setIsCustomJd(true);
+      setJobDescription('');
+    } else {
+      setIsCustomJd(false);
+      const alertItem = alerts.find((a: any) => a.market_leads && String(a.market_leads.id) === leadId);
+      if (alertItem) {
+        setJobDescription(alertItem.market_leads.ai_summary || alertItem.market_leads.ai_notes || '');
+      } else {
+        setJobDescription('');
+      }
+    }
+  };
+
+  const handleTailorCV = async () => {
+    if (!studentData) return;
+    setTailorLoading(true);
+    setTailoredResults(null);
+    try {
+      const candidatePayload = {
+        full_name: studentData.full_name || 'Student',
+        department: studentData.department || 'General',
+        skills: studentData.skills || [],
+        archetype: assessment?.primary_profile || 'builder',
+        location: studentData.location || 'San Francisco'
+      };
+
+      const resumePromise = fetch('/api/market/generate/resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: selectedLeadId,
+          posting: jobDescription,
+          candidate: candidatePayload
+        })
+      });
+
+      const coverLetterPromise = fetch('/api/market/generate/cover-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: selectedLeadId,
+          posting: jobDescription,
+          candidate: candidatePayload
+        })
+      });
+
+      const outreachPromise = fetch('/api/market/generate/outreach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          posting: jobDescription,
+          candidate: candidatePayload,
+          style: 'cold_email'
+        })
+      });
+
+      const [resResume, resCoverLetter, resOutreach] = await Promise.all([
+        resumePromise,
+        coverLetterPromise,
+        outreachPromise
+      ]);
+
+      if (resResume.ok && resCoverLetter.ok && resOutreach.ok) {
+        const resumeData = await resResume.json();
+        const coverLetterData = await resCoverLetter.json();
+        const outreachData = await resOutreach.json();
+        setTailoredResults({
+          resume: resumeData,
+          coverLetter: coverLetterData,
+          outreach: outreachData
+        });
+      } else {
+        console.error('One or more tailor APIs failed');
+      }
+    } catch (err) {
+      console.error('Error tailoring CV:', err);
+    } finally {
+      setTailorLoading(false);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!studentData) return;
+    try {
+      const candidatePayload = {
+        full_name: studentData.full_name || 'Student',
+        department: studentData.department || 'General',
+        skills: studentData.skills || [],
+        archetype: assessment?.primary_profile || 'builder',
+        location: studentData.location || 'San Francisco'
+      };
+
+      const response = await fetch('/api/market/download/resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: selectedLeadId,
+          posting: jobDescription,
+          candidate: candidatePayload
+        })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const nameStr = studentData.full_name || 'Student';
+        a.download = `tailored_resume_${nameStr.replace(/\s+/g, '_')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Failed to download tailored resume PDF');
+      }
+    } catch (err) {
+      console.error('Error downloading PDF:', err);
+    }
+  };
 
   // Load candidate details
   useEffect(() => {
@@ -547,6 +705,10 @@ export default function RetroPortfolio() {
             <span className="desktop-shortcut-icon">📟</span>
             <span className="desktop-shortcut-label">MS-DOS Prompt</span>
           </div>
+          <div className="desktop-shortcut" onDoubleClick={() => openWindow('cv_tailor')}>
+            <span className="desktop-shortcut-icon">👔</span>
+            <span className="desktop-shortcut-label">CV Tailor</span>
+          </div>
           <div 
             className="desktop-shortcut" 
             onClick={() => window.open(`https://github.com`, '_blank')}
@@ -555,6 +717,7 @@ export default function RetroPortfolio() {
             <span className="desktop-shortcut-label">GitHub</span>
           </div>
         </div>
+
 
         {/* Back Link Button for Next.js Context */}
         <div className="absolute top-4 right-4 z-50">
@@ -702,10 +865,150 @@ export default function RetroPortfolio() {
                     </form>
                   </div>
                 )}
+
+                {w.id === 'cv_tailor' && (
+                  <div className="space-y-4 text-xs font-sans">
+                    <div className="flex flex-col gap-1">
+                      <label className="font-bold">Select Opportunity Alert:</label>
+                      <select 
+                        className="w-full border-2 border-gray-600 bg-white p-1 text-black font-sans outline-none"
+                        value={selectedLeadId}
+                        onChange={(e) => handleLeadChange(e.target.value)}
+                        disabled={tailorLoading}
+                      >
+                        <option value="">-- Choose an Alert --</option>
+                        {alerts.map((a: any) => {
+                          const lead = a.market_leads;
+                          if (!lead) return null;
+                          return (
+                            <option key={lead.id} value={lead.id}>
+                              {lead.company || 'Unknown Company'} - {lead.name || 'Job Lead'} (Score: {a.score}%)
+                            </option>
+                          );
+                        })}
+                        <option value="custom">Paste Custom Job Description</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="custom-jd-checkbox" 
+                        checked={isCustomJd} 
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            handleLeadChange('custom');
+                          } else {
+                            handleLeadChange('');
+                          }
+                        }}
+                        disabled={tailorLoading}
+                      />
+                      <label htmlFor="custom-jd-checkbox" className="select-none font-bold">Paste Custom JD</label>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="font-bold">Job Description Details:</label>
+                      <textarea
+                        rows={5}
+                        className="w-full border-2 border-gray-600 bg-white p-1 text-black font-sans outline-none resize-none"
+                        value={jobDescription}
+                        onChange={(e) => setJobDescription(e.target.value)}
+                        placeholder="Paste details here..."
+                        disabled={tailorLoading || (!isCustomJd && selectedLeadId !== '')}
+                      />
+                    </div>
+
+                    <button
+                      className="win95-btn px-4 py-1.5 font-bold flex items-center justify-center disabled:opacity-50"
+                      onClick={handleTailorCV}
+                      disabled={tailorLoading || !jobDescription}
+                    >
+                      {tailorLoading ? 'Tailoring in Progress...' : 'Tailor CV'}
+                    </button>
+
+                    {tailoredResults && (
+                      <div className="mt-4 space-y-4 border-2 border-gray-600 p-2 bg-gray-50 max-h-72 overflow-y-auto">
+                        <div>
+                          <div className="font-bold border-b border-gray-400 pb-1 mb-2 text-blue-900 font-sans">1. Tailored Resume Preview</div>
+                          <div className="space-y-1 font-mono text-[11px] bg-white p-2 border border-gray-300">
+                            <div><strong>Candidate:</strong> {tailoredResults.resume.candidate_name}</div>
+                            <div><strong>Department:</strong> {tailoredResults.resume.department}</div>
+                            <div><strong>Role Title:</strong> {tailoredResults.resume.role_title}</div>
+                            <div><strong>Company:</strong> {tailoredResults.resume.company}</div>
+                            <div><strong>Location:</strong> {tailoredResults.resume.location}</div>
+                            <div><strong>Voice Hook:</strong> {tailoredResults.resume.voice_hook}</div>
+                            <div><strong>Summary:</strong> {tailoredResults.resume.archetype_summary}</div>
+                            {tailoredResults.resume.top_skills && (
+                              <div><strong>Top Skills:</strong> {tailoredResults.resume.top_skills.join(', ')}</div>
+                            )}
+                            {tailoredResults.resume.matched_tech && (
+                              <div><strong>Matched Tech:</strong> {tailoredResults.resume.matched_tech.join(', ')}</div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="font-bold border-b border-gray-400 pb-1 mb-2 text-blue-900 font-sans">2. Tailored Cover Letter</div>
+                          <div className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300">
+                            {tailoredResults.coverLetter && (
+                              <>
+                                <p>Dear Hiring Team at {tailoredResults.coverLetter.company || 'Company'},</p>
+                                <br />
+                                <p>{tailoredResults.coverLetter.opener}. My core strengths include {tailoredResults.coverLetter.strength}, and I have hands-on experience with {tailoredResults.coverLetter.skills_str}.</p>
+                                <br />
+                                <p>{tailoredResults.coverLetter.hook}.</p>
+                                <br />
+                                <p>{tailoredResults.coverLetter.follow_up_note}</p>
+                                <br />
+                                <p>Sincerely,</p>
+                                <p>{tailoredResults.coverLetter.candidate_name}</p>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="font-bold border-b border-gray-400 pb-1 mb-2 text-blue-900 font-sans">3. Outreach & LinkedIn Templates</div>
+                          <div className="space-y-4">
+                            <div>
+                              <div className="font-bold text-[10px] text-gray-600 font-sans">COLD EMAIL DRAFT:</div>
+                              <pre className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300 mt-1">
+                                {tailoredResults.outreach.cold_email}
+                              </pre>
+                            </div>
+                            <div>
+                              <div className="font-bold text-[10px] text-gray-600 font-sans">LINKEDIN NOTE DRAFT:</div>
+                              <pre className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300 mt-1">
+                                {tailoredResults.outreach.linkedin_note}
+                              </pre>
+                            </div>
+                            <div>
+                              <div className="font-bold text-[10px] text-gray-600 font-sans">FOUNDER MESSAGE DRAFT:</div>
+                              <pre className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300 mt-1">
+                                {tailoredResults.outreach.founder_message}
+                              </pre>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-2">
+                          <button
+                            className="win95-btn px-4 py-1.5 font-bold flex items-center justify-center"
+                            onClick={handleDownloadPDF}
+                          >
+                            Download tailored PDF
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           );
         })}
+
 
         {/* 2. Start Menu Drawer */}
         {startMenuOpen && (
@@ -727,8 +1030,10 @@ export default function RetroPortfolio() {
                     <div className="start-menu-item" onClick={() => { openWindow('resume'); setStartMenuOpen(false); }}>📝 Resume Details</div>
                     <div className="start-menu-item" onClick={() => { openWindow('projects'); setStartMenuOpen(false); }}>📁 Vector Profiles</div>
                     <div className="start-menu-item" onClick={() => { openWindow('dos'); setStartMenuOpen(false); }}>📟 MS-DOS Shell</div>
+                    <div className="start-menu-item" onClick={() => { openWindow('cv_tailor'); setStartMenuOpen(false); }}>👔 CV Tailor</div>
                   </div>
                 )}
+
               </div>
               <div 
                 className="start-menu-item" 

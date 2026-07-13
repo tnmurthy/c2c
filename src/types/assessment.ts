@@ -13,6 +13,7 @@ export interface AssessmentQuestion {
   text: string;
   item_type: string;
   options?: AssessmentOption[] | string;
+  stem?: string;
 }
 
 export interface AssessmentOption {

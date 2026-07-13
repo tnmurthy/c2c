@@ -35,7 +35,12 @@ export async function setupMocks(
     last_sign_in_at: '2026-07-04T22:05:00Z',
     app_metadata: {
       provider: 'email',
-      providers: ['email']
+      providers: ['email'],
+      role: role || 'student',
+      profile_id: role === 'student' ? 'mock-student-id' :
+                  role === 'employer' ? 'mock-employer-id' :
+                  role === 'institution' ? 'mock-institution-id' :
+                  role === 'admin' ? 'mock-admin-id' : 'mock-profile-id'
     },
     user_metadata: {
       role: role || 'student',
@@ -59,6 +64,18 @@ export async function setupMocks(
   };
 
   if (role) {
+    const cookieValue = encodeURIComponent(JSON.stringify(mockSession));
+    await page.context().addCookies([
+      {
+        name: tokenKey,
+        value: cookieValue,
+        domain: 'localhost',
+        path: '/',
+        expires: Math.floor(Date.now() / 1000) + 3600,
+        sameSite: 'Lax',
+      }
+    ]);
+
     await page.addInitScript(({ key, session }) => {
       window.localStorage.setItem(key, JSON.stringify(session));
       // Also write to document.cookie to synchronize with server-side middleware immediately

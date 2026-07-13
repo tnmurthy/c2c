@@ -35,7 +35,7 @@ export function useAuthSession(): UseAuthSessionReturn {
       }
 
       const activeUser = activeSession.user;
-      const userRole = activeUser.app_metadata?.role || null;
+      const userRole = activeUser.app_metadata?.role || activeUser.user_metadata?.role || null;
       let resolvedTenantId = activeUser.app_metadata?.tenant_id || null;
 
       if (!resolvedTenantId && activeUser) {
