@@ -1,0 +1,1047 @@
+{
+  "communities": {
+    "0": [
+      "portfolio_schema",
+      "portfolio_schema_certifications_items",
+      "portfolio_schema_certifications_type",
+      "portfolio_schema_folder_type",
+      "portfolio_schema_folders_items",
+      "portfolio_schema_folders_type",
+      "portfolio_schema_icon_enum",
+      "portfolio_schema_icon_type",
+      "portfolio_schema_id_type",
+      "portfolio_schema_impact_type",
+      "portfolio_schema_issuer_type",
+      "portfolio_schema_items_properties",
+      "portfolio_schema_items_required",
+      "portfolio_schema_items_type",
+      "portfolio_schema_projects_items",
+      "portfolio_schema_projects_type",
+      "portfolio_schema_properties",
+      "portfolio_schema_properties_certifications",
+      "portfolio_schema_properties_folder",
+      "portfolio_schema_properties_folders",
+      "portfolio_schema_properties_icon",
+      "portfolio_schema_properties_id",
+      "portfolio_schema_properties_impact",
+      "portfolio_schema_properties_issuer",
+      "portfolio_schema_properties_projects",
+      "portfolio_schema_properties_repo",
+      "portfolio_schema_properties_stack",
+      "portfolio_schema_properties_title",
+      "portfolio_schema_properties_tooltip",
+      "portfolio_schema_properties_url",
+      "portfolio_schema_properties_year",
+      "portfolio_schema_repo_type",
+      "portfolio_schema_required",
+      "portfolio_schema_schema",
+      "portfolio_schema_stack_type",
+      "portfolio_schema_title",
+      "portfolio_schema_title_type",
+      "portfolio_schema_tooltip_type",
+      "portfolio_schema_type",
+      "portfolio_schema_url_type",
+      "portfolio_schema_year_type"
+    ],
+    "1": [
+      "api_exceptions",
+      "api_exceptions_apiexception",
+      "api_exceptions_apiexception_init",
+      "api_exceptions_databaseconnectionerror",
+      "api_exceptions_databaseconnectionerror_init",
+      "api_exceptions_notfounderror",
+      "api_exceptions_notfounderror_init",
+      "api_exceptions_permissiondeniederror",
+      "api_exceptions_permissiondeniederror_init",
+      "api_exceptions_rationale_11",
+      "api_exceptions_rationale_17",
+      "api_exceptions_rationale_2",
+      "api_exceptions_rationale_23",
+      "api_pdf_generator",
+      "api_pdf_generator_generate_interview_guide_pdf",
+      "api_pdf_generator_generate_student_pdf",
+      "exception",
+      "routers_employer_router_get_job_matches",
+      "routers_student_router",
+      "routers_student_router_apply_to_job",
+      "routers_student_router_export_interview_guide",
+      "routers_student_router_export_student_pdf",
+      "routers_student_router_get_cohort_report",
+      "routers_student_router_get_institution_cohort",
+      "routers_student_router_get_student",
+      "routers_student_router_get_student_alerts",
+      "routers_student_router_get_student_applications",
+      "routers_student_router_onboard_student",
+      "routers_student_router_run_optimizers",
+      "routers_student_router_update_student_profile",
+      "routers_student_router_verify_student",
+      "schemas_student",
+      "schemas_student_applicationcreate",
+      "schemas_student_studentonboard",
+      "schemas_student_studentprofileupdate"
+    ],
+    "2": [
+      "package",
+      "package_dependencies",
+      "package_dependencies_clsx",
+      "package_dependencies_concurrently",
+      "package_dependencies_lucide_react",
+      "package_dependencies_next",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_supabase_ssr",
+      "package_dependencies_supabase_supabase_js",
+      "package_dependencies_tailwind_merge",
+      "package_devdependencies",
+      "package_devdependencies_autoprefixer",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_config_next",
+      "package_devdependencies_playwright_test",
+      "package_devdependencies_postcss",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_types_node",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_typescript",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_dev_test",
+      "package_scripts_lint",
+      "package_scripts_start",
+      "package_scripts_test_e2e",
+      "package_version"
+    ],
+    "3": [
+      "api_deps",
+      "api_deps_get_current_user",
+      "api_deps_get_supabase_client",
+      "api_deps_rationale_1",
+      "api_deps_rationale_11",
+      "api_deps_rationale_24",
+      "api_deps_rationale_46",
+      "api_deps_rationale_70",
+      "api_deps_require_admin_supabase",
+      "api_deps_require_role",
+      "api_deps_require_supabase",
+      "routers_analytics_router",
+      "routers_analytics_router_get_funnel_metrics",
+      "routers_analytics_router_get_summary_metrics",
+      "routers_analytics_router_get_tenant_id_from_user",
+      "routers_analytics_router_rationale_11",
+      "routers_analytics_router_rationale_125",
+      "routers_analytics_router_rationale_41",
+      "routers_employer_router_run_scoring_engine",
+      "routers_portfolio_router",
+      "routers_portfolio_router_get_portfolio_placeholder",
+      "routers_portfolio_router_rationale_11",
+      "tests_test_assessment_endpoints",
+      "tests_test_assessment_endpoints_get_mock_student_user",
+      "tests_test_assessment_endpoints_mockuser",
+      "tests_test_assessment_endpoints_mockuser_init",
+      "tests_test_assessment_endpoints_testassessmenthardened",
+      "tests_test_assessment_endpoints_testassessmenthardened_setup",
+      "tests_test_assessment_endpoints_testassessmenthardened_teardown",
+      "tests_test_assessment_endpoints_testassessmenthardened_test_assessment_session_and_cooldown_lifecycle",
+      "tests_test_assessment_endpoints_testassessmenthardened_test_get_assessment_bank"
+    ],
+    "4": [
+      "any",
+      "basemodel",
+      "routers_assessment_router",
+      "routers_assessment_router_c2c_orchestrator_v2",
+      "routers_assessment_router_c2c_orchestrator_v2_init",
+      "routers_assessment_router_c2c_orchestrator_v2_run_ordeal_session",
+      "routers_assessment_router_generate_assessment",
+      "routers_assessment_router_generate_development_report",
+      "routers_assessment_router_get_assessment_bank",
+      "routers_assessment_router_get_item_analysis",
+      "routers_assessment_router_normalize_bank_item",
+      "routers_assessment_router_parse_scoring_logic",
+      "routers_assessment_router_run_agent_recruiters",
+      "routers_assessment_router_start_session",
+      "routers_assessment_router_submit_answer",
+      "routers_assessment_router_submit_assessment",
+      "routers_assessment_router_submit_feedback",
+      "routers_student_router_onboard_institution",
+      "schemas_assessment",
+      "schemas_assessment_answersubmit",
+      "schemas_assessment_assessmentsubmit",
+      "schemas_assessment_feedbacksubmit",
+      "schemas_assessment_institutiononboard",
+      "schemas_assessment_sessionstart",
+      "schemas_portfolio",
+      "schemas_portfolio_auditrequest",
+      "schemas_portfolio_ordealrequest",
+      "schemas_portfolio_portfoliorequest",
+      "tests_test_assessment_endpoints_testassessmenthardened_test_development_report_spq_integration"
+    ],
+    "5": [
+      "backgroundtasks",
+      "request",
+      "routers_assessment_router_webhook_assessment_completed",
+      "routers_employer_router",
+      "routers_employer_router_calculate_match_score",
+      "routers_employer_router_create_job_posting",
+      "routers_employer_router_get_employer_candidates",
+      "routers_employer_router_get_employer_jobs",
+      "routers_employer_router_get_leads",
+      "routers_employer_router_onboard_employer",
+      "routers_employer_router_rationale_27",
+      "routers_employer_router_run_auto_apply",
+      "routers_employer_router_run_job_matching",
+      "routers_employer_router_run_market_scout",
+      "routers_employer_router_webhook_daily_sweep",
+      "routers_employer_router_webhook_job_posted",
+      "routers_employer_router_webhook_lead_approved",
+      "routers_student_router_webhook_student_onboarded",
+      "schemas_employer",
+      "schemas_employer_employeronboard",
+      "schemas_employer_jobcreate",
+      "schemas_employer_jobmatchrequest"
+    ],
+    "6": [
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowjs",
+      "tsconfig_compileroptions_esmoduleinterop",
+      "tsconfig_compileroptions_incremental",
+      "tsconfig_compileroptions_isolatedmodules",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_plugins",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_exclude",
+      "tsconfig_include",
+      "tsconfig_paths"
+    ],
+    "7": [
+      "portfolio_schema_candidate_properties",
+      "portfolio_schema_candidate_required",
+      "portfolio_schema_candidate_type",
+      "portfolio_schema_github_type",
+      "portfolio_schema_linkedin_type",
+      "portfolio_schema_name_type",
+      "portfolio_schema_properties_candidate",
+      "portfolio_schema_properties_github",
+      "portfolio_schema_properties_linkedin",
+      "portfolio_schema_properties_name",
+      "portfolio_schema_properties_roles",
+      "portfolio_schema_properties_summary",
+      "portfolio_schema_roles_items",
+      "portfolio_schema_roles_type",
+      "portfolio_schema_summary_type"
+    ],
+    "8": [
+      "routers_student_router_run_student_profile_optimization",
+      "routers_student_router_send_email_notification",
+      "scripts_c2c_agency",
+      "scripts_c2c_agency_run_pipeline",
+      "scripts_c2c_agency_serve_portfolio",
+      "scripts_live_fire_test",
+      "scripts_live_fire_test_test_live_fire",
+      "scripts_orchestrator",
+      "scripts_orchestrator_generate_ordeal_prompt",
+      "scripts_orchestrator_rationale_16",
+      "scripts_portfolio_generator",
+      "scripts_portfolio_generator_generate_projects_js",
+      "scripts_portfolio_generator_rationale_5"
+    ],
+    "9": [
+      "scripts_c2c_orchestrator_v2",
+      "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2",
+      "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2_finalize_session",
+      "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2_init",
+      "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2_read_audit_gap",
+      "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2_run_ordeal_session",
+      "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2_simulate_stress_test",
+      "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2_verify_code_claim",
+      "scripts_c2c_orchestrator_v2_rationale_20",
+      "scripts_c2c_orchestrator_v2_rationale_25",
+      "scripts_c2c_orchestrator_v2_rationale_32",
+      "scripts_c2c_orchestrator_v2_rationale_6",
+      "scripts_c2c_orchestrator_v2_rationale_67"
+    ],
+    "10": [
+      "client",
+      "tests_e2e_flow_test",
+      "tests_e2e_flow_test_rationale_22",
+      "tests_e2e_flow_test_rationale_31",
+      "tests_e2e_flow_test_rationale_66",
+      "tests_e2e_flow_test_rationale_97",
+      "tests_e2e_flow_test_supabase",
+      "tests_e2e_flow_test_test_edge_case_profile_flow",
+      "tests_e2e_flow_test_test_market_scout_flow",
+      "tests_e2e_flow_test_test_standard_onboarding_flow",
+      "tests_e2e_flow_test_test_system_health"
+    ],
+    "11": [
+      "scripts_market_intel",
+      "scripts_market_intel_mockscout",
+      "scripts_market_intel_mockscout_run",
+      "scripts_market_intel_run_market_intelligence"
+    ],
+    "12": [
+      "scripts_simulate_agent_tests",
+      "scripts_simulate_agent_tests_generate_test",
+      "scripts_simulate_agent_tests_rationale_24",
+      "scripts_simulate_agent_tests_simulate_agent"
+    ],
+    "13": [
+      "scripts_generate_seed_sql",
+      "scripts_generate_seed_sql_escape_sql",
+      "scripts_generate_seed_sql_generate_sql"
+    ],
+    "14": [
+      "scripts_local_dev",
+      "scripts_local_dev_run_backend",
+      "scripts_local_dev_run_frontend"
+    ],
+    "15": [
+      "api_constants",
+      "api_constants_rationale_1"
+    ],
+    "16": [
+      "feedback_issue_template_feedback_issue_template",
+      "skill_feedback_skill_feedback"
+    ],
+    "17": [
+      "scripts_bulk_upload_bank",
+      "scripts_bulk_upload_bank_bulk_upload"
+    ],
+    "18": [
+      "scripts_generate_bank",
+      "scripts_generate_bank_generate_psychometric_bank"
+    ],
+    "19": [
+      "scripts_seed_crm_data",
+      "scripts_seed_crm_data_seed_data"
+    ],
+    "20": [
+      "scripts_seed_crm_data_psycopg2",
+      "scripts_seed_crm_data_psycopg2_seed_data"
+    ],
+    "21": [
+      "types_assessment_dimensionscores",
+      "types_crm_cohortdata"
+    ],
+    "22": [
+      "_contributing__contributing"
+    ],
+    "23": [
+      "_sections__sections"
+    ],
+    "24": [
+      "_template__template"
+    ],
+    "25": [
+      "admin_panel_admin_panel"
+    ],
+    "26": [
+      "advanced_full_text_search_advanced_full_text_search"
+    ],
+    "27": [
+      "advanced_jsonb_indexing_advanced_jsonb_indexing"
+    ],
+    "28": [
+      "agent_harness_spec_agent_harness_spec"
+    ],
+    "29": [
+      "agents_agents"
+    ],
+    "30": [
+      "api_crm_router"
+    ],
+    "31": [
+      "assessment_page_assessment_page"
+    ],
+    "32": [
+      "brd_and_frd_brd_and_frd"
+    ],
+    "33": [
+      "briefing_briefing"
+    ],
+    "34": [
+      "briefing_briefing_1"
+    ],
+    "35": [
+      "briefing_briefing_2"
+    ],
+    "36": [
+      "c2c_hld_c2c_hld"
+    ],
+    "37": [
+      "callback_page_authcallbackpage"
+    ],
+    "38": [
+      "changelog_changelog"
+    ],
+    "39": [
+      "changelog_changelog_1"
+    ],
+    "40": [
+      "components_footer_footer"
+    ],
+    "41": [
+      "components_statcard_statcard"
+    ],
+    "42": [
+      "conn_idle_timeout_conn_idle_timeout"
+    ],
+    "43": [
+      "conn_limits_conn_limits"
+    ],
+    "44": [
+      "conn_pooling_conn_pooling"
+    ],
+    "45": [
+      "conn_prepared_statements_conn_prepared_statements"
+    ],
+    "46": [
+      "critic_report_critic_report"
+    ],
+    "47": [
+      "crm_layout_crmlayout"
+    ],
+    "48": [
+      "crm_navitem_navitem"
+    ],
+    "49": [
+      "dashboard_page_dashboardredirect"
+    ],
+    "50": [
+      "data_batch_inserts_data_batch_inserts"
+    ],
+    "51": [
+      "data_n_plus_one_data_n_plus_one"
+    ],
+    "52": [
+      "data_pagination_data_pagination"
+    ],
+    "53": [
+      "data_upsert_data_upsert"
+    ],
+    "54": [
+      "demo_jd_demo_jd"
+    ],
+    "55": [
+      "e2e_summary_e2e_summary"
+    ],
+    "56": [
+      "e2e_testhelpers_setupmocks"
+    ],
+    "57": [
+      "employer_portal_employer_portal"
+    ],
+    "58": [
+      "erd_erd"
+    ],
+    "59": [
+      "erd_mermaid_script_erd_mermaid_script"
+    ],
+    "60": [
+      "graphify_graphify"
+    ],
+    "61": [
+      "handoff_handoff"
+    ],
+    "62": [
+      "handoff_handoff_1"
+    ],
+    "63": [
+      "handoff_handoff_2"
+    ],
+    "64": [
+      "hooks_useapiquery_useapiquery"
+    ],
+    "65": [
+      "hooks_useauth_userequireauth"
+    ],
+    "66": [
+      "hooks_useauthsession_useauthsession"
+    ],
+    "67": [
+      "hooks_useauthsession_useauthsessionreturn"
+    ],
+    "68": [
+      "hooks_usesupabasequery_usesupabasequery"
+    ],
+    "69": [
+      "investor_deck_investor_deck"
+    ],
+    "70": [
+      "landing_page_landing_page"
+    ],
+    "71": [
+      "lib_authfetch_authfetch"
+    ],
+    "72": [
+      "lib_utils_cn"
+    ],
+    "73": [
+      "lock_advisory_lock_advisory"
+    ],
+    "74": [
+      "lock_deadlock_prevention_lock_deadlock_prevention"
+    ],
+    "75": [
+      "lock_short_transactions_lock_short_transactions"
+    ],
+    "76": [
+      "lock_skip_locked_lock_skip_locked"
+    ],
+    "77": [
+      "login_page_login_page"
+    ],
+    "78": [
+      "main_layout_mainlayout"
+    ],
+    "79": [
+      "main_page_home"
+    ],
+    "80": [
+      "monitor_explain_analyze_monitor_explain_analyze"
+    ],
+    "81": [
+      "monitor_pg_stat_statements_monitor_pg_stat_statements"
+    ],
+    "82": [
+      "monitor_vacuum_analyze_monitor_vacuum_analyze"
+    ],
+    "83": [
+      "onboard_page_onboard"
+    ],
+    "84": [
+      "onboard_page_onboard_page"
+    ],
+    "85": [
+      "original_request_original_request"
+    ],
+    "86": [
+      "original_request_original_request_1"
+    ],
+    "87": [
+      "original_request_original_request_2"
+    ],
+    "88": [
+      "plan_plan"
+    ],
+    "89": [
+      "profile_profilecompletionwidget_profilecompletionwidget"
+    ],
+    "90": [
+      "progress10_progress10"
+    ],
+    "91": [
+      "progress2_progress2"
+    ],
+    "92": [
+      "progress3_progress3"
+    ],
+    "93": [
+      "progress4_progress4"
+    ],
+    "94": [
+      "progress5_progress5"
+    ],
+    "95": [
+      "progress6_progress6"
+    ],
+    "96": [
+      "progress7_progress7"
+    ],
+    "97": [
+      "progress8_progress8"
+    ],
+    "98": [
+      "progress9_progress9"
+    ],
+    "99": [
+      "progress_progress"
+    ],
+    "100": [
+      "progress_progress_1"
+    ],
+    "101": [
+      "progress_progress_2"
+    ],
+    "102": [
+      "project_project"
+    ],
+    "103": [
+      "query_composite_indexes_query_composite_indexes"
+    ],
+    "104": [
+      "query_covering_indexes_query_covering_indexes"
+    ],
+    "105": [
+      "query_index_types_query_index_types"
+    ],
+    "106": [
+      "query_missing_indexes_query_missing_indexes"
+    ],
+    "107": [
+      "query_partial_indexes_query_partial_indexes"
+    ],
+    "108": [
+      "readme_readme"
+    ],
+    "109": [
+      "requirements_requirements"
+    ],
+    "110": [
+      "review_report_review_report"
+    ],
+    "111": [
+      "robots_robots"
+    ],
+    "112": [
+      "schema_constraints_schema_constraints"
+    ],
+    "113": [
+      "schema_data_types_schema_data_types"
+    ],
+    "114": [
+      "schema_foreign_key_indexes_schema_foreign_key_indexes"
+    ],
+    "115": [
+      "schema_lowercase_identifiers_schema_lowercase_identifiers"
+    ],
+    "116": [
+      "schema_partitioning_schema_partitioning"
+    ],
+    "117": [
+      "schema_primary_keys_schema_primary_keys"
+    ],
+    "118": [
+      "scope_scope"
+    ],
+    "119": [
+      "scripts_inspect_schema"
+    ],
+    "120": [
+      "scripts_probe_tables"
+    ],
+    "121": [
+      "scripts_sample_test"
+    ],
+    "122": [
+      "security_privileges_security_privileges"
+    ],
+    "123": [
+      "security_rls_basics_security_rls_basics"
+    ],
+    "124": [
+      "security_rls_performance_security_rls_performance"
+    ],
+    "125": [
+      "skill_skill"
+    ],
+    "126": [
+      "skill_skill_1"
+    ],
+    "127": [
+      "src_middleware_middleware"
+    ],
+    "128": [
+      "student_dashboard_student_dashboard"
+    ],
+    "129": [
+      "supabase_client_createclient"
+    ],
+    "130": [
+      "supabase_middleware_updatesession"
+    ],
+    "131": [
+      "supabase_postgres_best_practices_skill_supabase_postgres_best_practices_skill"
+    ],
+    "132": [
+      "supabase_server_createclient"
+    ],
+    "133": [
+      "test_ai_jd_test_ai_jd"
+    ],
+    "134": [
+      "test_infra_test_infra"
+    ],
+    "135": [
+      "test_ready_test_ready"
+    ],
+    "136": [
+      "tpo_dashboard_tpo_dashboard"
+    ],
+    "137": [
+      "types_assessment_actionablefeedback"
+    ],
+    "138": [
+      "types_assessment_assessmentoption"
+    ],
+    "139": [
+      "types_assessment_assessmentquestion"
+    ],
+    "140": [
+      "types_assessment_assessmentresponse"
+    ],
+    "141": [
+      "types_assessment_assessmentresult"
+    ],
+    "142": [
+      "types_assessment_developmentreport"
+    ],
+    "143": [
+      "types_assessment_student"
+    ],
+    "144": [
+      "types_crm_alert"
+    ],
+    "145": [
+      "types_crm_candidate"
+    ],
+    "146": [
+      "types_crm_crmaccount"
+    ],
+    "147": [
+      "types_crm_crmcandidate"
+    ],
+    "148": [
+      "types_crm_crmcandidatescore"
+    ],
+    "149": [
+      "types_crm_crmlead"
+    ],
+    "150": [
+      "types_crm_crmopportunity"
+    ],
+    "151": [
+      "types_crm_lead"
+    ],
+    "152": [
+      "types_crm_pipelinestage"
+    ],
+    "153": [
+      "ui_datastate_datastate"
+    ],
+    "154": [
+      "unit_economics_unit_economics"
+    ],
+    "155": [
+      "user_journeys_user_journeys"
+    ],
+    "156": [
+      "workflow_integration_workflow_integration"
+    ]
+  },
+  "cohesion": {
+    "0": 0.054878048780487805,
+    "1": 0.12436974789915967,
+    "2": 0.0625,
+    "3": 0.09247311827956989,
+    "4": 0.13793103448275862,
+    "5": 0.14285714285714285,
+    "6": 0.10526315789473684,
+    "7": 0.13333333333333333,
+    "8": 0.15384615384615385,
+    "9": 0.19230769230769232,
+    "10": 0.23636363636363636,
+    "11": 0.6666666666666666,
+    "12": 0.6666666666666666,
+    "13": 1.0,
+    "14": 0.6666666666666666,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0,
+    "77": 1.0,
+    "78": 1.0,
+    "79": 1.0,
+    "80": 1.0,
+    "81": 1.0,
+    "82": 1.0,
+    "83": 1.0,
+    "84": 1.0,
+    "85": 1.0,
+    "86": 1.0,
+    "87": 1.0,
+    "88": 1.0,
+    "89": 1.0,
+    "90": 1.0,
+    "91": 1.0,
+    "92": 1.0,
+    "93": 1.0,
+    "94": 1.0,
+    "95": 1.0,
+    "96": 1.0,
+    "97": 1.0,
+    "98": 1.0,
+    "99": 1.0,
+    "100": 1.0,
+    "101": 1.0,
+    "102": 1.0,
+    "103": 1.0,
+    "104": 1.0,
+    "105": 1.0,
+    "106": 1.0,
+    "107": 1.0,
+    "108": 1.0,
+    "109": 1.0,
+    "110": 1.0,
+    "111": 1.0,
+    "112": 1.0,
+    "113": 1.0,
+    "114": 1.0,
+    "115": 1.0,
+    "116": 1.0,
+    "117": 1.0,
+    "118": 1.0,
+    "119": 1.0,
+    "120": 1.0,
+    "121": 1.0,
+    "122": 1.0,
+    "123": 1.0,
+    "124": 1.0,
+    "125": 1.0,
+    "126": 1.0,
+    "127": 1.0,
+    "128": 1.0,
+    "129": 1.0,
+    "130": 1.0,
+    "131": 1.0,
+    "132": 1.0,
+    "133": 1.0,
+    "134": 1.0,
+    "135": 1.0,
+    "136": 1.0,
+    "137": 1.0,
+    "138": 1.0,
+    "139": 1.0,
+    "140": 1.0,
+    "141": 1.0,
+    "142": 1.0,
+    "143": 1.0,
+    "144": 1.0,
+    "145": 1.0,
+    "146": 1.0,
+    "147": 1.0,
+    "148": 1.0,
+    "149": 1.0,
+    "150": 1.0,
+    "151": 1.0,
+    "152": 1.0,
+    "153": 1.0,
+    "154": 1.0,
+    "155": 1.0,
+    "156": 1.0
+  },
+  "gods": [
+    {
+      "id": "api_exceptions_databaseconnectionerror",
+      "label": "DatabaseConnectionError",
+      "degree": 33
+    },
+    {
+      "id": "api_exceptions_notfounderror",
+      "label": "NotFoundError",
+      "degree": 19
+    },
+    {
+      "id": "api_exceptions_permissiondeniederror",
+      "label": "PermissionDeniedError",
+      "degree": 16
+    },
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 15
+    },
+    {
+      "id": "routers_assessment_router_c2c_orchestrator_v2",
+      "label": "C2C_Orchestrator_V2",
+      "degree": 13
+    },
+    {
+      "id": "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2",
+      "label": "C2C_Orchestrator_V2",
+      "degree": 11
+    },
+    {
+      "id": "api_deps_get_supabase_client",
+      "label": "get_supabase_client()",
+      "degree": 10
+    },
+    {
+      "id": "api_exceptions_apiexception",
+      "label": "APIException",
+      "degree": 9
+    },
+    {
+      "id": "api_deps_require_role",
+      "label": "require_role()",
+      "degree": 8
+    },
+    {
+      "id": "api_deps_get_current_user",
+      "label": "get_current_user()",
+      "degree": 7
+    }
+  ],
+  "surprises": [
+    {
+      "source": "C2C_Orchestrator_V2",
+      "target": "C2C_Orchestrator_V2",
+      "source_files": [
+        "api/routers/assessment_router.py",
+        "scripts/c2c_orchestrator_v2.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "run_agent_recruiters()",
+      "target": "C2C_Orchestrator_V2",
+      "source_files": [
+        "api/routers/assessment_router.py",
+        "scripts/c2c_orchestrator_v2.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "C2C_Orchestrator_V2",
+      "target": "APIException",
+      "source_files": [
+        "api/routers/assessment_router.py",
+        "api/exceptions.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "C2C_Orchestrator_V2",
+      "target": "DatabaseConnectionError",
+      "source_files": [
+        "api/routers/assessment_router.py",
+        "api/exceptions.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "get_employer_jobs()",
+      "target": "DatabaseConnectionError",
+      "source_files": [
+        "api/routers/employer_router.py",
+        "api/exceptions.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities; peripheral node `get_employer_jobs()` unexpectedly reaches hub `DatabaseConnectionError`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `DatabaseConnectionError` connect `Community 1` to `Community 4`, `Community 5`?",
+      "why": "High betweenness centrality (0.018) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `C2C_Orchestrator_V2` connect `Community 9` to `Community 4`?",
+      "why": "High betweenness centrality (0.017) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `generate_projects_js()` connect `Community 8` to `Community 1`?",
+      "why": "High betweenness centrality (0.015) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `$schema`, `title`, `type` to the rest of the system?",
+      "why": "232 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.054878048780487805 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 1` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.12436974789915967 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 2` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.0625 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
