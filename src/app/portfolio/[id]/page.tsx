@@ -35,6 +35,7 @@ export default function RetroPortfolio() {
   // Start Menu state
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   // DOS terminal history
   const [terminalInput, setTerminalInput] = useState('');
@@ -282,12 +283,22 @@ export default function RetroPortfolio() {
     return () => clearInterval(timer);
   }, []);
 
+  // Resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const openWindow = (windowId: string) => {
     const nextZ = maxZIndex + 1;
     setMaxZIndex(nextZ);
     setWindows(prev => prev.map(w => {
       if (w.id === windowId) {
-        return { ...w, isOpen: true, isMinimized: false, zIndex: nextZ };
+        return { ...w, isOpen: true, isMinimized: false, isMaximized: isMobile ? true : w.isMaximized, zIndex: nextZ };
       }
       return w;
     }));
@@ -684,39 +695,82 @@ export default function RetroPortfolio() {
       {/* Main retro desktop area */}
       <div className="retro-win95-desktop">
         {/* Desktop shortcuts */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('about')}>
-            <span className="desktop-shortcut-icon">💻</span>
-            <span className="desktop-shortcut-label">My Computer</span>
+        {!isMobile && (
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('about')}>
+              <span className="desktop-shortcut-icon">💻</span>
+              <span className="desktop-shortcut-label">My Computer</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('resume')}>
+              <span className="desktop-shortcut-icon">📝</span>
+              <span className="desktop-shortcut-label">My Resume</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('projects')}>
+              <span className="desktop-shortcut-icon">📁</span>
+              <span className="desktop-shortcut-label">Competencies</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('scores')}>
+              <span className="desktop-shortcut-icon">📊</span>
+              <span className="desktop-shortcut-label">CogMatrix</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('dos')}>
+              <span className="desktop-shortcut-icon">📟</span>
+              <span className="desktop-shortcut-label">MS-DOS Prompt</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('cv_tailor')}>
+              <span className="desktop-shortcut-icon">👔</span>
+              <span className="desktop-shortcut-label">CV Tailor</span>
+            </div>
+            <div 
+              className="desktop-shortcut" 
+              onClick={() => window.open(`https://github.com`, '_blank')}
+            >
+              <span className="desktop-shortcut-icon">🌐</span>
+              <span className="desktop-shortcut-label">GitHub</span>
+            </div>
           </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('resume')}>
-            <span className="desktop-shortcut-icon">📝</span>
-            <span className="desktop-shortcut-label">My Resume</span>
+        )}
+
+        {/* Mobile DOS Menu program selector */}
+        {isMobile && (
+          <div className="absolute inset-x-0 top-0 bottom-10 bg-[#000080] text-[#c0c0c0] font-mono p-4 flex flex-col z-[1]">
+            <div className="border-2 border-double border-white p-4 flex-1 flex flex-col justify-between overflow-y-auto">
+              <div>
+                <div className="text-center text-white bg-blue-800 font-bold px-2 py-1 uppercase border-b-2 border-white mb-6">
+                  === C2C COGNITIVE DIRECTORY ===
+                </div>
+                <p className="text-xs text-cyan-300 mb-6 text-center leading-relaxed">
+                  Screen calibration detected: MOBILE NODE.
+                  Tap an application key below to establish connection.
+                </p>
+                
+                <div className="space-y-3 max-w-sm mx-auto">
+                  {[
+                    { id: 'about', label: '💻 My Computer', desc: 'View cognitive archetype details' },
+                    { id: 'resume', label: '📝 My Resume', desc: 'Access educational & score records' },
+                    { id: 'projects', label: '📁 Competencies', desc: 'Inspect dimension quotient density' },
+                    { id: 'scores', label: '📊 CogMatrix', desc: 'Review developmental feedback directives' },
+                    { id: 'dos', label: '📟 MS-DOS Shell', desc: 'Run low-level console diagnostics' },
+                    { id: 'cv_tailor', label: '👔 CV Tailor', desc: 'Tailor resume & cover letters' },
+                  ].map((app) => (
+                    <button
+                      key={app.id}
+                      onClick={() => openWindow(app.id)}
+                      className="w-full text-left bg-[#c0c0c0] text-[#000] border-2 border-white border-r-[#808080] border-b-[#808080] p-3 text-xs font-bold font-mono tracking-wider flex flex-col gap-1 active:border-r-white active:border-b-white"
+                    >
+                      <span className="text-[#000080] font-bold">{app.label}</span>
+                      <span className="text-[10px] text-gray-700 font-normal">{app.desc}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-center text-[10px] text-gray-500 uppercase tracking-widest pt-4">
+                C2C MOBILE OPERATING SHELL v1.95
+              </div>
+            </div>
           </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('projects')}>
-            <span className="desktop-shortcut-icon">📁</span>
-            <span className="desktop-shortcut-label">Competencies</span>
-          </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('scores')}>
-            <span className="desktop-shortcut-icon">📊</span>
-            <span className="desktop-shortcut-label">CogMatrix</span>
-          </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('dos')}>
-            <span className="desktop-shortcut-icon">📟</span>
-            <span className="desktop-shortcut-label">MS-DOS Prompt</span>
-          </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('cv_tailor')}>
-            <span className="desktop-shortcut-icon">👔</span>
-            <span className="desktop-shortcut-label">CV Tailor</span>
-          </div>
-          <div 
-            className="desktop-shortcut" 
-            onClick={() => window.open(`https://github.com`, '_blank')}
-          >
-            <span className="desktop-shortcut-icon">🌐</span>
-            <span className="desktop-shortcut-label">GitHub</span>
-          </div>
-        </div>
+        )}
 
 
         {/* Back Link Button for Next.js Context */}
@@ -741,10 +795,10 @@ export default function RetroPortfolio() {
               key={w.id}
               className="win95-window"
               style={{
-                top: w.isMaximized ? '0' : `${w.y}px`,
-                left: w.isMaximized ? '0' : `${w.x}px`,
-                width: w.isMaximized ? '100vw' : `${w.width}px`,
-                height: w.isMaximized ? 'calc(100vh - 40px)' : `${w.height}px`,
+                top: (w.isMaximized || isMobile) ? '0' : `${w.y}px`,
+                left: (w.isMaximized || isMobile) ? '0' : `${w.x}px`,
+                width: (w.isMaximized || isMobile) ? '100vw' : `${w.width}px`,
+                height: (w.isMaximized || isMobile) ? 'calc(100vh - 40px)' : `${w.height}px`,
                 zIndex: w.zIndex,
               }}
               onClick={() => focusWindow(w.id)}
