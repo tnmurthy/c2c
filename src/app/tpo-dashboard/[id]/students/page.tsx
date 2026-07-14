@@ -178,7 +178,7 @@ export default function StudentTracking() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0e1416] text-[#dde4e5]">
+    <div className="w-full text-[#dde4e5]">
       {/* Header */}
       <div className="border-b border-cyan-500/10 bg-[#1a2122]/80 backdrop-blur-xl sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
