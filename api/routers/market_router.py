@@ -9,11 +9,18 @@ Endpoint paths are unchanged from the previous proxy router.
 from __future__ import annotations
 
 import logging
-from typing import Any
 
 from fastapi import APIRouter, HTTPException, Depends, Response
-from pydantic import BaseModel
 from api.deps import get_supabase_client
+from api.schemas.market import (
+    ScoreFitRequest,
+    EvaluateLeadRequest,
+    ExtractIntelRequest,
+    DiscoveryRunRequest,
+    GenerateResumeRequest,
+    GenerateCoverLetterRequest,
+    GenerateOutreachRequest,
+)
 
 
 from services.market_intelligence import (
@@ -28,47 +35,6 @@ from services.market_intelligence import (
 logger = logging.getLogger("c2c_api.market")
 
 router = APIRouter(prefix="/market", tags=["market-intelligence"])
-
-
-# ─── Models ───────────────────────────────────────────────────────────────────
-
-class ScoreFitRequest(BaseModel):
-    posting: str
-    candidate: dict[str, Any]
-
-
-class EvaluateLeadRequest(BaseModel):
-    lead: dict[str, Any]
-    min_quality: int = 60
-    target_level: str = "fresher"
-    max_age_days: int = 14
-
-
-class ExtractIntelRequest(BaseModel):
-    text: str
-
-
-class DiscoveryRunRequest(BaseModel):
-    sources: list[str] = []
-    max_leads: int = 50
-
-
-class GenerateResumeRequest(BaseModel):
-    lead_id: str
-    candidate: dict[str, Any]
-    posting: str = ""
-
-
-class GenerateCoverLetterRequest(BaseModel):
-    lead_id: str
-    posting: str
-    candidate: dict[str, Any]
-
-
-class GenerateOutreachRequest(BaseModel):
-    posting: str
-    candidate: dict[str, Any]
-    style: str = "cold_email"  # cold_email | linkedin_note | founder_message
 
 
 # ─── Routes ───────────────────────────────────────────────────────────────────

@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
-from typing import Dict, Any
 import logging
 
 from api.deps import get_supabase_client, require_role, get_current_user, require_admin_supabase
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
+from api.schemas.crm import LeadConvertRequest
 
 router = APIRouter(prefix="/crm", tags=["CRM"])
 logger = logging.getLogger("c2c_api.crm")
 
 @router.post("/leads/{lead_id}/convert")
-def convert_lead(lead_id: str, payload: Dict[str, Any], user: dict = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(get_supabase_client)):
+def convert_lead(lead_id: str, payload: LeadConvertRequest, user: dict = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(get_supabase_client)):
     """
     Converts a Lead into an Account and Contact.
     Optionally creates an Opportunity if pipeline details are provided.
@@ -29,12 +29,12 @@ def convert_lead(lead_id: str, payload: Dict[str, Any], user: dict = Depends(req
         
     try:
         # Create Account (if not linking to an existing one)
-        account_name = payload.get("account_name") or lead.get("account_name") or f"{lead.get('first_name', '')} {lead.get('last_name', '')} Household"
-        
+        account_name = payload.account_name or lead.get("account_name") or f"{lead.get('first_name', '')} {lead.get('last_name', '')} Household"
+
         account_data = {
             "tenant_id": tenant_id,
             "name": account_name,
-            "type": payload.get("account_type", "individual"),
+            "type": payload.account_type or "individual",
             "owner_id": user["sub"]
         }
         
