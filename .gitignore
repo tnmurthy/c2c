@@ -71,4 +71,10 @@ services/market-scout/.env
 .gemini/tmp
 .gemini/
 
+# agent session state / generated analysis output / test run artifacts
+/.agents/
+/graphify-out/
+/graphify/
+/playwright-report/
+/test-results/
 
