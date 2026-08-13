@@ -98,9 +98,9 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 
 # --- ROUTERS ---
 
-from api.routers.student_router import router as student_router
+from api.routers.student import router as student_router
 from api.routers.employer_router import router as employer_router
-from api.routers.assessment_router import router as assessment_router
+from api.routers.assessment import router as assessment_router
 from api.routers.portfolio_router import router as portfolio_router
 from api.routers.crm_router import router as crm_router
 from api.routers.analytics_router import router as analytics_router
