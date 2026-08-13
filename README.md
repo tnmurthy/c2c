@@ -12,8 +12,7 @@
   │ Service Unit               │ Business Vision               │ Technical Highlights            │   │
   ├────────────────────────────┼───────────────────────────────┼─────────────────────────────────┼───┤
   │ brand-optimizer            │ Identity / Core Vision        │ Windows 95 Interactive Desktop  │   │
-  │ git-optimizer              │ GitHub Profile Engineering    │ README ASCII / Code Auditing    │   │
-  │ job-intel-desk             │ Recruitment Intelligence      │ Scrapers + Fit Ranking          │   │
+  │ justhireme                 │ Recruitment Intelligence      │ Scrapers + Fit Ranking          │   │
   │ agent-recruiters           │ Automated Interview Swarm     │ Multi-Agent Coordinated Hiring  │   │
   │ campus-to-corporate        │ Talent Pipeline Bridge        │ Training + Career Readiness     │   │
   └────────────────────────────┴───────────────────────────────┴─────────────────────────────────┴───┘
@@ -26,8 +25,7 @@
 The **Campus to Corporate (c2c)** monorepo organizes specialized AI services into cohesive business units.
 
 *   **/services/brand-optimizer:** [Interactive Branding] Nostalgic UI for modern portfolios.
-*   **/services/git-optimizer:** [Technical Presence] Optimizing GitHub profiles for impact.
-*   **/services/job-intel-desk:** [Market Intelligence] High-signal role matching and scraping.
+*   **/services/justhireme:** [Market Intelligence] High-signal role matching and scraping.
 *   **/services/agent-recruiters:** [Process Automation] Domain-specific expert agent swarms.
 *   **/services/campus-to-corporate:** [Pipeline Development] Bridging the gap for new graduates.
 

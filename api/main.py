@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 # Add service directories to sys.path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "services", "job-intel-desk", "backend"))
 sys.path.append(os.path.join(BASE_DIR, "services", "market-scout"))
 
 load_dotenv(os.path.join(BASE_DIR, ".env.local"))

@@ -22,7 +22,7 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 # Add project root and other necessary backend paths to sys.path
 sys.path.append(PROJECT_ROOT)
 sys.path.append(SCRIPT_DIR)
-sys.path.append(os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend"))
+sys.path.append(os.path.join(PROJECT_ROOT, "services", "justhireme", "backend"))
 
 try:
     from scripts.orchestrator import generate_ordeal_prompt
@@ -124,7 +124,7 @@ if __name__ == "__main__":
         serve_portfolio()
     else:
         # Default run with sample data if no files provided
-        sample_cand = os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend", "data", "profile_schema_example.json")
+        sample_cand = os.path.join(PROJECT_ROOT, "services", "justhireme", "backend", "data", "profile_schema_example.json")
         
         # Create a dummy JD for the demo
         demo_jd_path = os.path.join(PROJECT_ROOT, "DEMO_JD.txt")
