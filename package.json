@@ -7,7 +7,7 @@
     "dev:test": "concurrently \"next dev -p 3011\" \"call .venv\\\\Scripts\\\\activate.bat && python -m uvicorn api.main:app --port 8011\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test:e2e": "npx kill-port 3011 8011 && playwright test"
   },
   "dependencies": {

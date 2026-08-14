@@ -19,7 +19,8 @@ export function useSupabaseQuery<T>(
     } finally {
       setLoading(false);
     }
-  }, dependencies);
+    // eslint-disable-next-line react-hooks/use-memo, react-hooks/exhaustive-deps -- dependencies is caller-supplied and intentionally variadic
+  }, [...dependencies]);
 
   useEffect(() => {
     refetch();

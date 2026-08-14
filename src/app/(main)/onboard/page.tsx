@@ -54,6 +54,7 @@ export default function Onboard() {
 
   useEffect(() => {
     if (user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- part of a larger block syncing several form defaults once the user session resolves
       setAuthId(user.id);
 
       // Pre-select the role tab based on what the user chose during sign-up

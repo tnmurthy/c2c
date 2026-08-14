@@ -58,7 +58,7 @@ export function CandidateDetailPanel({
             <div className="space-y-4">
               <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>Professional Legend</h4>
               <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg text-sm text-[#dde4e5] leading-relaxed border-l-2 border-[#8aebff] border-white/5">
-                "{selectedCandidate.summary}"
+                &ldquo;{selectedCandidate.summary}&rdquo;
               </div>
             </div>
 

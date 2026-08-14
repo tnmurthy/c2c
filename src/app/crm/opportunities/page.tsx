@@ -31,8 +31,10 @@ export default function OpportunitiesPage() {
   // Set default stage when stages load
   useEffect(() => {
     if (stages.length > 0 && !formData.stage_id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time default once stages finish loading; stage_id remains user-editable afterward
       setFormData(prev => ({ ...prev, stage_id: stages[0].stage_id }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stages]);
 
   const handleAddOpportunity = async (e: React.FormEvent) => {

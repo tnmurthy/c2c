@@ -78,7 +78,7 @@ export function PrintableDossier({ selectedCandidate }: PrintableDossierProps) {
           <div className="mb-8">
             <h3 className="text-sm font-bold text-slate-900 uppercase font-mono border-b pb-2 mb-3">Professional Dossier Overview</h3>
             <p className="text-sm text-slate-700 leading-relaxed italic">
-              "{selectedCandidate.summary}"
+              &ldquo;{selectedCandidate.summary}&rdquo;
             </p>
           </div>
 

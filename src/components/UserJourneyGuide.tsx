@@ -15,6 +15,7 @@ export default function UserJourneyGuide() {
 
   // Load guides
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- standard post-hydration "mounted" flag, must run once client-side
     setMounted(true);
     // Open by default if not explicitly closed in this session
     const isClosed = sessionStorage.getItem('journey_guide_closed');

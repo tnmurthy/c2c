@@ -86,6 +86,7 @@ export default function StudentTracking() {
   }, [id]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- standard fetch-on-mount pattern
     if (!authLoading) fetchStudents();
   }, [authLoading, fetchStudents]);
 
@@ -220,7 +221,7 @@ export default function StudentTracking() {
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div>
           <h1 className="text-2xl font-mono font-bold text-[#dde4e5] mb-1">Student Roster</h1>
-          <p className="text-[#bbc9cd] text-sm">Manage, verify, and track your institution's cohort.</p>
+          <p className="text-[#bbc9cd] text-sm">Manage, verify, and track your institution&apos;s cohort.</p>
         </div>
 
         {/* Stats Bar */}
