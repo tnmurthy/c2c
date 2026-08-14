@@ -11,8 +11,9 @@ from __future__ import annotations
 import logging
 import re
 
-from fastapi import APIRouter, HTTPException, Depends, Response
+from fastapi import APIRouter, HTTPException, Depends, Response, Request
 from api.deps import get_supabase_client, get_optional_user
+from api.rate_limit import limiter
 from api.schemas.market import (
     ScoreFitRequest,
     EvaluateLeadRequest,
@@ -47,7 +48,8 @@ async def market_health():
 
 
 @router.post("/score-fit")
-async def score_fit(body: ScoreFitRequest):
+@limiter.limit("20/minute")
+async def score_fit(request: Request, body: ScoreFitRequest):
     """
     Score a job description against a student profile.
     Uses the native deterministic fit rubric (no LLM key required).
@@ -63,7 +65,8 @@ async def score_fit(body: ScoreFitRequest):
 
 
 @router.post("/evaluate-lead")
-async def evaluate_lead(body: EvaluateLeadRequest):
+@limiter.limit("20/minute")
+async def evaluate_lead(request: Request, body: EvaluateLeadRequest):
     """
     Run the native quality gate on a raw job lead.
     Use before saving any scraped job to the `jobs` table.
@@ -82,7 +85,8 @@ async def evaluate_lead(body: EvaluateLeadRequest):
 
 
 @router.post("/extract-intel")
-async def extract_intel(body: ExtractIntelRequest):
+@limiter.limit("20/minute")
+async def extract_intel(request: Request, body: ExtractIntelRequest):
     """
     Extract structured intel from raw JD text:
     company, location, budget, urgency, tech_stack, signal_quality.
@@ -164,7 +168,8 @@ def _resolve_job_posting(body, user) -> dict:
 
 
 @router.post("/generate/resume")
-async def generate_resume(body: GenerateResumeRequest, user = Depends(get_optional_user)):
+@limiter.limit("10/minute")
+async def generate_resume(request: Request, body: GenerateResumeRequest, user = Depends(get_optional_user)):
     """Generate resume context for a candidate and job posting."""
     try:
         job = _resolve_job_posting(body, user)
@@ -177,7 +182,8 @@ async def generate_resume(body: GenerateResumeRequest, user = Depends(get_option
 
 
 @router.post("/download/resume")
-async def download_resume(body: GenerateResumeRequest, user = Depends(get_optional_user)):
+@limiter.limit("10/minute")
+async def download_resume(request: Request, body: GenerateResumeRequest, user = Depends(get_optional_user)):
     """
     Generate tailored resume context and return the PDF file stream.
     """
@@ -204,7 +210,8 @@ async def download_resume(body: GenerateResumeRequest, user = Depends(get_option
 
 
 @router.post("/generate/cover-letter")
-async def generate_cover_letter(body: GenerateCoverLetterRequest):
+@limiter.limit("10/minute")
+async def generate_cover_letter(request: Request, body: GenerateCoverLetterRequest):
     """Generate cover-letter context for a candidate and job posting."""
     try:
         job = {"title": body.posting[:80], "description": body.posting, "lead_id": body.lead_id}
@@ -215,7 +222,8 @@ async def generate_cover_letter(body: GenerateCoverLetterRequest):
 
 
 @router.post("/generate/outreach")
-async def generate_outreach(body: GenerateOutreachRequest):
+@limiter.limit("10/minute")
+async def generate_outreach(request: Request, body: GenerateOutreachRequest):
     """
     Generate a hiring manager outreach draft.
     Styles: cold_email | linkedin_note | founder_message.

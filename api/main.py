@@ -4,6 +4,7 @@ import logging
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse, Response
 from dotenv import load_dotenv
+from slowapi.errors import RateLimitExceeded
 
 # Add service directories to sys.path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,10 +32,23 @@ logger.addHandler(ch)
 
 # Imports from exceptions
 from api.exceptions import APIException, DatabaseConnectionError, NotFoundError, PermissionDeniedError
+from api.rate_limit import limiter
 
 app = FastAPI()
+app.state.limiter = limiter
 
 # --- EXCEPTION HANDLERS ---
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={
+            "error": True,
+            "code": "429",
+            "message": f"Rate limit exceeded: {exc.detail}"
+        }
+    )
 
 @app.exception_handler(APIException)
 async def api_exception_handler(request: Request, exc: APIException):

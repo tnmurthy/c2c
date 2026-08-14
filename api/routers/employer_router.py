@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client
 from api.schemas.employer import EmployerOnboard, JobCreate
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
+from api.rate_limit import limiter
 
 router = APIRouter(tags=["Employer"])
 logger = logging.getLogger("c2c_api.employer")
@@ -359,6 +360,7 @@ async def webhook_lead_approved(request: Request, background_tasks: BackgroundTa
     return {"status": "received"}
 
 @router.post("/webhook/daily-sweep")
+@limiter.limit("5/minute")
 async def webhook_daily_sweep(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
     logger.info(f"WEBHOOK: daily-sweep received. Payload: {payload}")
