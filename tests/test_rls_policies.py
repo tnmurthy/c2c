@@ -1,9 +1,12 @@
+import os
 import unittest
 import psycopg2
 
 class TestRLSPolicies(unittest.TestCase):
     def setUp(self):
-        self.db_url = 'postgresql://postgres:***REMOVED-LEAKED-PASSWORD***@db.onsmkbwqucvbzggugmmn.supabase.co:5432/postgres'
+        self.db_url = os.environ.get("TEST_DATABASE_URL")
+        if not self.db_url:
+            self.skipTest("TEST_DATABASE_URL environment variable is not set")
         try:
             self.conn = psycopg2.connect(self.db_url)
         except Exception as e:
