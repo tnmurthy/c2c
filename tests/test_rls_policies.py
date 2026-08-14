@@ -1,9 +1,15 @@
 import os
 import unittest
-import psycopg2
+
+try:
+    import psycopg2
+except ImportError:
+    psycopg2 = None
 
 class TestRLSPolicies(unittest.TestCase):
     def setUp(self):
+        if psycopg2 is None:
+            self.skipTest("psycopg2 is not installed")
         self.db_url = os.environ.get("TEST_DATABASE_URL")
         if not self.db_url:
             self.skipTest("TEST_DATABASE_URL environment variable is not set")

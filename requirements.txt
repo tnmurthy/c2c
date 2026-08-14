@@ -6,3 +6,4 @@ fpdf2==2.7.9
 supabase==2.5.1
 python-dotenv==1.2.2
 slowapi==0.1.10
+psycopg2-binary==2.9.10
