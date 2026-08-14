@@ -56,10 +56,27 @@ jobs:
           if [ -f api/requirements.txt ]; then pip install -r api/requirements.txt; fi
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start local Supabase stack
+        run: supabase start -x studio,imgproxy,inbucket,edge-runtime,logflare,vector,pgadmin-schema-diff,migra,pgbouncer
+
+      - name: Export local Supabase credentials
+        run: |
+          supabase status -o env \
+            --override-name api.url=SUPABASE_URL \
+            --override-name auth.anon_key=SUPABASE_KEY \
+            --override-name auth.service_role_key=SUPABASE_SERVICE_ROLE_KEY \
+            --override-name db.url=TEST_DATABASE_URL \
+            >> "$GITHUB_ENV"
+
       - name: Run Unit Tests
         run: |
           python -m unittest discover -s tests -p "test_*.py"
-        env:
-          SUPABASE_URL: https://placeholder.supabase.co
-          SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
-          SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
+
+      - name: Stop local Supabase stack
+        if: always()
+        run: supabase stop
