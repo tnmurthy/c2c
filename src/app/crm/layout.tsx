@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import NavItem from '@/components/crm/NavItem';
 
 export default async function CRMLayout({ children }: { children: React.ReactNode }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
