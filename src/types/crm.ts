@@ -82,10 +82,13 @@ export interface CrmLead {
   phone?: string;
   source: string;
   status: string;
-  interest_area: string;
-  account_name: string;
+  interest_area?: string;
+  account_name?: string;
   owner_id?: string;
   tenant_id: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CrmAccount {

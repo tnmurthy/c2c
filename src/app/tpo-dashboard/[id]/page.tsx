@@ -84,24 +84,21 @@ export default function TPODashboard() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'students' },
-        (payload) => {
-          console.log('Realtime update: students', payload);
+        () => {
           fetchData(); // Refetch cohort averages and distributions
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'assessments' },
-        (payload) => {
-          console.log('Realtime update: assessments', payload);
-          fetchData(); 
+        () => {
+          fetchData();
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'applications' },
-        (payload) => {
-          console.log('Realtime update: applications', payload);
+        () => {
           fetchData(); // Refetch placement funnel metrics
         }
       )

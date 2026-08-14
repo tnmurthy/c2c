@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { authFetch } from '@/lib/authFetch';
+import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 
 interface UseApiQueryReturn<T> {
   data: T | null;
@@ -10,41 +10,22 @@ interface UseApiQueryReturn<T> {
   refetch: () => void;
 }
 
+/**
+ * Thin wrapper around useSupabaseQuery for authFetch-based endpoints.
+ * Returns null (no fetch) when url is null, e.g. while auth is still resolving.
+ */
 export function useApiQuery<T>(url: string | null): UseApiQueryReturn<T> {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [fetchCount, setFetchCount] = useState(0);
+  const { data, loading, error, refetch } = useSupabaseQuery<T | null>(async () => {
+    if (!url) return null;
+    const res = await authFetch(url);
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+    return res.json();
+  }, [url]);
 
-  useEffect(() => {
-    if (!url) {
-      setLoading(false);
-      return;
-    }
-
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    authFetch(url)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-        return res.json();
-      })
-      .then((json) => {
-        if (!cancelled) setData(json);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err.message);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => { cancelled = true; };
-  }, [url, fetchCount]);
-
-  const refetch = () => setFetchCount((c) => c + 1);
-
-  return { data, loading, error, refetch };
+  return {
+    data: data ?? null,
+    loading,
+    error: error ? (error.message ?? String(error)) : null,
+    refetch,
+  };
 }

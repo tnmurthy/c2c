@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { getUserRole } from '@/lib/authRole';
 import type { User } from '@supabase/supabase-js';
 
 interface UseAuthOptions {
@@ -50,7 +51,7 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
         }
 
         if (allowedRolesStr) {
-          const role = authUser.app_metadata?.role || authUser.user_metadata?.role;
+          const role = getUserRole(authUser);
           const isAdmin = role === 'admin';
           const rolesList = allowedRolesStr.split(',');
           
