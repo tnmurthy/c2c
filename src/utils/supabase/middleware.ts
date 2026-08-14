@@ -6,25 +6,29 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  // Bypass server-side getUser check for E2E mock sessions to avoid invalid token clearing
+  // Bypass server-side getUser check for E2E mock sessions to avoid invalid token clearing.
+  // Hard-gated on NODE_ENV: a client cannot influence this value, and Next.js sets it to
+  // 'production' automatically for `next build`/`next start`, so this bypass can never
+  // trigger in a production deployment regardless of what cookie an attacker sends.
+  const isNonProduction = process.env.NODE_ENV !== 'production';
   const ref = 'onsmkbwqucvbzggugmmn';
   const cookiePrefix = `sb-${ref}-auth-token`;
   const allCookies = request.cookies.getAll();
-  const isMockToken = allCookies.some(cookie => {
+  const isMockToken = isNonProduction && allCookies.some(cookie => {
     if (!cookie.name.startsWith(cookiePrefix)) return false;
-    
+
     // Check plain / URL-decoded
     try {
       const decodedUrl = decodeURIComponent(cookie.value);
       if (decodedUrl.includes('mock-access-token')) return true;
     } catch (e) {}
-    
+
     // Check base64-decoded
     try {
       const decodedBase64 = Buffer.from(cookie.value, 'base64').toString('utf-8');
       if (decodedBase64.includes('mock-access-token')) return true;
     } catch (e) {}
-    
+
     return false;
   });
   if (isMockToken) {

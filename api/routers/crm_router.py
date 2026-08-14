@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 import logging
 
-from api.deps import get_supabase_client, require_role, get_current_user, require_admin_supabase
+from api.deps import get_supabase_client, require_role, get_current_user, require_admin_supabase, get_tenant_id_from_user
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 from api.schemas.crm import LeadConvertRequest
 
@@ -9,13 +9,15 @@ router = APIRouter(prefix="/crm", tags=["CRM"])
 logger = logging.getLogger("c2c_api.crm")
 
 @router.post("/leads/{lead_id}/convert")
-def convert_lead(lead_id: str, payload: LeadConvertRequest, user: dict = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(get_supabase_client)):
+def convert_lead(lead_id: str, payload: LeadConvertRequest, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(get_supabase_client)):
     """
     Converts a Lead into an Account and Contact.
     Optionally creates an Opportunity if pipeline details are provided.
     """
-    tenant_id = user.get("tenant_id")
-    
+    tenant_id = get_tenant_id_from_user(user, supabase)
+    if not tenant_id:
+        raise HTTPException(status_code=400, detail="No tenant associated with your user account")
+
     # 1. Fetch the lead
     lead_res = supabase.table("leads").select("*").eq("lead_id", lead_id).eq("tenant_id", tenant_id).single().execute()
     if not lead_res.data:
@@ -35,7 +37,7 @@ def convert_lead(lead_id: str, payload: LeadConvertRequest, user: dict = Depends
             "tenant_id": tenant_id,
             "name": account_name,
             "type": payload.account_type or "individual",
-            "owner_id": user["sub"]
+            "owner_id": user.id
         }
         
         acc_res = supabase.table("accounts").insert(account_data).execute()
@@ -51,7 +53,7 @@ def convert_lead(lead_id: str, payload: LeadConvertRequest, user: dict = Depends
             "last_name": lead.get("last_name"),
             "email": lead.get("email"),
             "phone": lead.get("phone"),
-            "owner_id": user["sub"]
+            "owner_id": user.id
         }
         
         contact_res = supabase.table("contacts").insert(contact_data).execute()
@@ -72,20 +74,39 @@ def convert_lead(lead_id: str, payload: LeadConvertRequest, user: dict = Depends
         logger.error(f"Error converting lead {lead_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Error converting lead")
 
-@router.get("/candidates")
-def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
+def _get_tenant_candidate_ids(supabase, tenant_id: str) -> list[str]:
     """
-    Returns all candidates for the CRM talent pool.
+    A student is only visible to a CRM tenant once they're linked to that
+    tenant's pipeline via opportunities.candidate_id. Students have no
+    tenant_id column of their own (they're shared across the campus-to-
+    corporate marketplace), so this join is the real tenant boundary.
+    """
+    opps_res = (
+        supabase.table("opportunities")
+        .select("candidate_id")
+        .eq("tenant_id", tenant_id)
+        .not_.is_("candidate_id", "null")
+        .execute()
+    )
+    return list({o["candidate_id"] for o in (opps_res.data or []) if o.get("candidate_id")})
+
+@router.get("/candidates")
+def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])), anon_supabase = Depends(get_supabase_client), supabase = Depends(require_admin_supabase)):
+    """
+    Returns candidates linked to this tenant's pipeline (via opportunities.candidate_id).
     """
     try:
-        # Note: Depending on the tenant structure for B2C, we might just return all students 
-        # or filter by a specific criteria if the CRM is isolated per agency.
-        # Here we just fetch all students and their latest assessments.
-        students_res = supabase.table("students").select("*").execute()
+        tenant_id = get_tenant_id_from_user(user, anon_supabase)
+        if not tenant_id:
+            raise HTTPException(status_code=400, detail="No tenant associated with your user account")
+
+        student_ids = _get_tenant_candidate_ids(supabase, tenant_id)
+        if not student_ids:
+            return []
+
+        students_res = supabase.table("students").select("*").in_("id", student_ids).execute()
         if not students_res.data:
             return []
-            
-        student_ids = [s["id"] for s in students_res.data]
         assessments_res = supabase.table("assessments").select("*").in_("student_id", student_ids).order("created_at", desc=True).execute()
         
         # Map latest assessment to student
@@ -113,22 +134,41 @@ def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])),
             })
             
         return results
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error fetching CRM candidates: {str(e)}")
         raise HTTPException(status_code=500, detail="Error fetching candidates")
 
+def _assert_candidate_in_tenant(supabase, tenant_id: str, student_id: str) -> None:
+    opp_res = (
+        supabase.table("opportunities")
+        .select("opportunity_id")
+        .eq("tenant_id", tenant_id)
+        .eq("candidate_id", student_id)
+        .limit(1)
+        .execute()
+    )
+    if not opp_res.data:
+        raise HTTPException(status_code=404, detail="Student not found")
+
 @router.get("/candidates/{student_id}/pdf/profile")
-def get_candidate_profile_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
+def get_candidate_profile_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), anon_supabase = Depends(get_supabase_client), supabase = Depends(require_admin_supabase)):
     try:
+        tenant_id = get_tenant_id_from_user(user, anon_supabase)
+        if not tenant_id:
+            raise HTTPException(status_code=400, detail="No tenant associated with your user account")
+        _assert_candidate_in_tenant(supabase, tenant_id, student_id)
+
         student_res = supabase.table("students").select("*").eq("id", student_id).single().execute()
         if not student_res.data:
             raise HTTPException(status_code=404, detail="Student not found")
-            
+
         ass_res = supabase.table("assessments").select("*").eq("student_id", student_id).order("created_at", desc=True).limit(1).execute()
         ass_data = ass_res.data[0] if ass_res.data else {}
-        
+
         pdf_bytes = generate_student_pdf(student_res.data, ass_data)
-        
+
         return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=profile_{student_id}.pdf"})
     except HTTPException:
         raise
@@ -137,17 +177,22 @@ def get_candidate_profile_pdf(student_id: str, user = Depends(require_role(["ten
         raise HTTPException(status_code=500, detail="Error generating PDF")
 
 @router.get("/candidates/{student_id}/pdf/interview-guide")
-def get_candidate_interview_guide_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
+def get_candidate_interview_guide_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), anon_supabase = Depends(get_supabase_client), supabase = Depends(require_admin_supabase)):
     try:
+        tenant_id = get_tenant_id_from_user(user, anon_supabase)
+        if not tenant_id:
+            raise HTTPException(status_code=400, detail="No tenant associated with your user account")
+        _assert_candidate_in_tenant(supabase, tenant_id, student_id)
+
         student_res = supabase.table("students").select("*").eq("id", student_id).single().execute()
         if not student_res.data:
             raise HTTPException(status_code=404, detail="Student not found")
-            
+
         ass_res = supabase.table("assessments").select("*").eq("student_id", student_id).order("created_at", desc=True).limit(1).execute()
         ass_data = ass_res.data[0] if ass_res.data else {}
-        
+
         pdf_bytes = generate_interview_guide_pdf(student_res.data, ass_data)
-        
+
         return Response(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=interview_guide_{student_id}.pdf"})
     except HTTPException:
         raise

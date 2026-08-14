@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
-from api.deps import require_admin_supabase, require_role
+from api.deps import require_admin_supabase, require_role, assert_own_student_profile
 from api.schemas.assessment import AssessmentSubmit
 from api.exceptions import NotFoundError, DatabaseConnectionError
 from api.routers.assessment.common import (
@@ -23,6 +23,7 @@ router = APIRouter(tags=["Assessment"])
 
 @router.post("/assessment/submit")
 async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_admin_supabase), current_user = Depends(require_role(["student", "admin"]))):
+    assert_own_student_profile(current_user, submit.student_id)
     scores = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
     try:
         # Extract student's tenant_id from their profile/record

@@ -9,9 +9,10 @@ Endpoint paths are unchanged from the previous proxy router.
 from __future__ import annotations
 
 import logging
+import re
 
 from fastapi import APIRouter, HTTPException, Depends, Response
-from api.deps import get_supabase_client
+from api.deps import get_supabase_client, get_optional_user
 from api.schemas.market import (
     ScoreFitRequest,
     EvaluateLeadRequest,
@@ -126,83 +127,76 @@ async def list_leads(status: str = "all", limit: int = 50):
     }
 
 
+def _resolve_job_posting(body, user) -> dict:
+    """
+    Resolves the job posting for resume/cover-letter generation. If the
+    caller supplied posting text directly, use it as-is -- this is the
+    public, unauthenticated path (e.g. a portfolio visitor pasting a JD).
+
+    If instead a lead_id is supplied so the posting should be auto-filled
+    from the market_leads table, that lookup requires a logged-in user:
+    without this gate, any anonymous caller could enumerate lead_id values
+    to exfiltrate ai_summary/ai_notes/company for leads they have no
+    relationship to.
+    """
+    posting = body.posting
+    company = ""
+    title = ""
+    lead_id = body.lead_id
+
+    if not posting and lead_id and lead_id != "custom":
+        if not user:
+            raise HTTPException(401, "Looking up a saved lead requires signing in. Paste the job description directly to use this without an account.")
+        client = get_supabase_client()
+        if client:
+            try:
+                lead_bigint = int(lead_id)
+                res = client.table("market_leads").select("*").eq("id", lead_bigint).execute()
+                if res.data:
+                    lead_data = res.data[0]
+                    posting = lead_data.get("ai_summary") or lead_data.get("ai_notes") or ""
+                    company = lead_data.get("company") or ""
+                    title = lead_data.get("name") or ""
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Invalid lead_id for bigint cast: {lead_id}, error: {e}")
+
+    return {"title": title, "description": posting, "company": company, "lead_id": lead_id}
+
+
 @router.post("/generate/resume")
-async def generate_resume(body: GenerateResumeRequest):
+async def generate_resume(body: GenerateResumeRequest, user = Depends(get_optional_user)):
     """Generate resume context for a candidate and job posting."""
     try:
-        posting = body.posting
-        company = ""
-        title = ""
-        lead_id = body.lead_id
-        
-        if not posting and lead_id and lead_id != "custom":
-            client = get_supabase_client()
-            if client:
-                try:
-                    lead_bigint = int(lead_id)
-                    res = client.table("market_leads").select("*").eq("id", lead_bigint).execute()
-                    if res.data:
-                        lead_data = res.data[0]
-                        posting = lead_data.get("ai_summary") or lead_data.get("ai_notes") or ""
-                        company = lead_data.get("company") or ""
-                        title = lead_data.get("name") or ""
-                except (ValueError, TypeError) as e:
-                    logger.warning(f"Invalid lead_id for bigint cast: {lead_id}, error: {e}")
-                    
-        job = {
-            "title": title,
-            "description": posting,
-            "company": company,
-            "lead_id": lead_id
-        }
+        job = _resolve_job_posting(body, user)
         return build_resume_context(body.candidate, job)
+    except HTTPException:
+        raise
     except Exception as exc:
         logger.exception("generate/resume error")
         raise HTTPException(500, f"build_resume_context failed: {exc}") from exc
 
 
 @router.post("/download/resume")
-async def download_resume(body: GenerateResumeRequest):
+async def download_resume(body: GenerateResumeRequest, user = Depends(get_optional_user)):
     """
     Generate tailored resume context and return the PDF file stream.
     """
     try:
-        posting = body.posting
-        company = ""
-        title = ""
-        lead_id = body.lead_id
-        
-        if not posting and lead_id and lead_id != "custom":
-            client = get_supabase_client()
-            if client:
-                try:
-                    lead_bigint = int(lead_id)
-                    res = client.table("market_leads").select("*").eq("id", lead_bigint).execute()
-                    if res.data:
-                        lead_data = res.data[0]
-                        posting = lead_data.get("ai_summary") or lead_data.get("ai_notes") or ""
-                        company = lead_data.get("company") or ""
-                        title = lead_data.get("name") or ""
-                except (ValueError, TypeError) as e:
-                    logger.warning(f"Invalid lead_id for bigint cast: {lead_id}, error: {e}")
-                    
-        job = {
-            "title": title,
-            "description": posting,
-            "company": company,
-            "lead_id": lead_id
-        }
+        job = _resolve_job_posting(body, user)
         context = build_resume_context(body.candidate, job)
         
         from api.pdf_generator import generate_tailored_resume_pdf
         pdf_bytes = generate_tailored_resume_pdf(context)
-        
-        filename = f"tailored_resume_{body.candidate.get('full_name', 'candidate').replace(' ', '_')}.pdf"
+
+        safe_name = re.sub(r"[^A-Za-z0-9_-]", "_", body.candidate.get("full_name", "candidate")) or "candidate"
+        filename = f"tailored_resume_{safe_name}.pdf"
         return Response(
             content=pdf_bytes,
             media_type="application/pdf",
             headers={"Content-Disposition": f"attachment; filename={filename}"}
         )
+    except HTTPException:
+        raise
     except Exception as exc:
         logger.exception("download/resume error")
         raise HTTPException(500, f"generate_tailored_resume_pdf failed: {exc}") from exc

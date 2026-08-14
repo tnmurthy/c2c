@@ -2,36 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Dict, Any
 import logging
 
-from api.deps import get_supabase_client, require_role, get_current_user
+from api.deps import get_supabase_client, require_role, get_current_user, get_tenant_id_from_user
 
 router = APIRouter(prefix="/analytics", tags=["Analytics"])
 logger = logging.getLogger("c2c_api.analytics")
-
-def get_tenant_id_from_user(user, supabase) -> str:
-    """
-    Extracts the tenant_id from the user metadata or database.
-    """
-    tenant_id = None
-    if isinstance(user, dict):
-        tenant_id = user.get("tenant_id")
-        if not tenant_id:
-            metadata = user.get("app_metadata", {}) or {}
-            tenant_id = metadata.get("tenant_id")
-    else:
-        metadata = getattr(user, "app_metadata", {}) or {}
-        tenant_id = metadata.get("tenant_id") or getattr(user, "tenant_id", None)
-        
-    if not tenant_id:
-        user_id = getattr(user, "id", None) or (user.get("id") if isinstance(user, dict) else None) or (user.get("sub") if isinstance(user, dict) else None)
-        if user_id:
-            try:
-                crm_user_res = supabase.table("crm_users").select("tenant_id").eq("user_id", user_id).execute()
-                if crm_user_res.data:
-                    tenant_id = crm_user_res.data[0].get("tenant_id")
-            except Exception as e:
-                logger.error(f"Failed to fetch user tenant from database: {e}")
-                
-    return tenant_id
 
 @router.get("/funnel")
 def get_funnel_metrics(

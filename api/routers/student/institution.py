@@ -2,8 +2,8 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
-from api.deps import require_admin_supabase, require_role
-from api.exceptions import DatabaseConnectionError
+from api.deps import require_admin_supabase, require_role, assert_own_institution_profile
+from api.exceptions import DatabaseConnectionError, PermissionDeniedError
 
 router = APIRouter(tags=["Student"])
 logger = logging.getLogger("c2c_api.student")
@@ -11,6 +11,7 @@ logger = logging.getLogger("c2c_api.student")
 
 @router.get("/institution/{institution_id}/cohort")
 async def get_institution_cohort(institution_id: str, client = Depends(require_admin_supabase), current_user = Depends(require_role(["institution", "admin"]))):
+    assert_own_institution_profile(current_user, institution_id)
     try:
         students_res = client.table("students").select("id, full_name, email, department, graduation_year, resume_url, skills, is_verified, created_at").eq("institution_id", institution_id).execute()
         students = students_res.data or []
@@ -42,6 +43,7 @@ async def get_institution_cohort(institution_id: str, client = Depends(require_a
 
 @router.post("/institution/{institution_id}/verify")
 async def verify_student(institution_id: str, payload: dict, client = Depends(require_admin_supabase), current_user = Depends(require_role(["institution", "admin"]))):
+    assert_own_institution_profile(current_user, institution_id)
     student_id = payload.get("student_id")
     if not student_id:
         raise HTTPException(status_code=400, detail="student_id required")

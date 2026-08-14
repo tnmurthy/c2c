@@ -8,9 +8,9 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
-from api.deps import require_admin_supabase, require_role
+from api.deps import require_admin_supabase, require_role, assert_own_student_profile
 from api.schemas.assessment import SessionStart, AnswerSubmit
-from api.exceptions import NotFoundError, DatabaseConnectionError
+from api.exceptions import NotFoundError, DatabaseConnectionError, PermissionDeniedError
 from api.routers.assessment.common import (
     logger,
     normalize_bank_item,
@@ -27,6 +27,7 @@ async def start_session(
     current_user = Depends(require_role(["student", "admin"]))
 ):
     student_id = req.student_id
+    assert_own_student_profile(current_user, str(student_id))
     try:
         # Extract student's tenant_id from their profile/record
         student_res = client.table("students").select("tenant_id").eq("id", str(student_id)).execute()
@@ -130,6 +131,8 @@ async def start_session(
             "questions": session["questions_json"],
             "status": session["status"]
         }
+    except (NotFoundError, PermissionDeniedError, HTTPException):
+        raise
     except Exception as e:
         logger.error(f"ERROR start_session: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
@@ -147,6 +150,7 @@ async def submit_answer(
             raise NotFoundError("Assessment session not found")
 
         session = session_res.data[0]
+        assert_own_student_profile(current_user, str(session["student_id"]))
         if session["status"] == "completed":
             raise HTTPException(status_code=400, detail="Session is already completed")
 
@@ -188,6 +192,8 @@ async def submit_answer(
             "questions": updated_session["questions_json"],
             "status": updated_session["status"]
         }
+    except (NotFoundError, PermissionDeniedError, HTTPException):
+        raise
     except Exception as e:
         logger.error(f"ERROR submit_answer: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
