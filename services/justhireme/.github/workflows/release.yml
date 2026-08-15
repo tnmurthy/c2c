@@ -1,0 +1,1062 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "V*"
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.13"
+  NODE_VERSION: "24"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # pip-audit currently reports no fixed versions for these transitive ML advisories.
+  # Keep the audit strict for all other packages; remove entries as upstream fixes land.
+  PIP_AUDIT_IGNORE_VULNS: >-
+    PYSEC-2024-277 PYSEC-2026-89
+    PYSEC-2025-210 PYSEC-2025-194 PYSEC-2025-196 PYSEC-2025-195 PYSEC-2025-193 PYSEC-2025-192
+    PYSEC-2026-139 PYSEC-2025-191 PYSEC-2025-197 PYSEC-2025-189 PYSEC-2025-190
+    PYSEC-2025-217 PYSEC-2025-214 PYSEC-2025-218 PYSEC-2025-211 PYSEC-2025-212 PYSEC-2025-213
+    PYSEC-2025-215 PYSEC-2025-216
+
+# ────────────────────────────────────────────────────────────
+# Topology (maximum parallelism):
+#
+#   preflight ─┬─ backend-windows ── tauri-windows ──┐
+#              ├─ backend-macos  ── tauri-macos   ──├─ publish
+#              ├─ backend-linux  ── tauri-linux   ──┤
+#              ├─ build-frontend ────────────────────┤
+#              └─ audit ────────────────────────────-┘
+#
+# Each Tauri job starts the moment its OWN sidecar + the shared
+# frontend artifact are ready — it never waits for other platforms.
+# Audits run fully in parallel and only gate the final publish.
+# ────────────────────────────────────────────────────────────
+
+jobs:
+  # ── Gate ──────────────────────────────────────────────────
+  release-preflight:
+    name: Release preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Verify tag matches project versions
+        run: npm run version:check -- "${{ github.ref_name }}"
+
+  # ── Shared frontend build (platform-agnostic) ────────────
+  build-frontend:
+    name: Build frontend
+    needs: release-preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Upload frontend dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+          retention-days: 1
+
+  # ── Audits (parallel, off-critical-path) ─────────────────
+  audit:
+    name: Dependency audit
+    needs: release-preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Audit frontend dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $auditLines = npm audit --audit-level=moderate --json 2>&1
+          $auditExit = $LASTEXITCODE
+          $auditText = ($auditLines -join "`n").Trim()
+
+          if (-not $auditText) {
+            if ($auditExit -ne 0) {
+              Write-Warning "npm audit exited with $auditExit but returned no report. npm ci already completed successfully, so continuing."
+            }
+            exit 0
+          }
+
+          try {
+            $audit = $auditText | ConvertFrom-Json
+          } catch {
+            Write-Host $auditText
+            throw
+          }
+
+          $vulnerabilities = $audit.metadata.vulnerabilities
+          function Get-VulnerabilityCount($name) {
+            if ($null -ne $vulnerabilities -and $null -ne $vulnerabilities.PSObject.Properties[$name]) {
+              return [int]$vulnerabilities.$name
+            }
+            return 0
+          }
+
+          $moderate = Get-VulnerabilityCount "moderate"
+          $high = Get-VulnerabilityCount "high"
+          $critical = Get-VulnerabilityCount "critical"
+          $blocking = $moderate + $high + $critical
+
+          if ($blocking -gt 0) {
+            Write-Host $auditText
+            throw "npm audit found $blocking moderate/high/critical frontend vulnerabilities."
+          }
+
+          if ($auditExit -ne 0) {
+            Write-Warning "npm audit exited with $auditExit but reported no moderate/high/critical vulnerabilities. Continuing."
+          }
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: false
+
+      - name: Audit backend dependencies
+        run: |
+          cd backend
+          uv sync --dev --frozen
+          audit_args=()
+          for vuln in $PIP_AUDIT_IGNORE_VULNS; do
+            audit_args+=(--ignore-vuln "$vuln")
+          done
+          uv run --with pip-audit pip-audit "${audit_args[@]}"
+
+  # ── Backend sidecars (one per platform) ──────────────────
+  backend-windows:
+    name: Build backend sidecar (Windows)
+    needs: release-preflight
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: false
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install backend dependencies
+        run: cd backend && uv sync --dev --frozen
+
+      - name: Install Playwright Chromium runtime
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $env:PLAYWRIGHT_BROWSERS_PATH = "..\src-tauri\resources\bin\ms-playwright"
+          cd backend
+          uv run python -m playwright install chromium
+
+      - name: Build sidecar with canonical script
+        run: npm run build:sidecar
+
+      - name: Package mandatory runtime pack OTA asset
+        run: npm run build:runtime-pack
+
+      - name: List sidecar output
+        shell: pwsh
+        run: |
+          Write-Host "Sidecar directory:"
+          Get-ChildItem -Path src-tauri\resources\backend\ -Recurse |
+            Select-Object FullName, Length |
+            Format-Table -AutoSize
+          $backendTotal = (Get-ChildItem -Path src-tauri\resources\backend\ -Recurse -File |
+            Measure-Object -Property Length -Sum).Sum / 1MB
+          Write-Host "Sidecar backend size: $([math]::Round($backendTotal, 1)) MB"
+          Write-Host "Installer sidecar is onefile; heavy runtime stays in the OTA runtime pack."
+          Get-Content src-tauri\resources\backend\sidecar-manifest.json
+
+      - name: Smoke sidecar startup
+        env:
+          JHM_VECTOR_RUNTIME_REQUIRED: "1"
+        run: npm run smoke:sidecar
+
+      - name: Upload backend sidecar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-sidecar-windows
+          path: |
+            src-tauri/resources/backend/
+          retention-days: 1
+
+      - name: Upload OTA runtime assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-runtime-windows
+          path: release-assets/
+          retention-days: 1
+
+  backend-macos:
+    name: Build backend sidecar (macOS)
+    needs: release-preflight
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: false
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install backend dependencies
+        run: cd backend && uv sync --dev --frozen
+
+      - name: Install Playwright Chromium runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PLAYWRIGHT_BROWSERS_PATH="../src-tauri/resources/bin/ms-playwright"
+          cd backend
+          uv run python -m playwright install chromium
+
+      - name: Build sidecar with canonical script
+        run: npm run build:sidecar
+
+      - name: Package mandatory runtime pack OTA asset
+        run: npm run build:runtime-pack
+
+      - name: List sidecar output
+        shell: bash
+        run: |
+          set -euo pipefail
+          find src-tauri/resources/backend -maxdepth 3 -type f -print
+          backend_kb="$(du -sk src-tauri/resources/backend | awk '{print $1}')"
+          echo "Sidecar backend size: $((backend_kb / 1024)) MB"
+          echo "Installer sidecar is onefile; heavy runtime stays in the OTA runtime pack."
+          cat src-tauri/resources/backend/sidecar-manifest.json
+
+      - name: Smoke sidecar startup
+        env:
+          JHM_VECTOR_RUNTIME_REQUIRED: "1"
+        run: npm run smoke:sidecar
+
+      - name: Upload backend sidecar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-sidecar-macos
+          path: |
+            src-tauri/resources/backend/
+          retention-days: 1
+
+      - name: Upload OTA runtime assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-runtime-macos
+          path: release-assets/
+          retention-days: 1
+
+  backend-linux:
+    name: Build backend sidecar (Linux)
+    needs: release-preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: false
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install backend dependencies
+        run: cd backend && uv sync --dev --frozen
+
+      - name: Install Playwright Chromium runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PLAYWRIGHT_BROWSERS_PATH="../src-tauri/resources/bin/ms-playwright"
+          cd backend
+          uv run python -m playwright install chromium
+
+      - name: Build sidecar with canonical script
+        run: npm run build:sidecar
+
+      - name: Package mandatory runtime pack OTA asset
+        run: npm run build:runtime-pack
+
+      - name: List sidecar output
+        shell: bash
+        run: |
+          set -euo pipefail
+          find src-tauri/resources/backend -maxdepth 3 -type f -print
+          backend_kb="$(du -sk src-tauri/resources/backend | awk '{print $1}')"
+          echo "Sidecar backend size: $((backend_kb / 1024)) MB"
+          echo "Installer sidecar is onefile; heavy runtime stays in the OTA runtime pack."
+          cat src-tauri/resources/backend/sidecar-manifest.json
+
+      - name: Smoke sidecar startup
+        env:
+          JHM_VECTOR_RUNTIME_REQUIRED: "1"
+        run: npm run smoke:sidecar
+
+      - name: Upload backend sidecar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-sidecar-linux
+          path: |
+            src-tauri/resources/backend/
+          retention-days: 1
+
+      - name: Upload OTA runtime assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-runtime-linux
+          path: release-assets/
+          retention-days: 1
+
+  # ── Tauri installers (each waits only for its own sidecar + frontend) ──
+
+  tauri-windows:
+    name: Build Tauri installer (Windows)
+    needs: [backend-windows, build-frontend]
+    runs-on: windows-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+
+      - name: Download backend sidecar
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-sidecar-windows
+          path: src-tauri/resources/backend/
+
+      - name: Download frontend dist
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+
+      - name: Download Windows runtime pack
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets-runtime-windows
+          path: runtime-assets/
+
+      - name: Run Rust unit tests
+        run: cd src-tauri && cargo test --lib
+
+      - name: Verify sidecar exists
+        shell: pwsh
+        run: |
+          $triple = (rustc -vV | Select-String "host:").ToString().Split()[1].Trim()
+          $sidecar = "src-tauri\resources\backend\jhm-sidecar-next-$triple.exe"
+          if (-not (Test-Path $sidecar)) {
+            throw "Sidecar not found at $sidecar"
+          }
+          if (-not (Test-Path "src-tauri\resources\backend\sidecar-manifest.json")) {
+            throw "Sidecar manifest not found."
+          }
+          Write-Host "Sidecar verified: $sidecar ($(( Get-Item $sidecar ).Length / 1MB) MB)"
+          Write-Host "The mandatory runtime pack is bundled into the installer and also published as an OTA recovery asset."
+
+      - name: Verify updater signing secrets
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY:-}" ] || [ -z "${TAURI_SIGNING_PRIVATE_KEY_PASSWORD:-}" ]; then
+            echo "Missing Tauri updater signing secrets." >&2
+            exit 1
+          fi
+
+      - name: Build Tauri installer
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          CARGO_PROFILE_RELEASE_LTO: "false"
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: "16"
+        run: npm run package:windows
+
+      - name: Smoke installed Windows package
+        shell: pwsh
+        env:
+          JHM_SMOKE_RUNTIME_PACK_ARCHIVE: runtime-assets\JustHireMe-runtime-pack-windows.zip
+        run: |
+          $ErrorActionPreference = "Stop"
+          $installer = Get-ChildItem -Path "src-tauri\target\release\bundle\nsis" -Filter "*.exe" -File -Recurse |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+          if (-not $installer) {
+            throw "No NSIS installer found for Windows package smoke."
+          }
+          $env:JHM_WINDOWS_INSTALLER_SMOKE = "1"
+          $env:JHM_NEW_INSTALLER = $installer.FullName
+          npm run smoke:windows-update
+
+      - name: Smoke Windows update over previous stable
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JHM_SMOKE_RUNTIME_PACK_ARCHIVE: runtime-assets\JustHireMe-runtime-pack-windows.zip
+        run: |
+          $ErrorActionPreference = "Stop"
+          $currentTag = "${{ github.ref_name }}"
+          $releasesJson = gh release list --exclude-drafts --exclude-pre-releases --limit 10 --json tagName
+          $previousTag = ($releasesJson | ConvertFrom-Json |
+            Where-Object { $_.tagName -ne $currentTag } |
+            Select-Object -First 1).tagName
+          if (-not $previousTag) {
+            Write-Host "No previous stable release found; skipping update-over-existing smoke."
+            exit 0
+          }
+
+          $previousDir = Join-Path $env:RUNNER_TEMP "previous-justhireme-release"
+          New-Item -ItemType Directory -Path $previousDir -Force | Out-Null
+          try {
+            gh release download $previousTag --pattern "*.exe" --dir $previousDir --clobber
+          } catch {
+            Write-Host "No previous Windows NSIS installer found for $previousTag; skipping update-over-existing smoke."
+            exit 0
+          }
+
+          $oldInstaller = Get-ChildItem -Path $previousDir -Filter "*.exe" -File |
+            Sort-Object Length -Descending |
+            Select-Object -First 1
+          if (-not $oldInstaller) {
+            Write-Host "Previous release $previousTag has no Windows NSIS installer; skipping update-over-existing smoke."
+            exit 0
+          }
+
+          $newInstaller = Get-ChildItem -Path "src-tauri\target\release\bundle\nsis" -Filter "*.exe" -File -Recurse |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+          if (-not $newInstaller) {
+            throw "No current NSIS installer found for update-over-existing smoke."
+          }
+
+          $env:JHM_WINDOWS_UPDATE_SMOKE = "1"
+          $env:JHM_OLD_INSTALLER = $oldInstaller.FullName
+          $env:JHM_NEW_INSTALLER = $newInstaller.FullName
+          npm run smoke:windows-update
+
+      - name: Smoke packaged Windows sidecar
+        shell: pwsh
+        env:
+          JHM_VECTOR_RUNTIME_REQUIRED: "1"
+          JHM_SMOKE_RUNTIME_PACK_ARCHIVE: runtime-assets\JustHireMe-runtime-pack-windows.zip
+        run: |
+          $ErrorActionPreference = "Stop"
+          $triple = (rustc -vV | Select-String "host:").ToString().Split(" ")[1].Trim()
+          $sidecarPath = "src-tauri\resources\backend\jhm-sidecar-next-$triple.exe"
+          if (-not (Test-Path $sidecarPath)) {
+            throw "Packaged Windows sidecar resource not found at $sidecarPath"
+          }
+          npm run smoke:sidecar
+
+      - name: Collect release assets
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $releaseDir = "release-assets"
+          New-Item -ItemType Directory -Path $releaseDir -Force | Out-Null
+          $assets = Get-ChildItem -Path "src-tauri\target\release\bundle" -Recurse -File -Include "*.exe", "*.msi", "*.sig" |
+            Sort-Object Name
+          $installers = $assets | Where-Object { $_.Extension -in ".exe", ".msi" }
+          if (-not $installers) {
+            throw "No Windows installer artifacts were produced."
+          }
+
+          $lines = foreach ($asset in $assets) {
+            Copy-Item $asset.FullName -Destination $releaseDir -Force
+            $hash = (Get-FileHash -Algorithm SHA256 -Path $asset.FullName).Hash.ToLowerInvariant()
+            "$hash  $($asset.Name)"
+          }
+          $lines | Set-Content -Path "$releaseDir\SHA256SUMS-windows.txt" -Encoding utf8
+
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-windows
+          path: release-assets/
+          retention-days: 1
+
+  tauri-macos:
+    name: Build Tauri installer (macOS)
+    needs: [backend-macos, build-frontend]
+    runs-on: macos-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+
+      - name: Download backend sidecar
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-sidecar-macos
+          path: src-tauri/resources/backend/
+
+      - name: Download frontend dist
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+
+      - name: Download macOS runtime pack
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets-runtime-macos
+          path: runtime-assets/
+
+      - name: Prepare sidecar for Rust tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          triple="$(rustc -vV | awk '/host:/ {print $2}')"
+          sidecar="src-tauri/resources/backend/jhm-sidecar-next-${triple}"
+          if [ ! -f "$sidecar" ]; then
+            find src-tauri/resources -maxdepth 3 -type f -print
+            echo "Sidecar not found at $sidecar" >&2
+            exit 1
+          fi
+          chmod +x "$sidecar"
+
+      - name: Run Rust unit tests
+        run: cd src-tauri && cargo test --lib
+
+      - name: Verify sidecar exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          triple="$(rustc -vV | awk '/host:/ {print $2}')"
+          sidecar="src-tauri/resources/backend/jhm-sidecar-next-${triple}"
+          if [ ! -f "$sidecar" ]; then
+            echo "Sidecar not found at $sidecar" >&2
+            exit 1
+          fi
+          if [ ! -f "src-tauri/resources/backend/sidecar-manifest.json" ]; then
+            echo "Sidecar manifest not found." >&2
+            exit 1
+          fi
+          chmod +x "$sidecar"
+          echo "Sidecar verified: $sidecar ($(du -h "$sidecar" | awk '{print $1}'))"
+          echo "The mandatory runtime pack is bundled into the installer and also published as an OTA recovery asset."
+
+      - name: Prepare macOS sidecar permissions
+        shell: bash
+        run: |
+          set -euo pipefail
+          triple="$(rustc -vV | awk '/host:/ {print $2}')"
+          sidecar="src-tauri/resources/backend/jhm-sidecar-next-${triple}"
+          chmod +x "$sidecar"
+          xattr -cr src-tauri/resources/backend || true
+          codesign --force --sign - --entitlements src-tauri/macos-entitlements.plist "$sidecar"
+          # Ad-hoc codesigning rewrites the binary (it grows ~32 bytes for the
+          # embedded signature), so the size recorded by the sidecar-build job no
+          # longer matches. Refresh the manifest to describe the signed artifact;
+          # otherwise check-sidecar.mjs (beforeBuildCommand) rejects it as
+          # size-mismatched, and the bundled manifest would misreport the size.
+          SIGNED_SIDECAR="$sidecar" node -e '
+            const fs = require("node:fs");
+            const manifestPath = "src-tauri/resources/backend/sidecar-manifest.json";
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+            const signedBytes = fs.statSync(process.env.SIGNED_SIDECAR).size;
+            const previous = manifest.sidecarBinaryBytes;
+            manifest.sidecarBinaryBytes = signedBytes;
+            fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+            console.log(`Refreshed sidecarBinaryBytes ${previous} -> ${signedBytes} after codesign.`);
+          '
+
+      - name: Verify updater signing secrets
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY:-}" ] || [ -z "${TAURI_SIGNING_PRIVATE_KEY_PASSWORD:-}" ]; then
+            echo "Missing Tauri updater signing secrets." >&2
+            exit 1
+          fi
+
+      - name: Build Tauri installer
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          CARGO_PROFILE_RELEASE_LTO: "false"
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: "16"
+        run: npm run package:macos
+
+      - name: Smoke packaged macOS sidecar
+        shell: bash
+        env:
+          JHM_VECTOR_RUNTIME_REQUIRED: "1"
+          JHM_SMOKE_RUNTIME_PACK_ARCHIVE: runtime-assets/JustHireMe-runtime-pack-macos.zip
+        run: |
+          set -euo pipefail
+          app_path="$(find src-tauri/target/release/bundle/macos -maxdepth 1 -name "*.app" -type d -print -quit)"
+          if [ -z "$app_path" ]; then
+            echo "Packaged .app not found." >&2
+            exit 1
+          fi
+          app_path="$(cd "$app_path" && pwd -P)"
+          echo "Packaged app: $app_path"
+          find "$app_path/Contents" -maxdepth 4 -name "jhm-sidecar-next*" -print
+          sidecar_path="$app_path/Contents/MacOS/jhm-sidecar-next"
+          if [ ! -f "$sidecar_path" ]; then
+            sidecar_path="$(find "$app_path/Contents" -type f -name "jhm-sidecar-next*" -print -quit)"
+          fi
+          if [ -z "$sidecar_path" ] || [ ! -f "$sidecar_path" ]; then
+            echo "Packaged sidecar not found in $app_path." >&2
+            exit 1
+          fi
+          codesign -d --entitlements :- "$sidecar_path" 2>&1 | tee packaged-sidecar-entitlements.txt
+          if ! grep -q "com.apple.security.cs.disable-library-validation" packaged-sidecar-entitlements.txt; then
+            echo "Packaged macOS sidecar is missing disable-library-validation entitlement." >&2
+            exit 1
+          fi
+          export JHM_SIDECAR_PATH="$sidecar_path"
+          npm run smoke:sidecar
+
+      - name: Collect release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_dir="release-assets"
+          mkdir -p "$release_dir"
+          asset_list="$release_dir/assets.txt"
+          find src-tauri/target/release/bundle -type f \( -name "*.dmg" -o -name "*.tar.gz" -o -name "*.sig" \) | sort > "$asset_list"
+
+          if [ ! -s "$asset_list" ]; then
+            echo "No macOS installer artifacts were produced." >&2
+            exit 1
+          fi
+
+          checksum_file="$release_dir/SHA256SUMS-macos.txt"
+          : > "$checksum_file"
+          while IFS= read -r asset; do
+            cp "$asset" "$release_dir/"
+            shasum -a 256 "$asset" | awk -v name="$(basename "$asset")" '{print $1 "  " name}' >> "$checksum_file"
+          done < "$asset_list"
+          rm "$asset_list"
+
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-macos
+          path: release-assets/
+          retention-days: 1
+
+  tauri-linux:
+    name: Build Tauri installer (Linux)
+    needs: [backend-linux, build-frontend]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install Tauri Linux system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            curl \
+            file \
+            libayatana-appindicator3-dev \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            librsvg2-dev \
+            libssl-dev \
+            libwebkit2gtk-4.1-dev \
+            libxdo-dev \
+            pkg-config \
+            patchelf \
+            wget
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+
+      - name: Download backend sidecar
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-sidecar-linux
+          path: src-tauri/resources/backend/
+
+      - name: Download frontend dist
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+
+      - name: Download Linux runtime pack
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets-runtime-linux
+          path: runtime-assets/
+
+      - name: Prepare sidecar for Rust tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          triple="$(rustc -vV | awk '/host:/ {print $2}')"
+          sidecar="src-tauri/resources/backend/jhm-sidecar-next-${triple}"
+          if [ ! -f "$sidecar" ]; then
+            find src-tauri/resources -maxdepth 3 -type f -print
+            echo "Sidecar not found at $sidecar" >&2
+            exit 1
+          fi
+          chmod +x "$sidecar"
+
+      - name: Run Rust unit tests
+        run: cd src-tauri && cargo test --lib
+
+      - name: Verify sidecar exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          triple="$(rustc -vV | awk '/host:/ {print $2}')"
+          sidecar="src-tauri/resources/backend/jhm-sidecar-next-${triple}"
+          if [ ! -f "$sidecar" ]; then
+            echo "Sidecar not found at $sidecar" >&2
+            exit 1
+          fi
+          if [ ! -f "src-tauri/resources/backend/sidecar-manifest.json" ]; then
+            echo "Sidecar manifest not found." >&2
+            exit 1
+          fi
+          chmod +x "$sidecar"
+          echo "Sidecar verified: $sidecar ($(du -h "$sidecar" | awk '{print $1}'))"
+          echo "The mandatory runtime pack is bundled into the installer and also published as an OTA recovery asset."
+
+      - name: Verify updater signing secrets
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY:-}" ] || [ -z "${TAURI_SIGNING_PRIVATE_KEY_PASSWORD:-}" ]; then
+            echo "Missing Tauri updater signing secrets." >&2
+            exit 1
+          fi
+
+      - name: Build Tauri installer
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          CARGO_PROFILE_RELEASE_LTO: "false"
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: "16"
+        run: npm run package:linux
+
+      - name: Collect release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_dir="release-assets"
+          mkdir -p "$release_dir"
+          asset_list="$release_dir/assets.txt"
+          find src-tauri/target/release/bundle -type f \( -name "*.deb" -o -name "*.AppImage" -o -name "*.sig" \) | sort > "$asset_list"
+
+          if [ ! -s "$asset_list" ]; then
+            echo "No Linux installer artifacts were produced." >&2
+            exit 1
+          fi
+
+          checksum_file="$release_dir/SHA256SUMS-linux.txt"
+          : > "$checksum_file"
+          while IFS= read -r asset; do
+            cp "$asset" "$release_dir/"
+            shasum -a 256 "$asset" | awk -v name="$(basename "$asset")" '{print $1 "  " name}' >> "$checksum_file"
+          done < "$asset_list"
+          rm "$asset_list"
+
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-linux
+          path: release-assets/
+          retention-days: 1
+
+  # ── Publish ──────────────────────────────────────────────
+  publish-release:
+    name: Publish GitHub release
+    needs: [tauri-windows, tauri-macos, tauri-linux, audit]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Download release assets
+        uses: actions/download-artifact@v4
+        with:
+          pattern: release-assets-*
+          path: release-assets
+          merge-multiple: true
+
+      - name: Generate release checksums and notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+          cd release-assets
+
+          find . -type f ! -name "SHA256SUMS*.txt" ! -name "ASSET-SIZES.txt" -printf "%P\n" | sort | while read -r asset; do
+            sha256sum "$asset"
+          done > SHA256SUMS.txt
+          find . -type f ! -name "SHA256SUMS*.txt" ! -name "ASSET-SIZES.txt" -printf "%P\n" | sort | while read -r asset; do
+            bytes="$(stat -c%s "$asset")"
+            python - "$bytes" "$asset" <<'PY'
+          import sys
+          size = int(sys.argv[1])
+          asset = sys.argv[2]
+          print(f"{size / (1024 * 1024):8.1f} MB  {asset}")
+          PY
+          done > ASSET-SIZES.txt
+
+          release_url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${tag}"
+          windows_asset="$(find . -maxdepth 1 -type f -name "*.exe" -printf "%f\n" | sort | head -n1)"
+          windows_sig="$(find . -maxdepth 1 -type f -name "*.exe.sig" -printf "%f\n" | sort | head -n1)"
+          linux_asset="$(find . -maxdepth 1 -type f -name "*.AppImage" -printf "%f\n" | sort | head -n1)"
+          linux_sig="$(find . -maxdepth 1 -type f -name "*.AppImage.sig" -printf "%f\n" | sort | head -n1)"
+          mac_asset="$(find . -maxdepth 1 -type f -name "*.app.tar.gz" -printf "%f\n" | sort | head -n1)"
+          mac_sig="$(find . -maxdepth 1 -type f -name "*.app.tar.gz.sig" -printf "%f\n" | sort | head -n1)"
+          pub_date="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export TAG="$tag" VERSION="$version" RELEASE_URL="$release_url" PUB_DATE="$pub_date"
+          export WINDOWS_ASSET="$windows_asset" WINDOWS_SIG="$windows_sig"
+          export LINUX_ASSET="$linux_asset" LINUX_SIG="$linux_sig"
+          export MAC_ASSET="$mac_asset" MAC_SIG="$mac_sig"
+
+          python - <<'PY'
+          import json
+          import os
+          import pathlib
+
+          tag = os.environ["TAG"]
+          version = os.environ["VERSION"]
+          release_url = os.environ["RELEASE_URL"]
+          platforms = {}
+          candidates = {
+              "windows-x86_64": (os.environ.get("WINDOWS_ASSET"), os.environ.get("WINDOWS_SIG")),
+              "linux-x86_64": (os.environ.get("LINUX_ASSET"), os.environ.get("LINUX_SIG")),
+              "darwin-aarch64": (os.environ.get("MAC_ASSET"), os.environ.get("MAC_SIG")),
+          }
+          for target, (asset, sig) in candidates.items():
+              if not asset or not sig:
+                  continue
+              sig_path = pathlib.Path(sig)
+              platforms[target] = {
+                  "signature": sig_path.read_text(encoding="utf-8").strip(),
+                  "url": f"{release_url}/{asset}",
+              }
+          if not platforms:
+              raise SystemExit("No updater platforms found. Missing signed updater artifacts.")
+          pathlib.Path("latest.json").write_text(json.dumps({
+              "version": version,
+              "notes": f"JustHireMe {tag}: signed desktop update.",
+              "pub_date": os.environ["PUB_DATE"],
+              "platforms": platforms,
+          }, indent=2), encoding="utf-8")
+          PY
+
+          cd ..
+          npm run release:verify-updater -- release-assets "${tag}"
+
+          {
+            echo "## JustHireMe ${tag}"
+            echo
+            echo "### Installation"
+            if find release-assets -maxdepth 1 -type f -name "*.exe" | grep -q .; then
+              echo "- Windows: download JustHireMe_${version}_x64-setup.exe, run it, and use More info -> Run anyway if SmartScreen appears."
+            fi
+            if find release-assets -maxdepth 1 -type f \( -name "*.AppImage" -o -name "*.deb" \) | grep -q .; then
+              echo "- Linux: download the .AppImage, run chmod a+x on it, then launch it; or install the .deb on Debian/Ubuntu-based systems."
+            fi
+            if find release-assets -maxdepth 1 -type f -name "*.dmg" | grep -q .; then
+              echo "- macOS: download the .dmg and drag JustHireMe into Applications. If the build is not notarized, macOS may require Privacy & Security -> Open Anyway."
+            fi
+            echo
+            echo "> **Your data stays on your machine.** JustHireMe is local-first: no hosted backend, no tracking, and no app data leaves your computer by default."
+            echo
+            echo "### SHA256 checksums"
+            echo
+            sed 's/^/    /' release-assets/SHA256SUMS.txt
+            echo
+            echo "### Asset sizes"
+            echo
+            sed 's/^/    /' release-assets/ASSET-SIZES.txt
+            echo
+            echo "### What's inside"
+            echo "- Local-first job intelligence workbench"
+            echo "- Source adapters, quality gates, and transparent ranking"
+            echo "- Built-in CRM for your job pipeline"
+            echo "- Profile-aware graph and vector matching"
+            echo "- Resume, cover letter, and outreach draft generation"
+            echo "- Bundled backend sidecar"
+            echo "- Mandatory runtime pack as one first-run OTA download"
+            echo "- Runtime pack includes LanceDB, PyArrow, vector support, the local embedder path, and Playwright Chromium"
+            echo "- Signed in-app updates for future releases"
+            echo
+            echo "---"
+            echo "_This installer set was built by GitHub Actions from tag ${tag}. Having issues? [Open an issue](https://github.com/${GITHUB_REPOSITORY}/issues) or check the [README](https://github.com/${GITHUB_REPOSITORY}#readme)._"
+          } > release-notes.md
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd release-assets
+          mapfile -t assets < <(find . -maxdepth 1 -type f -printf "%P\n" | sort)
+          if [ "${#assets[@]}" -eq 0 ]; then
+            echo "No release assets found." >&2
+            exit 1
+          fi
+
+          tag="${GITHUB_REF_NAME}"
+          # A prerelease tag (e.g. v1.0.37-rc1) is published as a GitHub
+          # pre-release and is NOT marked --latest, so the updater endpoint
+          # (releases/latest) keeps pointing at the last stable release and
+          # existing users are not auto-updated to a release candidate.
+          if [[ "$tag" == *-* ]]; then
+            promotion=(--prerelease)
+          else
+            promotion=(--latest)
+          fi
+          if gh release view "$tag" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release upload "$tag" "${assets[@]}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --clobber
+            gh release edit "$tag" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "JustHireMe ${tag}" \
+              --notes-file "../release-notes.md" \
+              "${promotion[@]}"
+          else
+            gh release create "$tag" "${assets[@]}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "JustHireMe ${tag}" \
+              --notes-file "../release-notes.md" \
+              "${promotion[@]}"
+          fi

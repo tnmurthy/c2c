@@ -22,8 +22,8 @@ export default function AuthCallbackPage() {
         }
 
         const user = session.user;
-        const role = user.user_metadata?.role;
-        const profileId = user.user_metadata?.profile_id;
+        const role = user.app_metadata?.role || user.user_metadata?.role;
+        const profileId = user.app_metadata?.profile_id || user.user_metadata?.profile_id;
 
         // Same routing logic as login/page.tsx
         if (role === "admin") {

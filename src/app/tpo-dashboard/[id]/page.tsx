@@ -76,7 +76,40 @@ export default function TPODashboard() {
         setLoading(false);
       }
     };
+    
     fetchData();
+
+    // Supabase Realtime Subscriptions
+    const channel = supabase.channel('tpo-dashboard-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'students' },
+        (payload) => {
+          console.log('Realtime update: students', payload);
+          fetchData(); // Refetch cohort averages and distributions
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'assessments' },
+        (payload) => {
+          console.log('Realtime update: assessments', payload);
+          fetchData(); 
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'applications' },
+        (payload) => {
+          console.log('Realtime update: applications', payload);
+          fetchData(); // Refetch placement funnel metrics
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [id, authLoading]);
 
   if (error) {
@@ -104,62 +137,9 @@ export default function TPODashboard() {
   }
 
   return (
-    <div className={`bg-[#0e1416] text-[#dde4e5] font-sans`}>
-
-
-      <div className="flex ">
-        {/* SideNavBar */}
-        <aside className="hidden lg:flex flex-col w-64 bg-[#1a2122]/90 backdrop-blur-2xl border-r border-white/5 h-screen sticky top-0">
-          <div className="p-6">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-[#22d3ee]/20 flex items-center justify-center rounded">
-                <LayoutDashboard className="text-[#8aebff] w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-[#8aebff]">TPO Command</h2>
-                <p className={`text-[10px] text-[#bbc9cd] opacity-70 font-bold tracking-[0.1em] font-mono`}>ENTERPRISE TIER</p>
-              </div>
-            </div>
-
-            <nav className="space-y-1">
-              <Link href="/" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
-                <Home className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Home</span>
-              </Link>
-              <Link href={`/tpo-dashboard/${id}/students`} className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
-                <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Student Tracking</span>
-              </Link>
-              <Link href="/employer" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group">
-                <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Talent Pool</span>
-              </Link>
-              <Link href="#" className="flex items-center gap-3 bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff] px-3 py-2 rounded-md">
-                <Calendar className="w-4 h-4" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Interviews</span>
-              </Link>
-            </nav>
-          </div>
-
-          <div className="mt-auto p-6 space-y-4">
-            <button className="w-full bg-[#8aebff] text-[#00363e] py-3 text-[12px] font-bold tracking-[0.1em] rounded flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg">
-              <Plus className="w-4 h-4" /> Post New Job
-            </button>
-            <div className="space-y-1">
-              <a href="#" className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 transition-colors">
-                <HelpCircle className="w-4 h-4" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Support</span>
-              </a>
-              <button onClick={handleLogout} className="w-full flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 transition-colors text-left">
-                <LogOut className="w-4 h-4" />
-                <span className={`text-[12px] font-bold tracking-[0.1em] font-mono`}>Logout</span>
-              </button>
-            </div>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-8 max-w-7xl mx-auto overflow-y-auto">
+    <>
+      {/* Main Content */}
+      <main className="p-8 max-w-7xl mx-auto">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
@@ -288,6 +268,114 @@ export default function TPODashboard() {
                 <span>75%</span>
                 <span>100% Saturation</span>
               </div>
+            </div>
+          </section>
+
+          {/* Cohort Industry Sector Fit & Quotient Balance */}
+          <section className="mb-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Industry Placement Fit Heatmap */}
+            <div className="bg-[#0f172a]/40 backdrop-blur-md p-8 border border-white/10 rounded-xl">
+              <h3 className="text-2xl font-bold text-white mb-2">Industry Alignment Fit</h3>
+              <p className="text-[#bbc9cd] text-sm mb-6">Aggregated cohort suitability scores across standard corporate pathways</p>
+              
+              {(() => {
+                const iq = data.averages.IQ || 0;
+                const eq = data.averages.EQ || 0;
+                const sq = data.averages.SQ || 0;
+                const aq = data.averages.AQ || 0;
+                const spq = data.averages.SpQ || 0;
+
+                const sectors = [
+                  { name: "Tech Roles (Software / Systems)", fit: iq * 0.40 + aq * 0.30 + eq * 0.20 + sq * 0.05 + spq * 0.05, desc: "High problem solving and adaptability requirements", color: "from-cyan-500 to-blue-500" },
+                  { name: "Sales & BD Roles (Client/growth)", fit: iq * 0.10 + aq * 0.20 + eq * 0.35 + sq * 0.35 + spq * 0.00, desc: "High emotional and social resonance focus", color: "from-purple-500 to-indigo-500" },
+                  { name: "Ops & Logistics (Execution/Scale)", fit: iq * 0.30 + aq * 0.25 + eq * 0.25 + sq * 0.15 + spq * 0.05, desc: "Balanced cognitive and process organization requirements", color: "from-emerald-500 to-teal-500" },
+                  { name: "Leadership & Management (Trainee)", fit: iq * 0.20 + aq * 0.20 + eq * 0.30 + sq * 0.25 + spq * 0.05, desc: "High communication, resilience, and vision focus", color: "from-amber-500 to-orange-500" }
+                ];
+
+                return (
+                  <div className="space-y-6">
+                    {sectors.map((sec) => (
+                      <div key={sec.name} className="space-y-2">
+                        <div className="flex justify-between items-baseline font-mono text-sm">
+                          <span className="text-white font-bold">{sec.name}</span>
+                          <span className="text-[#8aebff] font-extrabold">{sec.fit.toFixed(1)}% Suitability</span>
+                        </div>
+                        <div className="h-3 w-full bg-[#1a2122] rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full bg-gradient-to-r ${sec.color} rounded-full`}
+                            style={{ width: `${sec.fit}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-[11px] text-[#bbc9cd]/70 leading-tight">{sec.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Cognitive vs Emotional Balance Grid */}
+            <div className="bg-[#0f172a]/40 backdrop-blur-md p-8 border border-white/10 rounded-xl">
+              <h3 className="text-2xl font-bold text-white mb-2">Cognitive & Emotional Balance Grid</h3>
+              <p className="text-[#bbc9cd] text-sm mb-6">Distribution matrix classification based on IQ vs EQ metrics</p>
+              
+              {(() => {
+                const iq = data.averages.IQ || 0;
+                const eq = data.averages.EQ || 0;
+                
+                const executorPercent = Math.round((iq / 100) * (eq / 100) * 100);
+                const specialistPercent = Math.round((iq / 100) * (1 - eq / 100) * 100);
+                const builderPercent = Math.round((1 - iq / 100) * (eq / 100) * 100);
+                const supportPercent = Math.max(0, 100 - executorPercent - specialistPercent - builderPercent);
+
+                return (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-black/30 border border-[#8aebff]/20 rounded-lg p-5 flex flex-col justify-between h-36 hover:border-[#8aebff]/50 transition-colors">
+                      <div>
+                        <span className="text-xs font-mono font-bold text-[#8aebff] block mb-1">HIGH IQ / HIGH EQ</span>
+                        <span className="text-sm font-bold text-white leading-tight block">Balanced Executors</span>
+                      </div>
+                      <div className="flex justify-between items-baseline mt-4">
+                        <span className="text-xs text-[#bbc9cd]/60">Cohort Share</span>
+                        <span className="text-3xl font-black text-white font-mono">{executorPercent}%</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-black/30 border border-[#c3c0ff]/20 rounded-lg p-5 flex flex-col justify-between h-36 hover:border-[#c3c0ff]/50 transition-colors">
+                      <div>
+                        <span className="text-xs font-mono font-bold text-[#c3c0ff] block mb-1">HIGH IQ / LOW EQ</span>
+                        <span className="text-sm font-bold text-white leading-tight block">Technical Specialists</span>
+                      </div>
+                      <div className="flex justify-between items-baseline mt-4">
+                        <span className="text-xs text-[#bbc9cd]/60">Cohort Share</span>
+                        <span className="text-3xl font-black text-white font-mono">{specialistPercent}%</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-black/30 border border-[#ffd6a3]/20 rounded-lg p-5 flex flex-col justify-between h-36 hover:border-[#ffd6a3]/50 transition-colors">
+                      <div>
+                        <span className="text-xs font-mono font-bold text-[#ffd6a3] block mb-1">LOW IQ / HIGH EQ</span>
+                        <span className="text-sm font-bold text-white leading-tight block">Relationship Builders</span>
+                      </div>
+                      <div className="flex justify-between items-baseline mt-4">
+                        <span className="text-xs text-[#bbc9cd]/60">Cohort Share</span>
+                        <span className="text-3xl font-black text-white font-mono">{builderPercent}%</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-black/30 border border-[#ffb4ab]/20 rounded-lg p-5 flex flex-col justify-between h-36 hover:border-[#ffb4ab]/50 transition-colors">
+                      <div>
+                        <span className="text-xs font-mono font-bold text-[#ffb4ab] block mb-1">LOW IQ / LOW EQ</span>
+                        <span className="text-sm font-bold text-white leading-tight block">Supported Talents</span>
+                      </div>
+                      <div className="flex justify-between items-baseline mt-4">
+                        <span className="text-xs text-[#bbc9cd]/60">Cohort Share</span>
+                        <span className="text-3xl font-black text-white font-mono">{supportPercent}%</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </section>
 
@@ -466,8 +554,7 @@ export default function TPODashboard() {
               </div>
             </div>
           </section>
-        </main>
-      </div>
+      </main>
 
       <footer className="mt-12 py-8 border-t border-white/5 bg-[#090f11]">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -482,6 +569,6 @@ export default function TPODashboard() {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 }

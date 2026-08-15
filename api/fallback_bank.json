@@ -1,5 +1,15 @@
 [
   {
+    "ID": "META-000",
+    "stem": "Campus to Corporate (c2c) Demonstration Instrument. Note: This assessment bank is a prototype demonstration tool. Dimension mapping and scoring logic are for simulation purposes only.",
+    "type": "Metadata",
+    "primary_dimension": "SpQ",
+    "secondary_dimensions": [],
+    "tags": ["demo"],
+    "options": null,
+    "scoring_logic": "Prototype instrument for validation purposes."
+  },
+  {
     "ID": "EQ-001",
     "stem": "You are ghosted by a mentor during a critical remote work. Your immediate emotional response is to:",
     "type": "SJT",

@@ -35,6 +35,7 @@ export default function RetroPortfolio() {
   // Start Menu state
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   // DOS terminal history
   const [terminalInput, setTerminalInput] = useState('');
@@ -56,6 +57,7 @@ export default function RetroPortfolio() {
     { id: 'projects', title: 'Competency Vectors', icon: '📁', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 150, y: 110, width: 400, height: 280 },
     { id: 'dos', title: 'MS-DOS Prompt', icon: '📟', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 80, y: 120, width: 500, height: 350 },
     { id: 'scores', title: 'Cognitive Matrix', icon: '📊', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 200, y: 150, width: 400, height: 320 },
+    { id: 'cv_tailor', title: 'CV Tailor', icon: '👔', isOpen: false, isMinimized: false, isMaximized: false, zIndex: 10, x: 220, y: 180, width: 550, height: 480 },
   ]);
 
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
@@ -64,6 +66,163 @@ export default function RetroPortfolio() {
   // Dragging states
   const [draggedWindow, setDraggedWindow] = useState<string | null>(null);
   const dragOffset = useRef({ x: 0, y: 0 });
+
+  // CV Tailor State
+  const [alerts, setAlerts] = useState<any[]>([]);
+  const [selectedLeadId, setSelectedLeadId] = useState<string>('');
+  const [jobDescription, setJobDescription] = useState<string>('');
+  const [isCustomJd, setIsCustomJd] = useState<boolean>(false);
+  const [tailorLoading, setTailorLoading] = useState<boolean>(false);
+  const [tailoredResults, setTailoredResults] = useState<any>(null);
+
+  // Fetch student alerts
+  useEffect(() => {
+    async function fetchAlerts() {
+      try {
+        const response = await fetch(`/api/alerts/student/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setAlerts(data || []);
+          if (data && data.length > 0) {
+            const firstLead = data.find((a: any) => a.market_leads);
+            if (firstLead) {
+              setSelectedLeadId(String(firstLead.market_leads.id));
+              setJobDescription(firstLead.market_leads.ai_summary || firstLead.market_leads.ai_notes || '');
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch student alerts:', err);
+      }
+    }
+    if (id) {
+      fetchAlerts();
+    }
+  }, [id]);
+
+  const handleLeadChange = (leadId: string) => {
+    setSelectedLeadId(leadId);
+    if (leadId === 'custom') {
+      setIsCustomJd(true);
+      setJobDescription('');
+    } else {
+      setIsCustomJd(false);
+      const alertItem = alerts.find((a: any) => a.market_leads && String(a.market_leads.id) === leadId);
+      if (alertItem) {
+        setJobDescription(alertItem.market_leads.ai_summary || alertItem.market_leads.ai_notes || '');
+      } else {
+        setJobDescription('');
+      }
+    }
+  };
+
+  const handleTailorCV = async () => {
+    if (!studentData) return;
+    setTailorLoading(true);
+    setTailoredResults(null);
+    try {
+      const candidatePayload = {
+        full_name: studentData.full_name || 'Student',
+        department: studentData.department || 'General',
+        skills: studentData.skills || [],
+        archetype: assessment?.primary_profile || 'builder',
+        location: studentData.location || 'San Francisco'
+      };
+
+      const resumePromise = fetch('/api/market/generate/resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: selectedLeadId,
+          posting: jobDescription,
+          candidate: candidatePayload
+        })
+      });
+
+      const coverLetterPromise = fetch('/api/market/generate/cover-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: selectedLeadId,
+          posting: jobDescription,
+          candidate: candidatePayload
+        })
+      });
+
+      const outreachPromise = fetch('/api/market/generate/outreach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          posting: jobDescription,
+          candidate: candidatePayload,
+          style: 'cold_email'
+        })
+      });
+
+      const [resResume, resCoverLetter, resOutreach] = await Promise.all([
+        resumePromise,
+        coverLetterPromise,
+        outreachPromise
+      ]);
+
+      if (resResume.ok && resCoverLetter.ok && resOutreach.ok) {
+        const resumeData = await resResume.json();
+        const coverLetterData = await resCoverLetter.json();
+        const outreachData = await resOutreach.json();
+        setTailoredResults({
+          resume: resumeData,
+          coverLetter: coverLetterData,
+          outreach: outreachData
+        });
+      } else {
+        console.error('One or more tailor APIs failed');
+      }
+    } catch (err) {
+      console.error('Error tailoring CV:', err);
+    } finally {
+      setTailorLoading(false);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!studentData) return;
+    try {
+      const candidatePayload = {
+        full_name: studentData.full_name || 'Student',
+        department: studentData.department || 'General',
+        skills: studentData.skills || [],
+        archetype: assessment?.primary_profile || 'builder',
+        location: studentData.location || 'San Francisco'
+      };
+
+      const response = await fetch('/api/market/download/resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lead_id: selectedLeadId,
+          posting: jobDescription,
+          candidate: candidatePayload
+        })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const nameStr = studentData.full_name || 'Student';
+        a.download = `tailored_resume_${nameStr.replace(/\s+/g, '_')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Failed to download tailored resume PDF');
+      }
+    } catch (err) {
+      console.error('Error downloading PDF:', err);
+    }
+  };
 
   // Load candidate details
   useEffect(() => {
@@ -124,12 +283,22 @@ export default function RetroPortfolio() {
     return () => clearInterval(timer);
   }, []);
 
+  // Resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const openWindow = (windowId: string) => {
     const nextZ = maxZIndex + 1;
     setMaxZIndex(nextZ);
     setWindows(prev => prev.map(w => {
       if (w.id === windowId) {
-        return { ...w, isOpen: true, isMinimized: false, zIndex: nextZ };
+        return { ...w, isOpen: true, isMinimized: false, isMaximized: isMobile ? true : w.isMaximized, zIndex: nextZ };
       }
       return w;
     }));
@@ -526,35 +695,83 @@ export default function RetroPortfolio() {
       {/* Main retro desktop area */}
       <div className="retro-win95-desktop">
         {/* Desktop shortcuts */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('about')}>
-            <span className="desktop-shortcut-icon">💻</span>
-            <span className="desktop-shortcut-label">My Computer</span>
+        {!isMobile && (
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('about')}>
+              <span className="desktop-shortcut-icon">💻</span>
+              <span className="desktop-shortcut-label">My Computer</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('resume')}>
+              <span className="desktop-shortcut-icon">📝</span>
+              <span className="desktop-shortcut-label">My Resume</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('projects')}>
+              <span className="desktop-shortcut-icon">📁</span>
+              <span className="desktop-shortcut-label">Competencies</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('scores')}>
+              <span className="desktop-shortcut-icon">📊</span>
+              <span className="desktop-shortcut-label">CogMatrix</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('dos')}>
+              <span className="desktop-shortcut-icon">📟</span>
+              <span className="desktop-shortcut-label">MS-DOS Prompt</span>
+            </div>
+            <div className="desktop-shortcut" onDoubleClick={() => openWindow('cv_tailor')}>
+              <span className="desktop-shortcut-icon">👔</span>
+              <span className="desktop-shortcut-label">CV Tailor</span>
+            </div>
+            <div 
+              className="desktop-shortcut" 
+              onClick={() => window.open(`https://github.com`, '_blank')}
+            >
+              <span className="desktop-shortcut-icon">🌐</span>
+              <span className="desktop-shortcut-label">GitHub</span>
+            </div>
           </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('resume')}>
-            <span className="desktop-shortcut-icon">📝</span>
-            <span className="desktop-shortcut-label">My Resume</span>
+        )}
+
+        {/* Mobile DOS Menu program selector */}
+        {isMobile && (
+          <div className="absolute inset-x-0 top-0 bottom-10 bg-[#000080] text-[#c0c0c0] font-mono p-4 flex flex-col z-[1]">
+            <div className="border-2 border-double border-white p-4 flex-1 flex flex-col justify-between overflow-y-auto">
+              <div>
+                <div className="text-center text-white bg-blue-800 font-bold px-2 py-1 uppercase border-b-2 border-white mb-6">
+                  === C2C COGNITIVE DIRECTORY ===
+                </div>
+                <p className="text-xs text-cyan-300 mb-6 text-center leading-relaxed">
+                  Screen calibration detected: MOBILE NODE.
+                  Tap an application key below to establish connection.
+                </p>
+                
+                <div className="space-y-3 max-w-sm mx-auto">
+                  {[
+                    { id: 'about', label: '💻 My Computer', desc: 'View cognitive archetype details' },
+                    { id: 'resume', label: '📝 My Resume', desc: 'Access educational & score records' },
+                    { id: 'projects', label: '📁 Competencies', desc: 'Inspect dimension quotient density' },
+                    { id: 'scores', label: '📊 CogMatrix', desc: 'Review developmental feedback directives' },
+                    { id: 'dos', label: '📟 MS-DOS Shell', desc: 'Run low-level console diagnostics' },
+                    { id: 'cv_tailor', label: '👔 CV Tailor', desc: 'Tailor resume & cover letters' },
+                  ].map((app) => (
+                    <button
+                      key={app.id}
+                      onClick={() => openWindow(app.id)}
+                      className="w-full text-left bg-[#c0c0c0] text-[#000] border-2 border-white border-r-[#808080] border-b-[#808080] p-3 text-xs font-bold font-mono tracking-wider flex flex-col gap-1 active:border-r-white active:border-b-white"
+                    >
+                      <span className="text-[#000080] font-bold">{app.label}</span>
+                      <span className="text-[10px] text-gray-700 font-normal">{app.desc}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-center text-[10px] text-gray-500 uppercase tracking-widest pt-4">
+                C2C MOBILE OPERATING SHELL v1.95
+              </div>
+            </div>
           </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('projects')}>
-            <span className="desktop-shortcut-icon">📁</span>
-            <span className="desktop-shortcut-label">Competencies</span>
-          </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('scores')}>
-            <span className="desktop-shortcut-icon">📊</span>
-            <span className="desktop-shortcut-label">CogMatrix</span>
-          </div>
-          <div className="desktop-shortcut" onDoubleClick={() => openWindow('dos')}>
-            <span className="desktop-shortcut-icon">📟</span>
-            <span className="desktop-shortcut-label">MS-DOS Prompt</span>
-          </div>
-          <div 
-            className="desktop-shortcut" 
-            onClick={() => window.open(`https://github.com`, '_blank')}
-          >
-            <span className="desktop-shortcut-icon">🌐</span>
-            <span className="desktop-shortcut-label">GitHub</span>
-          </div>
-        </div>
+        )}
+
 
         {/* Back Link Button for Next.js Context */}
         <div className="absolute top-4 right-4 z-50">
@@ -578,10 +795,10 @@ export default function RetroPortfolio() {
               key={w.id}
               className="win95-window"
               style={{
-                top: w.isMaximized ? '0' : `${w.y}px`,
-                left: w.isMaximized ? '0' : `${w.x}px`,
-                width: w.isMaximized ? '100vw' : `${w.width}px`,
-                height: w.isMaximized ? 'calc(100vh - 40px)' : `${w.height}px`,
+                top: (w.isMaximized || isMobile) ? '0' : `${w.y}px`,
+                left: (w.isMaximized || isMobile) ? '0' : `${w.x}px`,
+                width: (w.isMaximized || isMobile) ? '100vw' : `${w.width}px`,
+                height: (w.isMaximized || isMobile) ? 'calc(100vh - 40px)' : `${w.height}px`,
                 zIndex: w.zIndex,
               }}
               onClick={() => focusWindow(w.id)}
@@ -702,10 +919,150 @@ export default function RetroPortfolio() {
                     </form>
                   </div>
                 )}
+
+                {w.id === 'cv_tailor' && (
+                  <div className="space-y-4 text-xs font-sans">
+                    <div className="flex flex-col gap-1">
+                      <label className="font-bold">Select Opportunity Alert:</label>
+                      <select 
+                        className="w-full border-2 border-gray-600 bg-white p-1 text-black font-sans outline-none"
+                        value={selectedLeadId}
+                        onChange={(e) => handleLeadChange(e.target.value)}
+                        disabled={tailorLoading}
+                      >
+                        <option value="">-- Choose an Alert --</option>
+                        {alerts.map((a: any) => {
+                          const lead = a.market_leads;
+                          if (!lead) return null;
+                          return (
+                            <option key={lead.id} value={lead.id}>
+                              {lead.company || 'Unknown Company'} - {lead.name || 'Job Lead'} (Score: {a.score}%)
+                            </option>
+                          );
+                        })}
+                        <option value="custom">Paste Custom Job Description</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        id="custom-jd-checkbox" 
+                        checked={isCustomJd} 
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            handleLeadChange('custom');
+                          } else {
+                            handleLeadChange('');
+                          }
+                        }}
+                        disabled={tailorLoading}
+                      />
+                      <label htmlFor="custom-jd-checkbox" className="select-none font-bold">Paste Custom JD</label>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="font-bold">Job Description Details:</label>
+                      <textarea
+                        rows={5}
+                        className="w-full border-2 border-gray-600 bg-white p-1 text-black font-sans outline-none resize-none"
+                        value={jobDescription}
+                        onChange={(e) => setJobDescription(e.target.value)}
+                        placeholder="Paste details here..."
+                        disabled={tailorLoading || (!isCustomJd && selectedLeadId !== '')}
+                      />
+                    </div>
+
+                    <button
+                      className="win95-btn px-4 py-1.5 font-bold flex items-center justify-center disabled:opacity-50"
+                      onClick={handleTailorCV}
+                      disabled={tailorLoading || !jobDescription}
+                    >
+                      {tailorLoading ? 'Tailoring in Progress...' : 'Tailor CV'}
+                    </button>
+
+                    {tailoredResults && (
+                      <div className="mt-4 space-y-4 border-2 border-gray-600 p-2 bg-gray-50 max-h-72 overflow-y-auto">
+                        <div>
+                          <div className="font-bold border-b border-gray-400 pb-1 mb-2 text-blue-900 font-sans">1. Tailored Resume Preview</div>
+                          <div className="space-y-1 font-mono text-[11px] bg-white p-2 border border-gray-300">
+                            <div><strong>Candidate:</strong> {tailoredResults.resume.candidate_name}</div>
+                            <div><strong>Department:</strong> {tailoredResults.resume.department}</div>
+                            <div><strong>Role Title:</strong> {tailoredResults.resume.role_title}</div>
+                            <div><strong>Company:</strong> {tailoredResults.resume.company}</div>
+                            <div><strong>Location:</strong> {tailoredResults.resume.location}</div>
+                            <div><strong>Voice Hook:</strong> {tailoredResults.resume.voice_hook}</div>
+                            <div><strong>Summary:</strong> {tailoredResults.resume.archetype_summary}</div>
+                            {tailoredResults.resume.top_skills && (
+                              <div><strong>Top Skills:</strong> {tailoredResults.resume.top_skills.join(', ')}</div>
+                            )}
+                            {tailoredResults.resume.matched_tech && (
+                              <div><strong>Matched Tech:</strong> {tailoredResults.resume.matched_tech.join(', ')}</div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="font-bold border-b border-gray-400 pb-1 mb-2 text-blue-900 font-sans">2. Tailored Cover Letter</div>
+                          <div className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300">
+                            {tailoredResults.coverLetter && (
+                              <>
+                                <p>Dear Hiring Team at {tailoredResults.coverLetter.company || 'Company'},</p>
+                                <br />
+                                <p>{tailoredResults.coverLetter.opener}. My core strengths include {tailoredResults.coverLetter.strength}, and I have hands-on experience with {tailoredResults.coverLetter.skills_str}.</p>
+                                <br />
+                                <p>{tailoredResults.coverLetter.hook}.</p>
+                                <br />
+                                <p>{tailoredResults.coverLetter.follow_up_note}</p>
+                                <br />
+                                <p>Sincerely,</p>
+                                <p>{tailoredResults.coverLetter.candidate_name}</p>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="font-bold border-b border-gray-400 pb-1 mb-2 text-blue-900 font-sans">3. Outreach & LinkedIn Templates</div>
+                          <div className="space-y-4">
+                            <div>
+                              <div className="font-bold text-[10px] text-gray-600 font-sans">COLD EMAIL DRAFT:</div>
+                              <pre className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300 mt-1">
+                                {tailoredResults.outreach.cold_email}
+                              </pre>
+                            </div>
+                            <div>
+                              <div className="font-bold text-[10px] text-gray-600 font-sans">LINKEDIN NOTE DRAFT:</div>
+                              <pre className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300 mt-1">
+                                {tailoredResults.outreach.linkedin_note}
+                              </pre>
+                            </div>
+                            <div>
+                              <div className="font-bold text-[10px] text-gray-600 font-sans">FOUNDER MESSAGE DRAFT:</div>
+                              <pre className="whitespace-pre-wrap font-mono text-[11px] bg-white p-2 border border-gray-300 mt-1">
+                                {tailoredResults.outreach.founder_message}
+                              </pre>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-2">
+                          <button
+                            className="win95-btn px-4 py-1.5 font-bold flex items-center justify-center"
+                            onClick={handleDownloadPDF}
+                          >
+                            Download tailored PDF
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           );
         })}
+
 
         {/* 2. Start Menu Drawer */}
         {startMenuOpen && (
@@ -727,8 +1084,10 @@ export default function RetroPortfolio() {
                     <div className="start-menu-item" onClick={() => { openWindow('resume'); setStartMenuOpen(false); }}>📝 Resume Details</div>
                     <div className="start-menu-item" onClick={() => { openWindow('projects'); setStartMenuOpen(false); }}>📁 Vector Profiles</div>
                     <div className="start-menu-item" onClick={() => { openWindow('dos'); setStartMenuOpen(false); }}>📟 MS-DOS Shell</div>
+                    <div className="start-menu-item" onClick={() => { openWindow('cv_tailor'); setStartMenuOpen(false); }}>👔 CV Tailor</div>
                   </div>
                 )}
+
               </div>
               <div 
                 className="start-menu-item" 

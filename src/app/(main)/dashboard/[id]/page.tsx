@@ -16,16 +16,39 @@ import {
   Cpu,
   Database,
   Copy,
-  Check
+  Check,
+  Briefcase,
+  CheckCircle,
+  Clock,
+  Send
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import GrowthRadar from "@/components/charts/GrowthRadar";
+import TrendLineChart from "@/components/charts/TrendLineChart";
 import { useRequireAuth } from "@/hooks/useAuth";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import type { DimensionScores, Alert } from "@/types";
+import { useApiQuery } from "@/hooks/useApiQuery";
+
 import { authFetch } from '@/lib/authFetch';
 import ProfileCompletionWidget from "@/components/profile/ProfileCompletionWidget";
+import UserJourneyWidget from "@/components/dashboard/UserJourneyWidget";
+import { supabase } from "@/lib/supabase";
+
+interface HistoryPoint {
+  attempt_number: number;
+  dimension_scores: DimensionScores;
+  created_at: string;
+}
+
+interface Application {
+  id: string;
+  job_id: string;
+  status: 'expressed_interest' | 'shortlisted' | 'interviewing' | 'offered' | 'rejected';
+  applied_at: string;
+  job_postings?: { title: string; location?: string; role_type?: string; };
+}
 
 interface DashboardData {
   student: {
@@ -46,13 +69,22 @@ interface DashboardData {
 
 export default function Dashboard() {
   const { id } = useParams();
-  const { user, loading: authLoading } = useRequireAuth();
-  
+  const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['student'] });
   const [data, setData] = useState<DashboardData | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [applyingTo, setApplyingTo] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [activeMatrixTab, setActiveMatrixTab] = useState<"radar" | "trend">("radar");
+
+
+  const { data: historyData } = useApiQuery<HistoryPoint[]>(
+    authLoading || !data || !data.assessments || data.assessments.length === 0
+      ? null
+      : `/api/student/${id}/history`
+  );
 
   const copyFeedbackLink = () => {
     const link = `${window.location.origin}/feedback/${id}`;
@@ -81,6 +113,16 @@ export default function Dashboard() {
         } catch (e) {
           console.error("Alerts fetch error", e);
         }
+
+        try {
+          const appsRes = await authFetch(`/api/student/${id}/applications`);
+          if (appsRes.ok) {
+            const appsJson = await appsRes.json();
+            setApplications(appsJson);
+          }
+        } catch (e) {
+          console.error("Applications fetch error", e);
+        }
       } catch (err: unknown) {
         console.error(err);
         setError("Failed to synchronize student metrics from the database node.");
@@ -88,7 +130,40 @@ export default function Dashboard() {
         setLoading(false);
       }
     }
+    
     fetchData();
+
+    // Supabase Realtime Subscriptions
+    const channel = supabase.channel('student-dashboard-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'applications' },
+        (payload) => {
+          console.log('Realtime update: applications', payload);
+          fetchData(); // Refetch to keep data consistent
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'leads' },
+        (payload) => {
+          console.log('Realtime update: leads', payload);
+          fetchData();
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'development_reports' },
+        (payload) => {
+          console.log('Realtime update: development_reports', payload);
+          fetchData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [id, authLoading]);
 
   const assessment = data?.assessments?.[0] || {};
@@ -96,6 +171,28 @@ export default function Dashboard() {
   const report = assessment.development_report || {};
   const maxFitValue = assessment.founder_fit ? Math.max(...Object.values(assessment.founder_fit as Record<string, number>)) : 96;
   const founderFitType = assessment.founder_fit ? Object.keys(assessment.founder_fit)[0].toUpperCase() : "THE_BUILDER";
+
+  const appliedJobIds = new Set(applications.map((a) => a.job_id));
+
+  const handleApply = useCallback(async (jobId: string) => {
+    if (!jobId || applyingTo) return;
+    setApplyingTo(jobId);
+    try {
+      const res = await authFetch(`/api/student/${id}/apply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ job_id: jobId }),
+      });
+      if (res.ok) {
+        const newApp: Application = await res.json();
+        setApplications((prev) => [newApp, ...prev.filter((a) => a.job_id !== jobId)]);
+      }
+    } catch (e) {
+      console.error("Apply error", e);
+    } finally {
+      setApplyingTo(null);
+    }
+  }, [id, applyingTo]);
 
   if (error) {
     return (
@@ -138,6 +235,17 @@ export default function Dashboard() {
           />
         )}
 
+        {data?.student && (
+          <UserJourneyWidget 
+            studentProfile={data.student}
+            hasAssessment={data.assessments && data.assessments.length > 0}
+            hasPeerFeedback={!!data.peer_scores}
+            hasApplications={applications.length > 0}
+            feedbackLinkCopied={copied}
+            onCopyFeedbackLink={copyFeedbackLink}
+          />
+        )}
+
         {/* Profile Hero Section */}
         <section className="mb-12">
           <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-16 overflow-hidden">
@@ -163,7 +271,6 @@ export default function Dashboard() {
                 <div className="flex flex-wrap gap-4 justify-center md:justify-start border-l-4 border-transparent pl-8">
                   <Link 
                     href={`/portfolio/${id}`}
-                    target="_blank"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded-sm font-mono text-xs font-black text-cyan-400 uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[0_0_25px_rgba(6,182,212,0.2)]"
                   >
                     <Cpu className="w-4 h-4" /> Boot_Retro_Portfolio
@@ -238,38 +345,63 @@ export default function Dashboard() {
                   </h2>
                   <p className="text-[10px] text-cyan-400/50 uppercase tracking-[0.4em] font-black mt-3">360°_NEURAL_CAPACITY_BENCHMARKS</p>
                 </div>
-                <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-black/40 border border-white/10 rounded-sm font-mono text-[10px] text-white/40 uppercase tracking-widest font-bold">
-                  <Database className="w-3.5 h-3.5" /> ARCHIVE_STABLE_001
+                <div className="flex bg-black/40 border border-white/10 rounded-sm p-0.5">
+                  <button
+                    onClick={() => setActiveMatrixTab("radar")}
+                    className={`px-3 py-1.5 font-mono text-[9px] uppercase font-black tracking-wider transition-all rounded-sm ${
+                      activeMatrixTab === "radar"
+                        ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
+                        : "text-white/40 hover:text-white/60 border border-transparent"
+                    }`}
+                  >
+                    Radar Matrix
+                  </button>
+                  <button
+                    onClick={() => setActiveMatrixTab("trend")}
+                    className={`px-3 py-1.5 font-mono text-[9px] uppercase font-black tracking-wider transition-all rounded-sm ${
+                      activeMatrixTab === "trend"
+                        ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
+                        : "text-white/40 hover:text-white/60 border border-transparent"
+                    }`}
+                  >
+                    Historical Trend
+                  </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-cyan-400/5 blur-3xl rounded-full scale-75"></div>
-                  <GrowthRadar data={scores as { [key: string]: number }} peerData={data?.peer_scores as { [key: string]: number } | undefined} />
-                </div>
-                
-                <div className="space-y-4">
-                  <h4 className="font-mono text-[10px] text-white/20 uppercase tracking-[0.4em] font-black mb-6">Vector_Decomposition</h4>
-                  {Object.entries(scores).map(([key, value]) => (
-                    <div key={key} className="bg-white/5 border border-white/5 p-6 rounded-xl group hover:border-cyan-500/30 transition-all">
-                      <div className="flex justify-between items-end mb-4">
-                        <span className="font-mono text-[11px] font-black text-white/40 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">{key}</span>
-                        <div className="flex items-baseline gap-1">
-                           <span className="text-3xl font-black text-white tracking-tighter">{value as number}</span>
-                           <span className="text-[10px] font-bold text-white/20 uppercase">PTS</span>
+              {activeMatrixTab === "radar" ? (
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-cyan-400/5 blur-3xl rounded-full scale-75"></div>
+                    <GrowthRadar data={scores as { [key: string]: number }} peerData={data?.peer_scores as { [key: string]: number } | undefined} />
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-mono text-[10px] text-white/20 uppercase tracking-[0.4em] font-black mb-6">Vector_Decomposition</h4>
+                    {Object.entries(scores).map(([key, value]) => (
+                      <div key={key} className="bg-white/5 border border-white/5 p-6 rounded-xl group hover:border-cyan-500/30 transition-all">
+                        <div className="flex justify-between items-end mb-4">
+                          <span className="font-mono text-[11px] font-black text-white/40 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">{key}</span>
+                          <div className="flex items-baseline gap-1">
+                             <span className="text-3xl font-black text-white tracking-tighter">{value as number}</span>
+                             <span className="text-[10px] font-bold text-white/20 uppercase">PTS</span>
+                          </div>
+                        </div>
+                        <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-cyan-500 to-indigo-600 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(6,182,212,0.4)]" 
+                            style={{ width: `${value}%` }}
+                          ></div>
                         </div>
                       </div>
-                      <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-cyan-500 to-indigo-600 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(6,182,212,0.4)]" 
-                          style={{ width: `${value}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="animate-fadeIn mt-8">
+                  <TrendLineChart history={historyData} />
+                </div>
+              )}
             </div>
           </div>
 
@@ -348,32 +480,68 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-4">
-                  {alerts.slice(0, 5).map((alert: any, i: number) => (
-                    <a key={i} href={alert.lead_url} target="_blank" rel="noopener noreferrer" className="block group/alert relative">
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400/20 to-indigo-600/20 rounded-xl blur opacity-0 group-hover/alert:opacity-100 transition duration-500"></div>
-                      <div className="relative bg-black/60 border border-white/5 p-6 rounded-xl flex flex-col gap-4 backdrop-blur-md transition-all group-hover/alert:bg-black/40 group-hover/alert:translate-x-2">
-                        <div className="flex justify-between items-start gap-6">
-                          <h3 className="text-[#bbc9cd] font-sans font-black group-hover/alert:text-white transition-colors line-clamp-1 uppercase tracking-tight text-lg">
-                            {alert.market_leads?.name || 'High Impact Role'}
-                          </h3>
-                          <div className="shrink-0 flex flex-col items-end">
-                             <div className="font-mono text-[9px] text-cyan-400/40 font-black uppercase tracking-widest mb-1">MATCH</div>
-                             <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-sm font-mono text-xs font-black text-cyan-400">
-                               {alert.score || alert.market_leads?.ai_score || 0}%
-                             </span>
+                  {alerts.slice(0, 5).map((alert: Alert, i: number) => {
+                    const jobId = (alert as Alert & { job_id?: string }).job_id || alert.market_leads?.id;
+                    const alreadyApplied = jobId ? appliedJobIds.has(jobId) : false;
+                    const isApplying = applyingTo === jobId;
+                    return (
+                      <div key={i} className="relative group/alert">
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400/20 to-indigo-600/20 rounded-xl blur opacity-0 group-hover/alert:opacity-100 transition duration-500"></div>
+                        <div className="relative bg-black/60 border border-white/5 p-6 rounded-xl flex flex-col gap-4 backdrop-blur-md transition-all group-hover/alert:bg-black/40">
+                          <div className="flex justify-between items-start gap-6">
+                            <h3 className="text-[#bbc9cd] font-sans font-black group-hover/alert:text-white transition-colors line-clamp-1 uppercase tracking-tight text-lg">
+                              {alert.market_leads?.name || 'High Impact Role'}
+                            </h3>
+                            <div className="shrink-0 flex flex-col items-end">
+                              <div className="font-mono text-[9px] text-cyan-400/40 font-black uppercase tracking-widest mb-1">MATCH</div>
+                              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-sm font-mono text-xs font-black text-cyan-400">
+                                {(alert as Alert & { score?: number }).score || alert.market_leads?.ai_score || 0}%
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/5">
+                            <span className="flex items-center gap-2 font-mono text-[10px] text-white/30 uppercase tracking-widest font-bold">
+                              <Database className="w-3.5 h-3.5" /> {alert.market_leads?.company || 'Confidential'}
+                            </span>
+                            <div className="flex items-center gap-2">
+                              {alert.lead_url && (
+                                <a
+                                  href={alert.lead_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1.5 text-[10px] font-black font-mono text-white/30 hover:text-white/60 uppercase tracking-widest transition-colors"
+                                >
+                                  View <ExternalLink className="w-3 h-3" />
+                                </a>
+                              )}
+                              {jobId && (
+                                <button
+                                  id={`apply-btn-${jobId}`}
+                                  onClick={() => handleApply(jobId)}
+                                  disabled={alreadyApplied || isApplying}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm font-mono text-[10px] font-black uppercase tracking-widest transition-all ${
+                                    alreadyApplied
+                                      ? "bg-green-500/10 border border-green-500/20 text-green-400 cursor-default"
+                                      : isApplying
+                                      ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 opacity-60"
+                                      : "bg-[#8aebff]/10 border border-[#8aebff]/30 text-[#8aebff] hover:bg-[#8aebff]/20"
+                                  }`}
+                                >
+                                  {alreadyApplied ? (
+                                    <><CheckCircle className="w-3 h-3" /> Applied</>
+                                  ) : isApplying ? (
+                                    <><div className="w-3 h-3 border border-cyan-400 border-t-transparent rounded-full animate-spin" /> Sending…</>
+                                  ) : (
+                                    <><Send className="w-3 h-3" /> Express_Interest</>
+                                  )}
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/5">
-                          <span className="flex items-center gap-2 font-mono text-[10px] text-white/30 uppercase tracking-widest font-bold">
-                             <Database className="w-3.5 h-3.5" /> {alert.market_leads?.company || 'Confidential'}
-                          </span>
-                          <span className="flex items-center gap-2 text-[10px] font-black font-mono text-cyan-400 uppercase tracking-widest group-hover/alert:translate-x-1 transition-transform">
-                             Execute_Link <ExternalLink className="w-3.5 h-3.5" />
-                          </span>
-                        </div>
                       </div>
-                    </a>
-                  ))}
+                    );
+                  })}
                 </div>
                 
                 {alerts.length > 5 && (
@@ -381,6 +549,50 @@ export default function Dashboard() {
                     Load_More_Matches_({alerts.length - 5})
                   </button>
                 )}
+              </div>
+            )}
+
+            {/* Applications Pipeline */}
+            {applications.length > 0 && (
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#c3c0ff] to-transparent"></div>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-black text-white font-mono uppercase tracking-tighter flex items-center gap-4">
+                    <Briefcase className="w-7 h-7 text-[#c3c0ff]" /> Application_Pipeline
+                  </h2>
+                  <p className="text-[10px] text-[#c3c0ff]/50 uppercase tracking-[0.4em] font-black mt-3">CAREER_STATUS_FEED</p>
+                </div>
+                <div className="space-y-3">
+                  {applications.slice(0, 8).map((app) => {
+                    const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+                      expressed_interest: { label: "Expressed Interest", color: "text-cyan-400 bg-cyan-400/10 border-cyan-400/20", icon: <Send className="w-3 h-3" /> },
+                      shortlisted:        { label: "Shortlisted",        color: "text-[#c3c0ff] bg-[#c3c0ff]/10 border-[#c3c0ff]/20", icon: <CheckCircle className="w-3 h-3" /> },
+                      interviewing:       { label: "Interviewing",       color: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20", icon: <Clock className="w-3 h-3" /> },
+                      offered:            { label: "Offer Received",    color: "text-green-400 bg-green-400/10 border-green-400/20", icon: <CheckCircle className="w-3 h-3" /> },
+                      rejected:           { label: "Not Selected",      color: "text-red-400 bg-red-400/10 border-red-400/20", icon: <AlertCircle className="w-3 h-3" /> },
+                    };
+                    const cfg = statusConfig[app.status] || statusConfig.expressed_interest;
+                    return (
+                      <div
+                        key={app.id}
+                        id={`app-row-${app.id}`}
+                        className="flex items-center justify-between p-4 bg-black/30 border border-white/5 rounded-xl hover:bg-black/50 transition-all"
+                      >
+                        <div>
+                          <p className="font-mono text-sm text-[#dde4e5] font-medium">
+                            {app.job_postings?.title || "Job Opportunity"}
+                          </p>
+                          <p className="text-xs text-[#bbc9cd] mt-0.5">
+                            {app.job_postings?.location || "Remote"} · {new Date(app.applied_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-mono ${cfg.color}`}>
+                          {cfg.icon} {cfg.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JustHireMe — Privacy Policy</title>
+<meta name="robots" content="index,follow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root{--paper:#F4F3EE;--ink:#1F1A14;--ink-2:#4A463E;--ink-3:#8A847A;--line:rgba(31,26,20,.10);--accent:#C96442;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 50% -10%,#FBFAF6,#F1EFE8 60%,#E9E5DB);
+    color:var(--ink);font-family:Inter,system-ui,-apple-system,sans-serif;line-height:1.65;font-size:15px}
+  .top{position:sticky;top:0;backdrop-filter:blur(10px);background:rgba(244,243,238,.82);
+    border-bottom:1px solid var(--line);z-index:10}
+  .top .in{max-width:880px;margin:0 auto;padding:14px 22px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .top a.brand{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:18px;color:var(--ink);text-decoration:none;margin-right:auto}
+  .top nav a{font-size:12.5px;color:var(--ink-2);text-decoration:none;padding:5px 9px;border-radius:8px}
+  .top nav a:hover{background:rgba(31,26,20,.06);color:var(--ink)}
+  main{max-width:880px;margin:0 auto;padding:34px 22px 80px}
+  h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:34px;line-height:1.15;margin:.2em 0 .5em}
+  h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:21px;margin:1.8em 0 .5em;padding-top:.3em}
+  h3{font-size:15.5px;font-weight:700;margin:1.4em 0 .4em}
+  p{margin:.7em 0;color:var(--ink-2)}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  ul,ol{margin:.6em 0 .9em;padding-left:1.3em;color:var(--ink-2)}li{margin:.3em 0}
+  hr{border:0;border-top:1px solid var(--line);margin:1.8em 0}
+  code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em;background:rgba(31,26,20,.06);
+    padding:1px 6px;border-radius:6px;color:var(--ink)}
+  blockquote{margin:1.2em 0;padding:12px 16px;background:rgba(201,100,66,.07);
+    border-left:3px solid var(--accent);border-radius:0 10px 10px 0;color:var(--ink-2);font-size:13.5px}
+  table{width:100%;border-collapse:collapse;margin:1.1em 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-weight:700;color:var(--ink);background:rgba(31,26,20,.03)}
+  footer{max-width:880px;margin:0 auto;padding:22px;border-top:1px solid var(--line);
+    color:var(--ink-3);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style></head>
+<body>
+<div class="top"><div class="in"><a class="brand" href="/">JustHireMe</a><nav><a href="terms-of-use.html">Terms of Use</a><a href="privacy-policy.html">Privacy Policy</a></nav></div></div>
+<main><h1>Privacy Policy</h1>
+<p><strong>Effective date:</strong> 2026-05-29 <strong>Applies to:</strong> the JustHireMe desktop application ("the Software") and the JustHireMe website/download pages ("the Site").</p>
+<blockquote>This Privacy Policy reflects how JustHireMe handles data today and is not a substitute for professional legal advice.</blockquote>
+<hr/>
+<h2>1. Our privacy model in one sentence</h2>
+<p>JustHireMe is <strong>local-first</strong>: the Software keeps your personal and job-search data on <strong>your own device</strong>, and the Site collects only minimal, mostly anonymized information needed to run download counters and a feedback channel.</p>
+<h2>2. Data the Software stores (on your device, not with us)</h2>
+<p>When you use the desktop Software, the following are stored <strong>locally</strong> on your machine and are <strong>not transmitted to the maintainer</strong>:</p>
+<table><thead><tr><th>Data</th><th>Where it lives</th></tr></thead><tbody><tr><td>Your profile / identity graph (resume, skills, projects, experience)</td><td>Local files + local Kùzu graph</td></tr><tr><td>Job leads and CRM history</td><td>Local SQLite database</td></tr><tr><td>Vector embeddings for matching</td><td>Local LanceDB store + local ONNX model</td></tr><tr><td>Generated resumes, cover letters, outreach drafts</td><td>Local files</td></tr><tr><td>Settings, including any API keys you enter</td><td>Local application settings</td></tr><tr><td>Activity / logs</td><td>Local</td></tr></tbody></table>
+<p>We do not have a server that receives, stores, or has access to this data. Deleting the app and its local data removes it.</p>
+<h2>3. Data sent to third parties <strong>because you chose to</strong></h2>
+<p>The Software only sends data off your device when a feature you use requires it:</p>
+<ul><li><strong>AI/LLM providers (your keys).</strong> If you configure a provider (OpenAI, Anthropic, Azure OpenAI, a custom endpoint, or a local Ollama instance), the relevant job text and profile context are sent to <strong>that provider</strong> to produce scores or documents. This is governed by <strong>that provider's</strong> privacy policy and your account with them. With a local provider (Ollama), this data stays on your machine.</li><li><strong>Job sources and APIs.</strong> When you scan sources, the Software contacts the public job boards, feeds, or APIs you configured to retrieve postings.</li><li><strong>Runtime pack + updates.</strong> On first run and during updates, the Software downloads runtime components and release metadata over HTTPS from the official release host (GitHub). These are standard file/version requests.</li></ul>
+<p>We (the maintainer) do not receive copies of any of the above.</p>
+<h2>4. Data the Site processes</h2>
+<p>The Site (marketing/download pages) processes a small amount of data to operate:</p>
+<ul><li><strong>Anonymous visit and download counts.</strong> The Site increments view/download counters. A per-visitor identifier is <strong>salted and hashed (HMAC)</strong> before storage and is used only to de-duplicate counts (so the same visitor is not counted repeatedly). We do not use it to identify you, and we do not store raw IP addresses for analytics purposes.</li><li><strong>Public GitHub data.</strong> The Site may read public repository data (such as star counts) from GitHub's API.</li><li><strong>Feedback you submit.</strong> If you use the feedback form, your message is forwarded to create a GitHub issue in the project repository. An automated step attempts to <strong>redact obvious personal data and secrets</strong> from the public issue, but you should not submit sensitive personal information, credentials, or other people's data. Anything you submit may become publicly visible in the issue tracker.</li></ul>
+<p>The Site does <strong>not</strong> use advertising trackers, does <strong>not</strong> sell data, and does <strong>not</strong> require an account.</p>
+<h2>5. Cookies and local storage</h2>
+<p>The Site uses minimal browser storage only where needed for functionality (for example, a local cache of public counts and your theme preference). It does not use third-party advertising or cross-site tracking cookies.</p>
+<h2>6. Legal bases for processing (GDPR/UK GDPR)</h2>
+<p>Where GDPR/UK GDPR applies, our limited processing relies on:</p>
+<ul><li><strong>Legitimate interests</strong> — operating download/visit counters and understanding aggregate, anonymized usage; running a public feedback channel.</li><li><strong>Consent</strong> — when you voluntarily submit feedback or enter information into a form.</li><li><strong>Contract / your request</strong> — performing an action you asked for (for example, fetching a download or release metadata).</li></ul>
+<p>You can object to legitimate-interest processing; because Site analytics are anonymized aggregates, opting out is generally a matter of not using the Site.</p>
+<h2>7. Sub-processors / service providers</h2>
+<p>The Site relies on a small set of providers to function: <strong>Vercel</strong> (static/edge hosting), <strong>Upstash Redis</strong> (view/download counters), and <strong>GitHub</strong> (release hosting and the feedback issue tracker). These providers process data on our behalf under their own terms and privacy/security programs.</p>
+<h2>8. International transfers</h2>
+<p>Service providers above may process data in regions including the United States and the EU. Where required, transfers rely on appropriate safeguards (such as Standard Contractual Clauses) offered by those providers.</p>
+<h2>9. Data retention</h2>
+<ul><li><strong>Local Software data:</strong> retained on your device until you delete it; we have no copy.</li><li><strong>Site counters:</strong> stored as aggregate counts and salted-hashed de-dup keys; retained for as long as the counters operate.</li><li><strong>Feedback:</strong> retained in the public GitHub issue tracker until removed; request removal via the contact below.</li></ul>
+<h2>10. Your rights</h2>
+<p>Depending on your location (GDPR/UK GDPR, CCPA/CPRA, and similar laws), you may have rights to access, correct, delete, port, or restrict processing of your personal data, and to object or withdraw consent. Because we hold almost no personal data about you:</p>
+<ul><li>For <strong>Software data</strong>, you exercise these rights directly on your device (edit/delete locally).</li><li>For <strong>feedback or Site data</strong> that may identify you, contact us using Section 13 and we will respond as required by applicable law (for example, within one month under GDPR/UK GDPR).</li></ul>
+<h2>11. Security</h2>
+<p>We aim to follow reasonable security practices: HTTPS for downloads and Site traffic, hashing of visitor identifiers, and redaction on the public feedback path. No method of transmission or storage is 100% secure. Protect your own device, local data, and API keys. Report vulnerabilities per <code>SECURITY.md</code>.</p>
+<h2>12. Children's privacy</h2>
+<p>JustHireMe is not directed to children under 16 and we do not knowingly collect their personal data. If you believe a child provided personal data through the feedback channel, contact us for removal.</p>
+<h2>13. Contact</h2>
+<p>Privacy questions or data-subject requests (access, correction, deletion): email pls@justhireme.ai, open an issue at https://github.com/vasu-devs/JustHireMe, or follow <code>SECURITY.md</code> for sensitive reports. For local Software data, the fastest path is to manage or delete it directly in the app on your device.</p>
+<h2>14. Changes</h2>
+<p>We may update this Policy; the "Effective date" will change and material updates will be noted in release notes or the changelog.</p></main>
+<footer><span>JustHireMe — local-first AI job intelligence</span><span><a href="/">← Back to site</a> · <a href="https://github.com/vasu-devs/JustHireMe">GitHub</a></span></footer>
+</body></html>

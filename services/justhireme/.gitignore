@@ -1,0 +1,112 @@
+# Logs
+logs
+*.log
+.codex-*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node / Vite
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+htmlcov/
+backend/.coverage
+backend/.hf-cache/
+backend/.pyinstaller-cache/
+backend/build_cache/
+backend/tests/tmp*/
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/schemas/
+src-tauri/WixTools/
+
+# Tauri build resources we do not want to commit
+src-tauri/resources/python-runtime/*
+!src-tauri/resources/python-runtime/.gitkeep
+src-tauri/resources/bin/chromium/*
+!src-tauri/resources/bin/chromium/.gitkeep
+src-tauri/resources/bin/ms-playwright/
+src-tauri/resources/backend/
+src-tauri/resources/backend-*/
+src-tauri/resources/backend-*
+src-tauri/resources/sidecar-internal/
+
+# Local data / DBs
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+JustHireMe/
+BoomBoom/
+scratch/
+
+# Generated artifacts and local analysis output
+graphify-out/
+.codex-temp-appdata/
+.codex-temp-sidecar/
+.codex-temp-vector-runtime/
+.codex-temp-runtime-pack/
+.codex-video-analysis/
+release-assets/
+release-assets-*/
+test_resume_output.pdf
+*.tmp
+*.bak
+.tmp-*
+profile_export.json
+
+# User-generated documents
+*.pdf
+!docs/**/*.pdf
+
+# Test scratch + migration lock artifacts
+backend/tests/.scratch-templates/
+*.migration.lock
+
+# Kuzu test graph artifacts
+backend/tests/graph.kuzu
+*.kuzu*
+
+# Local pytest basetemp fallback (used when %TEMP%/pytest-of-<user> is broken)
+backend/.pytest-basetemp/
