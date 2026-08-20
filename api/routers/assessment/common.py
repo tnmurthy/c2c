@@ -99,6 +99,20 @@ def get_fallback_bank_path() -> str:
 
 # --- BACKGROUND TASKS ---
 
+def _build_agent_profile_summary(final_status: str, evidence_scores: Dict[str, Any]) -> str:
+    """finalize_session() reports convergence but no narrative summary -- derive one
+    from the per-gap evidence scores so development_reports.profile_summary isn't blank."""
+    if not evidence_scores:
+        return f"Ordeal session completed with status: {final_status}."
+    strongest = max(evidence_scores, key=evidence_scores.get)
+    weakest = min(evidence_scores, key=evidence_scores.get)
+    return (
+        f"Ordeal session result: {final_status}. "
+        f"Strongest demonstrated gap: {strongest} ({evidence_scores[strongest]}). "
+        f"Weakest demonstrated gap: {weakest} ({evidence_scores[weakest]})."
+    )
+
+
 async def run_agent_recruiters(student_id: str):
     if C2C_Orchestrator_V2 is None:
         logger.error(f"[WORKER] Skipping agent-recruiters for {student_id} — orchestrator unavailable ({ORCHESTRATOR_IMPORT_ERROR})")
@@ -110,3 +124,20 @@ async def run_agent_recruiters(student_id: str):
         logger.info(f"✅ [WORKER] agent-recruiters session result: {res}")
     except Exception as e:
         logger.error(f"❌ [WORKER] agent-recruiters failed: {e}")
+        return
+
+    try:
+        from api.deps import require_admin_supabase
+        client = require_admin_supabase()
+        final_status = res.get("final_status", "UNKNOWN")
+        evidence_scores = res.get("evidence_scores", {})
+        client.table("development_reports").insert({
+            "student_id": student_id,
+            "ordeal_status": final_status,
+            "evidence_scores": evidence_scores,
+            "profile_summary": _build_agent_profile_summary(final_status, evidence_scores),
+            "actionable_feedback": [],
+        }).execute()
+        logger.info(f"✅ [WORKER] Persisted development_reports row for {student_id}")
+    except Exception as e:
+        logger.error(f"❌ [WORKER] Failed to persist development_reports for {student_id}: {e}")

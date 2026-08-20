@@ -5,7 +5,7 @@ import subprocess
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 
-from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client
+from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client, verify_webhook_secret
 from api.schemas.employer import EmployerOnboard, JobCreate
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 from api.rate_limit import limiter
@@ -341,7 +341,7 @@ async def get_leads(client = Depends(require_admin_supabase), current_user = Dep
         logger.error(f"ERROR get_leads: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
-@router.post("/webhook/job-posted")
+@router.post("/webhook/job-posted", dependencies=[Depends(verify_webhook_secret)])
 async def webhook_job_posted(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
     logger.info(f"WEBHOOK: job-posted received. Payload: {payload}")
@@ -350,7 +350,7 @@ async def webhook_job_posted(request: Request, background_tasks: BackgroundTasks
         background_tasks.add_task(run_scoring_engine, job_id)
     return {"status": "received"}
 
-@router.post("/webhook/lead-approved")
+@router.post("/webhook/lead-approved", dependencies=[Depends(verify_webhook_secret)])
 async def webhook_lead_approved(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
     logger.info(f"WEBHOOK: lead-approved received. Payload: {payload}")
@@ -359,7 +359,7 @@ async def webhook_lead_approved(request: Request, background_tasks: BackgroundTa
         background_tasks.add_task(run_auto_apply, url)
     return {"status": "received"}
 
-@router.post("/webhook/daily-sweep")
+@router.post("/webhook/daily-sweep", dependencies=[Depends(verify_webhook_secret)])
 @limiter.limit("5/minute")
 async def webhook_daily_sweep(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()

@@ -1,6 +1,7 @@
 """
 FastAPI dependencies for the C2C API.
 """
+import hmac
 import os
 import logging
 from fastapi import HTTPException, Header, Depends, status
@@ -138,6 +139,23 @@ def get_tenant_id_from_user(user, supabase) -> str | None:
                 logger.error(f"Failed to fetch user tenant from database: {e}")
 
     return tenant_id
+
+def verify_webhook_secret(x_webhook_secret: str = Header(None)):
+    """
+    FastAPI dependency guarding inbound Supabase Database Webhook endpoints.
+    These previously accepted any anonymous POST -- fails closed: if
+    SUPABASE_WEBHOOK_SECRET isn't configured server-side, every call is
+    rejected (503) rather than silently accepted. The Postgres trigger
+    functions send this same secret via
+    supabase/migrations/20260821000000_fix_webhook_urls.sql's
+    get_webhook_headers(), configured separately via
+    `ALTER DATABASE postgres SET app.settings.webhook_secret = '...'`.
+    """
+    expected = os.environ.get("SUPABASE_WEBHOOK_SECRET")
+    if not expected:
+        raise HTTPException(status_code=503, detail="Webhook secret not configured")
+    if not x_webhook_secret or not hmac.compare_digest(x_webhook_secret, expected):
+        raise HTTPException(status_code=401, detail="Invalid webhook secret")
 
 def require_role(allowed_roles: list[str]):
     """FastAPI dependency factory to enforce RBAC constraints using app_metadata."""

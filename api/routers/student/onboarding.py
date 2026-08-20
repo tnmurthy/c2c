@@ -4,7 +4,7 @@ import logging
 from typing import Optional
 from fastapi import APIRouter, Depends, BackgroundTasks, Request
 
-from api.deps import require_admin_supabase, get_current_user, get_supabase_client
+from api.deps import require_admin_supabase, get_current_user, get_supabase_client, verify_webhook_secret
 from api.schemas.student import StudentOnboard
 from api.schemas.assessment import InstitutionOnboard
 from api.exceptions import DatabaseConnectionError
@@ -247,7 +247,7 @@ async def onboard_student(
         logger.error(f"ERROR onboard_student: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
-@router.post("/webhook/student-onboarded")
+@router.post("/webhook/student-onboarded", dependencies=[Depends(verify_webhook_secret)])
 async def webhook_student_onboarded(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
     logger.info(f"WEBHOOK: student-onboarded received. Payload: {payload}")
