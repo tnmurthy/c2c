@@ -15,15 +15,14 @@ logger = logging.getLogger("c2c_api.assessment")
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 try:
     from scripts.c2c_orchestrator_v2 import C2C_Orchestrator_V2
-except ImportError:
-    class C2C_Orchestrator_V2:
-        def __init__(self, candidate_name, audit_gaps):
-            self.candidate = candidate_name
-            self.gaps = audit_gaps
-            self.evidence_scores = {str(gap): 0 for gap in audit_gaps}
-            self.logs = []
-        def run_ordeal_session(self):
-            return {"candidate": self.candidate, "final_status": "CERTIFIED"}
+    ORCHESTRATOR_IMPORT_ERROR: str | None = None
+except ImportError as e:
+    C2C_Orchestrator_V2 = None
+    ORCHESTRATOR_IMPORT_ERROR = str(e)
+    logger.critical(
+        f"CRITICAL: C2C_Orchestrator_V2 failed to import: {e}. "
+        "Agent evaluation will be DISABLED until this is resolved."
+    )
 
 # --- HELPERS ---
 
@@ -101,6 +100,9 @@ def get_fallback_bank_path() -> str:
 # --- BACKGROUND TASKS ---
 
 async def run_agent_recruiters(student_id: str):
+    if C2C_Orchestrator_V2 is None:
+        logger.error(f"[WORKER] Skipping agent-recruiters for {student_id} — orchestrator unavailable ({ORCHESTRATOR_IMPORT_ERROR})")
+        return
     logger.info(f"🚀 [WORKER] Running agent-recruiters (Psychologist, Narratologist) for {student_id}...")
     try:
         orch = C2C_Orchestrator_V2(candidate_name=student_id, audit_gaps=[])

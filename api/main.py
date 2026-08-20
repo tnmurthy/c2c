@@ -18,17 +18,11 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 logger = logging.getLogger("c2c_api")
 logger.setLevel(logging.INFO)
 
-# Create a file handler
+# Create a stdout handler
 fh = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter('%(asctime)s [%(name)s] %(levelname)s: %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
-
-# Also keep console output
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-ch.setFormatter(formatter)
-logger.addHandler(ch)
 
 # Imports from exceptions
 from api.exceptions import APIException, DatabaseConnectionError, NotFoundError, PermissionDeniedError
@@ -137,6 +131,16 @@ def root():
 @app.get("/api")
 def api_root():
     return {"status": "c2c api online"}
+
+@app.get("/api/health/agents")
+def health_agents():
+    from api.routers.assessment.common import C2C_Orchestrator_V2, ORCHESTRATOR_IMPORT_ERROR
+    if C2C_Orchestrator_V2 is None:
+        return JSONResponse(
+            status_code=503,
+            content={"orchestrator": "unavailable", "error": ORCHESTRATOR_IMPORT_ERROR}
+        )
+    return {"orchestrator": "ok"}
 
 @app.get("/health")
 @app.get("/api/health")
