@@ -4,7 +4,7 @@ import sys
 import json
 
 # Add backend to path
-sys.path.append(os.path.join(os.getcwd(), "services", "job-intel-desk", "backend"))
+sys.path.append(os.path.join(os.getcwd(), "services", "justhireme", "backend"))
 
 async def test_live_fire(username):
     print(f"🚀 LOADING MANUAL PROFILE: {username}")

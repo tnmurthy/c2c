@@ -17,7 +17,7 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 
 # Add project root and backend to path
 sys.path.append(PROJECT_ROOT)
-sys.path.append(os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend"))
+sys.path.append(os.path.join(PROJECT_ROOT, "services", "justhireme", "backend"))
 
 # Mocking the scout services since we don't have all dependencies (like kuzu) in this environment
 class MockScout:

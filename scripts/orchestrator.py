@@ -15,10 +15,10 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 
 # Add project root and backend to path so we can import the scoring engine
 sys.path.append(PROJECT_ROOT)
-sys.path.append(os.path.join(PROJECT_ROOT, "services", "job-intel-desk", "backend"))
+sys.path.append(os.path.join(PROJECT_ROOT, "services", "justhireme", "backend"))
 
 try:
-    from agents.scoring_engine import score_job_lead, analyze_candidate, analyze_posting
+    from ranking.scoring_engine import score_job_lead, analyze_candidate, analyze_posting
 except ImportError as e:
     print(f"Error importing scoring engine: {e}")
     print("Ensure you are running this from the project root.")

@@ -8,21 +8,7 @@ import SlideOutDrawer from '@/components/crm/SlideOutDrawer';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import DataState from '@/components/ui/DataState';
 import { useAuthSession } from '@/hooks/useAuthSession';
-
-interface Lead {
-  lead_id: string;
-  tenant_id: string;
-  owner_id?: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone?: string;
-  source: string;
-  status: string;
-  notes?: string;
-  created_at: string;
-  updated_at?: string;
-}
+import type { CrmLead as Lead } from '@/types';
 
 export default function LeadsPage() {
   const [searchTerm, setSearchTerm] = useState('');

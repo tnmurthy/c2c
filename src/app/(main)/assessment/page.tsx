@@ -35,6 +35,7 @@ export default function Assessment() {
       router.push('/onboard');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- part of a larger auth-gated init effect that also writes localStorage and kicks off the question fetch below
     setStudentId(profileId);
     localStorage.setItem('student_id', profileId);
 

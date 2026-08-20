@@ -28,6 +28,7 @@ export default function SlideOutDrawer({
 
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- paired with the close-transition timer below and the document.body side effect; genuinely effectful, not derivable during render
       setIsRendered(true);
       document.body.style.overflow = 'hidden';
     } else {

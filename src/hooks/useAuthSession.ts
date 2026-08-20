@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { getUserRole } from '@/lib/authRole';
 import type { Session, User } from '@supabase/supabase-js';
 
 export interface UseAuthSessionReturn {
@@ -35,7 +36,7 @@ export function useAuthSession(): UseAuthSessionReturn {
       }
 
       const activeUser = activeSession.user;
-      const userRole = activeUser.app_metadata?.role || activeUser.user_metadata?.role || null;
+      const userRole = getUserRole(activeUser);
       let resolvedTenantId = activeUser.app_metadata?.tenant_id || null;
 
       if (!resolvedTenantId && activeUser) {

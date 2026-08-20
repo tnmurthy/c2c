@@ -138,24 +138,21 @@ export default function Dashboard() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'applications' },
-        (payload) => {
-          console.log('Realtime update: applications', payload);
+        () => {
           fetchData(); // Refetch to keep data consistent
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'leads' },
-        (payload) => {
-          console.log('Realtime update: leads', payload);
+        () => {
           fetchData();
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'development_reports' },
-        (payload) => {
-          console.log('Realtime update: development_reports', payload);
+        () => {
           fetchData();
         }
       )

@@ -48,6 +48,7 @@ export default function CRMDashboard() {
   useEffect(() => {
     if (authLoading) return;
     if (!tenantId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- early-exit branch of the same data-loading effect below
       setDataLoading(false);
       return;
     }
