@@ -33,13 +33,61 @@ def calculate_match_score(dimension_scores: Dict[str, Any], role_type: str = "te
 
 # --- BACKGROUND TASKS ---
 
+def score_candidates_for_job(job_id: str, client) -> Dict[str, Any]:
+    """Weighted 5Q match scoring for every student with a completed assessment
+    against the given job's role_type, persisted to job_postings.match_scores
+    plus a match_alerts row for anyone clearing ALERT_THRESHOLD. Shared by the
+    automatic post-creation background task and the manual /match endpoint."""
+    job_res = client.table("job_postings").select("*").eq("id", job_id).execute()
+    if not job_res.data:
+        raise NotFoundError("Job not found")
+    job = job_res.data[0]
+    role_type = job.get("role_type") or "tech"
+
+    students_res = client.table("students").select("id, full_name, email").execute()
+    ids = [s["id"] for s in (students_res.data or [])]
+    if not ids:
+        return {"message": "No students to match", "matched": 0, "alerts_sent": 0}
+
+    assess_res = client.table("assessments").select("student_id, dimension_scores, primary_profile").in_("student_id", ids).execute()
+    latest: Dict[str, Any] = {}
+    for a in (assess_res.data or []):
+        sid = a["student_id"]
+        if sid not in latest:
+            latest[sid] = a
+
+    match_scores_map: Dict[str, float] = {}
+    alert_inserts = []
+    ALERT_THRESHOLD = 75.0
+
+    for student in (students_res.data or []):
+        sid = student["id"]
+        assessment = latest.get(sid)
+        if not assessment:
+            continue
+        scores = assessment.get("dimension_scores") or {}
+        match_pct = calculate_match_score(scores, role_type)
+        match_scores_map[sid] = match_pct
+        if match_pct >= ALERT_THRESHOLD:
+            alert_inserts.append({"student_id": sid, "job_id": job_id, "score": match_pct})
+
+    client.table("job_postings").update({"match_scores": match_scores_map}).eq("id", job_id).execute()
+
+    if alert_inserts:
+        try:
+            client.table("match_alerts").upsert(alert_inserts, on_conflict="student_id,job_id").execute()
+        except Exception as e:
+            logger.warning(f"match_alerts upsert failed: {e}")
+
+    return {"message": "Matching complete", "matched": len(match_scores_map), "alerts_sent": len(alert_inserts)}
+
+
 async def run_scoring_engine(job_id: str):
     logger.info(f"🚀 [WORKER] Running Scoring Engine for new job {job_id}...")
     try:
-        client = get_supabase_client()
-        students_res = client.table("students").select("id").execute()
-        student_ids = [s["id"] for s in (students_res.data or [])]
-        logger.info(f"✅ [WORKER] Scoring Engine evaluated {len(student_ids)} candidates against job {job_id}")
+        client = require_admin_supabase()
+        result = score_candidates_for_job(job_id, client)
+        logger.info(f"✅ [WORKER] Scoring Engine matched {result['matched']} candidates against job {job_id} ({result['alerts_sent']} alerts)")
     except Exception as e:
         logger.error(f"❌ [WORKER] Scoring Engine failed: {e}")
 
@@ -121,19 +169,22 @@ async def get_employer_candidates(client = Depends(require_admin_supabase), curr
         raise DatabaseConnectionError(str(e))
 
 @router.post("/employer/jobs")
-async def create_job_posting(job: JobCreate, client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer"]))):
+async def create_job_posting(job: JobCreate, background_tasks: BackgroundTasks, client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer"]))):
     try:
         emp_res = client.table("employers").select("id").eq("auth_id", current_user.id).execute()
         if not emp_res.data:
             raise NotFoundError("Employer profile not found")
-        
+
         emp_id = emp_res.data[0]["id"]
-        
+
         data = job.dict()
         data["employer_id"] = emp_id
-        
+
         res = client.table("job_postings").insert(data).execute()
-        return res.data[0] if res.data else None
+        posting = res.data[0] if res.data else None
+        if posting:
+            background_tasks.add_task(run_scoring_engine, posting["id"])
+        return posting
     except NotFoundError:
         raise
     except Exception as e:
@@ -157,54 +208,16 @@ async def get_employer_jobs(client = Depends(require_admin_supabase), current_us
 @router.post("/employer/jobs/{job_id}/match")
 async def run_job_matching(
     job_id: str,
-    background_tasks: BackgroundTasks,
     client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["employer", "admin"]))
 ):
+    """Manual re-run of the same matching pass create_job_posting() already
+    triggers automatically in the background -- useful after new students
+    complete assessments post-job-creation."""
     try:
-        job_res = client.table("job_postings").select("*").eq("id", job_id).execute()
-        if not job_res.data:
-            raise NotFoundError("Job not found")
-        job = job_res.data[0]
-        role_type = job.get("role_type") or "tech"
-
-        students_res = client.table("students").select("id, full_name, email").execute()
-        ids = [s["id"] for s in (students_res.data or [])]
-        if not ids:
-            return {"message": "No students to match", "matched": 0}
-
-        assess_res = client.table("assessments").select("student_id, dimension_scores, primary_profile").in_("student_id", ids).execute()
-        latest: Dict[str, Any] = {}
-        for a in (assess_res.data or []):
-            sid = a["student_id"]
-            if sid not in latest:
-                latest[sid] = a
-
-        match_scores_map: Dict[str, float] = {}
-        alert_inserts = []
-        ALERT_THRESHOLD = 75.0
-
-        for student in (students_res.data or []):
-            sid = student["id"]
-            assessment = latest.get(sid)
-            if not assessment:
-                continue
-            scores = assessment.get("dimension_scores") or {}
-            match_pct = calculate_match_score(scores, role_type)
-            match_scores_map[sid] = match_pct
-            if match_pct >= ALERT_THRESHOLD:
-                alert_inserts.append({"student_id": sid, "job_id": job_id, "score": match_pct})
-
-        client.table("job_postings").update({"match_scores": match_scores_map}).eq("id", job_id).execute()
-
-        if alert_inserts:
-            try:
-                client.table("match_alerts").upsert(alert_inserts, on_conflict="student_id,job_id").execute()
-            except Exception as e:
-                logger.warning(f"match_alerts upsert failed: {e}")
-
-        logger.info(f"Matched {len(match_scores_map)} students against job {job_id} (role={role_type})")
-        return {"message": "Matching complete", "matched": len(match_scores_map), "alerts_sent": len(alert_inserts)}
+        result = score_candidates_for_job(job_id, client)
+        logger.info(f"Matched {result['matched']} students against job {job_id}")
+        return result
     except NotFoundError:
         raise
     except Exception as e:
