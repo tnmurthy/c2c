@@ -67,10 +67,16 @@ interface DashboardData {
   peer_scores?: DimensionScores;
 }
 
+interface AgentDevelopmentReport {
+  profile_summary?: string;
+  actionable_feedback?: string[];
+}
+
 export default function Dashboard() {
   const { id } = useParams();
   const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['student'] });
   const [data, setData] = useState<DashboardData | null>(null);
+  const [agentReport, setAgentReport] = useState<AgentDevelopmentReport | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
   const [applyingTo, setApplyingTo] = useState<string | null>(null);
@@ -123,6 +129,16 @@ export default function Dashboard() {
         } catch (e) {
           console.error("Applications fetch error", e);
         }
+
+        try {
+          const reportRes = await authFetch(`/api/students/${id}/development-report`);
+          if (reportRes.ok) {
+            const reportJson = await reportRes.json();
+            setAgentReport(reportJson);
+          }
+        } catch (e) {
+          console.error("Development report fetch error", e);
+        }
       } catch (err: unknown) {
         console.error(err);
         setError("Failed to synchronize student metrics from the database node.");
@@ -165,7 +181,7 @@ export default function Dashboard() {
 
   const assessment = data?.assessments?.[0] || {};
   const scores = assessment.dimension_scores || { Technical: 85, Product: 92, Leadership: 78, Communication: 88, Adaptability: 70 };
-  const report = assessment.development_report || {};
+  const report = agentReport || assessment.development_report || {};
   const maxFitValue = assessment.founder_fit ? Math.max(...Object.values(assessment.founder_fit as Record<string, number>)) : 96;
   const founderFitType = assessment.founder_fit ? Object.keys(assessment.founder_fit)[0].toUpperCase() : "THE_BUILDER";
 

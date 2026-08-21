@@ -171,6 +171,59 @@ async def get_assessment_history(student_id: str, client = Depends(require_admin
         logger.error(f"ERROR get_assessment_history: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
+@router.get("/students/{student_id}/development-report")
+async def get_development_report(student_id: str, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
+    """Latest agent-recruiters (Psychologist/Narratologist) output for a student,
+    written asynchronously by run_agent_recruiters() after the
+    assessment-completed webhook fires. Distinct from the synchronous
+    assessment_attempts.development_report jsonb column."""
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    email = getattr(current_user, "email", "") or ""
+
+    if role == "admin":
+        pass
+    elif role == "student" or not role:
+        student_check = client.table("students").select("auth_id").eq("id", student_id).execute()
+        is_owner = student_check.data and str(student_check.data[0].get("auth_id")) == str(current_user.id)
+        is_profile_match = str(app_metadata.get("profile_id")) == str(student_id)
+
+        if not (is_owner or is_profile_match):
+            raise PermissionDeniedError("Access denied: cannot view other student profiles")
+    elif role == "institution":
+        student_check = client.table("students").select("institution_id, email").eq("id", student_id).execute()
+        if not student_check.data:
+            raise NotFoundError("Student not found")
+
+        s_email = student_check.data[0].get("email") or ""
+        s_domain = s_email.split("@")[-1] if s_email else ""
+        tpo_domain = email.split("@")[-1] if email else ""
+
+        inst_id = app_metadata.get("profile_id")
+        is_owner = inst_id and str(student_check.data[0].get("institution_id")) == str(inst_id)
+        is_domain_match = tpo_domain and s_domain == tpo_domain
+
+        if not (is_owner or is_domain_match):
+            raise PermissionDeniedError("Access denied: student does not belong to your institution")
+    elif role == "employer":
+        pass
+    else:
+        raise PermissionDeniedError("Access denied: unauthorized profile view")
+
+    try:
+        res = (
+            client.table("development_reports")
+            .select("*")
+            .eq("student_id", student_id)
+            .order("created_at", desc=True)
+            .limit(1)
+            .execute()
+        )
+        return res.data[0] if res.data else None
+    except Exception as e:
+        logger.error(f"ERROR get_development_report: {e}", exc_info=True)
+        raise DatabaseConnectionError(str(e))
+
 @router.put("/student/{student_id}/profile")
 async def update_student_profile(student_id: str, profile: StudentProfileUpdate, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     student_check = client.table("students").select("auth_id").eq("id", student_id).execute()
