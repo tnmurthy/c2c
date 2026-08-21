@@ -1,15 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 import logging
 
-from api.deps import get_supabase_client, require_role, get_current_user, require_admin_supabase, get_tenant_id_from_user
+from api.deps import require_role, get_current_user, require_admin_supabase, get_tenant_id_from_user
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 from api.schemas.crm import LeadConvertRequest
 
 router = APIRouter(prefix="/crm", tags=["CRM"])
 logger = logging.getLogger("c2c_api.crm")
 
+# All endpoints below use require_admin_supabase (service-role), not the
+# anon-key client: the tenant_isolation_policy RLS on leads/accounts/
+# contacts/opportunities keys off auth.uid(), which is NULL for a client
+# built from just the anon key (no JWT attached) -- writes and reads through
+# that client silently no-op/empty instead of erroring. Tenant scoping is
+# enforced here in Python via get_tenant_id_from_user() + explicit filters.
+
 @router.post("/leads/{lead_id}/convert")
-def convert_lead(lead_id: str, payload: LeadConvertRequest, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(get_supabase_client)):
+def convert_lead(lead_id: str, payload: LeadConvertRequest, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
     """
     Converts a Lead into an Account and Contact.
     Optionally creates an Opportunity if pipeline details are provided.
@@ -91,12 +98,12 @@ def _get_tenant_candidate_ids(supabase, tenant_id: str) -> list[str]:
     return list({o["candidate_id"] for o in (opps_res.data or []) if o.get("candidate_id")})
 
 @router.get("/candidates")
-def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])), anon_supabase = Depends(get_supabase_client), supabase = Depends(require_admin_supabase)):
+def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
     """
     Returns candidates linked to this tenant's pipeline (via opportunities.candidate_id).
     """
     try:
-        tenant_id = get_tenant_id_from_user(user, anon_supabase)
+        tenant_id = get_tenant_id_from_user(user, supabase)
         if not tenant_id:
             raise HTTPException(status_code=400, detail="No tenant associated with your user account")
 
@@ -153,9 +160,9 @@ def _assert_candidate_in_tenant(supabase, tenant_id: str, student_id: str) -> No
         raise HTTPException(status_code=404, detail="Student not found")
 
 @router.get("/candidates/{student_id}/pdf/profile")
-def get_candidate_profile_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), anon_supabase = Depends(get_supabase_client), supabase = Depends(require_admin_supabase)):
+def get_candidate_profile_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
     try:
-        tenant_id = get_tenant_id_from_user(user, anon_supabase)
+        tenant_id = get_tenant_id_from_user(user, supabase)
         if not tenant_id:
             raise HTTPException(status_code=400, detail="No tenant associated with your user account")
         _assert_candidate_in_tenant(supabase, tenant_id, student_id)
@@ -177,9 +184,9 @@ def get_candidate_profile_pdf(student_id: str, user = Depends(require_role(["ten
         raise HTTPException(status_code=500, detail="Error generating PDF")
 
 @router.get("/candidates/{student_id}/pdf/interview-guide")
-def get_candidate_interview_guide_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), anon_supabase = Depends(get_supabase_client), supabase = Depends(require_admin_supabase)):
+def get_candidate_interview_guide_pdf(student_id: str, user = Depends(require_role(["tenant_admin", "sales_exec"])), supabase = Depends(require_admin_supabase)):
     try:
-        tenant_id = get_tenant_id_from_user(user, anon_supabase)
+        tenant_id = get_tenant_id_from_user(user, supabase)
         if not tenant_id:
             raise HTTPException(status_code=400, detail="No tenant associated with your user account")
         _assert_candidate_in_tenant(supabase, tenant_id, student_id)

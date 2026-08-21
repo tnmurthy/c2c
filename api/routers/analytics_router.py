@@ -1,8 +1,17 @@
+"""
+CRM funnel/summary analytics. Uses the service-role client (not the anon-key
+one) because the tenant_isolation_policy RLS policies on leads/contacts/
+opportunities key off auth.uid() via get_auth_tenant_id() -- a client built
+from just the anon key carries no JWT, so auth.uid() is NULL and every
+`.eq("tenant_id", tenant_id)` query below silently returned zero rows.
+Tenant scoping is enforced here in Python instead, same as every other
+service-role-backed router in this codebase.
+"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Dict, Any
 import logging
 
-from api.deps import get_supabase_client, require_role, get_current_user, get_tenant_id_from_user
+from api.deps import require_admin_supabase, require_role, get_current_user, get_tenant_id_from_user
 
 router = APIRouter(prefix="/analytics", tags=["Analytics"])
 logger = logging.getLogger("c2c_api.analytics")
@@ -10,7 +19,7 @@ logger = logging.getLogger("c2c_api.analytics")
 @router.get("/funnel")
 def get_funnel_metrics(
     user = Depends(require_role(["tenant_admin", "sales_exec"])),
-    supabase = Depends(get_supabase_client)
+    supabase = Depends(require_admin_supabase)
 ):
     """
     For the authenticated tenant, query leads, contacts, and opportunities tables.
@@ -94,7 +103,7 @@ def get_funnel_metrics(
 @router.get("/summary")
 def get_summary_metrics(
     user = Depends(require_role(["tenant_admin", "sales_exec"])),
-    supabase = Depends(get_supabase_client)
+    supabase = Depends(require_admin_supabase)
 ):
     """
     Return total leads count, active opportunities value sum, win rate percentage, and average opportunity value.

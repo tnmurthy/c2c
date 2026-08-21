@@ -12,7 +12,7 @@ import logging
 import re
 
 from fastapi import APIRouter, HTTPException, Depends, Response, Request
-from api.deps import get_supabase_client, get_optional_user
+from api.deps import require_admin_supabase, get_optional_user
 from api.rate_limit import limiter
 from api.schemas.market import (
     ScoreFitRequest,
@@ -151,7 +151,12 @@ def _resolve_job_posting(body, user) -> dict:
     if not posting and lead_id and lead_id != "custom":
         if not user:
             raise HTTPException(401, "Looking up a saved lead requires signing in. Paste the job description directly to use this without an account.")
-        client = get_supabase_client()
+        # market_leads_select_policy requires an authenticated JWT (via
+        # auth_role()); the anon-key client carries none, so this used to
+        # return empty for every logged-in caller. The `user` check above is
+        # the actual auth gate here -- require_admin_supabase() just needs to
+        # succeed in reading the row.
+        client = require_admin_supabase()
         if client:
             try:
                 lead_bigint = int(lead_id)

@@ -4,7 +4,7 @@ import logging
 from typing import Optional
 from fastapi import APIRouter, Depends, BackgroundTasks, Request
 
-from api.deps import require_admin_supabase, get_current_user, get_supabase_client, verify_webhook_secret
+from api.deps import require_admin_supabase, get_current_user, verify_webhook_secret
 from api.schemas.student import StudentOnboard
 from api.schemas.assessment import InstitutionOnboard
 from api.exceptions import DatabaseConnectionError
@@ -70,9 +70,13 @@ The C2C Placement Swarm
 async def run_student_profile_optimization(student_id: str, email: str, full_name: str, github_url: Optional[str] = None, linkedin_url: Optional[str] = None):
     logger.info(f"🚀 [WORKER] Starting background profile optimization for {full_name} ({student_id})")
 
-    client = get_supabase_client()
-    if not client:
-        logger.error("Database connection unavailable in background worker.")
+    # require_admin_supabase (service-role), not the anon-key client -- this
+    # background task both updates students and needs students_update_policy
+    # to pass, which requires an authenticated JWT the anon client never has.
+    try:
+        client = require_admin_supabase()
+    except Exception as e:
+        logger.error(f"Database connection unavailable in background worker: {e}")
         return
 
     try:
