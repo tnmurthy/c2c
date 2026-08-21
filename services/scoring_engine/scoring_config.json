@@ -1,0 +1,52 @@
+{
+  "archetype_dimension_map": {
+    "Builder": ["IQ", "AQ"],
+    "Leader": ["EQ", "SQ"],
+    "Rainmaker": ["SQ", "AQ"],
+    "Anchor": ["IQ", "EQ"]
+  },
+  "archetype_rules": {
+    "Builder": {
+      "summary": "Builders thrive on creating and optimizing systems. They combine high cognitive and adversity quotients to solve complex problems."
+    },
+    "Leader": {
+      "summary": "Leaders excel at rallying teams and building culture. They leverage high emotional and social intelligence."
+    },
+    "Rainmaker": {
+      "summary": "Rainmakers are natural advocates and relationship builders. They use social and adversity quotients to drive growth."
+    },
+    "Anchor": {
+      "summary": "Anchors provide stability and process. They combine cognitive and emotional intelligence to manage operations effectively."
+    }
+  },
+  "feedback_thresholds": {
+    "AQ": {
+      "low": 50,
+      "low_feedback": "Your AQ is below 50. Consider engaging in resilience-building exercises and taking on challenging projects with mentorship."
+    },
+    "SQ": {
+      "high": 80,
+      "high_feedback": "Your SQ is high (> 80). Suggest pursuing leadership roles in student clubs or organizing community events."
+    },
+    "IQ": {
+      "low": 50,
+      "low_feedback": "Consider supplemental courses or study groups to strengthen core problem-solving (IQ) skills."
+    },
+    "EQ": {
+      "high": 80,
+      "high_feedback": "Your EQ is excellent. You might make a great peer mentor or team mediator."
+    },
+    "SpQ": {
+      "high": 75,
+      "high_feedback": "Your SpQ is high (> 75). Purpose-driven leadership is a strong growth vector for you. Consider leading cross-functional initiative projects.",
+      "low": 40,
+      "low_feedback": "Your SpQ score is below 40. Engaging in value-alignment reflection and mission-driven projects can help expand your perspective."
+    }
+  },
+  "role_weights": {
+    "tech":       { "IQ": 0.40, "AQ": 0.30, "EQ": 0.20, "SQ": 0.05, "SpQ": 0.05 },
+    "sales":      { "IQ": 0.10, "AQ": 0.20, "EQ": 0.35, "SQ": 0.35, "SpQ": 0.00 },
+    "ops":        { "IQ": 0.30, "AQ": 0.25, "EQ": 0.25, "SQ": 0.15, "SpQ": 0.05 },
+    "leadership": { "IQ": 0.20, "AQ": 0.20, "EQ": 0.30, "SQ": 0.25, "SpQ": 0.05 }
+  }
+}

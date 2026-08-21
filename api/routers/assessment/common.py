@@ -51,36 +51,11 @@ def parse_scoring_logic(logic_str: str, item_type: str) -> Dict[str, Any]:
     return logic
 
 def generate_development_report(scores: Dict[str, int], founder_profile: str) -> Dict[str, Any]:
-    report = {
-        "profile_summary": "",
-        "actionable_feedback": []
-    }
-
-    if founder_profile == "Builder":
-        report["profile_summary"] = "Builders thrive on creating and optimizing systems. They combine high cognitive and adversity quotients to solve complex problems."
-    elif founder_profile == "Leader":
-        report["profile_summary"] = "Leaders excel at rallying teams and building culture. They leverage high emotional and social intelligence."
-    elif founder_profile == "Rainmaker":
-        report["profile_summary"] = "Rainmakers are natural advocates and relationship builders. They use social and adversity quotients to drive growth."
-    elif founder_profile == "Anchor":
-        report["profile_summary"] = "Anchors provide stability and process. They combine cognitive and emotional intelligence to manage operations effectively."
-
-    if scores.get("AQ", 0) < 50:
-        report["actionable_feedback"].append("Your AQ is below 50. Consider engaging in resilience-building exercises and taking on challenging projects with mentorship.")
-    if scores.get("SQ", 0) > 80:
-        report["actionable_feedback"].append("Your SQ is high (> 80). Suggest pursuing leadership roles in student clubs or organizing community events.")
-    if scores.get("IQ", 0) < 50:
-        report["actionable_feedback"].append("Consider supplemental courses or study groups to strengthen core problem-solving (IQ) skills.")
-    if scores.get("EQ", 0) > 80:
-        report["actionable_feedback"].append("Your EQ is excellent. You might make a great peer mentor or team mediator.")
-
-    # Archetype Engine v2 — SpQ Integration
-    if scores.get("SpQ", 0) > 75:
-        report["actionable_feedback"].append("Your SpQ is high (> 75). Purpose-driven leadership is a strong growth vector for you. Consider leading cross-functional initiative projects.")
-    if scores.get("SpQ", 0) < 40:
-        report["actionable_feedback"].append("Your SpQ score is below 40. Engaging in value-alignment reflection and mission-driven projects can help expand your perspective.")
-
-    return report
+    """Thin re-export: thresholds and archetype summaries now live in
+    services/scoring_engine/scoring_config.json, editable without touching
+    router code. Kept here so existing imports don't need to change."""
+    from services.scoring_engine.engine import generate_development_report as _generate_development_report
+    return _generate_development_report(scores, founder_profile)
 
 def normalize_bank_item(item: Dict[str, Any]) -> Dict[str, Any]:
     normalized = dict(item)

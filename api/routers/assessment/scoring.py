@@ -17,6 +17,7 @@ from api.routers.assessment.common import (
     normalize_bank_item,
     get_fallback_bank_path,
 )
+from services.scoring_engine.engine import compute_founder_fit, compute_fit_score
 
 router = APIRouter(tags=["Assessment"])
 
@@ -151,21 +152,15 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_a
             else:
                 percentile_bands[dim] = "Average"
 
-        founder_fit = {
-            "Builder": normalized_scores.get("IQ", 0) + normalized_scores.get("AQ", 0),
-            "Leader": normalized_scores.get("EQ", 0) + normalized_scores.get("SQ", 0),
-            "Rainmaker": normalized_scores.get("SQ", 0) + normalized_scores.get("AQ", 0),
-            "Anchor": normalized_scores.get("IQ", 0) + normalized_scores.get("EQ", 0)
-        }
+        founder_fit = compute_founder_fit(normalized_scores)
         primary_profile = max(founder_fit, key=founder_fit.get)
 
         # Generate development report with SpQ integration
         dev_report = generate_development_report(normalized_scores, primary_profile)
         dev_report["percentile_bands"] = percentile_bands
 
-        from api.routers.employer_router import calculate_match_score
-        tech_fit_index = calculate_match_score(normalized_scores, "tech")
-        sales_fit_index = calculate_match_score(normalized_scores, "sales")
+        tech_fit_index = compute_fit_score(normalized_scores, "tech")
+        sales_fit_index = compute_fit_score(normalized_scores, "sales")
 
         # Save to database
         db_payload = {

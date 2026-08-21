@@ -9,27 +9,12 @@ from api.deps import require_admin_supabase, require_role, get_current_user, get
 from api.schemas.employer import EmployerOnboard, JobCreate
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 from api.rate_limit import limiter
+from services.scoring_engine.engine import compute_fit_score as calculate_match_score, ROLE_WEIGHTS
 
 router = APIRouter(tags=["Employer"])
 logger = logging.getLogger("c2c_api.employer")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# --- 5Q MATCHING ENGINE ---
-
-ROLE_WEIGHTS: Dict[str, Dict[str, float]] = {
-    "tech":       {"IQ": 0.40, "AQ": 0.30, "EQ": 0.20, "SQ": 0.05, "SpQ": 0.05},
-    "sales":      {"IQ": 0.10, "AQ": 0.20, "EQ": 0.35, "SQ": 0.35, "SpQ": 0.00},
-    "ops":        {"IQ": 0.30, "AQ": 0.25, "EQ": 0.25, "SQ": 0.15, "SpQ": 0.05},
-    "leadership": {"IQ": 0.20, "AQ": 0.20, "EQ": 0.30, "SQ": 0.25, "SpQ": 0.05},
-}
-
-def calculate_match_score(dimension_scores: Dict[str, Any], role_type: str = "tech") -> float:
-    """Compute weighted 5Q match score (0-100) for a given role type."""
-    weights = ROLE_WEIGHTS.get(role_type, ROLE_WEIGHTS["tech"])
-    max_possible = sum(w * 100 for w in weights.values())
-    raw = sum(weights.get(dim, 0) * float(score) for dim, score in dimension_scores.items())
-    return round((raw / max_possible) * 100, 1) if max_possible > 0 else 0.0
 
 # --- BACKGROUND TASKS ---
 
