@@ -43,12 +43,77 @@ export default function LoginPage() {
     setLoading(false);
   };
 
+  const loginDemo = async (role: 'student' | 'institution' | 'employer' | 'admin', profileId: string = 'demo-profile') => {
+    setLoading(true);
+    // Set demo session cookie & localStorage for local offline testing
+    const demoUser = {
+      id: `${role}-001`,
+      email: `${role}@c2c.demo`,
+      app_metadata: { role, profile_id: profileId },
+      user_metadata: { role, profile_id: profileId },
+    };
+    
+    // Write cookie readable by middleware
+    const ref = 'onsmkbwqucvbzggugmmn';
+    const cookieName = `sb-${ref}-auth-token`;
+    const tokenVal = JSON.stringify({
+      access_token: 'demo-access-token',
+      token_type: 'bearer',
+      user: demoUser,
+      expires_at: Math.floor(Date.now() / 1000) + 86400 * 7,
+    });
+    
+    document.cookie = `${cookieName}=${encodeURIComponent(tokenVal)}; path=/; max-age=604800; SameSite=Lax`;
+    document.cookie = `demo_role=${role}; path=/; max-age=604800; SameSite=Lax`;
+    try {
+      localStorage.setItem(cookieName, tokenVal);
+    } catch (e) {}
+
+    routeUser(demoUser);
+  };
+
   return <main className="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden p-6">
     <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(#00FFFF 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
     <section className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#1a2326]/90 p-8 shadow-2xl backdrop-blur-xl">
       <header className="mb-8 text-center"><p className="text-xs font-mono font-bold tracking-[.2em] text-cyan-400">SECURE ACCESS</p><h1 className="mt-3 font-mono text-4xl font-bold text-white">ONE.<span className="text-cyan-400">CLICK</span>_ACCESS</h1><p className="mt-3 text-sm text-[#bbc9cd]">New here or returning? Use the same button.</p></header>
       <button onClick={continueWithGoogle} disabled={loading} className="flex w-full items-center justify-center gap-3 rounded-xl bg-cyan-500 py-4 font-mono text-sm font-bold text-[#0e1416] transition hover:bg-cyan-400 disabled:opacity-50">{loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleMark />} CONTINUE WITH GOOGLE</button>
       <p className="mt-4 text-center text-xs leading-5 text-[#bbc9cd]">Your account is created automatically the first time you continue. Profile details come after you are in.</p>
+      
+      {/* Local Fast-Access Demo Buttons */}
+      <div className="mt-6 p-4 rounded-xl bg-black/40 border border-cyan-500/20 space-y-2">
+        <p className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider text-center mb-2">⚡ Quick Local Demo Access</p>
+        <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+          <button
+            type="button"
+            onClick={() => loginDemo('student', 'stu-001')}
+            className="p-2.5 rounded bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/10 text-cyan-300 transition-all font-bold"
+          >
+            🎓 Student Portal
+          </button>
+          <button
+            type="button"
+            onClick={() => loginDemo('institution', 'inst-001')}
+            className="p-2.5 rounded bg-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 border border-white/10 text-emerald-300 transition-all font-bold"
+          >
+            🏛️ TPO Dashboard
+          </button>
+          <button
+            type="button"
+            onClick={() => loginDemo('employer', 'emp-001')}
+            className="p-2.5 rounded bg-white/5 hover:bg-indigo-500/10 hover:border-indigo-500/40 border border-white/10 text-indigo-300 transition-all font-bold"
+          >
+            💼 Employer View
+          </button>
+          <button
+            type="button"
+            onClick={() => loginDemo('admin', 'admin-001')}
+            className="p-2.5 rounded bg-white/5 hover:bg-rose-500/10 hover:border-rose-500/40 border border-white/10 text-rose-300 transition-all font-bold"
+          >
+            🛡️ Admin Portal
+          </button>
+        </div>
+      </div>
+
       {error && <p role="alert" className="mt-5 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</p>}
       <div className="mt-7 border-t border-white/10 pt-2"><button onClick={() => setShowEmail(!showEmail)} className="flex w-full items-center justify-between py-3 text-xs font-mono text-[#bbc9cd] hover:text-cyan-400">USE EMAIL AND PASSWORD INSTEAD <ChevronDown className={`h-4 w-4 ${showEmail ? "rotate-180" : ""}`} /></button>
       {showEmail && <form onSubmit={emailAuth} className="space-y-4 pt-4"><label className="block text-xs text-[#bbc9cd]">EMAIL<input required type="email" value={email} onChange={e => setEmail(e.target.value)} className="mt-2 w-full rounded-lg border border-white/10 bg-black/20 p-3 text-white" /></label><label className="block text-xs text-[#bbc9cd]">PASSWORD<input required type="password" value={password} onChange={e => setPassword(e.target.value)} className="mt-2 w-full rounded-lg border border-white/10 bg-black/20 p-3 text-white" /></label><button disabled={loading} className="w-full rounded-lg border border-cyan-400/40 p-3 text-xs font-bold text-cyan-400">{returning ? "SIGN IN WITH EMAIL" : "CREATE EMAIL ACCOUNT"}</button><button type="button" onClick={() => setReturning(!returning)} className="w-full text-xs text-[#bbc9cd]">{returning ? "Need an email account? Create one" : "Already registered? Sign in"}</button></form>}</div>

@@ -107,6 +107,36 @@ export default function CRMLoginPage() {
                 </>
               )}
             </button>
+
+            {/* Quick Demo Access */}
+            <div className="pt-3 border-t border-slate-800 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  const demoUser = {
+                    id: 'admin-001',
+                    email: 'admin@taliatech.in',
+                    app_metadata: { role: 'admin', profile_id: 'admin-001' },
+                    user_metadata: { role: 'admin', profile_id: 'admin-001' },
+                  };
+                  const ref = 'onsmkbwqucvbzggugmmn';
+                  const cookieName = `sb-${ref}-auth-token`;
+                  const tokenVal = JSON.stringify({
+                    access_token: 'demo-access-token',
+                    token_type: 'bearer',
+                    user: demoUser,
+                    expires_at: Math.floor(Date.now() / 1000) + 86400 * 7,
+                  });
+                  document.cookie = `${cookieName}=${encodeURIComponent(tokenVal)}; path=/; max-age=604800; SameSite=Lax`;
+                  document.cookie = `demo_role=admin; path=/; max-age=604800; SameSite=Lax`;
+                  try { localStorage.setItem(cookieName, tokenVal); } catch (e) {}
+                  router.push('/crm');
+                }}
+                className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono font-bold rounded-lg border border-slate-700 transition-all"
+              >
+                ⚡ Quick Demo Access (Admin)
+              </button>
+            </div>
           </form>
         </div>
       </div>
