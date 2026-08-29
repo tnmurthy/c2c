@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Upload, ChevronRight, CheckCircle2, Circle } from 'lucide-react';
+import { Upload, ChevronRight, CheckCircle2, Circle, Sparkles, Github } from 'lucide-react';
 import ResumeUploadModal from './ResumeUploadModal';
+import { ProfileExpansionModal } from './ProfileExpansionModal';
 
 interface ProfileCompletionWidgetProps {
   student: any;
@@ -8,7 +9,8 @@ interface ProfileCompletionWidgetProps {
 }
 
 export default function ProfileCompletionWidget({ student, onProfileUpdate }: ProfileCompletionWidgetProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+  const [isExpansionModalOpen, setIsExpansionModalOpen] = useState(false);
 
   // Calculate profile completion
   const fields = [
@@ -21,10 +23,6 @@ export default function ProfileCompletionWidget({ student, onProfileUpdate }: Pr
 
   const completedFields = fields.filter(f => f.isComplete).length;
   const progressPercentage = Math.round((completedFields / fields.length) * 100);
-  
-  if (progressPercentage === 100) {
-    return null; // Don't show if profile is fully complete
-  }
 
   return (
     <>
@@ -32,10 +30,10 @@ export default function ProfileCompletionWidget({ student, onProfileUpdate }: Pr
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-white font-bold font-mono uppercase tracking-widest text-sm mb-1">
-              Profile Setup
+              Profile Setup & Enrichment
             </h3>
             <p className="text-[#bbc9cd]/60 text-xs font-mono">
-              Complete your profile to increase your match rate.
+              Complete details and auto-discover skills to elevate your placement match rate.
             </p>
           </div>
           <div className="text-right">
@@ -65,21 +63,39 @@ export default function ProfileCompletionWidget({ student, onProfileUpdate }: Pr
           ))}
         </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="w-full bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 py-2.5 rounded-lg font-mono text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
-        >
-          <Upload className="w-4 h-4" />
-          Complete Profile
-        </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button
+            onClick={() => setIsResumeModalOpen(true)}
+            className="w-full bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 py-2.5 rounded-lg font-mono text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+          >
+            <Upload className="w-4 h-4" />
+            Resume Upload
+          </button>
+          <button
+            onClick={() => setIsExpansionModalOpen(true)}
+            className="w-full bg-indigo-600/20 hover:bg-indigo-600/30 text-[#c3c0ff] border border-indigo-500/30 py-2.5 rounded-lg font-mono text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+          >
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            Discover from GitHub
+          </button>
+        </div>
       </div>
 
       <ResumeUploadModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        isOpen={isResumeModalOpen} 
+        onClose={() => setIsResumeModalOpen(false)} 
         student={student}
         onSuccess={() => {
-          setIsModalOpen(false);
+          setIsResumeModalOpen(false);
+          onProfileUpdate();
+        }}
+      />
+
+      <ProfileExpansionModal
+        isOpen={isExpansionModalOpen}
+        onClose={() => setIsExpansionModalOpen(false)}
+        student={student}
+        onSkillsUpdated={() => {
           onProfileUpdate();
         }}
       />
