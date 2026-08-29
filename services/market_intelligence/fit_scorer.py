@@ -147,7 +147,8 @@ def _score_tech_stack(posting: str, candidate: dict) -> tuple[int, list, list]:
     Ratio of candidate skills matching posting tech terms.
     """
     job_tech = set(t.lower() for t in extract_tech_stack(posting))
-    cand_skills = set(s.lower() for s in (candidate.get("skills") or []))
+    raw_skills = candidate.get("skills") or []
+    cand_skills = set(str(s).lower() for s in raw_skills if s)
 
     if not job_tech:
         return 12, ["No specific tech requirements in posting"], []
@@ -220,10 +221,10 @@ def _score_location(posting: str, candidate: dict) -> tuple[int, list, list]:
         return 7, ["Location unspecified — partial credit"], []
     if "remote" in job_loc.lower():
         return 10, ["Remote role — location compatible"], []
-    if job_loc.lower() in cand_loc or cand_loc in job_loc.lower():
-        return 10, [f"Location match: {job_loc}"], []
     if not cand_loc:
         return 5, [], ["Candidate location not specified"]
+    if job_loc.lower() in cand_loc or cand_loc in job_loc.lower():
+        return 10, [f"Location match: {job_loc}"], []
     return 3, [], [f"Location mismatch: job={job_loc}, candidate={cand_loc}"]
 
 
