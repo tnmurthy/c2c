@@ -99,6 +99,25 @@ def normalize_bank_item(item: Dict[str, Any]) -> Dict[str, Any]:
         normalized["scoring_logic"] = {"raw": sl}
     return normalized
 
+def select_distinct_items(items: List[Dict[str, Any]], count: int, seen_fingerprints: set) -> List[Dict[str, Any]]:
+    """
+    Randomly selects `count` items from `items` ensuring that no two items share
+    identical or near-identical stems across the assessment session.
+    """
+    shuffled = list(items)
+    random.shuffle(shuffled)
+    chosen = []
+    for item in shuffled:
+        stem = item.get("stem") or item.get("text") or ""
+        fp = re.sub(r'[^a-zA-Z0-9]', '', stem).lower()[:50]
+        if not fp or fp in seen_fingerprints:
+            continue
+        seen_fingerprints.add(fp)
+        chosen.append(item)
+        if len(chosen) >= count:
+            break
+    return chosen
+
 # --- BACKGROUND TASKS ---
 
 async def run_agent_recruiters(student_id: str):
@@ -220,6 +239,7 @@ async def start_session(
         # Create a new session with randomized question sequence
         dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
         selected_questions = []
+        seen_fingerprints = set()
         
         bank_data = []
         try:
@@ -242,9 +262,10 @@ async def start_session(
                 items = [item for item in bank_data if item.get("primary_dimension") == dim]
                 
             if items:
-                count = min(len(items), 5)
-                selected_questions.extend(random.sample(items, count))
+                picked = select_distinct_items(items, 5, seen_fingerprints)
+                selected_questions.extend(picked)
                 
+        random.shuffle(selected_questions)
         session_payload = {
             "student_id": str(student_id),
             "tenant_id": str(tenant_id),
@@ -330,9 +351,10 @@ async def submit_answer(
         raise DatabaseConnectionError(str(e))
 
 @router.get("/assessment/generate")
-async def generate_assessment(num_per_section: int = 25, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
+async def generate_assessment(num_per_section: int = 5, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
     dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
     final_items = []
+    seen_fingerprints = set()
     try:
         bank_data = []
         try:
@@ -355,12 +377,15 @@ async def generate_assessment(num_per_section: int = 25, client = Depends(requir
                 items = [item for item in bank_data if item.get("primary_dimension") == dim]
 
             if items:
-                count = min(len(items), random.randint(25, 30) if num_per_section == 25 else num_per_section)
-                final_items.extend(random.sample(items, count))
+                target_count = min(len(items), num_per_section if num_per_section > 0 else 5)
+                picked = select_distinct_items(items, target_count, seen_fingerprints)
+                final_items.extend(picked)
                 
         if not final_items:
             raise NotFoundError("Database empty and fallback JSON missing")
             
+        # Shuffle final questions so questions from different dimensions alternate smoothly
+        random.shuffle(final_items)
         return final_items
     except APIException:
         raise

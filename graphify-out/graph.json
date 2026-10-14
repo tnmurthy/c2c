@@ -750,7 +750,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "api_deps_get_supabase_client",
-      "community": 233,
+      "community": 4,
       "norm_label": "get_supabase_client()"
     },
     {
@@ -760,7 +760,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "api_deps_require_supabase",
-      "community": 233,
+      "community": 4,
       "norm_label": "require_supabase()"
     },
     {
@@ -800,7 +800,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "api_deps_rationale_45",
-      "community": 233,
+      "community": 4,
       "norm_label": "create and return a supabase client. returns none if env vars are missing."
     },
     {
@@ -810,7 +810,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "api_deps_rationale_59",
-      "community": 233,
+      "community": 4,
       "norm_label": "fastapi dependency that provides a supabase client or raises 503."
     },
     {
@@ -880,7 +880,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "api_exceptions_databaseconnectionerror",
-      "community": 165,
+      "community": 150,
       "norm_label": "databaseconnectionerror"
     },
     {
@@ -900,7 +900,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_exceptions_notfounderror",
-      "community": 165,
+      "community": 167,
       "norm_label": "notfounderror"
     },
     {
@@ -920,7 +920,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "api_exceptions_permissiondeniederror",
-      "community": 167,
+      "community": 1,
       "norm_label": "permissiondeniederror"
     },
     {
@@ -950,7 +950,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_exceptions_rationale_11",
-      "community": 165,
+      "community": 150,
       "norm_label": "raised when database connection fails or is unavailable."
     },
     {
@@ -960,7 +960,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "api_exceptions_rationale_17",
-      "community": 165,
+      "community": 167,
       "norm_label": "raised when a requested resource is not found."
     },
     {
@@ -970,7 +970,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "api_exceptions_rationale_23",
-      "community": 167,
+      "community": 1,
       "norm_label": "raised when permission is denied for the action."
     },
     {
@@ -1120,7 +1120,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "api_main_not_found_error_handler",
-      "community": 150,
+      "community": 167,
       "norm_label": "not_found_error_handler()"
     },
     {
@@ -1130,7 +1130,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "api_main_permission_denied_error_handler",
-      "community": 167,
+      "community": 1,
       "norm_label": "permission_denied_error_handler()"
     },
     {
@@ -1140,7 +1140,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "api_main_http_exception_handler",
-      "community": 68,
+      "community": 150,
       "norm_label": "http_exception_handler()"
     },
     {
@@ -1150,7 +1150,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "httpexception",
-      "community": 68,
+      "community": 4,
       "norm_label": "httpexception"
     },
     {
@@ -1180,7 +1180,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "api_main_health",
-      "community": 233,
+      "community": 4,
       "norm_label": "health()"
     },
     {
@@ -1190,7 +1190,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_pdf_generator_py",
-      "community": 1,
+      "community": 4,
       "norm_label": "pdf_generator.py"
     },
     {
@@ -1220,7 +1220,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "api_pdf_generator_generate_tailored_resume_pdf",
-      "community": 236,
+      "community": 4,
       "norm_label": "generate_tailored_resume_pdf()"
     },
     {
@@ -1230,7 +1230,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_analytics_router_py",
-      "community": 235,
+      "community": 4,
       "norm_label": "analytics_router.py"
     },
     {
@@ -1240,7 +1240,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "routers_analytics_router_get_tenant_id_from_user",
-      "community": 235,
+      "community": 4,
       "norm_label": "get_tenant_id_from_user()"
     },
     {
@@ -1250,7 +1250,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "routers_analytics_router_get_funnel_metrics",
-      "community": 235,
+      "community": 4,
       "norm_label": "get_funnel_metrics()"
     },
     {
@@ -1260,7 +1260,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "routers_analytics_router_get_summary_metrics",
-      "community": 235,
+      "community": 4,
       "norm_label": "get_summary_metrics()"
     },
     {
@@ -1270,7 +1270,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "routers_analytics_router_rationale_11",
-      "community": 235,
+      "community": 4,
       "norm_label": "extracts the tenant_id from the user metadata or database."
     },
     {
@@ -1280,7 +1280,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "routers_analytics_router_rationale_41",
-      "community": 235,
+      "community": 4,
       "norm_label": "for the authenticated tenant, query leads, contacts, and opportunities tables."
     },
     {
@@ -1290,7 +1290,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "routers_analytics_router_rationale_125",
-      "community": 235,
+      "community": 4,
       "norm_label": "return total leads count, active opportunities value sum, win rate percentage, a"
     },
     {
@@ -1299,7 +1299,7 @@
       "source_file": "api/routers/assessment_router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
+      "id": "routers_assessment_router",
       "community": 166,
       "norm_label": "assessment_router.py"
     },
@@ -1310,7 +1310,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "routers_assessment_router_c2c_orchestrator_v2",
-      "community": 143,
+      "community": 166,
       "norm_label": "c2c_orchestrator_v2"
     },
     {
@@ -1320,7 +1320,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "routers_assessment_router_c2c_orchestrator_v2_init",
-      "community": 143,
+      "community": 166,
       "norm_label": ".__init__()"
     },
     {
@@ -1330,7 +1330,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "routers_assessment_router_c2c_orchestrator_v2_run_ordeal_session",
-      "community": 143,
+      "community": 166,
       "norm_label": ".run_ordeal_session()"
     },
     {
@@ -1364,20 +1364,30 @@
       "norm_label": "normalize_bank_item()"
     },
     {
+      "label": "select_distinct_items()",
+      "file_type": "code",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "routers_assessment_router_select_distinct_items",
+      "community": 166,
+      "norm_label": "select_distinct_items()"
+    },
+    {
       "label": "run_agent_recruiters()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L104",
+      "source_location": "L123",
       "_origin": "ast",
       "id": "routers_assessment_router_run_agent_recruiters",
-      "community": 143,
+      "community": 166,
       "norm_label": "run_agent_recruiters()"
     },
     {
       "label": "get_assessment_bank()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L116",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "routers_assessment_router_get_assessment_bank",
       "community": 166,
@@ -1387,7 +1397,7 @@
       "label": "start_session()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L161",
+      "source_location": "L180",
       "_origin": "ast",
       "id": "routers_assessment_router_start_session",
       "community": 166,
@@ -1397,17 +1407,17 @@
       "label": "submit_answer()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L275",
+      "source_location": "L296",
       "_origin": "ast",
       "id": "routers_assessment_router_submit_answer",
-      "community": 165,
+      "community": 166,
       "norm_label": "submit_answer()"
     },
     {
       "label": "generate_assessment()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L333",
+      "source_location": "L354",
       "_origin": "ast",
       "id": "routers_assessment_router_generate_assessment",
       "community": 166,
@@ -1417,7 +1427,7 @@
       "label": "submit_assessment()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L372",
+      "source_location": "L397",
       "_origin": "ast",
       "id": "routers_assessment_router_submit_assessment",
       "community": 166,
@@ -1427,7 +1437,7 @@
       "label": "submit_feedback()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L569",
+      "source_location": "L594",
       "_origin": "ast",
       "id": "routers_assessment_router_submit_feedback",
       "community": 166,
@@ -1437,7 +1447,7 @@
       "label": "get_item_analysis()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L578",
+      "source_location": "L603",
       "_origin": "ast",
       "id": "routers_assessment_router_get_item_analysis",
       "community": 166,
@@ -1447,7 +1457,7 @@
       "label": "webhook_assessment_completed()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L681",
+      "source_location": "L706",
       "_origin": "ast",
       "id": "routers_assessment_router_webhook_assessment_completed",
       "community": 150,
@@ -1467,10 +1477,10 @@
       "label": "ItemGenerateRequest",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L691",
+      "source_location": "L716",
       "_origin": "ast",
       "id": "routers_assessment_router_itemgeneraterequest",
-      "community": 143,
+      "community": 166,
       "norm_label": "itemgeneraterequest"
     },
     {
@@ -1487,19 +1497,29 @@
       "label": "generate_items_endpoint()",
       "file_type": "code",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L698",
+      "source_location": "L723",
       "_origin": "ast",
       "id": "routers_assessment_router_generate_items_endpoint",
       "community": 166,
       "norm_label": "generate_items_endpoint()"
     },
     {
+      "label": "Randomly selects `count` items from `items` ensuring that no two items share",
+      "file_type": "rationale",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "routers_assessment_router_rationale_103",
+      "community": 166,
+      "norm_label": "randomly selects `count` items from `items` ensuring that no two items share"
+    },
+    {
       "label": "Admin-only endpoint to generate psychometric items using LLM and insert them int",
       "file_type": "rationale",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L699",
+      "source_location": "L724",
       "_origin": "ast",
-      "id": "routers_assessment_router_rationale_699",
+      "id": "routers_assessment_router_rationale_724",
       "community": 166,
       "norm_label": "admin-only endpoint to generate psychometric items using llm and insert them int"
     },
@@ -1600,7 +1620,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_employer_router_py",
-      "community": 165,
+      "community": 150,
       "norm_label": "employer_router.py"
     },
     {
@@ -1620,7 +1640,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "routers_employer_router_run_scoring_engine",
-      "community": 233,
+      "community": 4,
       "norm_label": "run_scoring_engine()"
     },
     {
@@ -1630,7 +1650,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "routers_employer_router_run_auto_apply",
-      "community": 165,
+      "community": 150,
       "norm_label": "run_auto_apply()"
     },
     {
@@ -1640,7 +1660,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "routers_employer_router_run_market_scout",
-      "community": 165,
+      "community": 150,
       "norm_label": "run_market_scout()"
     },
     {
@@ -1650,7 +1670,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "routers_employer_router_onboard_employer",
-      "community": 165,
+      "community": 150,
       "norm_label": "onboard_employer()"
     },
     {
@@ -1660,7 +1680,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "routers_employer_router_get_employer_candidates",
-      "community": 165,
+      "community": 150,
       "norm_label": "get_employer_candidates()"
     },
     {
@@ -1670,7 +1690,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "routers_employer_router_create_job_posting",
-      "community": 165,
+      "community": 150,
       "norm_label": "create_job_posting()"
     },
     {
@@ -1680,7 +1700,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "routers_employer_router_get_employer_jobs",
-      "community": 165,
+      "community": 150,
       "norm_label": "get_employer_jobs()"
     },
     {
@@ -1690,7 +1710,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "routers_employer_router_run_job_matching",
-      "community": 165,
+      "community": 150,
       "norm_label": "run_job_matching()"
     },
     {
@@ -1700,7 +1720,7 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "routers_employer_router_get_job_matches",
-      "community": 165,
+      "community": 150,
       "norm_label": "get_job_matches()"
     },
     {
@@ -1710,7 +1730,7 @@
       "source_location": "L248",
       "_origin": "ast",
       "id": "routers_employer_router_match_debugger",
-      "community": 165,
+      "community": 150,
       "norm_label": "match_debugger()"
     },
     {
@@ -1720,7 +1740,7 @@
       "source_location": "L331",
       "_origin": "ast",
       "id": "routers_employer_router_get_leads",
-      "community": 165,
+      "community": 150,
       "norm_label": "get_leads()"
     },
     {
@@ -1780,7 +1800,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "routers_market_router_scorefitrequest",
-      "community": 241,
+      "community": 4,
       "norm_label": "scorefitrequest"
     },
     {
@@ -1800,7 +1820,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "routers_market_router_interviewpreprequest",
-      "community": 240,
+      "community": 4,
       "norm_label": "interviewpreprequest"
     },
     {
@@ -1810,7 +1830,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "routers_market_router_expandprofilerequest",
-      "community": 237,
+      "community": 4,
       "norm_label": "expandprofilerequest"
     },
     {
@@ -1820,7 +1840,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "routers_market_router_skillgapreportrequest",
-      "community": 233,
+      "community": 4,
       "norm_label": "skillgapreportrequest"
     },
     {
@@ -1830,7 +1850,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "routers_market_router_reviewedapplicationrequest",
-      "community": 239,
+      "community": 4,
       "norm_label": "reviewedapplicationrequest"
     },
     {
@@ -1870,7 +1890,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "routers_market_router_generateresumerequest",
-      "community": 236,
+      "community": 4,
       "norm_label": "generateresumerequest"
     },
     {
@@ -1880,7 +1900,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "routers_market_router_generatecoverletterrequest",
-      "community": 238,
+      "community": 4,
       "norm_label": "generatecoverletterrequest"
     },
     {
@@ -1900,7 +1920,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "routers_market_router_market_health",
-      "community": 242,
+      "community": 4,
       "norm_label": "market_health()"
     },
     {
@@ -1910,7 +1930,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "routers_market_router_score_fit",
-      "community": 241,
+      "community": 4,
       "norm_label": "score_fit()"
     },
     {
@@ -1930,7 +1950,7 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "routers_market_router_interview_prep",
-      "community": 240,
+      "community": 4,
       "norm_label": "interview_prep()"
     },
     {
@@ -1940,7 +1960,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "routers_market_router_expand_profile",
-      "community": 237,
+      "community": 4,
       "norm_label": "expand_profile()"
     },
     {
@@ -1950,7 +1970,7 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "routers_market_router_skill_gap_report",
-      "community": 233,
+      "community": 4,
       "norm_label": "skill_gap_report()"
     },
     {
@@ -2000,7 +2020,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "routers_market_router_generate_resume",
-      "community": 236,
+      "community": 4,
       "norm_label": "generate_resume()"
     },
     {
@@ -2010,7 +2030,7 @@
       "source_location": "L317",
       "_origin": "ast",
       "id": "routers_market_router_download_resume",
-      "community": 236,
+      "community": 4,
       "norm_label": "download_resume()"
     },
     {
@@ -2020,7 +2040,7 @@
       "source_location": "L365",
       "_origin": "ast",
       "id": "routers_market_router_generate_cover_letter",
-      "community": 238,
+      "community": 4,
       "norm_label": "generate_cover_letter()"
     },
     {
@@ -2030,7 +2050,7 @@
       "source_location": "L376",
       "_origin": "ast",
       "id": "routers_market_router_generate_reviewed_application",
-      "community": 239,
+      "community": 4,
       "norm_label": "generate_reviewed_application()"
     },
     {
@@ -2060,7 +2080,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "routers_market_router_rationale_111",
-      "community": 242,
+      "community": 4,
       "norm_label": "return native service status \u2014 always online when the api is running."
     },
     {
@@ -2070,7 +2090,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "routers_market_router_rationale_117",
-      "community": 241,
+      "community": 4,
       "norm_label": "score a job description against a student profile.     uses the native determin"
     },
     {
@@ -2090,7 +2110,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "routers_market_router_rationale_148",
-      "community": 240,
+      "community": 4,
       "norm_label": "generate tailored interview prep kit (h5 implementation).     returns role-spec"
     },
     {
@@ -2100,7 +2120,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "routers_market_router_rationale_163",
-      "community": 237,
+      "community": 4,
       "norm_label": "auto-enrich candidate skills and competencies from public github / web footprint"
     },
     {
@@ -2110,7 +2130,7 @@
       "source_location": "L180",
       "_origin": "ast",
       "id": "routers_market_router_rationale_180",
-      "community": 233,
+      "community": 4,
       "norm_label": "generate prioritized cohort vs market skill gap heatmap (h3 implementation)."
     },
     {
@@ -2160,7 +2180,7 @@
       "source_location": "L283",
       "_origin": "ast",
       "id": "routers_market_router_rationale_283",
-      "community": 236,
+      "community": 4,
       "norm_label": "generate resume context for a candidate and job posting."
     },
     {
@@ -2170,7 +2190,7 @@
       "source_location": "L318",
       "_origin": "ast",
       "id": "routers_market_router_rationale_318",
-      "community": 236,
+      "community": 4,
       "norm_label": "generate tailored resume context and return the pdf file stream."
     },
     {
@@ -2180,7 +2200,7 @@
       "source_location": "L366",
       "_origin": "ast",
       "id": "routers_market_router_rationale_366",
-      "community": 238,
+      "community": 4,
       "norm_label": "generate cover-letter context for a candidate and job posting."
     },
     {
@@ -2190,7 +2210,7 @@
       "source_location": "L377",
       "_origin": "ast",
       "id": "routers_market_router_rationale_377",
-      "community": 239,
+      "community": 4,
       "norm_label": "execute two-pass drafter-reviewer pipeline (h4 implementation).     drafts tail"
     },
     {
@@ -2280,7 +2300,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "routers_student_router_onboard_institution",
-      "community": 1,
+      "community": 143,
       "norm_label": "onboard_institution()"
     },
     {
@@ -2300,7 +2320,7 @@
       "source_location": "L251",
       "_origin": "ast",
       "id": "routers_student_router_get_cohort_report",
-      "community": 167,
+      "community": 1,
       "norm_label": "get_cohort_report()"
     },
     {
@@ -2310,7 +2330,7 @@
       "source_location": "L308",
       "_origin": "ast",
       "id": "routers_student_router_get_student",
-      "community": 165,
+      "community": 1,
       "norm_label": "get_student()"
     },
     {
@@ -2320,7 +2340,7 @@
       "source_location": "L403",
       "_origin": "ast",
       "id": "routers_student_router_get_assessment_history",
-      "community": 165,
+      "community": 1,
       "norm_label": "get_assessment_history()"
     },
     {
@@ -2380,7 +2400,7 @@
       "source_location": "L592",
       "_origin": "ast",
       "id": "routers_student_router_get_student_applications",
-      "community": 167,
+      "community": 1,
       "norm_label": "get_student_applications()"
     },
     {
@@ -2470,7 +2490,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_schemas_assessment_py_schemas_assessment",
-      "community": 143,
+      "community": 166,
       "norm_label": "assessment.py"
     },
     {
@@ -2520,7 +2540,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "schemas_assessment_institutiononboard",
-      "community": 1,
+      "community": 143,
       "norm_label": "institutiononboard"
     },
     {
@@ -2530,7 +2550,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "schemas_assessment_assessmentsubmit",
-      "community": 143,
+      "community": 166,
       "norm_label": "assessmentsubmit"
     },
     {
@@ -2540,7 +2560,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "schemas_assessment_feedbacksubmit",
-      "community": 143,
+      "community": 166,
       "norm_label": "feedbacksubmit"
     },
     {
@@ -2550,7 +2570,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "schemas_assessment_sessionstart",
-      "community": 143,
+      "community": 166,
       "norm_label": "sessionstart"
     },
     {
@@ -2560,7 +2580,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "schemas_assessment_answersubmit",
-      "community": 143,
+      "community": 166,
       "norm_label": "answersubmit"
     },
     {
@@ -3740,7 +3760,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_page",
-      "community": 171,
+      "community": 64,
       "norm_label": "page.tsx"
     },
     {
@@ -3750,7 +3770,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "admin_page_itemanalysis",
-      "community": 171,
+      "community": 64,
       "norm_label": "itemanalysis"
     },
     {
@@ -3760,7 +3780,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "admin_page_admindashboard",
-      "community": 171,
+      "community": 64,
       "norm_label": "admindashboard()"
     },
     {
@@ -3830,7 +3850,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "id_page_dashboard",
-      "community": 171,
+      "community": 64,
       "norm_label": "dashboard()"
     },
     {
@@ -3840,7 +3860,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "dashboard_page",
-      "community": 48,
+      "community": 171,
       "norm_label": "page.tsx"
     },
     {
@@ -3850,7 +3870,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "dashboard_page_dashboardredirect",
-      "community": 48,
+      "community": 171,
       "norm_label": "dashboardredirect()"
     },
     {
@@ -3910,7 +3930,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "onboard_page",
-      "community": 171,
+      "community": 48,
       "norm_label": "page.tsx"
     },
     {
@@ -3920,7 +3940,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "onboard_page_role",
-      "community": 171,
+      "community": 48,
       "norm_label": "role"
     },
     {
@@ -4270,7 +4290,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "employer_page",
-      "community": 40,
+      "community": 171,
       "norm_label": "page.tsx"
     },
     {
@@ -4280,7 +4300,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "employer_page_employerpage",
-      "community": 40,
+      "community": 171,
       "norm_label": "employerpage()"
     },
     {
@@ -4390,7 +4410,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "id_layout",
-      "community": 40,
+      "community": 171,
       "norm_label": "layout.tsx"
     },
     {
@@ -4400,7 +4420,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "id_layout_tpodashboardlayout",
-      "community": 40,
+      "community": 171,
       "norm_label": "tpodashboardlayout()"
     },
     {
@@ -4410,7 +4430,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_tpo_dashboard_id_page_tsx_id_page",
-      "community": 40,
+      "community": 171,
       "norm_label": "page.tsx"
     },
     {
@@ -4420,7 +4440,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "id_page_tpocohortdata",
-      "community": 40,
+      "community": 171,
       "norm_label": "tpocohortdata"
     },
     {
@@ -4430,7 +4450,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "id_page_tpodashboard",
-      "community": 40,
+      "community": 171,
       "norm_label": "tpodashboard()"
     },
     {
@@ -4640,7 +4660,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_loadingscreen",
-      "community": 40,
+      "community": 171,
       "norm_label": "loadingscreen.tsx"
     },
     {
@@ -4650,7 +4670,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "components_loadingscreen_loadingscreenprops",
-      "community": 40,
+      "community": 171,
       "norm_label": "loadingscreenprops"
     },
     {
@@ -4660,7 +4680,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "components_loadingscreen_loadingscreen",
-      "community": 40,
+      "community": 171,
       "norm_label": "loadingscreen()"
     },
     {
@@ -4750,7 +4770,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "charts_growthradar",
-      "community": 21,
+      "community": 239,
       "norm_label": "growthradar.tsx"
     },
     {
@@ -4760,7 +4780,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "charts_growthradar_growthradarprops",
-      "community": 21,
+      "community": 239,
       "norm_label": "growthradarprops"
     },
     {
@@ -4770,7 +4790,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "charts_growthradar_default_data",
-      "community": 21,
+      "community": 239,
       "norm_label": "default_data"
     },
     {
@@ -4780,7 +4800,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "charts_growthradar_growthradar",
-      "community": 21,
+      "community": 239,
       "norm_label": "growthradar()"
     },
     {
@@ -4900,7 +4920,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "dashboard_cohortskillgapheatmap",
-      "community": 40,
+      "community": 171,
       "norm_label": "cohortskillgapheatmap.tsx"
     },
     {
@@ -4910,7 +4930,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "dashboard_cohortskillgapheatmap_skillgapitem",
-      "community": 40,
+      "community": 171,
       "norm_label": "skillgapitem"
     },
     {
@@ -4920,7 +4940,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "dashboard_cohortskillgapheatmap_skillgapreportdata",
-      "community": 40,
+      "community": 171,
       "norm_label": "skillgapreportdata"
     },
     {
@@ -4930,7 +4950,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "dashboard_cohortskillgapheatmap_cohortskillgapheatmapprops",
-      "community": 40,
+      "community": 171,
       "norm_label": "cohortskillgapheatmapprops"
     },
     {
@@ -4940,7 +4960,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "dashboard_cohortskillgapheatmap_cohortskillgapheatmap",
-      "community": 40,
+      "community": 171,
       "norm_label": "cohortskillgapheatmap()"
     },
     {
@@ -4980,7 +5000,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_profilecompletionwidget",
-      "community": 234,
+      "community": 5,
       "norm_label": "profilecompletionwidget.tsx"
     },
     {
@@ -4990,7 +5010,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "profile_profilecompletionwidget_profilecompletionwidgetprops",
-      "community": 234,
+      "community": 5,
       "norm_label": "profilecompletionwidgetprops"
     },
     {
@@ -5000,7 +5020,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "profile_profilecompletionwidget_profilecompletionwidget",
-      "community": 234,
+      "community": 5,
       "norm_label": "profilecompletionwidget()"
     },
     {
@@ -5010,7 +5030,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_profileexpansionmodal",
-      "community": 234,
+      "community": 5,
       "norm_label": "profileexpansionmodal.tsx"
     },
     {
@@ -5020,7 +5040,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "profile_profileexpansionmodal_profileexpansionmodalprops",
-      "community": 234,
+      "community": 5,
       "norm_label": "profileexpansionmodalprops"
     },
     {
@@ -5030,7 +5050,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "profile_profileexpansionmodal_profileexpansionmodal",
-      "community": 234,
+      "community": 5,
       "norm_label": "profileexpansionmodal()"
     },
     {
@@ -5040,7 +5060,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "profile_resumeuploadmodal",
-      "community": 234,
+      "community": 5,
       "norm_label": "resumeuploadmodal.tsx"
     },
     {
@@ -5050,7 +5070,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "profile_resumeuploadmodal_resumeuploadmodalprops",
-      "community": 234,
+      "community": 5,
       "norm_label": "resumeuploadmodalprops"
     },
     {
@@ -5060,7 +5080,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "profile_resumeuploadmodal_resumeuploadmodal",
-      "community": 234,
+      "community": 5,
       "norm_label": "resumeuploadmodal()"
     },
     {
@@ -5100,7 +5120,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "hooks_useapiquery",
-      "community": 171,
+      "community": 64,
       "norm_label": "useapiquery.ts"
     },
     {
@@ -5110,7 +5130,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "hooks_useapiquery_useapiqueryreturn",
-      "community": 171,
+      "community": 64,
       "norm_label": "useapiqueryreturn"
     },
     {
@@ -5120,7 +5140,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "hooks_useapiquery_useapiquery",
-      "community": 171,
+      "community": 64,
       "norm_label": "useapiquery()"
     },
     {
@@ -5590,7 +5610,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "types_crm",
-      "community": 41,
+      "community": 21,
       "norm_label": "crm.ts"
     },
     {
@@ -5600,7 +5620,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "types_crm_candidate",
-      "community": 40,
+      "community": 171,
       "norm_label": "candidate"
     },
     {
@@ -5610,7 +5630,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "types_crm_lead",
-      "community": 41,
+      "community": 64,
       "norm_label": "lead"
     },
     {
@@ -5620,7 +5640,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "types_crm_cohortdata",
-      "community": 41,
+      "community": 21,
       "norm_label": "cohortdata"
     },
     {
@@ -5630,7 +5650,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "types_crm_alert",
-      "community": 41,
+      "community": 21,
       "norm_label": "alert"
     },
     {
@@ -5640,7 +5660,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "types_crm_crmcandidatescore",
-      "community": 41,
+      "community": 21,
       "norm_label": "crmcandidatescore"
     },
     {
@@ -5660,7 +5680,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "types_crm_crmlead",
-      "community": 41,
+      "community": 21,
       "norm_label": "crmlead"
     },
     {
@@ -5680,7 +5700,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "types_crm_pipelinestage",
-      "community": 41,
+      "community": 21,
       "norm_label": "pipelinestage"
     },
     {
@@ -5690,7 +5710,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "types_crm_crmopportunity",
-      "community": 41,
+      "community": 21,
       "norm_label": "crmopportunity"
     },
     {
@@ -6400,7 +6420,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_market_intelligence",
-      "community": 221,
+      "community": 231,
       "norm_label": "test_market_intelligence.py"
     },
     {
@@ -6820,7 +6840,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_rationale_1",
-      "community": 221,
+      "community": 231,
       "norm_label": "tests/test_market_intelligence.py ================================= comprehensiv"
     },
     {
@@ -13314,9 +13334,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe",
-      "target": "portfolio_schema_icon_enum",
-      "confidence_score": 1.0
+      "target": "portfolio_schema_icon_enum"
     },
     {
       "relation": "inherits",
@@ -13324,9 +13344,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe_founderarchetype",
-      "target": "portfolio_schema_icon_enum",
-      "confidence_score": 1.0
+      "target": "portfolio_schema_icon_enum"
     },
     {
       "relation": "contains",
@@ -13694,17 +13714,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "api/routers/assessment_router.py",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "api_deps"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "api/routers/crm_router.py",
       "source_location": "L5",
       "weight": 1.0,
@@ -13755,6 +13764,17 @@
       "confidence_score": 1.0,
       "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_tests_test_assessment_endpoints_py",
       "target": "api_deps"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_deps",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -13872,9 +13892,9 @@
       "source_file": "api/main.py",
       "source_location": "L134",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_deps_get_supabase_client",
-      "confidence_score": 1.0
+      "target": "api_deps_get_supabase_client"
     },
     {
       "relation": "calls",
@@ -13886,6 +13906,17 @@
       "weight": 1.0,
       "source": "api_main_health",
       "target": "api_deps_get_supabase_client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_deps_get_supabase_client",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -14000,6 +14031,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_deps_require_admin_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "api/routers/student_router.py",
       "source_location": "L7",
       "weight": 1.0,
@@ -14109,6 +14151,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_deps_get_current_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "api/routers/student_router.py",
       "source_location": "L7",
       "weight": 1.0,
@@ -14125,6 +14178,17 @@
       "confidence_score": 1.0,
       "source": "api_deps_rationale_126",
       "target": "api_deps_require_role"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_deps_require_role",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -14255,9 +14319,9 @@
       "source_file": "api/main.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_exceptions_apiexception",
-      "confidence_score": 1.0
+      "target": "api_exceptions_apiexception"
     },
     {
       "relation": "references",
@@ -14269,6 +14333,17 @@
       "confidence_score": 1.0,
       "source": "api_main_api_exception_handler",
       "target": "api_exceptions_apiexception"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_exceptions_apiexception",
+      "confidence_score": 1.0
     },
     {
       "relation": "uses",
@@ -14339,9 +14414,9 @@
       "source_file": "api/main.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_exceptions_databaseconnectionerror",
-      "confidence_score": 1.0
+      "target": "api_exceptions_databaseconnectionerror"
     },
     {
       "relation": "references",
@@ -14353,6 +14428,17 @@
       "confidence_score": 1.0,
       "source": "api_main_db_connection_error_handler",
       "target": "api_exceptions_databaseconnectionerror"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_exceptions_databaseconnectionerror",
+      "confidence_score": 1.0
     },
     {
       "relation": "uses",
@@ -14720,9 +14806,9 @@
       "source_file": "api/main.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_exceptions_notfounderror",
-      "confidence_score": 1.0
+      "target": "api_exceptions_notfounderror"
     },
     {
       "relation": "references",
@@ -14734,6 +14820,17 @@
       "confidence_score": 1.0,
       "source": "api_main_not_found_error_handler",
       "target": "api_exceptions_notfounderror"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_exceptions_notfounderror",
+      "confidence_score": 1.0
     },
     {
       "relation": "uses",
@@ -14947,9 +15044,9 @@
       "source_file": "api/main.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_exceptions_permissiondeniederror",
-      "confidence_score": 1.0
+      "target": "api_exceptions_permissiondeniederror"
     },
     {
       "relation": "references",
@@ -14961,6 +15058,17 @@
       "confidence_score": 1.0,
       "source": "api_main_permission_denied_error_handler",
       "target": "api_exceptions_permissiondeniederror"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_exceptions_permissiondeniederror",
+      "confidence_score": 1.0
     },
     {
       "relation": "uses",
@@ -15176,6 +15284,17 @@
       "target": "api_item_generator_generate_llm_item"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L727",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "api_item_generator_generate_llm_item",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -15251,6 +15370,17 @@
       "confidence_score": 1.0,
       "source": "routers_assessment_router_parse_scoring_logic",
       "target": "any"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "routers_assessment_router_select_distinct_items",
+      "target": "any",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -15420,9 +15550,9 @@
       "source_file": "api/main.py",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_api_exception_handler",
-      "confidence_score": 1.0
+      "target": "api_main_api_exception_handler"
     },
     {
       "relation": "contains",
@@ -15430,9 +15560,9 @@
       "source_file": "api/main.py",
       "source_location": "L127",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_api_root",
-      "confidence_score": 1.0
+      "target": "api_main_api_root"
     },
     {
       "relation": "contains",
@@ -15440,9 +15570,9 @@
       "source_file": "api/main.py",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_db_connection_error_handler",
-      "confidence_score": 1.0
+      "target": "api_main_db_connection_error_handler"
     },
     {
       "relation": "contains",
@@ -15450,9 +15580,9 @@
       "source_file": "api/main.py",
       "source_location": "L132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_health",
-      "confidence_score": 1.0
+      "target": "api_main_health"
     },
     {
       "relation": "contains",
@@ -15460,9 +15590,9 @@
       "source_file": "api/main.py",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_http_exception_handler",
-      "confidence_score": 1.0
+      "target": "api_main_http_exception_handler"
     },
     {
       "relation": "contains",
@@ -15470,9 +15600,9 @@
       "source_file": "api/main.py",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_not_found_error_handler",
-      "confidence_score": 1.0
+      "target": "api_main_not_found_error_handler"
     },
     {
       "relation": "contains",
@@ -15480,9 +15610,9 @@
       "source_file": "api/main.py",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_permission_denied_error_handler",
-      "confidence_score": 1.0
+      "target": "api_main_permission_denied_error_handler"
     },
     {
       "relation": "contains",
@@ -15490,9 +15620,9 @@
       "source_file": "api/main.py",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_main",
-      "target": "api_main_root",
-      "confidence_score": 1.0
+      "target": "api_main_root"
     },
     {
       "relation": "imports_from",
@@ -15501,9 +15631,9 @@
       "source_file": "tests/test_assessment_endpoints.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_tests_test_assessment_endpoints_py",
-      "target": "api_main",
-      "confidence_score": 1.0
+      "target": "api_main"
     },
     {
       "relation": "references",
@@ -16085,19 +16215,19 @@
       "source_file": "api/routers/assessment_router.py",
       "source_location": "L24",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_c2c_orchestrator_v2"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_c2c_orchestrator_v2",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L333",
+      "source_location": "L354",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_generate_assessment"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_generate_assessment",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16105,49 +16235,49 @@
       "source_file": "api/routers/assessment_router.py",
       "source_location": "L59",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_generate_development_report"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_generate_development_report",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L698",
+      "source_location": "L723",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_generate_items_endpoint"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_generate_items_endpoint",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L116",
+      "source_location": "L135",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_get_assessment_bank"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_get_assessment_bank",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L578",
+      "source_location": "L603",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_get_item_analysis"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_get_item_analysis",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L691",
+      "source_location": "L716",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_itemgeneraterequest"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_itemgeneraterequest",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16155,9 +16285,9 @@
       "source_file": "api/routers/assessment_router.py",
       "source_location": "L91",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_normalize_bank_item"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_normalize_bank_item",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16165,69 +16295,145 @@
       "source_file": "api/routers/assessment_router.py",
       "source_location": "L35",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_parse_scoring_logic"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_parse_scoring_logic",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L104",
+      "source_location": "L123",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_run_agent_recruiters"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_run_agent_recruiters",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L161",
+      "source_location": "L102",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_start_session"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_select_distinct_items",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L275",
+      "source_location": "L180",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_submit_answer"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_start_session",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L372",
+      "source_location": "L296",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_submit_assessment"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_submit_answer",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L569",
+      "source_location": "L397",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_submit_feedback"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_submit_assessment",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L681",
+      "source_location": "L594",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_assessment_router_py",
-      "target": "routers_assessment_router_webhook_assessment_completed"
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_submit_feedback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L706",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "routers_assessment_router_webhook_assessment_completed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L537",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "routers_employer_router_calculate_match_score",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "schemas_assessment_answersubmit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "schemas_assessment_assessmentsubmit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "schemas_assessment_feedbacksubmit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "schemas_assessment_sessionstart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "routers_assessment_router",
+      "target": "scripts_c2c_orchestrator_v2_c2c_orchestrator_v2",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -16408,6 +16614,38 @@
       "confidence_score": 1.0,
       "source": "routers_assessment_router_submit_assessment",
       "target": "routers_assessment_router_normalize_bank_item"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L381",
+      "weight": 1.0,
+      "source": "routers_assessment_router_generate_assessment",
+      "target": "routers_assessment_router_select_distinct_items",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "routers_assessment_router_rationale_103",
+      "target": "routers_assessment_router_select_distinct_items",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "api/routers/assessment_router.py",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "routers_assessment_router_start_session",
+      "target": "routers_assessment_router_select_distinct_items",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16898,9 +17136,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe_dimensionscore",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -16908,9 +17146,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe_typesafeevaluaterequest",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -16918,9 +17156,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe_typesafeevaluateresponse",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -16928,19 +17166,19 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe_typesafestatusresponse",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "api/routers/assessment_router.py",
-      "source_location": "L699",
+      "source_location": "L724",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routers_assessment_router_rationale_699",
-      "target": "routers_assessment_router_generate_items_endpoint"
+      "source": "routers_assessment_router_rationale_724",
+      "target": "routers_assessment_router_generate_items_endpoint",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18226,9 +18464,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router",
-      "target": "routers_typesafe_router_evaluate_candidate",
-      "confidence_score": 1.0
+      "target": "routers_typesafe_router_evaluate_candidate"
     },
     {
       "relation": "contains",
@@ -18236,9 +18474,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router",
-      "target": "routers_typesafe_router_get_typesafe_status",
-      "confidence_score": 1.0
+      "target": "routers_typesafe_router_get_typesafe_status"
     },
     {
       "relation": "imports",
@@ -18247,9 +18485,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router",
-      "target": "schemas_typesafe_typesafeevaluaterequest",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_typesafeevaluaterequest"
     },
     {
       "relation": "imports",
@@ -18258,9 +18496,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router",
-      "target": "schemas_typesafe_typesafeevaluateresponse",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_typesafeevaluateresponse"
     },
     {
       "relation": "imports",
@@ -18269,9 +18507,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router",
-      "target": "schemas_typesafe_typesafestatusresponse",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_typesafestatusresponse"
     },
     {
       "relation": "rationale_for",
@@ -18279,9 +18517,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router_rationale_16",
-      "target": "routers_typesafe_router_get_typesafe_status",
-      "confidence_score": 1.0
+      "target": "routers_typesafe_router_get_typesafe_status"
     },
     {
       "relation": "references",
@@ -18290,9 +18528,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router_evaluate_candidate",
-      "target": "schemas_typesafe_typesafeevaluaterequest",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_typesafeevaluaterequest"
     },
     {
       "relation": "rationale_for",
@@ -18300,9 +18538,9 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routers_typesafe_router_rationale_24",
-      "target": "routers_typesafe_router_evaluate_candidate",
-      "confidence_score": 1.0
+      "target": "routers_typesafe_router_evaluate_candidate"
     },
     {
       "relation": "contains",
@@ -18400,9 +18638,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe_founderarchetype",
-      "target": "str",
-      "confidence_score": 1.0
+      "target": "str"
     },
     {
       "relation": "contains",
@@ -18500,9 +18738,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe",
-      "target": "schemas_typesafe_dimensionscore",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_dimensionscore"
     },
     {
       "relation": "contains",
@@ -18510,9 +18748,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe",
-      "target": "schemas_typesafe_founderarchetype",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_founderarchetype"
     },
     {
       "relation": "contains",
@@ -18520,9 +18758,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe",
-      "target": "schemas_typesafe_typesafeevaluaterequest",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_typesafeevaluaterequest"
     },
     {
       "relation": "contains",
@@ -18530,9 +18768,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe",
-      "target": "schemas_typesafe_typesafeevaluateresponse",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_typesafeevaluateresponse"
     },
     {
       "relation": "contains",
@@ -18540,9 +18778,9 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_typesafe",
-      "target": "schemas_typesafe_typesafestatusresponse",
-      "confidence_score": 1.0
+      "target": "schemas_typesafe_typesafestatusresponse"
     },
     {
       "relation": "contains",
@@ -23113,9 +23351,9 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_typesafeai",
-      "target": "lib_authfetch",
-      "confidence_score": 1.0
+      "target": "lib_authfetch"
     },
     {
       "relation": "imports",
@@ -23124,9 +23362,9 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_typesafeai",
-      "target": "lib_authfetch_authfetch",
-      "confidence_score": 1.0
+      "target": "lib_authfetch_authfetch"
     },
     {
       "relation": "calls",
@@ -23280,9 +23518,9 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_typesafeai",
-      "target": "lib_typesafeai_evaluatewithtypesafeai",
-      "confidence_score": 1.0
+      "target": "lib_typesafeai_evaluatewithtypesafeai"
     },
     {
       "relation": "contains",
@@ -23290,9 +23528,9 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_typesafeai",
-      "target": "lib_typesafeai_gettypesafestatus",
-      "confidence_score": 1.0
+      "target": "lib_typesafeai_gettypesafestatus"
     },
     {
       "relation": "imports_from",
@@ -23301,9 +23539,9 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_typesafeai",
-      "target": "types_typesafe",
-      "confidence_score": 1.0
+      "target": "types_typesafe"
     },
     {
       "relation": "imports",
@@ -23312,9 +23550,9 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_typesafeai",
-      "target": "types_typesafe_typesafeevaluateresponse",
-      "confidence_score": 1.0
+      "target": "types_typesafe_typesafeevaluateresponse"
     },
     {
       "relation": "imports",
@@ -23323,9 +23561,9 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_typesafeai",
-      "target": "types_typesafe_typesafestatusresponse",
-      "confidence_score": 1.0
+      "target": "types_typesafe_typesafestatusresponse"
     },
     {
       "relation": "contains",
@@ -23661,9 +23899,9 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "types_typesafe",
-      "target": "types_typesafe_founderarchetype",
-      "confidence_score": 1.0
+      "target": "types_typesafe_founderarchetype"
     },
     {
       "relation": "contains",
@@ -23671,9 +23909,9 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "types_typesafe",
-      "target": "types_typesafe_typesafedimensionscore",
-      "confidence_score": 1.0
+      "target": "types_typesafe_typesafedimensionscore"
     },
     {
       "relation": "contains",
@@ -23681,9 +23919,9 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "types_typesafe",
-      "target": "types_typesafe_typesafeevaluateresponse",
-      "confidence_score": 1.0
+      "target": "types_typesafe_typesafeevaluateresponse"
     },
     {
       "relation": "contains",
@@ -23691,9 +23929,9 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "types_typesafe",
-      "target": "types_typesafe_typesafestatusresponse",
-      "confidence_score": 1.0
+      "target": "types_typesafe_typesafestatusresponse"
     },
     {
       "relation": "contains",
@@ -28706,5 +28944,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "94662b487460855d25061ad06c9e6d03bd456c80"
+  "built_at_commit": "70192cff0cefaa15028e1d480d04344f36b31091"
 }
