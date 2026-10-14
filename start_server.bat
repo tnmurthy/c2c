@@ -1,0 +1,3 @@
+@echo off
+echo Starting Campus to Corporate (c2c) on port 3030 with FastAPI backend on port 8000...
+npm run start:c2c
