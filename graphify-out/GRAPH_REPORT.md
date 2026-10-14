@@ -1,16 +1,16 @@
 # Graph Report - makeover-talent-agency  (2026-10-14)
 
 ## Corpus Check
-- 230 files · ~437,234 words
+- 230 files · ~437,692 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1220 nodes · 1505 edges · 232 communities (79 shown, 153 thin omitted)
+- 1222 nodes · 1507 edges · 233 communities (79 shown, 154 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 52 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cc2046bc`
+- Built from commit: `fb3b43d5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -82,7 +82,6 @@
 - [[_COMMUNITY_Community 65|Community 65]]
 - [[_COMMUNITY_Community 66|Community 66]]
 - [[_COMMUNITY_Community 67|Community 67]]
-- [[_COMMUNITY_Community 68|Community 68]]
 - [[_COMMUNITY_Investor Deck Investor Deck|Investor Deck Investor Deck]]
 - [[_COMMUNITY_Landing Page Landing Page|Landing Page Landing Page]]
 - [[_COMMUNITY_Community 71|Community 71]]
@@ -230,6 +229,8 @@
 - [[_COMMUNITY_Community 223|Community 223]]
 - [[_COMMUNITY_Community 230|Community 230]]
 - [[_COMMUNITY_Community 231|Community 231]]
+- [[_COMMUNITY_Community 237|Community 237]]
+- [[_COMMUNITY_Community 238|Community 238]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `DatabaseConnectionError` - 35 edges
@@ -258,7 +259,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (232 total, 153 thin omitted)
+## Communities (233 total, 154 thin omitted)
 
 ### Community 0 - "Portfolio Schema"
 Cohesion: 0.10
@@ -281,8 +282,8 @@ Cohesion: 0.05
 Nodes (58): get_supabase_client(), Create and return a Supabase client. Returns None if env vars are missing., FastAPI dependency that provides a Supabase client or raises 503., require_supabase(), health(), generate_tailored_resume_pdf(), Exception, HTTPException (+50 more)
 
 ### Community 5 - "Assessment Webhooks"
-Cohesion: 0.12
-Nodes (16): ApplicationReviewModal(), ApplicationReviewModalProps, ReviewedApplicationData, InterviewPrepData, InterviewPrepModal(), InterviewPrepModalProps, JobMatchCardData, JobMatchCardProps (+8 more)
+Cohesion: 0.10
+Nodes (21): ApplicationReviewModal(), ApplicationReviewModalProps, ReviewedApplicationData, InterviewPrepData, InterviewPrepModal(), InterviewPrepModalProps, JobMatchCard(), JobMatchCardData (+13 more)
 
 ### Community 6 - "TypeScript Config"
 Cohesion: 0.11
@@ -329,8 +330,8 @@ Cohesion: 0.12
 Nodes (15): 1. Concrete Transformation Patterns, 2. Error-First Structure, 3. Quantified Impact, 4. Self-Contained Examples, 5. Semantic Naming, Code Example Standards, Comments, Impact Level Guidelines (+7 more)
 
 ### Community 21 - "CRM & Assessment Types"
-Cohesion: 0.10
-Nodes (16): DEFAULT_DATA, GrowthRadarProps, HistoryPoint, TrendLineChartProps, JobMatchCard(), UserJourneyWidgetProps, Application, DashboardData (+8 more)
+Cohesion: 0.11
+Nodes (17): HistoryPoint, TrendLineChartProps, UserJourneyWidgetProps, useApiQuery(), UseApiQueryReturn, Application, Dashboard(), DashboardData (+9 more)
 
 ### Community 30 - "Api Crm Router"
 Cohesion: 0.31
@@ -345,16 +346,16 @@ Cohesion: 0.40
 Nodes (3): hanken, jetbrains, metadata
 
 ### Community 41 - "Components Statcard Statcard"
-Cohesion: 0.10
-Nodes (21): AccountsPage(), ActivitiesPage(), Activity, DropdownItem, CandidatesPage(), Account, Contact, ContactsPage() (+13 more)
+Cohesion: 0.14
+Nodes (22): AccountsPage(), ActivitiesPage(), Activity, DropdownItem, CandidatesPage(), Account, Contact, ContactsPage() (+14 more)
 
 ### Community 47 - "Crm Layout Crmlayout"
 Cohesion: 0.43
 Nodes (4): CRMLayout(), NavItem(), NavItemProps, createClient()
 
 ### Community 48 - "Crm Navitem Navitem"
-Cohesion: 0.20
-Nodes (8): cn(), SlideOutDrawer(), SlideOutDrawerProps, Candidate, CandidateScore, Opportunity, PipelineStage, STAGE_COLORS
+Cohesion: 0.12
+Nodes (7): Candidate, CandidateScore, Opportunity, PipelineStage, STAGE_COLORS, WindowState, supabase
 
 ### Community 49 - "Dashboard Page Dashboardredirect"
 Cohesion: 0.13
@@ -365,8 +366,8 @@ Cohesion: 0.31
 Nodes (3): setupMocks(), { setupMocks }, { test, expect }
 
 ### Community 64 - "Hooks Useapiquery Useapiquery"
-Cohesion: 0.28
-Nodes (7): AdminDashboard(), ItemAnalysis, StatCard(), StatCardProps, useApiQuery(), Dashboard(), Lead
+Cohesion: 0.33
+Nodes (5): StatCard(), StatCardProps, CRMDashboard(), FunnelData, SummaryData
 
 ### Community 65 - "Community 65"
 Cohesion: 0.17
@@ -377,10 +378,6 @@ Cohesion: 0.14
 Nodes (13): 1. The Problem: The "Raw Talent" Gap, 2. The Solution: The "Scientific Makeover", 3. The Product Ecosystem (Live & Functional), 4. Why Now? (Timing & Market), 5. Business Model & Revenue Streams, 6. Traction & Moat, 7. The Ask, campus2corporate (c2c) (+5 more)
 
 ### Community 67 - "Community 67"
-Cohesion: 0.33
-Nodes (7): items, required, type, items, type, projects, items
-
-### Community 68 - "Community 68"
 Cohesion: 0.22
 Nodes (9): required, type, items, type, type, properties, candidate, certifications (+1 more)
 
@@ -421,8 +418,8 @@ Cohesion: 0.60
 Nodes (3): config, middleware(), updateSession()
 
 ### Community 137 - "Types Assessment Actionablefeedback"
-Cohesion: 0.15
-Nodes (14): STAGE_COLORS, ActionableFeedback, AssessmentOption, AssessmentQuestion, AssessmentResponse, AssessmentResult, DevelopmentReport, Student (+6 more)
+Cohesion: 0.24
+Nodes (8): Assessment(), ActionableFeedback, AssessmentOption, AssessmentQuestion, AssessmentResponse, AssessmentResult, DevelopmentReport, Student
 
 ### Community 138 - "Types Assessment Assessmentoption"
 Cohesion: 0.25
@@ -501,22 +498,26 @@ Cohesion: 0.29
 Nodes (6): 1. The Core Wedge: High-Volume, Low-Cost Placement Analytics, 2. Product Focus Decisions, 3. Core Structural Advantages, Deferrals: FutureHub Marketplace, Out-of-Scope: Coding Sandboxes, Product Positioning Strategy — Campus to Corporate (c2c)
 
 ### Community 171 - "Community 171"
-Cohesion: 0.12
-Nodes (18): Assessment(), LoadingScreen(), LoadingScreenProps, EmployerPage(), UseAuthOptions, UseAuthReturn, useRequireAuth(), TPODashboardLayout() (+10 more)
+Cohesion: 0.11
+Nodes (18): AdminDashboard(), ItemAnalysis, LoadingScreen(), LoadingScreenProps, EmployerPage(), UseAuthOptions, UseAuthReturn, useRequireAuth() (+10 more)
 
-### Community 231 - "Community 231"
+### Community 221 - "Community 221"
 Cohesion: 0.33
-Nodes (3): tests/test_market_intelligence.py ================================= Comprehensiv, Unit tests for services/market_intelligence/skill_gap.py, TestSkillGap
+Nodes (3): tests/test_market_intelligence.py ================================= Comprehensiv, Unit tests for services/market_intelligence/interview_prep.py, TestInterviewPrep
+
+### Community 238 - "Community 238"
+Cohesion: 0.33
+Nodes (7): items, required, type, items, type, projects, items
 
 ## Knowledge Gaps
 - **502 isolated node(s):** `PipelineStage`, `CandidateScore`, `Candidate`, `Opportunity`, `STAGE_COLORS` (+497 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **153 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **154 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `properties` connect `Portfolio Schema` to `Community 67`, `Community 68`, `Community 157`?**
+- **Why does `properties` connect `Portfolio Schema` to `Community 67`, `Community 157`, `Community 238`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Why does `enum` connect `Community 157` to `Types Assessment Student`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._

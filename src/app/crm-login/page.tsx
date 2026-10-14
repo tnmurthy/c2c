@@ -30,7 +30,12 @@ export default function CRMLoginPage() {
     })
     document.cookie = `${cookieName}=${encodeURIComponent(tokenVal)}; path=/; max-age=604800; SameSite=Lax`
     document.cookie = `demo_role=admin; path=/; max-age=604800; SameSite=Lax`
-    try { localStorage.setItem(cookieName, tokenVal); } catch (e) {}
+    document.cookie = `demo_user=${encodeURIComponent(JSON.stringify(demoUser))}; path=/; max-age=604800; SameSite=Lax`
+    try { 
+      localStorage.setItem(cookieName, tokenVal);
+      localStorage.setItem('demo_user', JSON.stringify(demoUser));
+      localStorage.setItem('demo_role', 'admin');
+    } catch (e) {}
     router.refresh()
     router.push('/crm')
   }

@@ -1980,8 +1980,8 @@
     "semantic_hash": "b09ce6198fe133af80d478905fd5d493"
   },
   "src/app/(main)/login/page.tsx": {
-    "mtime": 1791956149.153374,
-    "ast_hash": "f482476420bf5283e8187fb757d4ec59",
+    "mtime": 1791959942.2212243,
+    "ast_hash": "294d678ea5e864656638b8524f7b3cc7",
     "semantic_hash": ""
   },
   "src/app/(main)/onboard/page.tsx": {
@@ -2075,14 +2075,14 @@
     "semantic_hash": "d3a6a59b3c134f9f38f3b8fdcec442e3"
   },
   "src/hooks/useAuth.ts": {
-    "mtime": 1783829575.1867445,
-    "ast_hash": "00e3046662fd9d496b44da1f7d92cadd",
+    "mtime": 1791959694.2835677,
+    "ast_hash": "58f479dc2b5617d25c1d3b584d7f02d8",
     "semantic_hash": ""
   },
   "src/lib/authFetch.ts": {
-    "mtime": 1781790501.9075089,
-    "ast_hash": "da3a86bce1c7c432b3d11829bac587db",
-    "semantic_hash": "da3a86bce1c7c432b3d11829bac587db"
+    "mtime": 1791959859.309937,
+    "ast_hash": "7c9e8fc5afe3665aef7fb83fe0571f04",
+    "semantic_hash": ""
   },
   "src/lib/supabase.ts": {
     "mtime": 1783793868.7246635,
@@ -7520,8 +7520,8 @@
     "semantic_hash": "ffbc0189585d97a66460ad31e5fa0fd5"
   },
   "src/app/crm-login/page.tsx": {
-    "mtime": 1791956334.6078594,
-    "ast_hash": "257c904f92d2302aa8f1d9edfeb10783",
+    "mtime": 1791960020.3790545,
+    "ast_hash": "a0ff7dd0e6743a1e0d62790fdd96af46",
     "semantic_hash": ""
   },
   "src/app/crm/accounts/page.tsx": {
@@ -7535,9 +7535,9 @@
     "semantic_hash": "cd9084aa76f30c8d4cdbd36cfd4a9403"
   },
   "src/app/crm/layout.tsx": {
-    "mtime": 1783318959.7745824,
-    "ast_hash": "e2becb38fa60a42a85b3ea47f576ef4c",
-    "semantic_hash": "e2becb38fa60a42a85b3ea47f576ef4c"
+    "mtime": 1791959908.705215,
+    "ast_hash": "f833462603aaeabf7ac4822cb208a896",
+    "semantic_hash": ""
   },
   "src/app/crm/leads/page.tsx": {
     "mtime": 1783318804.7132182,
@@ -8160,8 +8160,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useAuthSession.ts": {
-    "mtime": 1783792035.692619,
-    "ast_hash": "57f0fd470588cde9730f466822c98aa2",
+    "mtime": 1791959722.3226123,
+    "ast_hash": "aae434803fee122f30c2ab54cd84edba",
     "semantic_hash": ""
   },
   "api/routers/market_router.py": {

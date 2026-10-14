@@ -54,10 +54,14 @@ export default function LoginPage() {
     
     document.cookie = `${cookieName}=${encodeURIComponent(tokenVal)}; path=/; max-age=604800; SameSite=Lax`;
     document.cookie = `demo_role=${role}; path=/; max-age=604800; SameSite=Lax`;
+    document.cookie = `demo_user=${encodeURIComponent(JSON.stringify(demoUser))}; path=/; max-age=604800; SameSite=Lax`;
     try {
       localStorage.setItem(cookieName, tokenVal);
+      localStorage.setItem('demo_user', JSON.stringify(demoUser));
+      localStorage.setItem('demo_role', role);
     } catch (e) {}
 
+    router.refresh();
     routeUser(demoUser);
   };
 
