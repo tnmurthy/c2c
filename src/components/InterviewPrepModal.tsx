@@ -190,7 +190,7 @@ export const InterviewPrepModal: React.FC<InterviewPrepModalProps> = ({
                       </button>
                     </div>
                     <p className="text-[#dde4e5] text-sm leading-relaxed font-sans">
-                      "{data.elevator_pitch}"
+                      “{data.elevator_pitch}”
                     </p>
                   </div>
 

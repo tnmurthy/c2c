@@ -6,7 +6,9 @@ from dotenv import load_dotenv
 load_dotenv(".env.local")
 
 from api.deps import require_admin_supabase
+from tests.db_gate import requires_db
 
+@requires_db
 class TestAssessmentAttempts(unittest.TestCase):
     def setUp(self):
         self.client = require_admin_supabase()
