@@ -560,7 +560,7 @@ export default function EmployerPage() {
                   <div className="space-y-4">
                     <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>Professional Legend</h4>
                     <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg text-sm text-[#dde4e5] leading-relaxed border-l-2 border-[#8aebff] border-white/5">
-                      "{selectedCandidate.summary}"
+                      “{selectedCandidate.summary}”
                     </div>
                   </div>
 
@@ -707,7 +707,7 @@ export default function EmployerPage() {
               <div className="border border-white/5 bg-white/5 rounded-lg p-12 text-center">
                 <LayoutGrid className="w-12 h-12 text-white/20 mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-white mb-2">No Active Postings</h3>
-                <p className="text-[#bbc9cd] text-sm mb-6 max-w-md mx-auto">You haven't created any job postings yet. Create your first role to start matching with elite candidates.</p>
+                <p className="text-[#bbc9cd] text-sm mb-6 max-w-md mx-auto">You haven’t created any job postings yet. Create your first role to start matching with elite candidates.</p>
                 <Link 
                   href="/employer/jobs/new"
                   className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded text-sm font-bold font-mono tracking-widest transition-colors inline-block"
@@ -822,7 +822,7 @@ export default function EmployerPage() {
           <div className="mb-8">
             <h3 className="text-sm font-bold text-slate-900 uppercase font-mono border-b pb-2 mb-3">Professional Dossier Overview</h3>
             <p className="text-sm text-slate-700 leading-relaxed italic">
-              "{selectedCandidate.summary}"
+              “{selectedCandidate.summary}”
             </p>
           </div>
 
