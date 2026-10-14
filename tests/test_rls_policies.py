@@ -1,8 +1,6 @@
 import os
 import unittest
 
-import psycopg2
-
 from tests.db_gate import requires_db
 
 @requires_db
@@ -12,6 +10,10 @@ class TestRLSPolicies(unittest.TestCase):
         self.db_url = os.getenv("C2C_DATABASE_URL")
         if not self.db_url:
             self.skipTest("C2C_DATABASE_URL is not set")
+        # Imported here, not at module level: CI does not install psycopg2,
+        # and a module-level import fails collection even when skipped.
+        import psycopg2
+
         try:
             self.conn = psycopg2.connect(self.db_url)
         except Exception as e:
