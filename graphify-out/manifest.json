@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "api/main.py": {
-    "mtime": 1783406164.209738,
-    "ast_hash": "d5df5bb6e2e904b936e70fed97b982f4",
+    "mtime": 1791967660.5249195,
+    "ast_hash": "cba4a6417afb1bded6f620b639cfa207",
     "semantic_hash": ""
   },
   "api/pdf_generator.py": {
@@ -8412,6 +8412,26 @@
   "New Text Document.txt": {
     "mtime": 1787198340.0007493,
     "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "api/routers/typesafe_router.py": {
+    "mtime": 1791967217.7467787,
+    "ast_hash": "c1f7e32f27c012d06877dc3b4464c988",
+    "semantic_hash": ""
+  },
+  "api/schemas/typesafe.py": {
+    "mtime": 1791967949.921221,
+    "ast_hash": "615b720a99dc03ff38e9b8da56240dbe",
+    "semantic_hash": ""
+  },
+  "src/lib/typesafeAi.ts": {
+    "mtime": 1791967702.0702121,
+    "ast_hash": "78a84b9dc3a2026244eb10bad87713a1",
+    "semantic_hash": ""
+  },
+  "src/types/typesafe.ts": {
+    "mtime": 1791967692.2066672,
+    "ast_hash": "b5c31045ef102055f9f690d283c242c4",
     "semantic_hash": ""
   }
 }
