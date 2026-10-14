@@ -19,6 +19,29 @@ The work below closes that gap systematically.
 
 ---
 
+## Autonomous Loop & Verification Commands
+
+### Verification Commands
+- **Frontend Next.js Build:** `npm run build`
+- **Frontend Lint:** `npm run lint`
+- **Playwright E2E Tests:** `npm run test:e2e`
+- **Backend API Server Health:** `python -m uvicorn api.main:app --port 8000` (check `/health`)
+- **Backend Pytest:** `pytest tests/`
+
+### Loop Execution Protocol (Self-Correction Cycle)
+When executing tasks in autonomous loop mode:
+1. **Pick Task:** Pick the topmost uncompleted task in the active Phase below.
+2. **Implement:** Write clean, minimal diffs meeting the specific Acceptance criteria.
+3. **Run Verification:** Run the relevant verification command (`npm run build` or `pytest tests/`).
+4. **Self-Healing Loop:** If verification fails:
+   - Read the exact error output / stack trace.
+   - Refactor implementation to fix the root cause.
+   - Retry verification (max 5 attempts).
+5. **State Update & Commit:** Check off the task, commit (`feat:`/`fix:`), and move to next task.
+
+
+---
+
 ## Phase 1 — Foundation Fixes (do first, blocks everything else)
 
 ### P1-A: Fix Python packaging — remove sys.path hacks

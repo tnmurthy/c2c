@@ -10,8 +10,8 @@
     "semantic_hash": "f736e255d7b0e93af7ce811d7e6434b2"
   },
   "api/deps.py": {
-    "mtime": 1783615737.5512357,
-    "ast_hash": "1af5aaaf08dfac975a595510a3401c2f",
+    "mtime": 1791945179.4111323,
+    "ast_hash": "acd1cd98f7f79cd72c8c5458df577561",
     "semantic_hash": ""
   },
   "api/fallback_bank.json": {
@@ -1190,13 +1190,13 @@
     "semantic_hash": "1713c4ede148cc142e79c786e8d11ec4"
   },
   "next.config.js": {
-    "mtime": 1783614659.9305701,
-    "ast_hash": "df8151993c8b52f796aecbdeea71bd80",
+    "mtime": 1791945024.7378435,
+    "ast_hash": "e816adbb39f79c8d8b335a557e8db116",
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1783615636.543172,
-    "ast_hash": "a2d25c4d666fd463177b4306d2bf188e",
+    "mtime": 1791946624.1919081,
+    "ast_hash": "b67301d2a54d42509d0a4975454f98da",
     "semantic_hash": ""
   },
   "playwright-audit.config.ts": {
@@ -1965,8 +1965,8 @@
     "semantic_hash": ""
   },
   "src/app/(main)/dashboard/[id]/page.tsx": {
-    "mtime": 1783830040.2001727,
-    "ast_hash": "300d15dcea641ad2cef6ef1a818c7f94",
+    "mtime": 1787963986.3314016,
+    "ast_hash": "1e8ba87d5acf72241eb44eb5db8655f6",
     "semantic_hash": ""
   },
   "src/app/(main)/dashboard/page.tsx": {
@@ -1980,8 +1980,8 @@
     "semantic_hash": "b09ce6198fe133af80d478905fd5d493"
   },
   "src/app/(main)/login/page.tsx": {
-    "mtime": 1784454166.0181146,
-    "ast_hash": "b332b0f8cf1de4b059e3ec5dfb0cb442",
+    "mtime": 1791956149.153374,
+    "ast_hash": "f482476420bf5283e8187fb757d4ec59",
     "semantic_hash": ""
   },
   "src/app/(main)/onboard/page.tsx": {
@@ -2015,8 +2015,8 @@
     "semantic_hash": "4044a37971761f3765711db6cdc6daa9"
   },
   "src/app/layout.tsx": {
-    "mtime": 1783790654.712003,
-    "ast_hash": "d0809a8a2484eee9b05c41b5a77f34a3",
+    "mtime": 1790152976.9034686,
+    "ast_hash": "98f5d2bd8c659071e019fba351d41d1c",
     "semantic_hash": ""
   },
   "src/app/portfolio/[id]/page.tsx": {
@@ -2025,8 +2025,8 @@
     "semantic_hash": ""
   },
   "src/app/tpo-dashboard/[id]/page.tsx": {
-    "mtime": 1783963468.9093091,
-    "ast_hash": "a6bdc8fc0f3d5e7d50469a34bd7765d3",
+    "mtime": 1787963986.3340664,
+    "ast_hash": "282e076083c2c9c21046e02f5846e7d6",
     "semantic_hash": ""
   },
   "src/app/tpo-dashboard/[id]/students/page.tsx": {
@@ -2060,9 +2060,9 @@
     "semantic_hash": "cb9b7d0dfa0e811323bc5ae26dac45ae"
   },
   "src/components/profile/ProfileCompletionWidget.tsx": {
-    "mtime": 1781790501.903999,
-    "ast_hash": "9d04794450865d0a6f0dd9fcb42c45e7",
-    "semantic_hash": "9d04794450865d0a6f0dd9fcb42c45e7"
+    "mtime": 1787963986.3430846,
+    "ast_hash": "9a8fe490fd13089fa553c8ef7a1e602c",
+    "semantic_hash": ""
   },
   "src/components/profile/ResumeUploadModal.tsx": {
     "mtime": 1781790501.904999,
@@ -7460,9 +7460,9 @@
     "semantic_hash": "dc494e380e63fe96ccfecd5553d0d514"
   },
   "supabase/migrations/20260626000001_seed_psychometric_items.sql": {
-    "mtime": 1782451077.575034,
-    "ast_hash": "f43b4a8f4fcc81a076c88dc006540551",
-    "semantic_hash": "f43b4a8f4fcc81a076c88dc006540551"
+    "mtime": 1789922636.7137916,
+    "ast_hash": "f5b2bcfcd4167bd129539f9fe465f93d",
+    "semantic_hash": ""
   },
   "supabase/migrations/db-schema.sql": {
     "mtime": 1782452208.5406656,
@@ -7480,7 +7480,7 @@
     "semantic_hash": "7557a277e60ddbc923e457bcfadda307"
   },
   "supabase/.temp/linked-project.json": {
-    "mtime": 1783097663.3216734,
+    "mtime": 1789915462.5796664,
     "ast_hash": "0fa5854b23984725e4b003a8218b5964",
     "semantic_hash": "0fa5854b23984725e4b003a8218b5964"
   },
@@ -7500,9 +7500,9 @@
     "semantic_hash": "a9466f251d379f831cd385b7aef6f507"
   },
   "docs/brd and frd.md": {
-    "mtime": 1783063187.9400725,
-    "ast_hash": "a1638af501270c1de7ad72cd91d16402",
-    "semantic_hash": "a1638af501270c1de7ad72cd91d16402"
+    "mtime": 1789922636.5548704,
+    "ast_hash": "d9487e8f9dd7d9a7ba401c1917fc9f19",
+    "semantic_hash": ""
   },
   "docs/erd mermaid script.md": {
     "mtime": 1783063187.9439821,
@@ -7520,9 +7520,9 @@
     "semantic_hash": "ffbc0189585d97a66460ad31e5fa0fd5"
   },
   "src/app/crm-login/page.tsx": {
-    "mtime": 1783104130.3497646,
-    "ast_hash": "4aa70c2e206b3043a4af0b14a33cd2b5",
-    "semantic_hash": "4aa70c2e206b3043a4af0b14a33cd2b5"
+    "mtime": 1791956334.6078594,
+    "ast_hash": "257c904f92d2302aa8f1d9edfeb10783",
+    "semantic_hash": ""
   },
   "src/app/crm/accounts/page.tsx": {
     "mtime": 1783318869.2486813,
@@ -7570,8 +7570,8 @@
     "semantic_hash": "4cb5739c1e33353d8f9d66c1737df2d1"
   },
   "src/utils/supabase/middleware.ts": {
-    "mtime": 1783793299.8176098,
-    "ast_hash": "a8264509e226d90fca0b124d3c87f901",
+    "mtime": 1787968635.3614933,
+    "ast_hash": "e205f060061540abc861ee33df2d84a7",
     "semantic_hash": ""
   },
   "src/utils/supabase/server.ts": {
@@ -7620,14 +7620,14 @@
     "semantic_hash": "71b8ee47ffc41c14b5e254ed368dddf2"
   },
   "api/routers/student_router.py": {
-    "mtime": 1783963442.9288323,
-    "ast_hash": "387b977d35e5ae4cfb93d1fa77d1d943",
+    "mtime": 1787969849.7771702,
+    "ast_hash": "8d230f311a7a96f20d7c45869b573ac2",
     "semantic_hash": ""
   },
   "api/schemas/assessment.py": {
-    "mtime": 1783270856.3893578,
-    "ast_hash": "ba8754201c7b4250bfe9f094517324b3",
-    "semantic_hash": "ba8754201c7b4250bfe9f094517324b3"
+    "mtime": 1791946344.2379067,
+    "ast_hash": "c7255f34c19d872a215e37cd04fcaa92",
+    "semantic_hash": ""
   },
   "api/schemas/employer.py": {
     "mtime": 1783222455.058424,
@@ -8165,8 +8165,8 @@
     "semantic_hash": ""
   },
   "api/routers/market_router.py": {
-    "mtime": 1783913388.3598368,
-    "ast_hash": "fad7c94c8272785016af2da11d3e7e4c",
+    "mtime": 1787963986.3126707,
+    "ast_hash": "d0107e735c4cf27a120426f665c896a7",
     "semantic_hash": ""
   },
   "scripts/jhm_daily_sweep.py": {
@@ -8264,11 +8264,6 @@
     "ast_hash": "e73ffb1faf2e982827e771f08076f690",
     "semantic_hash": ""
   },
-  "supabase/migrations/20260710000000_longitudinal_assessments.sql.sql": {
-    "mtime": 1783647912.2415512,
-    "ast_hash": "56309bd51a7101b7c9f3d926a17dcc2f",
-    "semantic_hash": ""
-  },
   "tests/test_assessment_attempts.py": {
     "mtime": 1783648480.8955686,
     "ast_hash": "0b13305dcd9512ffcd02cb9f6c15d83d",
@@ -8337,6 +8332,86 @@
   ".agents/victory_auditor_cv_tailor/README.md": {
     "mtime": 1783959948.9198694,
     "ast_hash": "15094e1d2f9658d2837fe96592e1b262",
+    "semantic_hash": ""
+  },
+  "api/db.py": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "8d319e2f7676d5267381a0d0bcb71796",
+    "semantic_hash": ""
+  },
+  "api/routers/assessments.py": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "26c69f61a42eeb514920e13698b2dacf",
+    "semantic_hash": ""
+  },
+  "src/components/ApplicationReviewModal.tsx": {
+    "mtime": 1787963986.3363466,
+    "ast_hash": "9c697fadd0396e7f1658bd5bac35b193",
+    "semantic_hash": ""
+  },
+  "src/components/InterviewPrepModal.tsx": {
+    "mtime": 1787963986.3380163,
+    "ast_hash": "13e60103ad7218f82fae8ad07afaad7e",
+    "semantic_hash": ""
+  },
+  "src/components/JobMatchCard.tsx": {
+    "mtime": 1787963986.3396819,
+    "ast_hash": "bebd512d4afeb862f30ea0c853601902",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/CohortSkillGapHeatmap.tsx": {
+    "mtime": 1787963986.3408926,
+    "ast_hash": "cd7da3aa4279ed0a64c465d3bd3297a0",
+    "semantic_hash": ""
+  },
+  "src/components/profile/ProfileExpansionModal.tsx": {
+    "mtime": 1787963986.3447127,
+    "ast_hash": "d7469c365dadfc9d9eb5a7aa2dd7b666",
+    "semantic_hash": ""
+  },
+  "src/lib/auth/requireRole.ts": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "63540deb83d683a8b9b6249a61b61b48",
+    "semantic_hash": ""
+  },
+  "src/lib/schemas/assessment.ts": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "31d381f2c651367d7575baf3be519c00",
+    "semantic_hash": ""
+  },
+  "src/types/auth.ts": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "3b49cc9d327591f7c9d4d8ea21fa8ef9",
+    "semantic_hash": ""
+  },
+  "src/types/database.types.ts": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "a8f11d522202b80a039662522503586a",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260625000000_psychometric_legacy_id_unique.sql": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "ff3622232c20a4bbfaa9bd261e717aba",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260711000001_longitudinal_assessments.sql": {
+    "mtime": 1789922636.7137916,
+    "ast_hash": "b5db18aa00d72ba7aad86149f628b3eb",
+    "semantic_hash": ""
+  },
+  "tests/test_market_intelligence.py": {
+    "mtime": 1787966052.598339,
+    "ast_hash": "b3564e90240c168316d9a90e4f29aebf",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1789922636.9304214,
+    "ast_hash": "ec754f64c8897f375d420aa189028d38",
+    "semantic_hash": ""
+  },
+  "New Text Document.txt": {
+    "mtime": 1787198340.0007493,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": ""
   }
 }
