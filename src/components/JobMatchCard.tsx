@@ -37,7 +37,20 @@ export interface JobMatchCardData {
   dimensions: MatchDimension[];
   key_strengths: string[];
   growth_gaps: string[];
+  typesafe_telemetry?: {
+    model_provider: string;
+    numeric_vector: number[];
+    feature_names: string[];
+    features: Record<string, {
+      mean: number;
+      spread_sd: number;
+      kind: 'intensity' | 'presence';
+      interpretation: string;
+    }>;
+    is_live_api: boolean;
+  };
 }
+
 
 interface JobMatchCardProps {
   postingText: string;
@@ -343,6 +356,61 @@ export const JobMatchCard: React.FC<JobMatchCardProps> = ({
                   </ul>
                 </div>
               </div>
+
+              {/* TypeSafe AI Autoresearch Verification Section */}
+              {data.typesafe_telemetry && (
+                <div className="p-4 rounded-xl bg-gradient-to-br from-[#0c131a] to-[#070b0e] border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)] mt-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/5 gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                        <Brain className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-mono text-xs font-bold text-white tracking-wide flex items-center gap-2">
+                          TypeSafe AI Autoresearch Telemetry
+                          <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-400/30">
+                            System One
+                          </span>
+                        </div>
+                        <div className="text-[10px] font-mono text-white/40">
+                          {data.typesafe_telemetry.model_provider} · 11D Float Matrix
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                        CatBoost / GBDT Vector Calibrated
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Probes Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3">
+                    {Object.entries(data.typesafe_telemetry.features).map(([name, feat]) => (
+                      <div key={name} className="p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-[11px] font-mono text-white/80 font-bold capitalize">
+                            {name.replace(/_/g, ' ')}
+                          </span>
+                          <span className="text-[10px] font-mono text-cyan-400 font-bold">
+                            {feat.kind === 'intensity' ? `${feat.mean.toFixed(1)}/4.0` : `${Math.round(feat.mean * 100)}%`}
+                            {feat.kind === 'intensity' && feat.spread_sd > 0 ? ` (±${feat.spread_sd.toFixed(2)})` : ''}
+                          </span>
+                        </div>
+                        <div className="w-full h-1 bg-black/40 rounded-full overflow-hidden mb-1">
+                          <div 
+                            className="h-full bg-cyan-400 rounded-full"
+                            style={{ width: `${feat.kind === 'intensity' ? (feat.mean / 4.0) * 100 : feat.mean * 100}%` }}
+                          />
+                        </div>
+                        <div className="text-[9px] font-mono text-white/40 truncate">
+                          {feat.interpretation}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>

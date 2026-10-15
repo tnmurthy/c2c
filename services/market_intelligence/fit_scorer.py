@@ -320,50 +320,122 @@ def generate_job_match_card(posting: str, candidate: dict, job_meta: Optional[di
     placement_readiness = _safe_int(candidate.get("placement_readiness_score", 75))
     career_score = min(100, int((role_score * 0.6) + (placement_readiness * 0.4)))
 
+    # TypeSafe AI System One Autoresearch Featurization
+    typesafe_telemetry = None
+    typesafe_alignment_score = None
+    try:
+        from api.services.typesafe_service import typesafe_service
+        candidate_text = f"{candidate.get('bio', '')} {' '.join(candidate.get('skills', []))} {candidate.get('department', '')}"
+        ts_res = typesafe_service.featurize(
+            free_text=candidate_text,
+            candidate_name=candidate.get("full_name") or "Candidate"
+        )
+        if ts_res:
+            features_dict = {
+                k: {
+                    "mean": v.mean,
+                    "spread_sd": v.spread_sd,
+                    "kind": v.kind,
+                    "interpretation": v.interpretation
+                }
+                for k, v in ts_res.features.items()
+            }
+            typesafe_telemetry = {
+                "model_provider": ts_res.model_provider,
+                "numeric_vector": ts_res.numeric_vector,
+                "feature_names": ts_res.feature_names,
+                "features": features_dict,
+                "is_live_api": ts_res.is_live_api
+            }
+
+            # Calculate probe match against job posting keywords
+            probes_matched = []
+            if any(w in posting_lower for w in ["system", "architect", "scale", "database", "backend"]):
+                f = features_dict.get("systems_architecture")
+                if f:
+                    probes_matched.append(f["mean"] / 4.0)
+            if any(w in posting_lower for w in ["production", "deploy", "docker", "ci/cd", "kubernetes"]):
+                f = features_dict.get("production_engineering")
+                if f:
+                    probes_matched.append(f["mean"] / 4.0)
+            if any(w in posting_lower for w in ["async", "concurren", "parallel", "queue", "kafka"]):
+                f = features_dict.get("concurrency_experience")
+                if f:
+                    probes_matched.append(f["mean"])
+            if any(w in posting_lower for w in ["lead", "mentor", "manage", "ownership"]):
+                f = features_dict.get("leadership_ownership")
+                if f:
+                    probes_matched.append(f["mean"] / 4.0)
+            if any(w in posting_lower for w in ["startup", "fast", "scrappy", "hack"]):
+                f = features_dict.get("startup_agility")
+                if f:
+                    probes_matched.append(f["mean"])
+
+            if probes_matched:
+                typesafe_alignment_score = min(100, int((sum(probes_matched) / len(probes_matched)) * 100))
+    except Exception as e:
+        logger.warning(f"TypeSafe AI featurization skipped in job match card: {e}")
+
     overall_fit = int((tech_score * 0.30) + (exp_score * 0.20) + (culture_score * 0.20) + (loc_score * 0.15) + (career_score * 0.15))
+
+    match_dimensions = [
+        {
+            "name": "Technical Skills Match",
+            "score": tech_score,
+            "weight": "30%",
+            "status": "Optimal" if tech_score >= 75 else ("Learnable Gap" if tech_score >= 45 else "High Gap"),
+            "details": [p for p in fit["match_points"] if "Skill match" in p] or ["Baseline skill overlap evaluated"],
+        },
+        {
+            "name": "Experience & Seniority Fit",
+            "score": exp_score,
+            "weight": "20%",
+            "status": "Qualified" if exp_score >= 75 else "Stretch Role",
+            "details": [p for p in fit["match_points"] if "Entry-level" in p or "Seniority" in p] or ["Seniority level compatible"],
+        },
+        {
+            "name": "Behavioral & Culture Fit",
+            "score": culture_score,
+            "weight": "20%",
+            "status": "Strong Synergy" if culture_score >= 80 else "Compatible",
+            "details": [f"Archetype alignment: {archetype}", f"EQ: {eq} | AQ: {aq}"],
+        },
+        {
+            "name": "Location & Logistics",
+            "score": loc_score,
+            "weight": "15%",
+            "status": loc_status,
+            "details": [p for p in fit["match_points"] if "Location" in p or "Remote" in p] or [f"Status: {loc_status}"],
+        },
+        {
+            "name": "Placement & Career Alignment",
+            "score": career_score,
+            "weight": "15%",
+            "status": "High Alignment" if career_score >= 75 else "Moderate Alignment",
+            "details": [f"Placement readiness factor: {placement_readiness}%"],
+        },
+    ]
+
+    if typesafe_alignment_score is not None:
+        match_dimensions.append({
+            "name": "TypeSafe AI Neural Rigor",
+            "score": typesafe_alignment_score,
+            "weight": "Bonus",
+            "status": "Verified Rigor" if typesafe_alignment_score >= 70 else "Calibrating",
+            "details": [
+                f"Autoresearch Vector: 11-dimension float matrix calibrated",
+                f"Model: {typesafe_telemetry.get('model_provider') if typesafe_telemetry else 'TypeSafe System One'}"
+            ]
+        })
 
     return {
         "job_title": job_meta.get("title") or "Opportunity Match",
         "company": job_meta.get("company") or "Hiring Entity",
         "overall_score": overall_fit,
         "grade": _grade(overall_fit),
-        "dimensions": [
-            {
-                "name": "Technical Skills Match",
-                "score": tech_score,
-                "weight": "30%",
-                "status": "Optimal" if tech_score >= 75 else ("Learnable Gap" if tech_score >= 45 else "High Gap"),
-                "details": [p for p in fit["match_points"] if "Skill match" in p] or ["Baseline skill overlap evaluated"],
-            },
-            {
-                "name": "Experience & Seniority Fit",
-                "score": exp_score,
-                "weight": "20%",
-                "status": "Qualified" if exp_score >= 75 else "Stretch Role",
-                "details": [p for p in fit["match_points"] if "Entry-level" in p or "Seniority" in p] or ["Seniority level compatible"],
-            },
-            {
-                "name": "Behavioral & Culture Fit",
-                "score": culture_score,
-                "weight": "20%",
-                "status": "Strong Synergy" if culture_score >= 80 else "Compatible",
-                "details": [f"Archetype alignment: {archetype}", f"EQ: {eq} | AQ: {aq}"],
-            },
-            {
-                "name": "Location & Logistics",
-                "score": loc_score,
-                "weight": "15%",
-                "status": loc_status,
-                "details": [p for p in fit["match_points"] if "Location" in p or "Remote" in p] or [f"Status: {loc_status}"],
-            },
-            {
-                "name": "Placement & Career Alignment",
-                "score": career_score,
-                "weight": "15%",
-                "status": "High Alignment" if career_score >= 75 else "Moderate Alignment",
-                "details": [f"Placement readiness factor: {placement_readiness}%"],
-            },
-        ],
+        "dimensions": match_dimensions,
         "key_strengths": fit["match_points"][:4],
         "growth_gaps": fit["gaps"][:4],
+        "typesafe_telemetry": typesafe_telemetry,
     }
+

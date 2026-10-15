@@ -1,7 +1,7 @@
 # Graph Report - makeover-talent-agency  (2026-10-15)
 
 ## Corpus Check
-- 237 files · ~420,496 words
+- 237 files · ~420,731 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4016bd4d`
+- Built from commit: `9377815e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -238,7 +238,7 @@
 - [[_COMMUNITY_Community 237|Community 237]]
 - [[_COMMUNITY_Community 238|Community 238]]
 - [[_COMMUNITY_Community 239|Community 239]]
-- [[_COMMUNITY_Community 242|Community 242]]
+- [[_COMMUNITY_Community 240|Community 240]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `DatabaseConnectionError` - 37 edges
@@ -298,8 +298,8 @@ Cohesion: 0.11
 Nodes (18): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+10 more)
 
 ### Community 7 - "Portfolio Candidate Schema"
-Cohesion: 0.13
-Nodes (15): properties, type, type, type, type, github, linkedin, meta (+7 more)
+Cohesion: 0.11
+Nodes (18): properties, required, type, type, type, type, type, candidate (+10 more)
 
 ### Community 8 - "Student Profile & Notifs"
 Cohesion: 0.20
@@ -386,8 +386,8 @@ Cohesion: 0.14
 Nodes (13): 1. The Problem: The "Raw Talent" Gap, 2. The Solution: The "Scientific Makeover", 3. The Product Ecosystem (Live & Functional), 4. Why Now? (Timing & Market), 5. Business Model & Revenue Streams, 6. Traction & Moat, 7. The Ask, campus2corporate (c2c) (+5 more)
 
 ### Community 67 - "Community 67"
-Cohesion: 0.22
-Nodes (9): required, type, items, type, type, properties, candidate, certifications (+1 more)
+Cohesion: 0.40
+Nodes (4): required, $schema, title, type
 
 ### Community 68 - "Community 68"
 Cohesion: 0.21
@@ -398,8 +398,8 @@ Cohesion: 0.17
 Nodes (11): 2026-07-13T03:13:18Z, Acceptance Criteria, Automated Tests, Document Generation, R1. Next.js Retro Desktop UI Integration, R2. Document Tailoring API Integration, R3. Output Preview & Download Formats, Requirements (+3 more)
 
 ### Community 83 - "Community 83"
-Cohesion: 0.40
-Nodes (4): required, $schema, title, type
+Cohesion: 0.13
+Nodes (18): get_service_client(), Client, main(), market_daily_sweep.py — Native Market Intelligence Cron ========================, Run the native market intelligence daily sweep., Map C2C assessment & student data → native score_job_fit candidate schema., Execute the full job × student scoring matrix and upsert qualified leads.      R, run_sweep() (+10 more)
 
 ### Community 89 - "Profile Profilecompletionwidget Profilec"
 Cohesion: 0.17
@@ -454,8 +454,8 @@ Cohesion: 0.32
 Nodes (7): { chromium }, fs, injectMockAuth(), interceptApis(), path, runTests(), SCREENSHOT_DIR
 
 ### Community 143 - "Types Assessment Student"
-Cohesion: 0.13
-Nodes (18): get_service_client(), Client, main(), market_daily_sweep.py — Native Market Intelligence Cron ========================, Run the native market intelligence daily sweep., Map C2C assessment & student data → native score_job_fit candidate schema., Execute the full job × student scoring matrix and upsert qualified leads.      R, run_sweep() (+10 more)
+Cohesion: 0.31
+Nodes (3): calculate_match_score(), Compute weighted 5Q match score (0-100) for a given role type., TestScoringEngine
 
 ### Community 144 - "Types Crm Alert"
 Cohesion: 0.29
@@ -490,8 +490,8 @@ Cohesion: 0.15
 Nodes (19): BaseModel, onboard_employer(), evaluate_candidate(), get_typesafe_status(), Returns the current status of the TypeSafe AI System One integration., Evaluates candidate responses using TypeSafe AI's System One (Choice, Score, Nou, EmployerOnboard, JobCreate (+11 more)
 
 ### Community 165 - "Community 165"
-Cohesion: 0.31
-Nodes (3): calculate_match_score(), Compute weighted 5Q match score (0-100) for a given role type., TestScoringEngine
+Cohesion: 0.29
+Nodes (5): Candidate, CandidateScore, Opportunity, PipelineStage, STAGE_COLORS
 
 ### Community 166 - "Community 166"
 Cohesion: 0.17
@@ -518,16 +518,16 @@ Cohesion: 0.33
 Nodes (3): tests/test_market_intelligence.py ================================= Comprehensiv, Unit tests for services/market_intelligence/interview_prep.py, TestInterviewPrep
 
 ### Community 232 - "Community 232"
-Cohesion: 0.25
-Nodes (9): items, required, type, items, type, projects, roles, items (+1 more)
+Cohesion: 0.21
+Nodes (12): items, type, items, type, required, type, items, type (+4 more)
 
 ### Community 233 - "Community 233"
 Cohesion: 0.67
 Nodes (3): evaluate_lead(), EvaluateLeadRequest, Run the native quality gate on a raw job lead.     Use before saving any scrape
 
 ### Community 234 - "Community 234"
-Cohesion: 0.29
-Nodes (5): Candidate, CandidateScore, Opportunity, PipelineStage, STAGE_COLORS
+Cohesion: 0.40
+Nodes (6): enum, type, icon, AppRole, FounderArchetype, str
 
 ### Community 235 - "Community 235"
 Cohesion: 0.19
@@ -545,9 +545,9 @@ Nodes (3): interview_prep(), InterviewPrepRequest, Generate tailored interview p
 Cohesion: 0.67
 Nodes (3): extract_intel(), ExtractIntelRequest, Extract structured intel from raw JD text:     company, location, budget, urgen
 
-### Community 242 - "Community 242"
-Cohesion: 0.40
-Nodes (6): enum, type, icon, AppRole, FounderArchetype, str
+### Community 240 - "Community 240"
+Cohesion: 0.67
+Nodes (3): roles, items, type
 
 ## Knowledge Gaps
 - **511 isolated node(s):** `PipelineStage`, `CandidateScore`, `Candidate`, `Opportunity`, `STAGE_COLORS` (+506 more)
@@ -557,11 +557,11 @@ Nodes (6): enum, type, icon, AppRole, FounderArchetype, str
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `properties` connect `Portfolio Schema` to `Community 232`, `Community 242`, `Community 67`?**
+- **Why does `properties` connect `Portfolio Schema` to `Community 232`, `Community 234`?**
   _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `enum` connect `Community 242` to `Community 157`, `Community 166`?**
+- **Why does `enum` connect `Community 234` to `Community 157`, `Community 166`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `icon` connect `Community 242` to `Portfolio Schema`?**
+- **Why does `icon` connect `Community 234` to `Portfolio Schema`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `DatabaseConnectionError` (e.g. with `C2C_Orchestrator_V2` and `ItemGenerateRequest`) actually correct?**
   _`DatabaseConnectionError` has 2 INFERRED edges - model-reasoned connections that need verification._
