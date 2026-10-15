@@ -1195,8 +1195,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1791946624.1919081,
-    "ast_hash": "b67301d2a54d42509d0a4975454f98da",
+    "mtime": 1792054881.4452147,
+    "ast_hash": "3c015d1b55407ce26f312021ca5ea9a8",
     "semantic_hash": ""
   },
   "playwright-audit.config.ts": {
@@ -7670,8 +7670,8 @@
     "semantic_hash": "3082dd539d1e9321d41939a3f430fd4c"
   },
   "tests/e2e/testHelpers.ts": {
-    "mtime": 1783757944.7378368,
-    "ast_hash": "2f386b19d455fc2cd68d8210fcb586e6",
+    "mtime": 1792054790.5876307,
+    "ast_hash": "17fae0b6fb1fd3219d90a8795bdfa693",
     "semantic_hash": ""
   },
   "tests/e2e/workflows.spec.ts": {
@@ -8400,8 +8400,8 @@
     "semantic_hash": ""
   },
   "tests/test_market_intelligence.py": {
-    "mtime": 1787966052.598339,
-    "ast_hash": "b3564e90240c168316d9a90e4f29aebf",
+    "mtime": 1792054732.5429525,
+    "ast_hash": "65a1ae6a11aee567a63693147327623d",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -8447,6 +8447,16 @@
   "src/app/portfolio/[id]/opengraph-image.tsx": {
     "mtime": 1792049938.1567566,
     "ast_hash": "3ab20ee01f1beaa97936a14a76a3cda7",
+    "semantic_hash": ""
+  },
+  "tests/e2e/portfolio_social_typesafe.spec.ts": {
+    "mtime": 1792054811.6656027,
+    "ast_hash": "9b450515e69d45fe2a2bc8dc9a7d6dc0",
+    "semantic_hash": ""
+  },
+  "tests/test_portfolio_matching_endpoints.py": {
+    "mtime": 1792058522.2288256,
+    "ast_hash": "01f30e793a84cdbb435907d2436a1d1c",
     "semantic_hash": ""
   }
 }

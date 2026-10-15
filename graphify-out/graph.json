@@ -120,7 +120,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "portfolio_schema_properties",
-      "community": 232,
+      "community": 67,
       "norm_label": "properties"
     },
     {
@@ -130,7 +130,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "portfolio_schema_properties_candidate",
-      "community": 7,
+      "community": 67,
       "norm_label": "candidate"
     },
     {
@@ -140,7 +140,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "portfolio_schema_candidate_type",
-      "community": 7,
+      "community": 67,
       "norm_label": "type"
     },
     {
@@ -200,7 +200,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "portfolio_schema_properties_roles",
-      "community": 240,
+      "community": 232,
       "norm_label": "roles"
     },
     {
@@ -210,7 +210,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "portfolio_schema_roles_type",
-      "community": 240,
+      "community": 232,
       "norm_label": "type"
     },
     {
@@ -220,7 +220,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "portfolio_schema_roles_items",
-      "community": 240,
+      "community": 232,
       "norm_label": "items"
     },
     {
@@ -340,7 +340,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "portfolio_schema_candidate_required",
-      "community": 7,
+      "community": 67,
       "norm_label": "required"
     },
     {
@@ -350,7 +350,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "portfolio_schema_properties_projects",
-      "community": 232,
+      "community": 67,
       "norm_label": "projects"
     },
     {
@@ -360,7 +360,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "portfolio_schema_projects_type",
-      "community": 232,
+      "community": 67,
       "norm_label": "type"
     },
     {
@@ -430,7 +430,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "portfolio_schema_properties_icon",
-      "community": 234,
+      "community": 157,
       "norm_label": "icon"
     },
     {
@@ -440,7 +440,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "portfolio_schema_icon_type",
-      "community": 234,
+      "community": 157,
       "norm_label": "type"
     },
     {
@@ -450,7 +450,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "portfolio_schema_icon_enum",
-      "community": 234,
+      "community": 157,
       "norm_label": "enum"
     },
     {
@@ -620,7 +620,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "portfolio_schema_properties_certifications",
-      "community": 232,
+      "community": 67,
       "norm_label": "certifications"
     },
     {
@@ -630,7 +630,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "portfolio_schema_certifications_type",
-      "community": 232,
+      "community": 67,
       "norm_label": "type"
     },
     {
@@ -750,7 +750,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "client",
-      "community": 83,
+      "community": 3,
       "norm_label": "client"
     },
     {
@@ -760,7 +760,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "api_db_get_service_client",
-      "community": 83,
+      "community": 3,
       "norm_label": "get_service_client()"
     },
     {
@@ -840,7 +840,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "api_deps_get_current_user",
-      "community": 1,
+      "community": 166,
       "norm_label": "get_current_user()"
     },
     {
@@ -880,7 +880,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "api_deps_rationale_83",
-      "community": 1,
+      "community": 166,
       "norm_label": "fastapi dependency to extract and verify jwt from authorization header."
     },
     {
@@ -900,7 +900,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_exceptions_py",
-      "community": 10,
+      "community": 150,
       "norm_label": "exceptions.py"
     },
     {
@@ -910,7 +910,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_exceptions_apiexception",
-      "community": 10,
+      "community": 150,
       "norm_label": "apiexception"
     },
     {
@@ -940,7 +940,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "api_exceptions_databaseconnectionerror",
-      "community": 150,
+      "community": 1,
       "norm_label": "databaseconnectionerror"
     },
     {
@@ -1000,7 +1000,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "api_exceptions_rationale_2",
-      "community": 10,
+      "community": 150,
       "norm_label": "base exception class for custom api errors."
     },
     {
@@ -1010,7 +1010,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_exceptions_rationale_11",
-      "community": 150,
+      "community": 1,
       "norm_label": "raised when database connection fails or is unavailable."
     },
     {
@@ -1150,7 +1150,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "api_main_api_exception_handler",
-      "community": 10,
+      "community": 150,
       "norm_label": "api_exception_handler()"
     },
     {
@@ -1280,7 +1280,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "api_pdf_generator_generate_tailored_resume_pdf",
-      "community": 167,
+      "community": 240,
       "norm_label": "generate_tailored_resume_pdf()"
     },
     {
@@ -1290,7 +1290,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_analytics_router_py",
-      "community": 3,
+      "community": 234,
       "norm_label": "analytics_router.py"
     },
     {
@@ -1300,7 +1300,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "routers_analytics_router_get_tenant_id_from_user",
-      "community": 3,
+      "community": 234,
       "norm_label": "get_tenant_id_from_user()"
     },
     {
@@ -1310,7 +1310,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "routers_analytics_router_get_funnel_metrics",
-      "community": 3,
+      "community": 234,
       "norm_label": "get_funnel_metrics()"
     },
     {
@@ -1320,7 +1320,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "routers_analytics_router_get_summary_metrics",
-      "community": 3,
+      "community": 234,
       "norm_label": "get_summary_metrics()"
     },
     {
@@ -1330,7 +1330,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "routers_analytics_router_rationale_11",
-      "community": 3,
+      "community": 234,
       "norm_label": "extracts the tenant_id from the user metadata or database."
     },
     {
@@ -1340,7 +1340,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "routers_analytics_router_rationale_41",
-      "community": 3,
+      "community": 234,
       "norm_label": "for the authenticated tenant, query leads, contacts, and opportunities tables."
     },
     {
@@ -1350,7 +1350,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "routers_analytics_router_rationale_125",
-      "community": 3,
+      "community": 234,
       "norm_label": "return total leads count, active opportunities value sum, win rate percentage, a"
     },
     {
@@ -1550,7 +1550,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "basemodel",
-      "community": 157,
+      "community": 83,
       "norm_label": "basemodel"
     },
     {
@@ -1680,7 +1680,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_employer_router_py",
-      "community": 150,
+      "community": 10,
       "norm_label": "employer_router.py"
     },
     {
@@ -1710,7 +1710,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "routers_employer_router_run_auto_apply",
-      "community": 150,
+      "community": 10,
       "norm_label": "run_auto_apply()"
     },
     {
@@ -1720,7 +1720,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "routers_employer_router_run_market_scout",
-      "community": 150,
+      "community": 10,
       "norm_label": "run_market_scout()"
     },
     {
@@ -1730,7 +1730,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "routers_employer_router_onboard_employer",
-      "community": 157,
+      "community": 83,
       "norm_label": "onboard_employer()"
     },
     {
@@ -1740,7 +1740,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "routers_employer_router_get_employer_candidates",
-      "community": 150,
+      "community": 143,
       "norm_label": "get_employer_candidates()"
     },
     {
@@ -1750,7 +1750,7 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "routers_employer_router_create_job_posting",
-      "community": 150,
+      "community": 83,
       "norm_label": "create_job_posting()"
     },
     {
@@ -1760,7 +1760,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "routers_employer_router_get_employer_jobs",
-      "community": 150,
+      "community": 10,
       "norm_label": "get_employer_jobs()"
     },
     {
@@ -1770,7 +1770,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "routers_employer_router_run_job_matching",
-      "community": 150,
+      "community": 10,
       "norm_label": "run_job_matching()"
     },
     {
@@ -1800,7 +1800,7 @@
       "source_location": "L331",
       "_origin": "ast",
       "id": "routers_employer_router_get_leads",
-      "community": 150,
+      "community": 1,
       "norm_label": "get_leads()"
     },
     {
@@ -1860,7 +1860,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "routers_market_router_scorefitrequest",
-      "community": 4,
+      "community": 242,
       "norm_label": "scorefitrequest"
     },
     {
@@ -1950,7 +1950,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "routers_market_router_generateresumerequest",
-      "community": 167,
+      "community": 240,
       "norm_label": "generateresumerequest"
     },
     {
@@ -1990,7 +1990,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "routers_market_router_score_fit",
-      "community": 4,
+      "community": 242,
       "norm_label": "score_fit()"
     },
     {
@@ -2080,7 +2080,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "routers_market_router_generate_resume",
-      "community": 167,
+      "community": 240,
       "norm_label": "generate_resume()"
     },
     {
@@ -2090,7 +2090,7 @@
       "source_location": "L317",
       "_origin": "ast",
       "id": "routers_market_router_download_resume",
-      "community": 167,
+      "community": 240,
       "norm_label": "download_resume()"
     },
     {
@@ -2150,7 +2150,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "routers_market_router_rationale_117",
-      "community": 4,
+      "community": 242,
       "norm_label": "score a job description against a student profile.     uses the native determin"
     },
     {
@@ -2240,7 +2240,7 @@
       "source_location": "L283",
       "_origin": "ast",
       "id": "routers_market_router_rationale_283",
-      "community": 167,
+      "community": 240,
       "norm_label": "generate resume context for a candidate and job posting."
     },
     {
@@ -2250,7 +2250,7 @@
       "source_location": "L318",
       "_origin": "ast",
       "id": "routers_market_router_rationale_318",
-      "community": 167,
+      "community": 240,
       "norm_label": "generate tailored resume context and return the pdf file stream."
     },
     {
@@ -2330,7 +2330,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "routers_student_router_send_email_notification",
-      "community": 1,
+      "community": 8,
       "norm_label": "send_email_notification()"
     },
     {
@@ -2340,7 +2340,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "routers_student_router_run_student_profile_optimization",
-      "community": 1,
+      "community": 8,
       "norm_label": "run_student_profile_optimization()"
     },
     {
@@ -2390,7 +2390,7 @@
       "source_location": "L312",
       "_origin": "ast",
       "id": "routers_student_router_get_student",
-      "community": 150,
+      "community": 1,
       "norm_label": "get_student()"
     },
     {
@@ -2400,7 +2400,7 @@
       "source_location": "L407",
       "_origin": "ast",
       "id": "routers_student_router_get_assessment_history",
-      "community": 1,
+      "community": 150,
       "norm_label": "get_assessment_history()"
     },
     {
@@ -2530,7 +2530,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "routers_typesafe_router_featurize_candidate_text",
-      "community": 68,
+      "community": 157,
       "norm_label": "featurize_candidate_text()"
     },
     {
@@ -2540,7 +2540,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "typesafefeaturizerequest",
-      "community": 68,
+      "community": 157,
       "norm_label": "typesafefeaturizerequest"
     },
     {
@@ -2570,7 +2570,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "routers_typesafe_router_rationale_41",
-      "community": 68,
+      "community": 157,
       "norm_label": "transforms candidate free-text (resume, project readme, interview notes) into a"
     },
     {
@@ -2590,7 +2590,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "schemas_assessment_approle",
-      "community": 234,
+      "community": 157,
       "norm_label": "approle"
     },
     {
@@ -2600,7 +2600,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "str",
-      "community": 234,
+      "community": 157,
       "norm_label": "str"
     },
     {
@@ -2620,7 +2620,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "schemas_assessment_assessmentattemptread",
-      "community": 3,
+      "community": 166,
       "norm_label": "assessmentattemptread"
     },
     {
@@ -2680,7 +2680,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_schemas_employer_py",
-      "community": 157,
+      "community": 83,
       "norm_label": "employer.py"
     },
     {
@@ -2690,7 +2690,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "schemas_employer_employeronboard",
-      "community": 157,
+      "community": 83,
       "norm_label": "employeronboard"
     },
     {
@@ -2700,7 +2700,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "schemas_employer_jobcreate",
-      "community": 157,
+      "community": 83,
       "norm_label": "jobcreate"
     },
     {
@@ -2710,7 +2710,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "schemas_employer_jobmatchrequest",
-      "community": 157,
+      "community": 83,
       "norm_label": "jobmatchrequest"
     },
     {
@@ -2720,7 +2720,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_schemas_portfolio_py",
-      "community": 157,
+      "community": 83,
       "norm_label": "portfolio.py"
     },
     {
@@ -2730,7 +2730,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "schemas_portfolio_auditrequest",
-      "community": 157,
+      "community": 83,
       "norm_label": "auditrequest"
     },
     {
@@ -2740,7 +2740,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "schemas_portfolio_ordealrequest",
-      "community": 157,
+      "community": 83,
       "norm_label": "ordealrequest"
     },
     {
@@ -2750,7 +2750,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "schemas_portfolio_portfoliorequest",
-      "community": 157,
+      "community": 83,
       "norm_label": "portfoliorequest"
     },
     {
@@ -2810,7 +2810,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "schemas_typesafe_founderarchetype",
-      "community": 234,
+      "community": 157,
       "norm_label": "founderarchetype"
     },
     {
@@ -3670,7 +3670,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_scripts_jhm_daily_sweep_py",
-      "community": 83,
+      "community": 3,
       "norm_label": "jhm_daily_sweep.py"
     },
     {
@@ -3680,7 +3680,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "scripts_jhm_daily_sweep_student_to_candidate",
-      "community": 83,
+      "community": 3,
       "norm_label": "student_to_candidate()"
     },
     {
@@ -3690,7 +3690,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "scripts_jhm_daily_sweep_run_sweep",
-      "community": 83,
+      "community": 3,
       "norm_label": "run_sweep()"
     },
     {
@@ -3700,7 +3700,7 @@
       "source_location": "L178",
       "_origin": "ast",
       "id": "scripts_jhm_daily_sweep_main",
-      "community": 83,
+      "community": 3,
       "norm_label": "main()"
     },
     {
@@ -3710,7 +3710,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_jhm_daily_sweep_rationale_1",
-      "community": 83,
+      "community": 3,
       "norm_label": "market_daily_sweep.py \u2014 native market intelligence cron ========================"
     },
     {
@@ -3720,7 +3720,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "scripts_jhm_daily_sweep_rationale_62",
-      "community": 83,
+      "community": 3,
       "norm_label": "map c2c assessment & student data \u2192 native score_job_fit candidate schema."
     },
     {
@@ -3730,7 +3730,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "scripts_jhm_daily_sweep_rationale_82",
-      "community": 83,
+      "community": 3,
       "norm_label": "execute the full job \u00d7 student scoring matrix and upsert qualified leads.      r"
     },
     {
@@ -3740,7 +3740,7 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "scripts_jhm_daily_sweep_rationale_179",
-      "community": 83,
+      "community": 3,
       "norm_label": "run the native market intelligence daily sweep."
     },
     {
@@ -6194,6 +6194,16 @@
       "norm_label": "employer.spec.ts"
     },
     {
+      "label": "portfolio_social_typesafe.spec.ts",
+      "file_type": "code",
+      "source_file": "tests/e2e/portfolio_social_typesafe.spec.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "e2e_portfolio_social_typesafe_spec",
+      "community": 56,
+      "norm_label": "portfolio_social_typesafe.spec.ts"
+    },
+    {
       "label": "student.spec.ts",
       "file_type": "code",
       "source_file": "tests/e2e/student.spec.ts",
@@ -6250,7 +6260,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_tests_e2e_flow_test_py",
-      "community": 83,
+      "community": 3,
       "norm_label": "e2e_flow_test.py"
     },
     {
@@ -6260,7 +6270,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_supabase",
-      "community": 83,
+      "community": 3,
       "norm_label": "supabase()"
     },
     {
@@ -6270,7 +6280,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_test_system_health",
-      "community": 83,
+      "community": 3,
       "norm_label": "test_system_health()"
     },
     {
@@ -6280,7 +6290,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_test_standard_onboarding_flow",
-      "community": 83,
+      "community": 3,
       "norm_label": "test_standard_onboarding_flow()"
     },
     {
@@ -6290,7 +6300,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_test_edge_case_profile_flow",
-      "community": 83,
+      "community": 3,
       "norm_label": "test_edge_case_profile_flow()"
     },
     {
@@ -6300,7 +6310,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_test_market_scout_flow",
-      "community": 83,
+      "community": 3,
       "norm_label": "test_market_scout_flow()"
     },
     {
@@ -6310,7 +6320,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_rationale_22",
-      "community": 83,
+      "community": 3,
       "norm_label": "smoke test: verify fastapi backend is reachable."
     },
     {
@@ -6320,7 +6330,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_rationale_31",
-      "community": 83,
+      "community": 3,
       "norm_label": "scenario a: test standard onboarding profile processing."
     },
     {
@@ -6330,7 +6340,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_rationale_66",
-      "community": 83,
+      "community": 3,
       "norm_label": "scenario b: test edge case profile with missing data."
     },
     {
@@ -6340,7 +6350,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "tests_e2e_flow_test_rationale_97",
-      "community": 83,
+      "community": 3,
       "norm_label": "scenario c: high-volume lead generation via market scout."
     },
     {
@@ -6657,7 +6667,7 @@
       "label": "TestLeadIntel",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L88",
+      "source_location": "L98",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel",
       "community": 163,
@@ -6667,7 +6677,7 @@
       "label": ".test_clean_text()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L91",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_clean_text",
       "community": 163,
@@ -6677,7 +6687,7 @@
       "label": ".test_extract_budget_various_formats()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L97",
+      "source_location": "L107",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_extract_budget_various_formats",
       "community": 163,
@@ -6687,7 +6697,7 @@
       "label": ".test_extract_tech_stack()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L111",
+      "source_location": "L121",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_extract_tech_stack",
       "community": 163,
@@ -6697,7 +6707,7 @@
       "label": ".test_extract_location()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L131",
+      "source_location": "L141",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_extract_location",
       "community": 163,
@@ -6707,7 +6717,7 @@
       "label": ".test_extract_company()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L141",
+      "source_location": "L151",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_extract_company",
       "community": 163,
@@ -6717,7 +6727,7 @@
       "label": ".test_extract_urgency()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L147",
+      "source_location": "L157",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_extract_urgency",
       "community": 163,
@@ -6727,7 +6737,7 @@
       "label": ".test_compute_signal_quality()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L152",
+      "source_location": "L162",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_compute_signal_quality",
       "community": 163,
@@ -6737,7 +6747,7 @@
       "label": ".test_extract_lead_intel_unified()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L179",
+      "source_location": "L189",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testleadintel_test_extract_lead_intel_unified",
       "community": 163,
@@ -6747,7 +6757,7 @@
       "label": "TestQualityGate",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L195",
+      "source_location": "L205",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testqualitygate",
       "community": 223,
@@ -6757,7 +6767,7 @@
       "label": ".test_parse_date()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L198",
+      "source_location": "L208",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testqualitygate_test_parse_date",
       "community": 223,
@@ -6767,7 +6777,7 @@
       "label": ".test_evaluate_lead_quality_passing()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L213",
+      "source_location": "L223",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testqualitygate_test_evaluate_lead_quality_passing",
       "community": 223,
@@ -6777,7 +6787,7 @@
       "label": ".test_evaluate_lead_quality_rejections_and_deductions()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L230",
+      "source_location": "L240",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testqualitygate_test_evaluate_lead_quality_rejections_and_deductions",
       "community": 223,
@@ -6787,7 +6797,7 @@
       "label": "TestFitScorer",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L282",
+      "source_location": "L292",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testfitscorer",
       "community": 213,
@@ -6797,7 +6807,7 @@
       "label": ".test_detect_role_family()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L285",
+      "source_location": "L295",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testfitscorer_test_detect_role_family",
       "community": 213,
@@ -6807,7 +6817,7 @@
       "label": ".test_candidate_role_family()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L298",
+      "source_location": "L308",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testfitscorer_test_candidate_role_family",
       "community": 213,
@@ -6817,7 +6827,7 @@
       "label": ".test_grade_and_safe_int()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L308",
+      "source_location": "L318",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testfitscorer_test_grade_and_safe_int",
       "community": 213,
@@ -6827,7 +6837,7 @@
       "label": ".test_scoring_dimensions_isolated()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L324",
+      "source_location": "L334",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testfitscorer_test_scoring_dimensions_isolated",
       "community": 213,
@@ -6837,7 +6847,7 @@
       "label": ".test_score_job_fit_composite()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L366",
+      "source_location": "L376",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testfitscorer_test_score_job_fit_composite",
       "community": 213,
@@ -6847,7 +6857,7 @@
       "label": ".test_generate_job_match_card()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L390",
+      "source_location": "L400",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testfitscorer_test_generate_job_match_card",
       "community": 213,
@@ -6857,7 +6867,7 @@
       "label": "TestInterviewPrep",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L424",
+      "source_location": "L439",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testinterviewprep",
       "community": 221,
@@ -6867,7 +6877,7 @@
       "label": ".test_generate_interview_prep_builder()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L427",
+      "source_location": "L442",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testinterviewprep_test_generate_interview_prep_builder",
       "community": 221,
@@ -6877,7 +6887,7 @@
       "label": ".test_generate_interview_prep_archetype_variations()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L468",
+      "source_location": "L483",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testinterviewprep_test_generate_interview_prep_archetype_variations",
       "community": 221,
@@ -6887,7 +6897,7 @@
       "label": "TestProfileExpander",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L494",
+      "source_location": "L509",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testprofileexpander",
       "community": 214,
@@ -6897,17 +6907,37 @@
       "label": ".test_extract_github_handle()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L497",
+      "source_location": "L512",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testprofileexpander_test_extract_github_handle",
       "community": 214,
       "norm_label": ".test_extract_github_handle()"
     },
     {
+      "label": ".test_extract_social_handles()",
+      "file_type": "code",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L521",
+      "_origin": "ast",
+      "id": "tests_test_market_intelligence_testprofileexpander_test_extract_social_handles",
+      "community": 214,
+      "norm_label": ".test_extract_social_handles()"
+    },
+    {
+      "label": ".test_normalize_social_urls()",
+      "file_type": "code",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L537",
+      "_origin": "ast",
+      "id": "tests_test_market_intelligence_testprofileexpander_test_normalize_social_urls",
+      "community": 214,
+      "norm_label": ".test_normalize_social_urls()"
+    },
+    {
       "label": ".test_expand_github_profile_success()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L507",
+      "source_location": "L553",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testprofileexpander_test_expand_github_profile_success",
       "community": 214,
@@ -6917,7 +6947,7 @@
       "label": ".test_expand_github_profile_network_error_resilience()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L561",
+      "source_location": "L607",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testprofileexpander_test_expand_github_profile_network_error_resilience",
       "community": 214,
@@ -6927,7 +6957,7 @@
       "label": ".test_expand_github_profile_empty_handle()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L570",
+      "source_location": "L616",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testprofileexpander_test_expand_github_profile_empty_handle",
       "community": 214,
@@ -6937,7 +6967,7 @@
       "label": ".test_expand_candidate_profile()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L576",
+      "source_location": "L622",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testprofileexpander_test_expand_candidate_profile",
       "community": 214,
@@ -6947,7 +6977,7 @@
       "label": "TestSkillGap",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L605",
+      "source_location": "L651",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testskillgap",
       "community": 231,
@@ -6957,7 +6987,7 @@
       "label": ".test_generate_skill_gap_report_standard()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L608",
+      "source_location": "L654",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testskillgap_test_generate_skill_gap_report_standard",
       "community": 231,
@@ -6967,7 +6997,7 @@
       "label": ".test_generate_skill_gap_report_empty_inputs()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L649",
+      "source_location": "L695",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testskillgap_test_generate_skill_gap_report_empty_inputs",
       "community": 231,
@@ -6977,7 +7007,7 @@
       "label": "TestDrafterReviewer",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L660",
+      "source_location": "L706",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testdrafterreviewer",
       "community": 230,
@@ -6987,7 +7017,7 @@
       "label": ".test_critique_application_packet()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L663",
+      "source_location": "L709",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testdrafterreviewer_test_critique_application_packet",
       "community": 230,
@@ -6997,7 +7027,7 @@
       "label": ".test_revise_cover_letter_cliche_removal()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L686",
+      "source_location": "L732",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testdrafterreviewer_test_revise_cover_letter_cliche_removal",
       "community": 230,
@@ -7007,7 +7037,7 @@
       "label": ".test_run_drafter_reviewer_pipeline_end_to_end()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L695",
+      "source_location": "L741",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testdrafterreviewer_test_run_drafter_reviewer_pipeline_end_to_end",
       "community": 230,
@@ -7017,7 +7047,7 @@
       "label": "TestOutreachGenerator",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L740",
+      "source_location": "L786",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testoutreachgenerator",
       "community": 222,
@@ -7027,7 +7057,7 @@
       "label": ".test_voice_profiles()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L743",
+      "source_location": "L789",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testoutreachgenerator_test_voice_profiles",
       "community": 222,
@@ -7037,7 +7067,7 @@
       "label": ".test_top_skills_and_job_location()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L752",
+      "source_location": "L798",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testoutreachgenerator_test_top_skills_and_job_location",
       "community": 222,
@@ -7047,7 +7077,7 @@
       "label": ".test_generate_outreach_draft_components()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L763",
+      "source_location": "L809",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testoutreachgenerator_test_generate_outreach_draft_components",
       "community": 222,
@@ -7057,11 +7087,41 @@
       "label": ".test_build_resume_and_cover_letter_context()",
       "file_type": "code",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L786",
+      "source_location": "L832",
       "_origin": "ast",
       "id": "tests_test_market_intelligence_testoutreachgenerator_test_build_resume_and_cover_letter_context",
       "community": 222,
       "norm_label": ".test_build_resume_and_cover_letter_context()"
+    },
+    {
+      "label": "TestTypeSafeAutoresearch",
+      "file_type": "code",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L858",
+      "_origin": "ast",
+      "id": "tests_test_market_intelligence_testtypesafeautoresearch",
+      "community": 241,
+      "norm_label": "testtypesafeautoresearch"
+    },
+    {
+      "label": ".test_featurize_candidate()",
+      "file_type": "code",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L861",
+      "_origin": "ast",
+      "id": "tests_test_market_intelligence_testtypesafeautoresearch_test_featurize_candidate",
+      "community": 241,
+      "norm_label": ".test_featurize_candidate()"
+    },
+    {
+      "label": ".test_featurize_empty_profile()",
+      "file_type": "code",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L871",
+      "_origin": "ast",
+      "id": "tests_test_market_intelligence_testtypesafeautoresearch_test_featurize_empty_profile",
+      "community": 241,
+      "norm_label": ".test_featurize_empty_profile()"
     },
     {
       "label": "tests/test_market_intelligence.py ================================= Comprehensiv",
@@ -7077,9 +7137,9 @@
       "label": "Unit tests for services/market_intelligence/lead_intel.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L89",
+      "source_location": "L99",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_89",
+      "id": "tests_test_market_intelligence_rationale_99",
       "community": 163,
       "norm_label": "unit tests for services/market_intelligence/lead_intel.py"
     },
@@ -7087,9 +7147,9 @@
       "label": "Unit tests for services/market_intelligence/quality_gate.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L196",
+      "source_location": "L206",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_196",
+      "id": "tests_test_market_intelligence_rationale_206",
       "community": 223,
       "norm_label": "unit tests for services/market_intelligence/quality_gate.py"
     },
@@ -7097,9 +7157,9 @@
       "label": "Unit tests for services/market_intelligence/fit_scorer.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L283",
+      "source_location": "L293",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_283",
+      "id": "tests_test_market_intelligence_rationale_293",
       "community": 213,
       "norm_label": "unit tests for services/market_intelligence/fit_scorer.py"
     },
@@ -7107,9 +7167,9 @@
       "label": "Unit tests for services/market_intelligence/interview_prep.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L425",
+      "source_location": "L440",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_425",
+      "id": "tests_test_market_intelligence_rationale_440",
       "community": 221,
       "norm_label": "unit tests for services/market_intelligence/interview_prep.py"
     },
@@ -7117,9 +7177,9 @@
       "label": "Unit tests for services/market_intelligence/profile_expander.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L495",
+      "source_location": "L510",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_495",
+      "id": "tests_test_market_intelligence_rationale_510",
       "community": 214,
       "norm_label": "unit tests for services/market_intelligence/profile_expander.py"
     },
@@ -7127,9 +7187,9 @@
       "label": "Unit tests for services/market_intelligence/skill_gap.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L606",
+      "source_location": "L652",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_606",
+      "id": "tests_test_market_intelligence_rationale_652",
       "community": 231,
       "norm_label": "unit tests for services/market_intelligence/skill_gap.py"
     },
@@ -7137,9 +7197,9 @@
       "label": "Unit tests for services/market_intelligence/drafter_reviewer.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L661",
+      "source_location": "L707",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_661",
+      "id": "tests_test_market_intelligence_rationale_707",
       "community": 230,
       "norm_label": "unit tests for services/market_intelligence/drafter_reviewer.py"
     },
@@ -7147,11 +7207,201 @@
       "label": "Unit tests for services/market_intelligence/outreach_generator.py",
       "file_type": "rationale",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L741",
+      "source_location": "L787",
       "_origin": "ast",
-      "id": "tests_test_market_intelligence_rationale_741",
+      "id": "tests_test_market_intelligence_rationale_787",
       "community": 222,
       "norm_label": "unit tests for services/market_intelligence/outreach_generator.py"
+    },
+    {
+      "label": "Unit tests for services/market_intelligence/typesafe_autoresearch.py",
+      "file_type": "rationale",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L859",
+      "_origin": "ast",
+      "id": "tests_test_market_intelligence_rationale_859",
+      "community": 241,
+      "norm_label": "unit tests for services/market_intelligence/typesafe_autoresearch.py"
+    },
+    {
+      "label": "test_portfolio_matching_endpoints.py",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints",
+      "community": 157,
+      "norm_label": "test_portfolio_matching_endpoints.py"
+    },
+    {
+      "label": "TestPortfolioAndMatchingEndpoints",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "community": 157,
+      "norm_label": "testportfolioandmatchingendpoints"
+    },
+    {
+      "label": ".test_typesafe_status_endpoint()",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_status_endpoint",
+      "community": 157,
+      "norm_label": ".test_typesafe_status_endpoint()"
+    },
+    {
+      "label": ".test_typesafe_featurize_endpoint()",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_featurize_endpoint",
+      "community": 157,
+      "norm_label": ".test_typesafe_featurize_endpoint()"
+    },
+    {
+      "label": ".test_market_job_match_card_endpoint()",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_market_job_match_card_endpoint",
+      "community": 157,
+      "norm_label": ".test_market_job_match_card_endpoint()"
+    },
+    {
+      "label": ".test_market_score_fit_endpoint()",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L108",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_market_score_fit_endpoint",
+      "community": 157,
+      "norm_label": ".test_market_score_fit_endpoint()"
+    },
+    {
+      "label": ".test_social_media_handles_normalization()",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L122",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_social_media_handles_normalization",
+      "community": 157,
+      "norm_label": ".test_social_media_handles_normalization()"
+    },
+    {
+      "label": ".test_social_handle_regex_extractors()",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_social_handle_regex_extractors",
+      "community": 157,
+      "norm_label": ".test_social_handle_regex_extractors()"
+    },
+    {
+      "label": ".test_assessment_session_question_deduplication()",
+      "file_type": "code",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_assessment_session_question_deduplication",
+      "community": 157,
+      "norm_label": ".test_assessment_session_question_deduplication()"
+    },
+    {
+      "label": "tests/test_portfolio_matching_endpoints.py =====================================",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_1",
+      "community": 157,
+      "norm_label": "tests/test_portfolio_matching_endpoints.py ====================================="
+    },
+    {
+      "label": "Zero-socket integration and unit tests for candidate matching, portfolio, and Ty",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_35",
+      "community": 157,
+      "norm_label": "zero-socket integration and unit tests for candidate matching, portfolio, and ty"
+    },
+    {
+      "label": "Verifies GET /typesafe/status returns active service status.",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_38",
+      "community": 157,
+      "norm_label": "verifies get /typesafe/status returns active service status."
+    },
+    {
+      "label": "Verifies POST /typesafe/featurize transforms candidate text into 11D feature vec",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_48",
+      "community": 157,
+      "norm_label": "verifies post /typesafe/featurize transforms candidate text into 11d feature vec"
+    },
+    {
+      "label": "Verifies job match card generation returns 6 dimensions and TypeSafe AI telemetr",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_63",
+      "community": 157,
+      "norm_label": "verifies job match card generation returns 6 dimensions and typesafe ai telemetr"
+    },
+    {
+      "label": "Verifies fit scorer calculates match score and breakdown.",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L109",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_109",
+      "community": 157,
+      "norm_label": "verifies fit scorer calculates match score and breakdown."
+    },
+    {
+      "label": "Verifies profile expander standardizes full suite of social media links.",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L123",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_123",
+      "community": 157,
+      "norm_label": "verifies profile expander standardizes full suite of social media links."
+    },
+    {
+      "label": "Unit verification for handle parsing from different URL variants.",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L139",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_139",
+      "community": 157,
+      "norm_label": "unit verification for handle parsing from different url variants."
+    },
+    {
+      "label": "Verifies select_distinct_items tracks served stems and eliminates duplicates.",
+      "file_type": "rationale",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L148",
+      "_origin": "ast",
+      "id": "tests_test_portfolio_matching_endpoints_rationale_148",
+      "community": 157,
+      "norm_label": "verifies select_distinct_items tracks served stems and eliminates duplicates."
     },
     {
       "label": "test_rls_policies.py",
@@ -16949,6 +17199,28 @@
       "target": "routers_assessment_router_select_distinct_items"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints",
+      "target": "routers_assessment_router_select_distinct_items",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_assessment_session_question_deduplication",
+      "target": "routers_assessment_router_select_distinct_items"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -18885,6 +19157,28 @@
       "target": "routers_typesafe_router_get_typesafe_status"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints",
+      "target": "routers_typesafe_router_get_typesafe_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_status_endpoint",
+      "target": "routers_typesafe_router_get_typesafe_status"
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -18924,6 +19218,28 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "routers_typesafe_router_rationale_41",
+      "target": "routers_typesafe_router_featurize_candidate_text"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints",
+      "target": "routers_typesafe_router_featurize_candidate_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_featurize_endpoint",
       "target": "routers_typesafe_router_featurize_candidate_text"
     },
     {
@@ -19195,6 +19511,38 @@
       "confidence_score": 1.0,
       "source": "schemas_typesafe",
       "target": "schemas_typesafe_typesafestatusresponse"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints",
+      "target": "schemas_typesafe_typesafefeaturizerequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L19",
+      "weight": 0.8,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "schemas_typesafe_typesafefeaturizerequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_featurize_endpoint",
+      "target": "schemas_typesafe_typesafefeaturizerequest"
     },
     {
       "relation": "contains",
@@ -22463,9 +22811,9 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_portfolio_id_layout_tsx_id_layout",
-      "target": "id_layout_generatemetadata",
-      "confidence_score": 1.0
+      "target": "id_layout_generatemetadata"
     },
     {
       "relation": "contains",
@@ -22473,9 +22821,9 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_portfolio_id_layout_tsx_id_layout",
-      "target": "id_layout_layoutprops",
-      "confidence_score": 1.0
+      "target": "id_layout_layoutprops"
     },
     {
       "relation": "contains",
@@ -22483,9 +22831,9 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_portfolio_id_layout_tsx_id_layout",
-      "target": "id_layout_portfoliolayout",
-      "confidence_score": 1.0
+      "target": "id_layout_portfoliolayout"
     },
     {
       "relation": "imports_from",
@@ -22494,9 +22842,9 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_portfolio_id_layout_tsx_id_layout",
-      "target": "lib_supabase",
-      "confidence_score": 1.0
+      "target": "lib_supabase"
     },
     {
       "relation": "imports",
@@ -22505,9 +22853,9 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app_portfolio_id_layout_tsx_id_layout",
-      "target": "lib_supabase_supabase",
-      "confidence_score": 1.0
+      "target": "lib_supabase_supabase"
     },
     {
       "relation": "contains",
@@ -24716,6 +25064,28 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "tests/e2e/portfolio_social_typesafe.spec.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "e2e_portfolio_social_typesafe_spec",
+      "target": "e2e_testhelpers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/e2e/portfolio_social_typesafe.spec.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "e2e_portfolio_social_typesafe_spec",
+      "target": "e2e_testhelpers_setupmocks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/e2e/student.spec.ts",
       "source_location": "L2",
       "weight": 1.0,
@@ -25274,6 +25644,16 @@
       "target": "tests_test_market_intelligence_testskillgap"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L858",
+      "weight": 1.0,
+      "source": "tests_test_market_intelligence",
+      "target": "tests_test_market_intelligence_testtypesafeautoresearch",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
@@ -25287,11 +25667,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L89",
+      "source_location": "L99",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_89",
-      "target": "tests_test_market_intelligence_testleadintel"
+      "source": "tests_test_market_intelligence_rationale_99",
+      "target": "tests_test_market_intelligence_testleadintel",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25377,11 +25757,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L196",
+      "source_location": "L206",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_196",
-      "target": "tests_test_market_intelligence_testqualitygate"
+      "source": "tests_test_market_intelligence_rationale_206",
+      "target": "tests_test_market_intelligence_testqualitygate",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25417,11 +25797,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L283",
+      "source_location": "L293",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_283",
-      "target": "tests_test_market_intelligence_testfitscorer"
+      "source": "tests_test_market_intelligence_rationale_293",
+      "target": "tests_test_market_intelligence_testfitscorer",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25487,11 +25867,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L425",
+      "source_location": "L440",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_425",
-      "target": "tests_test_market_intelligence_testinterviewprep"
+      "source": "tests_test_market_intelligence_rationale_440",
+      "target": "tests_test_market_intelligence_testinterviewprep",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25517,11 +25897,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L495",
+      "source_location": "L510",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_495",
-      "target": "tests_test_market_intelligence_testprofileexpander"
+      "source": "tests_test_market_intelligence_rationale_510",
+      "target": "tests_test_market_intelligence_testprofileexpander",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25574,14 +25954,34 @@
       "target": "tests_test_market_intelligence_testprofileexpander_test_extract_github_handle"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L521",
+      "weight": 1.0,
+      "source": "tests_test_market_intelligence_testprofileexpander",
+      "target": "tests_test_market_intelligence_testprofileexpander_test_extract_social_handles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L537",
+      "weight": 1.0,
+      "source": "tests_test_market_intelligence_testprofileexpander",
+      "target": "tests_test_market_intelligence_testprofileexpander_test_normalize_social_urls",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L606",
+      "source_location": "L652",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_606",
-      "target": "tests_test_market_intelligence_testskillgap"
+      "source": "tests_test_market_intelligence_rationale_652",
+      "target": "tests_test_market_intelligence_testskillgap",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25607,11 +26007,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L661",
+      "source_location": "L707",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_661",
-      "target": "tests_test_market_intelligence_testdrafterreviewer"
+      "source": "tests_test_market_intelligence_rationale_707",
+      "target": "tests_test_market_intelligence_testdrafterreviewer",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25647,11 +26047,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_market_intelligence.py",
-      "source_location": "L741",
+      "source_location": "L787",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_market_intelligence_rationale_741",
-      "target": "tests_test_market_intelligence_testoutreachgenerator"
+      "source": "tests_test_market_intelligence_rationale_787",
+      "target": "tests_test_market_intelligence_testoutreachgenerator",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -25692,6 +26092,206 @@
       "confidence_score": 1.0,
       "source": "tests_test_market_intelligence_testoutreachgenerator",
       "target": "tests_test_market_intelligence_testoutreachgenerator_test_voice_profiles"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L859",
+      "weight": 1.0,
+      "source": "tests_test_market_intelligence_rationale_859",
+      "target": "tests_test_market_intelligence_testtypesafeautoresearch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L861",
+      "weight": 1.0,
+      "source": "tests_test_market_intelligence_testtypesafeautoresearch",
+      "target": "tests_test_market_intelligence_testtypesafeautoresearch_test_featurize_candidate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_market_intelligence.py",
+      "source_location": "L871",
+      "weight": 1.0,
+      "source": "tests_test_market_intelligence_testtypesafeautoresearch",
+      "target": "tests_test_market_intelligence_testtypesafeautoresearch_test_featurize_empty_profile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_1",
+      "target": "tests_test_portfolio_matching_endpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_35",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_assessment_session_question_deduplication",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_market_job_match_card_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_market_score_fit_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_social_handle_regex_extractors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_social_media_handles_normalization",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_featurize_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_status_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_38",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_status_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_48",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_typesafe_featurize_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_63",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_market_job_match_card_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_109",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_market_score_fit_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_123",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_social_media_handles_normalization",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_139",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_social_handle_regex_extractors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_portfolio_matching_endpoints.py",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "tests_test_portfolio_matching_endpoints_rationale_148",
+      "target": "tests_test_portfolio_matching_endpoints_testportfolioandmatchingendpoints_test_assessment_session_question_deduplication",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -29525,5 +30125,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "9377815e07601e0ef64c170e9edca7f41edeff30"
+  "built_at_commit": "78acb5a676a022d7ca397fc07342b63569724e4d"
 }

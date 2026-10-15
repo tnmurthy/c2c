@@ -78,8 +78,18 @@ from services.market_intelligence.outreach_generator import (
     _top_skills,
     _voice,
 )
-from services.market_intelligence.profile_expander import _extract_github_handle
+from services.market_intelligence.profile_expander import (
+    _extract_github_handle,
+    _extract_linkedin_handle,
+    _extract_meta_handle,
+    _extract_x_handle,
+    normalize_social_urls,
+)
 from services.market_intelligence.quality_gate import _parse_date
+from api.services.typesafe_service import (
+    TypeSafeService,
+    typesafe_service,
+)
 
 
 # =============================================================================
@@ -406,7 +416,7 @@ class TestFitScorer(unittest.TestCase):
         card = generate_job_match_card(posting, candidate, job_meta={"title": "AI Backend Engineer", "company": "StartupAI"})
         self.assertEqual(card["job_title"], "AI Backend Engineer")
         self.assertEqual(card["company"], "StartupAI")
-        self.assertEqual(len(card["dimensions"]), 5)
+        self.assertEqual(len(card["dimensions"]), 6)
 
         dimension_names = [d["name"] for d in card["dimensions"]]
         self.assertIn("Technical Skills Match", dimension_names)
@@ -414,8 +424,13 @@ class TestFitScorer(unittest.TestCase):
         self.assertIn("Behavioral & Culture Fit", dimension_names)
         self.assertIn("Location & Logistics", dimension_names)
         self.assertIn("Placement & Career Alignment", dimension_names)
+        self.assertIn("TypeSafe AI Neural Rigor", dimension_names)
         self.assertIn("key_strengths", card)
         self.assertIn("growth_gaps", card)
+        self.assertIn("typesafe_telemetry", card)
+        self.assertIn("numeric_vector", card["typesafe_telemetry"])
+        self.assertIn("features", card["typesafe_telemetry"])
+        self.assertEqual(len(card["typesafe_telemetry"]["numeric_vector"]), 11)
 
 
 # =============================================================================
@@ -502,6 +517,37 @@ class TestProfileExpander(unittest.TestCase):
         self.assertEqual(_extract_github_handle("sriharsha"), "sriharsha")
         self.assertEqual(_extract_github_handle(""), "")
         self.assertEqual(_extract_github_handle(None), "")
+
+    def test_extract_social_handles(self):
+        self.assertEqual(_extract_x_handle("https://x.com/karpathy"), "karpathy")
+        self.assertEqual(_extract_x_handle("https://twitter.com/sama"), "sama")
+        self.assertEqual(_extract_x_handle("@elonmusk"), "elonmusk")
+        self.assertEqual(_extract_x_handle("johndoe"), "johndoe")
+        self.assertEqual(_extract_x_handle(""), "")
+
+        self.assertEqual(_extract_meta_handle("https://instagram.com/zuck"), "zuck")
+        self.assertEqual(_extract_meta_handle("https://threads.net/@meta_dev"), "meta_dev")
+        self.assertEqual(_extract_meta_handle("@nat_geo"), "nat_geo")
+        self.assertEqual(_extract_meta_handle(""), "")
+
+        self.assertEqual(_extract_linkedin_handle("https://linkedin.com/in/satyanadella"), "satyanadella")
+        self.assertEqual(_extract_linkedin_handle("satyanadella"), "satyanadella")
+        self.assertEqual(_extract_linkedin_handle(""), "")
+
+    def test_normalize_social_urls(self):
+        profile = {
+            "github": "torvalds",
+            "x": "@sama",
+            "meta": "instagram.com/zuck",
+            "linkedin": "https://linkedin.com/in/satyanadella",
+            "portfolio_url": "developer.io",
+        }
+        normalized = normalize_social_urls(profile)
+        self.assertEqual(normalized["github_url"], "https://github.com/torvalds")
+        self.assertEqual(normalized["x_url"], "https://x.com/sama")
+        self.assertEqual(normalized["meta_url"], "https://instagram.com/zuck")
+        self.assertEqual(normalized["linkedin_url"], "https://linkedin.com/in/satyanadella")
+        self.assertEqual(normalized["portfolio_url"], "https://developer.io")
 
     @patch("urllib.request.urlopen")
     def test_expand_github_profile_success(self, mock_urlopen):
@@ -805,6 +851,27 @@ class TestOutreachGenerator(unittest.TestCase):
         self.assertEqual(cl_ctx["candidate_name"], "Karthik Raja")
         self.assertEqual(cl_ctx["role_title"], "Business Intelligence Analyst")
         self.assertIn("follow_up_note", cl_ctx)
+
+# =============================================================================
+# 9. TEST TYPESAFE AI AUTORESEARCH
+# =============================================================================
+class TestTypeSafeAutoresearch(unittest.TestCase):
+    """Unit tests for services/market_intelligence/typesafe_autoresearch.py"""
+
+    def test_featurize_candidate(self):
+        text = "Devi Priya. Rust, Distributed Systems, Kubernetes, PostgreSQL, Kafka. Low-latency backend engineer with experience building scalable microservices and leading teams."
+        res = typesafe_service.featurize(free_text=text, candidate_name="Devi Priya")
+        self.assertEqual(len(res.numeric_vector), 11)
+        self.assertEqual(len(res.feature_names), 11)
+        self.assertIn("systems_architecture", res.features)
+        self.assertIn("concurrency_experience", res.features)
+        self.assertGreater(res.features["systems_architecture"].mean, 0.0)
+        self.assertGreaterEqual(res.features["concurrency_experience"].mean, 0.0)
+
+    def test_featurize_empty_profile(self):
+        res = typesafe_service.featurize(free_text="", candidate_name="Candidate")
+        self.assertEqual(len(res.numeric_vector), 11)
+        self.assertIn("production_engineering", res.features)
 
 
 if __name__ == "__main__":
