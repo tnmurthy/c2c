@@ -1,9 +1,17 @@
+import os
 import unittest
+
 import psycopg2
 
+from tests.db_gate import requires_db
+
+@requires_db
 class TestRLSPolicies(unittest.TestCase):
     def setUp(self):
-        self.db_url = 'postgresql://postgres:***REMOVED-LEAKED-PASSWORD***@db.onsmkbwqucvbzggugmmn.supabase.co:5432/postgres'
+        # Never hardcode this: the repo is public. Read-only, but still a live database.
+        self.db_url = os.getenv("C2C_DATABASE_URL")
+        if not self.db_url:
+            self.skipTest("C2C_DATABASE_URL is not set")
         try:
             self.conn = psycopg2.connect(self.db_url)
         except Exception as e:

@@ -148,7 +148,7 @@ export const CohortSkillGapHeatmap: React.FC<CohortSkillGapHeatmapProps> = ({
             Market Skill Gap Heatmap
           </h2>
           <p className="text-xs text-[#bbc9cd] mt-0.5">
-            Real-time delta between your cohort's verified skill supply and active recruiter hiring requirements.
+            Real-time delta between your cohort’s verified skill supply and active recruiter hiring requirements.
           </p>
         </div>
 
