@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, Download, Star, FileText } from 'lucide-react';
+import Link from 'next/link';
+import { Search, Download, Star, FileText, Github, Linkedin, Twitter, Instagram, Monitor, ExternalLink, Cpu } from 'lucide-react';
 import { authFetch } from '@/lib/authFetch';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import DataState from '@/components/ui/DataState';
@@ -80,13 +81,14 @@ export default function CandidatesPage() {
                 <th className="px-6 py-4">Department</th>
                 <th className="px-6 py-4">Archetype</th>
                 <th className="px-6 py-4">5Q Scores</th>
+                <th className="px-6 py-4">Channels & AI Telemetry</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredCandidates.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-8 text-slate-500">
+                  <td colSpan={6} className="text-center py-8 text-slate-500">
                     No candidates found.
                   </td>
                 </tr>
@@ -118,6 +120,80 @@ export default function CandidatesPage() {
                             </div>
                           );
                         })}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col gap-2">
+                        {/* Social Links & Win95 Portfolio */}
+                        <div className="flex items-center gap-1.5">
+                          {candidate.github_url && (
+                            <a 
+                              href={candidate.github_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              title="GitHub Profile" 
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                            >
+                              <Github className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {candidate.linkedin_url && (
+                            <a 
+                              href={candidate.linkedin_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              title="LinkedIn Profile" 
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 transition-colors"
+                            >
+                              <Linkedin className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {candidate.x_url && (
+                            <a 
+                              href={candidate.x_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              title="X / Twitter" 
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                            >
+                              <Twitter className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {candidate.meta_url && (
+                            <a 
+                              href={candidate.meta_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              title="Meta / Instagram" 
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-pink-400 hover:text-pink-300 transition-colors"
+                            >
+                              <Instagram className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          <Link
+                            href={`/portfolio/${candidate.id}`}
+                            target="_blank"
+                            title="Open Interactive Win95 Portfolio"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono transition-colors"
+                          >
+                            <Monitor className="w-3 h-3" />
+                            <span>Win95</span>
+                            <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                          </Link>
+                        </div>
+
+                        {/* TypeSafe AI Featurization Badge */}
+                        {candidate.typesafe_telemetry && (
+                          <div className="flex items-center gap-1.5">
+                            <span 
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-cyan-950/40 text-cyan-300 border border-cyan-500/30"
+                              title={candidate.typesafe_telemetry.features ? Object.keys(candidate.typesafe_telemetry.features).join(', ') : '11D Vector Featurization'}
+                            >
+                              <Cpu className="w-3 h-3 text-cyan-400" />
+                              TypeSafe AI: 11D
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
