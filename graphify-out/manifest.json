@@ -8438,5 +8438,15 @@
     "mtime": 1792047799.898876,
     "ast_hash": "a4a6835d6e74983541500e97497b6f01",
     "semantic_hash": ""
+  },
+  "src/app/portfolio/[id]/layout.tsx": {
+    "mtime": 1792049897.04562,
+    "ast_hash": "64fe26a690331cc3cb666f24e594c7fa",
+    "semantic_hash": ""
+  },
+  "src/app/portfolio/[id]/opengraph-image.tsx": {
+    "mtime": 1792049938.1567566,
+    "ast_hash": "3ab20ee01f1beaa97936a14a76a3cda7",
+    "semantic_hash": ""
   }
 }
