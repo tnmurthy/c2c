@@ -103,9 +103,13 @@ async def run_student_profile_optimization(student_id: str, email: str, full_nam
                 "name": full_name,
                 "summary": student_record.get("bio") or "AI-ready Talent focused on scalability and robust system architectures.",
                 "roles": skills,
-                "linkedin": linkedin_url or "#",
-                "github": github_url or "#"
+                "linkedin": student_record.get("linkedin_url") or linkedin_url or "#",
+                "github": student_record.get("github_url") or github_url or "#",
+                "x": student_record.get("x_url") or "#",
+                "meta": student_record.get("meta_url") or "#",
+                "website": student_record.get("portfolio_url") or "#"
             },
+
             "projects": [
                 {
                     "id": "workflow-core",

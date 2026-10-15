@@ -1,8 +1,8 @@
 {
   "PORTFOLIO_SCHEMA.json": {
-    "mtime": 1781423917.7015984,
-    "ast_hash": "b58c3ce17b6fcf7a89f6ec31aa1491fa",
-    "semantic_hash": "b58c3ce17b6fcf7a89f6ec31aa1491fa"
+    "mtime": 1792047849.23696,
+    "ast_hash": "c601dc662686f893a6804cc7d026c6db",
+    "semantic_hash": ""
   },
   "api/constants.py": {
     "mtime": 1781685137.1987584,
@@ -1245,8 +1245,8 @@
     "semantic_hash": ""
   },
   "scripts/portfolio_generator.py": {
-    "mtime": 1783645598.2932453,
-    "ast_hash": "bed69031d44af68156e402a5d2d02c07",
+    "mtime": 1792048177.667746,
+    "ast_hash": "89798242213abc6e5606c1a88a814816",
     "semantic_hash": ""
   },
   "services/agent-recruiters/integrations/mcp-memory/setup.sh": {
@@ -2020,8 +2020,8 @@
     "semantic_hash": ""
   },
   "src/app/portfolio/[id]/page.tsx": {
-    "mtime": 1784016953.7414205,
-    "ast_hash": "d9618d734056dff377d4a5936e540b15",
+    "mtime": 1792049048.3760748,
+    "ast_hash": "6dded883c50fcf3d8537492b1d67f5a1",
     "semantic_hash": ""
   },
   "src/app/tpo-dashboard/[id]/page.tsx": {
@@ -2035,9 +2035,9 @@
     "semantic_hash": ""
   },
   "src/components/Footer.tsx": {
-    "mtime": 1781666643.0361505,
-    "ast_hash": "b659ee9c76aa1054cc4926967143d863",
-    "semantic_hash": "b659ee9c76aa1054cc4926967143d863"
+    "mtime": 1792048935.3171978,
+    "ast_hash": "0e6cb53e378ac78bbe221e770ba475f7",
+    "semantic_hash": ""
   },
   "src/components/LoadingScreen.tsx": {
     "mtime": 1781680820.7195768,
@@ -2060,14 +2060,14 @@
     "semantic_hash": "cb9b7d0dfa0e811323bc5ae26dac45ae"
   },
   "src/components/profile/ProfileCompletionWidget.tsx": {
-    "mtime": 1787963986.3430846,
-    "ast_hash": "9a8fe490fd13089fa553c8ef7a1e602c",
+    "mtime": 1792048661.6180067,
+    "ast_hash": "8446ad5c946c8f0ab32f9a5ee676ffcc",
     "semantic_hash": ""
   },
   "src/components/profile/ResumeUploadModal.tsx": {
-    "mtime": 1781790501.904999,
-    "ast_hash": "aefef35357b8a72383d2d139c0ba2c60",
-    "semantic_hash": "aefef35357b8a72383d2d139c0ba2c60"
+    "mtime": 1792048636.7800052,
+    "ast_hash": "40b302b46eeb01648cc9a5d65536c4a8",
+    "semantic_hash": ""
   },
   "src/hooks/useApiQuery.ts": {
     "mtime": 1781790501.9060006,
@@ -7620,8 +7620,8 @@
     "semantic_hash": "71b8ee47ffc41c14b5e254ed368dddf2"
   },
   "api/routers/student_router.py": {
-    "mtime": 1787969849.7771702,
-    "ast_hash": "8d230f311a7a96f20d7c45869b573ac2",
+    "mtime": 1792048218.1701105,
+    "ast_hash": "c9d148406b658bce1e061d147e7608b1",
     "semantic_hash": ""
   },
   "api/schemas/assessment.py": {
@@ -7640,9 +7640,9 @@
     "semantic_hash": "7a5b67084d246db90903a1d67fd6cfa6"
   },
   "api/schemas/student.py": {
-    "mtime": 1783222452.9850407,
-    "ast_hash": "99a0440a3db34be3092ca1abb294c720",
-    "semantic_hash": "99a0440a3db34be3092ca1abb294c720"
+    "mtime": 1792047818.124437,
+    "ast_hash": "9eabbffa58802e714f181f90e472c302",
+    "semantic_hash": ""
   },
   "src/components/ui/DataState.tsx": {
     "mtime": 1783222609.0018477,
@@ -8432,6 +8432,11 @@
   "src/types/typesafe.ts": {
     "mtime": 1792042080.2713761,
     "ast_hash": "72fb64981f2a346e8df449a080f62573",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261015000000_add_social_media_handles.sql": {
+    "mtime": 1792047799.898876,
+    "ast_hash": "a4a6835d6e74983541500e97497b6f01",
     "semantic_hash": ""
   }
 }

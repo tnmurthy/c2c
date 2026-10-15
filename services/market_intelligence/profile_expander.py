@@ -81,6 +81,64 @@ def _extract_github_handle(url_or_handle: str) -> str:
     return raw
 
 
+def _extract_x_handle(url_or_handle: str) -> str:
+    raw = str(url_or_handle or "").strip().rstrip("/")
+    if not raw:
+        return ""
+    # Matches https://x.com/username, twitter.com/username, @username, or username
+    match = re.search(r"(?:x\.com/|twitter\.com/|@|^)([a-zA-Z0-9_]{1,15})(?:/.*)?$", raw)
+    if match:
+        return match.group(1)
+    return raw.lstrip("@")
+
+
+def _extract_meta_handle(url_or_handle: str) -> str:
+    raw = str(url_or_handle or "").strip().rstrip("/")
+    if not raw:
+        return ""
+    # Matches instagram.com/username, threads.net/@username, facebook.com/username, or @username
+    match = re.search(r"(?:instagram\.com/|threads\.net/@|facebook\.com/|@|^)([a-zA-Z0-9_.]+)(?:/.*)?$", raw)
+    if match:
+        return match.group(1)
+    return raw.lstrip("@")
+
+
+def _extract_linkedin_handle(url_or_handle: str) -> str:
+    raw = str(url_or_handle or "").strip().rstrip("/")
+    if not raw:
+        return ""
+    # Matches linkedin.com/in/username or username
+    match = re.search(r"(?:linkedin\.com/in/|^)([a-zA-Z0-9-_]+)(?:/.*)?$", raw)
+    if match:
+        return match.group(1)
+    return raw
+
+
+def normalize_social_urls(profile: dict) -> dict[str, str]:
+    """
+    Standardizes raw social media handles or URLs into canonical web links.
+    """
+    gh_raw = profile.get("github_url") or profile.get("github") or ""
+    x_raw = profile.get("x_url") or profile.get("twitter_url") or profile.get("x") or ""
+    meta_raw = profile.get("meta_url") or profile.get("instagram_url") or profile.get("meta") or ""
+    li_raw = profile.get("linkedin_url") or profile.get("linkedin") or ""
+    web_raw = profile.get("portfolio_url") or profile.get("website_url") or profile.get("website") or ""
+
+    gh_handle = _extract_github_handle(gh_raw)
+    x_handle = _extract_x_handle(x_raw)
+    meta_handle = _extract_meta_handle(meta_raw)
+    li_handle = _extract_linkedin_handle(li_raw)
+
+    return {
+        "github_url": f"https://github.com/{gh_handle}" if gh_handle else "",
+        "x_url": f"https://x.com/{x_handle}" if x_handle else "",
+        "meta_url": f"https://instagram.com/{meta_handle}" if meta_handle else "",
+        "linkedin_url": f"https://linkedin.com/in/{li_handle}" if li_handle else "",
+        "portfolio_url": web_raw if web_raw.startswith("http") or not web_raw else f"https://{web_raw}",
+    }
+
+
+
 def expand_github_profile(github_url_or_handle: str) -> dict[str, Any]:
     """
     Query public GitHub user and repository data without authentication.
@@ -177,6 +235,8 @@ def expand_candidate_profile(student_profile: dict) -> dict:
     new_discoveries = list(inferred - existing_skills)
     merged_skills = sorted(list(existing_skills | inferred))
 
+    socials = normalize_social_urls(student_profile)
+
     return {
         "candidate_id": student_profile.get("id"),
         "original_skills_count": len(existing_skills),
@@ -184,4 +244,6 @@ def expand_candidate_profile(student_profile: dict) -> dict:
         "new_skills_discovered": new_discoveries,
         "all_merged_skills": merged_skills,
         "github_telemetry": expansion_result,
+        "social_handles": socials,
     }
+

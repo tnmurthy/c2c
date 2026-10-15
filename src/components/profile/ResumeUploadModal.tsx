@@ -18,6 +18,10 @@ export default function ResumeUploadModal({ isOpen, onClose, student, onSuccess 
     skills: student.skills ? student.skills.join(', ') : '',
     phone: student.phone || '',
     linkedin_url: student.linkedin_url || '',
+    github_url: student.github_url || student.github || '',
+    x_url: student.x_url || '',
+    meta_url: student.meta_url || '',
+    portfolio_url: student.portfolio_url || '',
     resume_url: student.resume_url || ''
   });
 
@@ -58,27 +62,27 @@ export default function ResumeUploadModal({ isOpen, onClose, student, onSuccess 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[#0a0f11] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative">
+      <div className="bg-[#0a0f11] border border-white/10 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl relative">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-white/40 hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded-lg transition-colors"
+          className="absolute top-4 right-4 text-white/40 hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded-lg transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="p-6 border-b border-white/5">
-          <h2 className="text-xl font-bold font-mono text-white uppercase tracking-wider">Complete Profile</h2>
-          <p className="text-[#bbc9cd]/60 text-xs font-mono mt-1">Enhance your visibility to top employers.</p>
+          <h2 className="text-xl font-bold font-mono text-white uppercase tracking-wider">Complete Profile & Socials</h2>
+          <p className="text-[#bbc9cd]/60 text-xs font-mono mt-1">Connect your code, identity, and social channels for automated employer matching.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
             <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-xs font-mono">
               {error}
             </div>
           )}
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">Short Bio</label>
             <div className="relative group">
               <div className="absolute top-3 left-4 flex items-start pointer-events-none">
@@ -87,13 +91,13 @@ export default function ResumeUploadModal({ isOpen, onClose, student, onSuccess 
               <textarea
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                className="block w-full pl-11 pr-4 py-2.5 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm min-h-[80px]"
-                placeholder="Briefly describe your goals..."
+                className="block w-full pl-11 pr-4 py-2.5 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm min-h-[70px]"
+                placeholder="Briefly describe your goals and focus areas..."
               />
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">Technical Skills</label>
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -104,13 +108,21 @@ export default function ResumeUploadModal({ isOpen, onClose, student, onSuccess 
                 value={formData.skills}
                 onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
                 className="block w-full pl-11 pr-4 py-2.5 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm"
-                placeholder="React, Python, SQL (comma separated)"
+                placeholder="React, Python, SQL, Next.js (comma separated)"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+          {/* Social Channels Section Header */}
+          <div className="pt-2 pb-1">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white/70">
+              Direct Channels & Social Media Handles
+            </span>
+          </div>
+
+          {/* Phone & LinkedIn */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
               <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">Phone</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -120,30 +132,100 @@ export default function ResumeUploadModal({ isOpen, onClose, student, onSuccess 
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm"
+                  className="block w-full pl-10 pr-3 py-2 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-xs"
                   placeholder="+1 234 567 8900"
                 />
               </div>
             </div>
             
-            <div className="space-y-2">
-              <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">LinkedIn URL</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">LinkedIn Profile</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <LinkIcon className="h-4 w-4 text-[#dde4e5]/30 group-focus-within:text-cyan-400 transition-colors" />
                 </div>
                 <input
-                  type="url"
+                  type="text"
                   value={formData.linkedin_url}
                   onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm"
-                  placeholder="linkedin.com/in/..."
+                  className="block w-full pl-10 pr-3 py-2 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-xs"
+                  placeholder="linkedin.com/in/username"
                 />
               </div>
             </div>
           </div>
 
-          <div className="space-y-2">
+          {/* GitHub & X (Twitter) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">GitHub Handle / URL</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <LinkIcon className="h-4 w-4 text-[#dde4e5]/30 group-focus-within:text-cyan-400 transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  value={formData.github_url}
+                  onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+                  className="block w-full pl-10 pr-3 py-2 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-xs"
+                  placeholder="github.com/username or @handle"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">X (Twitter) Handle / URL</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <LinkIcon className="h-4 w-4 text-[#dde4e5]/30 group-focus-within:text-cyan-400 transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  value={formData.x_url}
+                  onChange={(e) => setFormData({ ...formData, x_url: e.target.value })}
+                  className="block w-full pl-10 pr-3 py-2 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-xs"
+                  placeholder="x.com/username or @handle"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Meta (Instagram / Threads) & Portfolio */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">Meta (Instagram / Threads)</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <LinkIcon className="h-4 w-4 text-[#dde4e5]/30 group-focus-within:text-cyan-400 transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  value={formData.meta_url}
+                  onChange={(e) => setFormData({ ...formData, meta_url: e.target.value })}
+                  className="block w-full pl-10 pr-3 py-2 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-xs"
+                  placeholder="instagram.com/user or threads.net/@user"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">Personal Portfolio / Website</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <LinkIcon className="h-4 w-4 text-[#dde4e5]/30 group-focus-within:text-cyan-400 transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  value={formData.portfolio_url}
+                  onChange={(e) => setFormData({ ...formData, portfolio_url: e.target.value })}
+                  className="block w-full pl-10 pr-3 py-2 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-xs"
+                  placeholder="https://mywebsite.dev"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
             <label className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/70 ml-1">Resume Link</label>
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -154,10 +236,11 @@ export default function ResumeUploadModal({ isOpen, onClose, student, onSuccess 
                 value={formData.resume_url}
                 onChange={(e) => setFormData({ ...formData, resume_url: e.target.value })}
                 className="block w-full pl-11 pr-4 py-2.5 bg-[#0e1416]/50 border border-white/10 rounded-xl text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/50 transition-all font-mono text-sm"
-                placeholder="Link to your resume (Drive, Dropbox, etc.)"
+                placeholder="Link to your resume (Drive, Dropbox, Notion, etc.)"
               />
             </div>
           </div>
+
 
           <div className="pt-4 border-t border-white/5">
             <button

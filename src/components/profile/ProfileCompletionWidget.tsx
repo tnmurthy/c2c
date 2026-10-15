@@ -17,8 +17,8 @@ export default function ProfileCompletionWidget({ student, onProfileUpdate }: Pr
     { key: 'basics', label: 'Basic Info', isComplete: !!(student.full_name && student.email) },
     { key: 'education', label: 'Education Details', isComplete: !!(student.department && student.graduation_year) },
     { key: 'skills', label: 'Technical Skills', isComplete: !!(student.skills && student.skills.length > 0) },
-    { key: 'resume', label: 'Resume Upload', isComplete: !!student.resume_url },
-    { key: 'contact', label: 'Contact Info', isComplete: !!(student.phone || student.linkedin_url) }
+    { key: 'contact', label: 'Contact & Socials', isComplete: !!(student.phone || student.linkedin_url || student.github_url || student.x_url || student.meta_url) }
+
   ];
 
   const completedFields = fields.filter(f => f.isComplete).length;
