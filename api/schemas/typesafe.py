@@ -52,3 +52,36 @@ class TypeSafeStatusResponse(BaseModel):
     latency_target_ms: int = 50
     supported_primitives: List[str] = ["Choice", "Score", "Noul"]
     status: str
+
+
+class TypeSafeFeaturizeRequest(BaseModel):
+    student_id: Optional[str] = None
+    candidate_name: Optional[str] = "Candidate"
+    free_text: str = Field(
+        ...,
+        description="Candidate resume, bio, project descriptions, or interview notes"
+    )
+    custom_probes: Optional[List[Dict[str, str]]] = Field(
+        default=None,
+        description="Optional custom probes matching TypeSafe autoresearch format"
+    )
+
+
+class TypeSafeFeatureColumn(BaseModel):
+    name: str
+    kind: str = Field(..., description="'intensity' (Score) or 'presence' (Noul)")
+    mean: float = Field(..., description="Expected rubric level or probability")
+    spread_sd: float = Field(0.0, description="Uncertainty / standard deviation across levels")
+    interpretation: str
+
+
+class TypeSafeFeaturizeResponse(BaseModel):
+    model_config = {"protected_namespaces": ()}
+
+    candidate_name: str
+    features: Dict[str, TypeSafeFeatureColumn]
+    numeric_vector: List[float] = Field(..., description="CatBoost/GBDT-ready float array")
+    feature_names: List[str] = Field(..., description="Column names corresponding to numeric_vector")
+    model_provider: str = "TypeSafe AI System One (Jev Autoresearch Engine)"
+    is_live_api: bool = False
+    timestamp: str

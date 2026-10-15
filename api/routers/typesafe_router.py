@@ -5,6 +5,8 @@ from api.schemas.typesafe import (
     TypeSafeEvaluateRequest,
     TypeSafeEvaluateResponse,
     TypeSafeStatusResponse,
+    TypeSafeFeaturizeRequest,
+    TypeSafeFeaturizeResponse,
 )
 from api.services.typesafe_service import typesafe_service
 
@@ -32,3 +34,21 @@ def evaluate_candidate(payload: TypeSafeEvaluateRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"TypeSafe evaluation error: {str(e)}")
+
+
+@router.post("/featurize", response_model=TypeSafeFeaturizeResponse)
+def featurize_candidate_text(payload: TypeSafeFeaturizeRequest):
+    """
+    Transforms candidate free-text (resume, project README, interview notes) into a numeric
+    feature vector using TypeSafe System One Intensity (Score mean + spread) and Presence (Noul) probes.
+    Ready for downstream CatBoost/GBDT ranking models.
+    """
+    try:
+        return typesafe_service.featurize(
+            free_text=payload.free_text,
+            candidate_name=payload.candidate_name or "Candidate",
+            custom_probes=payload.custom_probes
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"TypeSafe featurization error: {str(e)}")
+

@@ -28,3 +28,32 @@ export interface TypeSafeStatusResponse {
   supported_primitives: string[];
   status: string;
 }
+
+export interface TypeSafeFeatureColumn {
+  name: string;
+  kind: 'intensity' | 'presence';
+  mean: number;
+  spread_sd: number;
+  interpretation: string;
+}
+
+export interface TypeSafeFeaturizeResponse {
+  candidate_name: string;
+  features: Record<string, TypeSafeFeatureColumn>;
+  numeric_vector: number[];
+  feature_names: string[];
+  model_provider: string;
+  is_live_api: boolean;
+  timestamp: string;
+}
+
+export interface TypeSafeFeaturizeRequest {
+  student_id?: string;
+  candidate_name?: string;
+  free_text: string;
+  custom_probes?: Array<{
+    name: string;
+    kind: 'intensity' | 'presence';
+    question: string;
+  }>;
+}
