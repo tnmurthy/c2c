@@ -25,6 +25,7 @@ import { useRequireAuth } from "@/hooks/useAuth";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { supabase } from "@/lib/supabase";
 import { authFetch } from '@/lib/authFetch';
+import { CohortSkillGapHeatmap } from "@/components/dashboard/CohortSkillGapHeatmap";
 
 interface TPOCohortData {
   averages: {
@@ -443,6 +444,11 @@ export default function TPODashboard() {
                 })}
               </div>
             </div>
+          </section>
+
+          {/* Market Skill Gap Heatmap Section (H3) */}
+          <section className="mb-12">
+            <CohortSkillGapHeatmap institutionId={id as string} />
           </section>
 
           {/* Bottom: Intervention Feed */}

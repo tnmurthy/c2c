@@ -1,4 +1,4 @@
-﻿-- Migration: Expand psychometric_items table and seed all 500 assessment questions
+-- Migration: Expand psychometric_items table and seed all 500 assessment questions
 -- Source: api/fallback_bank.json
 -- ============================================================
 

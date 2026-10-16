@@ -10,7 +10,10 @@
         "summary": { "type": "string" },
         "roles": { "type": "array", "items": { "type": "string" } },
         "linkedin": { "type": "string" },
-        "github": { "type": "string" }
+        "github": { "type": "string" },
+        "x": { "type": "string" },
+        "meta": { "type": "string" },
+        "website": { "type": "string" }
       },
       "required": ["name", "summary", "roles"]
     },
@@ -21,7 +24,8 @@
         "properties": {
           "id": { "type": "string" },
           "title": { "type": "string" },
-          "icon": { "type": "string", "enum": ["computer", "folder", "text", "video", "gear", "msn", "chart", "html", "world", "network", "camera", "certificate", "brain", "robot", "product", "strategy", "linkedin", "resume", "briefcase", "book", "database", "shield", "search", "finance", "terminal", "pipe"] },
+          "icon": { "type": "string", "enum": ["computer", "folder", "text", "video", "gear", "msn", "chart", "html", "world", "network", "camera", "certificate", "brain", "robot", "product", "strategy", "linkedin", "resume", "briefcase", "book", "database", "shield", "search", "finance", "terminal", "pipe", "x", "meta"] },
+
           "tooltip": { "type": "string" },
           "stack": { "type": "string" },
           "impact": { "type": "string" },

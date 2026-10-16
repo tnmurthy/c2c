@@ -13,7 +13,13 @@ class StudentProfileUpdate(BaseModel):
     skills: Optional[list[str]] = None
     phone: Optional[str] = None
     linkedin_url: Optional[str] = None
+    github_url: Optional[str] = None
+    x_url: Optional[str] = None
+    meta_url: Optional[str] = None
+    portfolio_url: Optional[str] = None
+    social_links: Optional[Dict[str, str]] = None
     resume_url: Optional[str] = None
+
 
 class ApplicationCreate(BaseModel):
     job_id: str

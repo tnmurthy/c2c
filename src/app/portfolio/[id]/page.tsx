@@ -723,11 +723,54 @@ export default function RetroPortfolio() {
             </div>
             <div 
               className="desktop-shortcut" 
-              onClick={() => window.open(`https://github.com`, '_blank')}
+              onClick={() => {
+                const gh = studentData?.github_url || studentData?.github;
+                if (gh) {
+                  window.open(gh.startsWith('http') ? gh : `https://github.com/${gh.replace(/^@/, '')}`, '_blank');
+                } else {
+                  window.open('https://github.com', '_blank');
+                }
+              }}
             >
               <span className="desktop-shortcut-icon">🌐</span>
               <span className="desktop-shortcut-label">GitHub</span>
             </div>
+
+            {studentData?.linkedin_url && (
+              <div 
+                className="desktop-shortcut" 
+                onClick={() => window.open(studentData.linkedin_url.startsWith('http') ? studentData.linkedin_url : `https://${studentData.linkedin_url}`, '_blank')}
+              >
+                <span className="desktop-shortcut-icon">💼</span>
+                <span className="desktop-shortcut-label">LinkedIn</span>
+              </div>
+            )}
+
+            {studentData?.x_url && (
+              <div 
+                className="desktop-shortcut" 
+                onClick={() => {
+                  const x = studentData.x_url;
+                  window.open(x.startsWith('http') ? x : `https://x.com/${x.replace(/^@/, '')}`, '_blank');
+                }}
+              >
+                <span className="desktop-shortcut-icon">💬</span>
+                <span className="desktop-shortcut-label">X / Twitter</span>
+              </div>
+            )}
+
+            {studentData?.meta_url && (
+              <div 
+                className="desktop-shortcut" 
+                onClick={() => {
+                  const m = studentData.meta_url;
+                  window.open(m.startsWith('http') ? m : `https://instagram.com/${m.replace(/^@/, '')}`, '_blank');
+                }}
+              >
+                <span className="desktop-shortcut-icon">📸</span>
+                <span className="desktop-shortcut-label">Meta</span>
+              </div>
+            )}
           </div>
         )}
 
@@ -832,6 +875,65 @@ export default function RetroPortfolio() {
                     <p className="text-xs text-gray-700 italic border-l-2 border-blue-800 pl-4 py-2 bg-gray-100">
                       {assessment?.development_report?.profile_summary || 'No profile summary telemetry loaded.'}
                     </p>
+
+                    {/* Social Media & Direct Channels */}
+                    <div className="border-t border-gray-300 pt-3">
+                      <div className="text-[11px] font-bold text-blue-900 mb-2 uppercase tracking-wider font-sans">
+                        Verified Channels & Handles:
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {studentData?.linkedin_url && (
+                          <button 
+                            className="win95-btn px-3 py-1 text-xs" 
+                            onClick={() => window.open(studentData.linkedin_url.startsWith('http') ? studentData.linkedin_url : `https://${studentData.linkedin_url}`, '_blank')}
+                          >
+                            LinkedIn
+                          </button>
+                        )}
+                        {(studentData?.github_url || studentData?.github) && (
+                          <button 
+                            className="win95-btn px-3 py-1 text-xs" 
+                            onClick={() => {
+                              const gh = studentData.github_url || studentData.github;
+                              window.open(gh.startsWith('http') ? gh : `https://github.com/${gh.replace(/^@/, '')}`, '_blank');
+                            }}
+                          >
+                            GitHub
+                          </button>
+                        )}
+                        {studentData?.x_url && (
+                          <button 
+                            className="win95-btn px-3 py-1 text-xs" 
+                            onClick={() => {
+                              const x = studentData.x_url;
+                              window.open(x.startsWith('http') ? x : `https://x.com/${x.replace(/^@/, '')}`, '_blank');
+                            }}
+                          >
+                            X / Twitter
+                          </button>
+                        )}
+                        {studentData?.meta_url && (
+                          <button 
+                            className="win95-btn px-3 py-1 text-xs" 
+                            onClick={() => {
+                              const meta = studentData.meta_url;
+                              window.open(meta.startsWith('http') ? meta : `https://instagram.com/${meta.replace(/^@/, '')}`, '_blank');
+                            }}
+                          >
+                            Meta / Instagram
+                          </button>
+                        )}
+                        {studentData?.portfolio_url && (
+                          <button 
+                            className="win95-btn px-3 py-1 text-xs" 
+                            onClick={() => window.open(studentData.portfolio_url.startsWith('http') ? studentData.portfolio_url : `https://${studentData.portfolio_url}`, '_blank')}
+                          >
+                            Personal Site
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
                     <button className="win95-btn mt-4 px-4 py-1.5" onClick={() => openWindow('resume')}>View Technical Resume</button>
                   </div>
                 )}

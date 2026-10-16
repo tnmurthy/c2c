@@ -41,8 +41,10 @@ def generate_projects_js(portfolio_data):
     shield: 'https://win98icons.alexmeub.com/icons/png/key_padlock-0.png',
     search: 'https://win98icons.alexmeub.com/icons/png/search_file-0.png',
     finance: 'https://win98icons.alexmeub.com/icons/png/chart1-0.png',
-    terminal: 'https://win98icons.alexmeub.com/icons/png/ms_dos-0.png',
-    pipe: 'https://win98icons.alexmeub.com/icons/png/recycle_bin_full-4.png'
+    pipe: 'https://win98icons.alexmeub.com/icons/png/recycle_bin_full-4.png',
+    github: 'https://win98icons.alexmeub.com/icons/png/network_internet_pcs_pc-4.png',
+    x: 'https://win98icons.alexmeub.com/icons/png/world_network_directories-3.png',
+    meta: 'https://win98icons.alexmeub.com/icons/png/camera-0.png'
 };
 
 const projects = [
@@ -87,7 +89,24 @@ const projects = [
 ];
 """
 
-    # About Me Item
+    # About Me Item & Social Media Buttons
+    social_buttons = []
+    if cand.get('linkedin') and cand.get('linkedin') != '#':
+        social_buttons.append(f'<button class="btn-win95" onclick="window.open(\'{cand["linkedin"]}\', \'_blank\')">LinkedIn Profile</button>')
+    if cand.get('github') and cand.get('github') != '#':
+        social_buttons.append(f'<button class="btn-win95" onclick="window.open(\'{cand["github"]}\', \'_blank\')">GitHub</button>')
+    if cand.get('x') and cand.get('x') != '#':
+        social_buttons.append(f'<button class="btn-win95" onclick="window.open(\'{cand["x"]}\', \'_blank\')">X / Twitter</button>')
+    if cand.get('meta') and cand.get('meta') != '#':
+        social_buttons.append(f'<button class="btn-win95" onclick="window.open(\'{cand["meta"]}\', \'_blank\')">Meta / Instagram</button>')
+    if cand.get('website') and cand.get('website') != '#':
+        social_buttons.append(f'<button class="btn-win95" onclick="window.open(\'{cand["website"]}\', \'_blank\')">Portfolio Site</button>')
+    
+    if not social_buttons:
+        social_buttons.append(f'<button class="btn-win95" onclick="window.open(\'#\', \'_blank\')">LinkedIn Profile</button>')
+
+    buttons_html = "\n    ".join(social_buttons)
+
     js_content += f"""
 const aboutMeContent = {{
     id: 'about',
@@ -97,8 +116,7 @@ const aboutMeContent = {{
     <p><strong>{ " · ".join(cand['roles']) }</strong></p>
     <hr>
     <p>{cand['summary']}</p>
-    <button class="btn-win95" onclick="window.open('{cand.get('linkedin', '#')}', '_blank')">LinkedIn Profile</button>
-    <button class="btn-win95" onclick="window.open('{cand.get('github', '#')}', '_blank')">GitHub</button>`
+    {buttons_html}`
 }};
 """
 
@@ -116,9 +134,18 @@ const aboutMeContent = {{
     
     js_content += """    { id: 'dos', title: 'MS-DOS Prompt', icon: ICONS.terminal, isFolder: false, tooltip: 'Command line interface' },
     { id: 'resume', title: 'My Resume', icon: ICONS.resume, isFolder: false, tooltip: 'CV & Core Competencies' },
-    { id: 'linkedin', title: 'LinkedIn Profile', icon: ICONS.linkedin, isFolder: false, tooltip: 'Connect with me' }
-];
 """
+    if cand.get('linkedin') and cand.get('linkedin') != '#':
+        js_content += f"    {{ id: 'linkedin', title: 'LinkedIn Profile', icon: ICONS.linkedin, isFolder: false, tooltip: 'Connect with me', url: '{cand['linkedin']}' }},\n"
+    if cand.get('github') and cand.get('github') != '#':
+        js_content += f"    {{ id: 'github', title: 'GitHub', icon: ICONS.github, isFolder: false, tooltip: 'Code Repositories', url: '{cand['github']}' }},\n"
+    if cand.get('x') and cand.get('x') != '#':
+        js_content += f"    {{ id: 'x', title: 'X / Twitter', icon: ICONS.x, isFolder: false, tooltip: 'Social Feed', url: '{cand['x']}' }},\n"
+    if cand.get('meta') and cand.get('meta') != '#':
+        js_content += f"    {{ id: 'meta', title: 'Meta / Instagram', icon: ICONS.meta, isFolder: false, tooltip: 'Social Profile', url: '{cand['meta']}' }},\n"
+    
+    js_content += "];\n"
+
 
     return js_content
 
