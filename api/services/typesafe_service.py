@@ -1,33 +1,47 @@
 import os
 import json
 import logging
-from typing import List, Dict, Any, Optional
-from datetime import datetime, timezone
-import urllib.request
 import urllib.error
+import urllib.request
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
 
 from api.schemas.typesafe import (
-    TypeSafeEvaluateResponse,
-    TypeSafeStatusResponse,
-    TypeSafeFeaturizeResponse,
-    TypeSafeFeatureColumn,
     DimensionScore,
-    FounderArchetype
+    FounderArchetype,
+    TypeSafeEvaluateResponse,
+    TypeSafeFeatureColumn,
+    TypeSafeFeaturizeResponse,
+    TypeSafeStatusResponse,
+)
+from api.services import ai_budget
+from api.services.typesafe_heuristics import (
+    DIMENSIONS,
+    _mean_and_sd,
+    evaluate_heuristic,
+    featurize_heuristic,
+    percentile_band,
 )
 
 logger = logging.getLogger("c2c_api.typesafe")
+
+TYPESAFE_API_URL = "https://api.typesafe.ai/v1/systemone"
+TYPESAFE_MODEL = "jev-latest"
+TIMEOUT_SECONDS = 10.0
+LIVE_PROVIDER = "TypeSafe AI System One (Jev)"
+NOUL_THRESHOLD = 0.5
 
 INTENSITY_LEVELS = [
     "Not present in this candidate profile at all",
     "Barely present - mentioned once in passing",
     "Present at a moderate, competent level",
     "Present strongly - profile demonstrates deep hands-on execution",
-    "Dominant - candidate profile is largely centered around this capability"
+    "Dominant - candidate profile is largely centered around this capability",
 ]
 
 PRESENCE_CRITERIA = {
     "true": "The candidate profile explicitly confirms or clearly demonstrates this capability",
-    "false": "The profile gives no clear indication of this capability"
+    "false": "The profile gives no clear indication of this capability",
 }
 
 DEFAULT_PROBES = [
@@ -37,405 +51,273 @@ DEFAULT_PROBES = [
     {"name": "leadership_ownership", "kind": "intensity", "question": "Initiative, ownership of features end-to-end, and cross-team coordination"},
     {"name": "concurrency_experience", "kind": "presence", "question": "Does the candidate demonstrate experience with multithreading, async workers, or event-driven queues?"},
     {"name": "startup_agility", "kind": "presence", "question": "Demonstrates experience building rapidly under ambiguity, bootstrapping, or 0-to-1 prototyping"},
-    {"name": "cross_functional_alignment", "kind": "presence", "question": "Demonstrates collaboration with designers, product managers, or non-technical business partners"}
+    {"name": "cross_functional_alignment", "kind": "presence", "question": "Demonstrates collaboration with designers, product managers, or non-technical business partners"},
 ]
+
+# 5Q dimension definitions; each is judged as a Score over DIMENSION_LEVELS.
+DIMENSION_DEFINITIONS = {
+    "IQ": "logical structuring, analytical reasoning and clarity of thought",
+    "EQ": "empathy, situational awareness and self-regulation",
+    "AQ": "adversity quotient: resilience and persistence under ambiguity or setbacks",
+    "SQ": "social collaboration, communication and persuasion",
+    "SpQ": "purpose-driven alignment and ethical conviction",
+}
+DIMENSION_LEVELS = [
+    "The responses show no evidence of this quality, or evidence against it",
+    "The responses show weak or inconsistent evidence of this quality",
+    "The responses show a moderate, typical level of this quality",
+    "The responses show this quality clearly and consistently",
+    "The responses show this quality as an exceptional, defining strength",
+]
+
+ARCHETYPE_CRITERIA = {
+    "Builder": "Systems architect, iterative problem-solver, high technical curiosity.",
+    "Leader": "Visionary, rallies groups, culture builder, high emotional intelligence.",
+    "Rainmaker": "Stakeholder advocate, commercial communicator, resilient under rejection.",
+    "Anchor": "Reliable operator, process guardian, highly consistent execution.",
+}
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _level_to_percent(score: float, level_count: int) -> float:
+    return round(score / (level_count - 1) * 100.0, 1)
 
 
 class TypeSafeService:
     """
-    TypeSafe AI System One Integration Service.
-    Leverages TypeSafe AI's Jev model for deterministic Choice, Score, and Noul evaluations.
-    Features automatic fallback to calibrated psychometric logic when offline or unauthenticated.
+    TypeSafe System One (Jev) integration.
+
+    Calls the live API when a key is configured. On any failure it returns a
+    heuristic estimate that is explicitly labelled as such (is_live_api=False).
     """
 
-    def __init__(self):
-        self.api_key = os.getenv("TYPESAFE_API_KEY")
-        self.api_url = os.getenv("TYPESAFE_API_URL", "https://api.typesafe.ai/v1/system-one")
-        self.timeout_seconds = 3.0
+    @property
+    def api_key(self) -> Optional[str]:
+        key = os.getenv("TYPESAFE_API_KEY") or os.getenv("TYPESAFE_KEY")
+        return key.strip() if key and key.strip() else None
 
     def get_status(self) -> TypeSafeStatusResponse:
+        configured = self.api_key is not None
         return TypeSafeStatusResponse(
             provider="TypeSafe AI",
             flagship_model="Jev (System One)",
-            api_key_configured=bool(self.api_key and len(self.api_key.strip()) > 5),
+            api_key_configured=configured,
             latency_target_ms=50,
             supported_primitives=["Choice", "Score", "Noul"],
-            status="online"
+            status="online",
         )
+
+    def _system_one(
+        self, state: Any, questions: Dict[str, Any], source: str, student_id: Optional[str]
+    ) -> Dict[str, Any]:
+        """
+        Claims the call against the daily caps, then POSTs to /v1/systemone and
+        returns the `answers` map. Raises BudgetRefused or on any API failure.
+        """
+        ledger_id = ai_budget.claim_ai_call(source, student_id)
+        try:
+            answers = self._post(state, questions)
+        except Exception:
+            ai_budget.finish_ai_call(ledger_id, ok=False)
+            raise
+        ai_budget.finish_ai_call(ledger_id, ok=True)
+        return answers
+
+    def _post(self, state: Any, questions: Dict[str, Any]) -> Dict[str, Any]:
+        req = urllib.request.Request(
+            TYPESAFE_API_URL,
+            data=json.dumps({"model": TYPESAFE_MODEL, "state": state, "questions": questions}).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+                "User-Agent": "c2c-typesafe-client/2.0",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT_SECONDS) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"TypeSafe HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:300]}") from e
+        answers = data.get("answers")
+        if not isinstance(answers, dict):
+            raise RuntimeError("TypeSafe response missing 'answers'")
+        usage = data.get("usage") or {}
+        logger.info(
+            "TypeSafe call ok: %d question(s), %s in / %s out tokens",
+            len(questions), usage.get("input_tokens"), usage.get("output_tokens"),
+        )
+        return answers
+
+    # ------------------------------------------------------------------ evaluate
 
     def evaluate(
         self,
         responses: List[Dict[str, Any]],
         candidate_name: str = "Candidate",
-        custom_rubrics: Optional[Dict[str, str]] = None
+        custom_rubrics: Optional[Dict[str, str]] = None,
+        student_id: Optional[str] = None,
     ) -> TypeSafeEvaluateResponse:
-        """
-        Evaluate candidate assessment responses using TypeSafe AI primitives.
-        """
-        # 1. Attempt live TypeSafe AI System One API call if key is present
+        """Raises ValueError when there are no responses to judge."""
+        if not responses:
+            raise ValueError("No assessment responses to evaluate.")
         if self.api_key:
             try:
-                live_result = self._call_typesafe_api(responses, candidate_name, custom_rubrics)
-                if live_result:
-                    return live_result
+                return self._evaluate_live(responses, candidate_name, custom_rubrics or {}, student_id)
+            except ai_budget.BudgetRefused as e:
+                logger.info("TypeSafe evaluate not called (%s); using heuristic estimate", e.reason)
             except Exception as e:
-                logger.warning(f"TypeSafe AI live API call encountered error, engaging fallback: {e}")
+                logger.warning("TypeSafe evaluate failed, using heuristic estimate: %s", e)
+        return evaluate_heuristic(responses, candidate_name)
 
-        # 2. Resilient Deterministic Fallback
-        return self._evaluate_fallback(responses, candidate_name)
+    def _evaluate_questions(self, custom_rubrics: Dict[str, str]) -> Dict[str, Any]:
+        questions: Dict[str, Any] = {
+            "archetype": {
+                "type": "choice",
+                "instructions": "Which founder archetype best describes the candidate, judging from their behavioural assessment `responses`?",
+                "criteria": ARCHETYPE_CRITERIA,
+            },
+            "placement_ready": {
+                "type": "noul",
+                "instructions": "Do the candidate's `responses` show readiness for immediate corporate or startup placement?",
+                "criteria": {
+                    "true": "The responses show the maturity, reasoning and resilience expected of a new hire",
+                    "false": "The responses show gaps that should be developed before placement",
+                },
+            },
+            "requires_intervention": {
+                "type": "noul",
+                "instructions": "Do the candidate's `responses` indicate burnout, flight risk, or a severe skill gap that needs a mentor's intervention?",
+                "criteria": {
+                    "true": "There are clear warning signs that a mentor should act on",
+                    "false": "There are no clear warning signs",
+                },
+            },
+        }
+        for dim in DIMENSIONS:
+            definition = custom_rubrics.get(dim) or DIMENSION_DEFINITIONS[dim]
+            questions[dim] = {
+                "type": "score",
+                "instructions": f"How strongly do the candidate's assessment `responses` demonstrate {dim} ({definition})?",
+                "criteria": DIMENSION_LEVELS,
+            }
+        return questions
 
-    def _call_typesafe_api(
+    def _evaluate_live(
         self,
         responses: List[Dict[str, Any]],
         candidate_name: str,
-        custom_rubrics: Optional[Dict[str, str]] = None
-    ) -> Optional[TypeSafeEvaluateResponse]:
-        """
-        Executes a real TypeSafe AI System One request using standard HTTP.
-        """
-        payload = {
-            "model": "jev",
-            "state": {
-                "candidate_name": candidate_name,
-                "responses": responses
-            },
-            "questions": {
-                "archetype": {
-                    "type": "choice",
-                    "instructions": "Determine the candidate's primary founder archetype based on their behavioral responses.",
-                    "criteria": {
-                        "Builder": "Systems architect, iterative problem-solver, high technical curiosity.",
-                        "Leader": "Visionary, group rallying, culture builder, high emotional intelligence.",
-                        "Rainmaker": "Stakeholder advocate, commercial communicator, high resilience under rejection.",
-                        "Anchor": "Reliable operator, process guardian, highly consistent execution."
-                    }
-                },
-                "IQ": {"type": "score", "rubric": "Logical structuring and clarity (0 to 100)"},
-                "EQ": {"type": "score", "rubric": "Empathy, situational awareness, and self-regulation (0 to 100)"},
-                "AQ": {"type": "score", "rubric": "Adversity quotient, resilience under ambiguity (0 to 100)"},
-                "SQ": {"type": "score", "rubric": "Social collaboration, communication, and persuasion (0 to 100)"},
-                "SpQ": {"type": "score", "rubric": "Purpose-driven alignment and ethical conviction (0 to 100)"},
-                "placement_ready": {
-                    "type": "noul",
-                    "proposition": "Candidate demonstrates readiness for immediate corporate or startup placement."
-                },
-                "requires_intervention": {
-                    "type": "noul",
-                    "proposition": "Candidate scores suggest critical flight risk, burnout, or severe skill gap requiring intervention."
-                }
-            }
-        }
-
-        req = urllib.request.Request(
-            self.api_url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.api_key}",
-                "User-Agent": "c2c-typesafe-client/1.0"
-            },
-            method="POST"
+        custom_rubrics: Dict[str, str],
+        student_id: Optional[str],
+    ) -> TypeSafeEvaluateResponse:
+        answers = self._system_one(
+            {"responses": responses}, self._evaluate_questions(custom_rubrics), "typesafe_evaluate", student_id
         )
 
-        with urllib.request.urlopen(req, timeout=self.timeout_seconds) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            answers = data.get("answers", {})
-
-            # Parse Choice
-            primary_archetype_str = answers.get("archetype", {}).get("choice", "Builder")
-            archetype_enum = getattr(FounderArchetype, primary_archetype_str.lower(), FounderArchetype.builder)
-
-            # Parse Scores
-            dim_scores = {}
-            for dim in ["IQ", "EQ", "AQ", "SQ", "SpQ"]:
-                raw_score = float(answers.get(dim, {}).get("score", 75))
-                band = "Top 10%" if raw_score >= 85 else "Top 25%" if raw_score >= 70 else "Average"
-                dim_scores[dim] = DimensionScore(
-                    score=raw_score,
-                    percentile_band=band,
-                    confidence=0.95,
-                    rationale=f"Evaluated via TypeSafe AI Jev model ({dim} rubric)."
-                )
-
-            placement_ready = bool(answers.get("placement_ready", {}).get("result", True))
-            requires_intervention = bool(answers.get("requires_intervention", {}).get("result", False))
-
-            return TypeSafeEvaluateResponse(
-                candidate_name=candidate_name,
-                primary_archetype=archetype_enum,
-                archetype_probabilities={
-                    "Builder": 0.40 if primary_archetype_str == "Builder" else 0.20,
-                    "Leader": 0.40 if primary_archetype_str == "Leader" else 0.20,
-                    "Rainmaker": 0.40 if primary_archetype_str == "Rainmaker" else 0.20,
-                    "Anchor": 0.40 if primary_archetype_str == "Anchor" else 0.20,
-                },
-                scores=dim_scores,
-                placement_ready=placement_ready,
-                requires_intervention=requires_intervention,
-                ai_confidence=0.94,
-                model_provider="TypeSafe AI System One (Jev)",
-                is_live_api=True,
-                timestamp=datetime.now(timezone.utc).isoformat()
-            )
-
-    def _evaluate_fallback(
-        self,
-        responses: List[Dict[str, Any]],
-        candidate_name: str
-    ) -> TypeSafeEvaluateResponse:
-        """
-        Calibrated algorithmic fallback providing deterministic TypeSafe-compatible outputs.
-        """
-        raw_accumulators = {"IQ": 0, "EQ": 0, "AQ": 0, "SQ": 0, "SpQ": 0}
-        counts = {"IQ": 0, "EQ": 0, "AQ": 0, "SQ": 0, "SpQ": 0}
-
-        for r in responses:
-            dim = r.get("dimension") or r.get("primary_dimension") or "IQ"
-            if dim not in raw_accumulators:
-                dim = "IQ"
-
-            val = r.get("response") or r.get("value") or 4
-            try:
-                num = float(val)
-            except (ValueError, TypeError):
-                num = 4.0
-
-            raw_accumulators[dim] += num
-            counts[dim] += 1
-
-        # Normalize to 0-100 scale
         scores: Dict[str, DimensionScore] = {}
-        defaults = {"IQ": 82.0, "EQ": 78.0, "AQ": 85.0, "SQ": 72.0, "SpQ": 79.0}
-
-        for dim in ["IQ", "EQ", "AQ", "SQ", "SpQ"]:
-            if counts[dim] > 0:
-                normalized = min(100.0, max(20.0, (raw_accumulators[dim] / (counts[dim] * 5.0)) * 100.0))
-            else:
-                normalized = defaults[dim]
-
-            band = "Top 10%" if normalized >= 85 else "Top 25%" if normalized >= 70 else "Average"
+        for dim in DIMENSIONS:
+            ans = answers[dim]
+            percent = _level_to_percent(float(ans["score"]), len(DIMENSION_LEVELS))
             scores[dim] = DimensionScore(
-                score=round(normalized, 1),
-                percentile_band=band,
-                confidence=0.92,
-                rationale=f"Calibrated 5Q psychometric evaluation for {dim} based on response vector."
+                score=percent,
+                percentile_band=percentile_band(percent),
+                confidence=float(ans.get("confidence") or 0.0),
+                rationale=f"Jev level {float(ans['score']):.2f} of 0-{len(DIMENSION_LEVELS) - 1} on the {dim} rubric.",
             )
 
-        # Map to Archetype
-        founder_weights = {
-            "Builder": scores["IQ"].score + scores["AQ"].score,
-            "Leader": scores["EQ"].score + scores["SQ"].score,
-            "Rainmaker": scores["SQ"].score + scores["AQ"].score,
-            "Anchor": scores["IQ"].score + scores["EQ"].score,
-        }
-        total_w = sum(founder_weights.values()) or 1.0
-        probabilities = {k: round(v / total_w, 3) for k, v in founder_weights.items()}
-
-        primary_str = max(founder_weights, key=founder_weights.get)
-        archetype_enum = getattr(FounderArchetype, primary_str.lower(), FounderArchetype.builder)
-
-        placement_ready = scores["AQ"].score >= 60 and scores["IQ"].score >= 60
-        requires_intervention = scores["AQ"].score < 45 or scores["EQ"].score < 40
+        archetype = answers["archetype"]
+        placement_p = float(answers["placement_ready"]["noul"])
+        intervention_p = float(answers["requires_intervention"]["noul"])
 
         return TypeSafeEvaluateResponse(
             candidate_name=candidate_name,
-            primary_archetype=archetype_enum,
-            archetype_probabilities=probabilities,
+            primary_archetype=FounderArchetype(archetype["choice"]),
+            archetype_probabilities={k: float(v) for k, v in archetype.get("probabilities", {}).items()},
             scores=scores,
-            placement_ready=placement_ready,
-            requires_intervention=requires_intervention,
-            ai_confidence=0.92,
-            model_provider="TypeSafe AI System One (Calibrated Fallback)",
-            is_live_api=False,
-            timestamp=datetime.now(timezone.utc).isoformat()
+            placement_ready=placement_p >= NOUL_THRESHOLD,
+            placement_ready_probability=placement_p,
+            requires_intervention=intervention_p >= NOUL_THRESHOLD,
+            requires_intervention_probability=intervention_p,
+            ai_confidence=float(archetype.get("confidence") or 0.0),
+            model_provider=LIVE_PROVIDER,
+            is_live_api=True,
+            timestamp=_now(),
         )
+
+    # ----------------------------------------------------------------- featurize
 
     def featurize(
         self,
         free_text: str,
         candidate_name: str = "Candidate",
-        custom_probes: Optional[List[Dict[str, str]]] = None
+        custom_probes: Optional[List[Dict[str, str]]] = None,
+        student_id: Optional[str] = None,
     ) -> TypeSafeFeaturizeResponse:
         """
-        Transforms raw candidate text into numeric features using TypeSafe System One probes.
-        Following the Autoresearch Feature Discovery cookbook:
-        - Intensity questions produce: (name, mean), (name_sd, spread_sd)
-        - Presence questions produce: (name, probability)
+        Turns candidate free text into a numeric feature vector (Autoresearch Feature Discovery):
+        intensity probes -> (mean level, spread sd); presence probes -> probability.
         """
-        probes = custom_probes if custom_probes else DEFAULT_PROBES
-
-        if self.api_key:
+        probes = custom_probes or DEFAULT_PROBES
+        # No text means no evidence to judge; skip the paid call.
+        if self.api_key and free_text.strip():
             try:
-                live_result = self._call_typesafe_featurize_api(free_text, candidate_name, probes)
-                if live_result:
-                    return live_result
+                return self._featurize_live(free_text, candidate_name, probes, student_id)
+            except ai_budget.BudgetRefused as e:
+                logger.info("TypeSafe featurize not called (%s); using heuristic estimate", e.reason)
             except Exception as e:
-                logger.warning(f"TypeSafe featurize API call failed, using fallback: {e}")
+                logger.warning("TypeSafe featurize failed, using heuristic estimate: %s", e)
+        return featurize_heuristic(free_text, candidate_name, probes)
 
-        return self._featurize_fallback(free_text, candidate_name, probes)
-
-    def _call_typesafe_featurize_api(
-        self,
-        free_text: str,
-        candidate_name: str,
-        probes: List[Dict[str, str]]
-    ) -> Optional[TypeSafeFeaturizeResponse]:
-        import math
-        questions_payload = {}
-        for p in probes:
-            if p["kind"] == "intensity":
-                questions_payload[p["name"]] = {
-                    "type": "score",
-                    "instructions": p["question"],
-                    "criteria": INTENSITY_LEVELS
-                }
-            else:
-                questions_payload[p["name"]] = {
-                    "type": "noul",
-                    "instructions": p["question"],
-                    "criteria": PRESENCE_CRITERIA
-                }
-
-        payload = {
-            "model": "jev",
-            "state": {"candidate_name": candidate_name, "profile_text": free_text},
-            "questions": questions_payload
-        }
-
-        req = urllib.request.Request(
-            self.api_url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.api_key}",
-                "User-Agent": "c2c-typesafe-client/1.0"
-            },
-            method="POST"
-        )
-
-        with urllib.request.urlopen(req, timeout=self.timeout_seconds) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            answers = data.get("answers", {})
-
-            features_map = {}
-            numeric_vector = []
-            feature_names = []
-
-            for p in probes:
-                name = p["name"]
-                ans = answers.get(name, {})
-                if p["kind"] == "intensity":
-                    probs = [ans.get("probabilities", {}).get(str(i), 0.2) for i in range(len(INTENSITY_LEVELS))]
-                    norm = sum(probs) or 1.0
-                    probs = [v / norm for v in probs]
-                    mean = sum(i * pr for i, pr in enumerate(probs))
-                    variance = max(0.0, sum((i**2) * pr for i, pr in enumerate(probs)) - (mean**2))
-                    spread_sd = math.sqrt(variance)
-
-                    features_map[name] = TypeSafeFeatureColumn(
-                        name=name,
-                        kind="intensity",
-                        mean=round(mean, 2),
-                        spread_sd=round(spread_sd, 2),
-                        interpretation=f"Score: {mean:.2f}/4.0 (±{spread_sd:.2f}) across 5 intensity bands."
-                    )
-                    feature_names.extend([name, f"{name}_sd"])
-                    numeric_vector.extend([round(mean, 2), round(spread_sd, 2)])
-                else:
-                    prob = float(ans.get("noul", 0.5))
-                    features_map[name] = TypeSafeFeatureColumn(
-                        name=name,
-                        kind="presence",
-                        mean=round(prob, 2),
-                        spread_sd=0.0,
-                        interpretation=f"Presence Probability: {prob:.2f} ({'Confirmed' if prob >= 0.5 else 'Unconfirmed'})"
-                    )
-                    feature_names.append(name)
-                    numeric_vector.append(round(prob, 2))
-
-            return TypeSafeFeaturizeResponse(
-                candidate_name=candidate_name,
-                features=features_map,
-                numeric_vector=numeric_vector,
-                feature_names=feature_names,
-                model_provider="TypeSafe AI System One (Jev Live)",
-                is_live_api=True,
-                timestamp=datetime.now(timezone.utc).isoformat()
-            )
-
-    def _featurize_fallback(
-        self,
-        free_text: str,
-        candidate_name: str,
-        probes: List[Dict[str, str]]
+    def _featurize_live(
+        self, free_text: str, candidate_name: str, probes: List[Dict[str, str]], student_id: Optional[str]
     ) -> TypeSafeFeaturizeResponse:
-        import math
-        text_lower = free_text.lower()
-        features_map = {}
-        numeric_vector = []
-        feature_names = []
-
-        # Keywords dictionary for semantic heuristic weighting
-        keywords = {
-            "production_engineering": ["docker", "ci/cd", "kubernetes", "test", "testing", "pytest", "jest", "monitoring", "deploy"],
-            "systems_architecture": ["microservices", "cache", "redis", "database", "postgres", "sql", "architecture", "scalability", "api"],
-            "problem_solving_rigor": ["algorithm", "optimization", "bottleneck", "latency", "distributed", "concurrency", "performance"],
-            "leadership_ownership": ["lead", "led", "mentored", "coordinated", "designed", "owned", "spearheaded", "founded"],
-            "concurrency_experience": ["async", "threading", "queue", "kafka", "rabbitmq", "celery", "concurrent", "parallel"],
-            "startup_agility": ["startup", "0 to 1", "hackathon", "mvp", "prototype", "fast-paced", "pivot", "scrappy"],
-            "cross_functional_alignment": ["product manager", "designer", "stakeholders", "clients", "cross-functional", "collaborated"]
+        questions = {
+            p["name"]: (
+                {"type": "score", "instructions": f"{p['question']}, judging from `profile_text`.", "criteria": INTENSITY_LEVELS}
+                if p["kind"] == "intensity"
+                else {"type": "noul", "instructions": f"{p['question']} Judge from `profile_text`.", "criteria": PRESENCE_CRITERIA}
+            )
+            for p in probes
         }
+        answers = self._system_one({"profile_text": free_text}, questions, "typesafe_featurize", student_id)
 
+        features: Dict[str, TypeSafeFeatureColumn] = {}
+        vector: List[float] = []
+        names: List[str] = []
         for p in probes:
             name = p["name"]
-            kind = p["kind"]
-            target_kw = keywords.get(name, [name.replace("_", " ")])
-            match_count = sum(1 for kw in target_kw if kw in text_lower)
-
-            if kind == "intensity":
-                # Map keyword count to probability spread over levels 0-4
-                if match_count >= 4:
-                    probs = [0.05, 0.10, 0.20, 0.40, 0.25]
-                elif match_count >= 2:
-                    probs = [0.10, 0.20, 0.45, 0.20, 0.05]
-                elif match_count == 1:
-                    probs = [0.20, 0.40, 0.30, 0.08, 0.02]
-                else:
-                    probs = [0.60, 0.25, 0.10, 0.04, 0.01]
-
-                mean = sum(i * pr for i, pr in enumerate(probs))
-                variance = max(0.0, sum((i**2) * pr for i, pr in enumerate(probs)) - (mean**2))
-                spread_sd = math.sqrt(variance)
-
-                features_map[name] = TypeSafeFeatureColumn(
-                    name=name,
-                    kind="intensity",
-                    mean=round(mean, 2),
-                    spread_sd=round(spread_sd, 2),
-                    interpretation=f"Score: {mean:.2f}/4.0 (±{spread_sd:.2f}) based on demonstrated signals."
+            ans = answers[name]
+            if p["kind"] == "intensity":
+                raw = ans.get("probabilities") or {}
+                probs = [float(raw.get(str(i), raw.get(i, 0.0))) for i in range(len(INTENSITY_LEVELS))]
+                _, sd = _mean_and_sd(probs)
+                mean = float(ans["score"])
+                features[name] = TypeSafeFeatureColumn(
+                    name=name, kind="intensity", mean=round(mean, 2), spread_sd=round(sd, 2),
+                    interpretation=f"Jev level {mean:.2f}/4.0 (±{sd:.2f}).",
                 )
-                feature_names.extend([name, f"{name}_sd"])
-                numeric_vector.extend([round(mean, 2), round(spread_sd, 2)])
+                names.extend([name, f"{name}_sd"])
+                vector.extend([round(mean, 2), round(sd, 2)])
             else:
-                prob = 0.85 if match_count >= 1 else 0.15
-                features_map[name] = TypeSafeFeatureColumn(
-                    name=name,
-                    kind="presence",
-                    mean=round(prob, 2),
-                    spread_sd=0.0,
-                    interpretation=f"Presence Probability: {prob:.2f} ({'Demonstrated' if prob >= 0.5 else 'Not detected'})"
+                prob = float(ans["noul"])
+                features[name] = TypeSafeFeatureColumn(
+                    name=name, kind="presence", mean=round(prob, 2), spread_sd=0.0,
+                    interpretation=f"Jev probability {prob:.2f} that this is demonstrated.",
                 )
-                feature_names.append(name)
-                numeric_vector.append(round(prob, 2))
+                names.append(name)
+                vector.append(round(prob, 2))
 
         return TypeSafeFeaturizeResponse(
             candidate_name=candidate_name,
-            features=features_map,
-            numeric_vector=numeric_vector,
-            feature_names=feature_names,
-            model_provider="TypeSafe AI System One (Autoresearch Featurizer Fallback)",
-            is_live_api=False,
-            timestamp=datetime.now(timezone.utc).isoformat()
+            features=features,
+            numeric_vector=vector,
+            feature_names=names,
+            model_provider=LIVE_PROVIDER,
+            is_live_api=True,
+            timestamp=_now(),
         )
 
 

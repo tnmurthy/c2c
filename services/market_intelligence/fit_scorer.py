@@ -273,6 +273,10 @@ def score_job_fit(posting: str, candidate: dict) -> dict:
 
 # ─── H1: Multi-Dimension Job Match Card Generator ────────────────────────────
 
+TYPESAFE_RIGOR_LIVE = "TypeSafe AI Neural Rigor"
+TYPESAFE_RIGOR_HEURISTIC = "Profile Rigor (heuristic)"
+
+
 def generate_job_match_card(posting: str, candidate: dict, job_meta: Optional[dict] = None) -> dict:
     """
     Generate a 5-Dimension Scored Job Match Card inspired by ai-job-search framework.
@@ -417,11 +421,12 @@ def generate_job_match_card(posting: str, candidate: dict, job_meta: Optional[di
     ]
 
     if typesafe_alignment_score is not None:
+        is_live = bool(typesafe_telemetry and typesafe_telemetry.get("is_live_api"))
         match_dimensions.append({
-            "name": "TypeSafe AI Neural Rigor",
+            "name": TYPESAFE_RIGOR_LIVE if is_live else TYPESAFE_RIGOR_HEURISTIC,
             "score": typesafe_alignment_score,
             "weight": "Bonus",
-            "status": "Verified Rigor" if typesafe_alignment_score >= 70 else "Calibrating",
+            "status": ("Verified Rigor" if typesafe_alignment_score >= 70 else "Calibrating") if is_live else "Heuristic estimate",
             "details": [
                 f"Autoresearch Vector: 11-dimension float matrix calibrated",
                 f"Model: {typesafe_telemetry.get('model_provider') if typesafe_telemetry else 'TypeSafe System One'}"

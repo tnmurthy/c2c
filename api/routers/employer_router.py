@@ -4,8 +4,10 @@ import logging
 import subprocess
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
+from fastapi.concurrency import run_in_threadpool
 
 from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client
+from api.services.candidate_features import features_for_students
 from api.schemas.employer import EmployerOnboard, JobCreate
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 
@@ -92,36 +94,16 @@ async def get_employer_candidates(client = Depends(require_admin_supabase), curr
         for a in (a_res.data or []):
             sid = a["student_id"]
             if sid not in latest or a.get("created_at", "") > latest[sid].get("created_at", ""): latest[sid] = a
+        assessed = [s for s in s_res.data if s["id"] in latest]
+        telemetry_by_id = await run_in_threadpool(features_for_students, client, assessed)
         results = []
-        from api.services.typesafe_service import typesafe_service
 
         for s in s_res.data:
             ass = latest.get(s["id"])
             if not ass: continue
             sc = ass.get("dimension_scores", {})
 
-            # TypeSafe AI System One Autoresearch Featurization
-            ts_telemetry = None
-            try:
-                candidate_text = f"{s.get('bio', '')} {' '.join(s.get('skills', []) if isinstance(s.get('skills'), list) else [])} {s.get('department', '')}"
-                ts_feat = typesafe_service.featurize(free_text=candidate_text, candidate_name=s.get("full_name") or "Candidate")
-                if ts_feat:
-                    ts_telemetry = {
-                        "numeric_vector": ts_feat.numeric_vector,
-                        "feature_names": ts_feat.feature_names,
-                        "features": {
-                            k: {
-                                "mean": v.mean,
-                                "spread_sd": v.spread_sd,
-                                "kind": v.kind,
-                                "interpretation": v.interpretation,
-                            }
-                            for k, v in ts_feat.features.items()
-                        },
-                        "model_provider": ts_feat.model_provider,
-                    }
-            except Exception as e:
-                logger.warning(f"TypeSafe featurization skipped for candidate {s.get('id')}: {e}")
+            ts_telemetry = telemetry_by_id.get(s["id"])
 
             clean_name = (s.get("full_name") or "candidate").lower().replace(" ", "")
             clean_slug = (s.get("full_name") or "candidate").lower().replace(" ", "-")

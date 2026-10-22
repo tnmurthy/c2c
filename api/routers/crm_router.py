@@ -3,6 +3,7 @@ from typing import Dict, Any
 import logging
 
 from api.deps import get_supabase_client, require_role, get_current_user, require_admin_supabase
+from api.services.candidate_features import features_for_students
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 
 router = APIRouter(prefix="/crm", tags=["CRM"])
@@ -95,7 +96,9 @@ def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])),
             if sid not in latest_assessments:
                 latest_assessments[sid] = a
                 
-        from api.services.typesafe_service import typesafe_service
+        assessed = [s for s in students_res.data if s["id"] in latest_assessments]
+        telemetry_by_id = features_for_students(supabase, assessed)
+        results = []
 
         for s in students_res.data:
             ass = latest_assessments.get(s["id"])
@@ -104,28 +107,7 @@ def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])),
                 
             scores = ass.get("dimension_scores", {})
 
-            # TypeSafe AI System One Autoresearch Featurization
-            ts_telemetry = None
-            try:
-                candidate_text = f"{s.get('bio', '')} {' '.join(s.get('skills', []) if isinstance(s.get('skills'), list) else [])} {s.get('department', '')}"
-                ts_feat = typesafe_service.featurize(free_text=candidate_text, candidate_name=s.get("full_name") or "Candidate")
-                if ts_feat:
-                    ts_telemetry = {
-                        "numeric_vector": ts_feat.numeric_vector,
-                        "feature_names": ts_feat.feature_names,
-                        "features": {
-                            k: {
-                                "mean": v.mean,
-                                "spread_sd": v.spread_sd,
-                                "kind": v.kind,
-                                "interpretation": v.interpretation,
-                            }
-                            for k, v in ts_feat.features.items()
-                        },
-                        "model_provider": ts_feat.model_provider,
-                    }
-            except Exception as e:
-                logger.warning(f"TypeSafe featurization skipped in CRM for {s.get('id')}: {e}")
+            ts_telemetry = telemetry_by_id.get(s["id"])
 
             clean_name = (s.get("full_name") or "candidate").lower().replace(" ", "")
             clean_slug = (s.get("full_name") or "candidate").lower().replace(" ", "-")

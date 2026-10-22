@@ -424,7 +424,7 @@ class TestFitScorer(unittest.TestCase):
         self.assertIn("Behavioral & Culture Fit", dimension_names)
         self.assertIn("Location & Logistics", dimension_names)
         self.assertIn("Placement & Career Alignment", dimension_names)
-        self.assertIn("TypeSafe AI Neural Rigor", dimension_names)
+        self.assertTrue({"TypeSafe AI Neural Rigor", "Profile Rigor (heuristic)"} & set(dimension_names))
         self.assertIn("key_strengths", card)
         self.assertIn("growth_gaps", card)
         self.assertIn("typesafe_telemetry", card)
