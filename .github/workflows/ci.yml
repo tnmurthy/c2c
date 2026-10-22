@@ -55,10 +55,12 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f api/requirements.txt ]; then pip install -r api/requirements.txt; fi
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest
 
       - name: Run Unit Tests
         run: |
-          python -m unittest discover -s tests -p "test_*.py"
+          # e2e_flow_test.py and tests/e2e need running servers; they are not unit tests.
+          python -m pytest tests -q --ignore=tests/e2e --ignore=tests/e2e_flow_test.py
         env:
           SUPABASE_URL: https://placeholder.supabase.co
           SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder
