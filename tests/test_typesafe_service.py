@@ -43,7 +43,21 @@ def _evaluate_answers() -> dict:
 
 
 @pytest.fixture
-def live_key(monkeypatch):
+def ledger(monkeypatch):
+    """Budget always grants the claim; records claims and outcomes."""
+    box = {"claims": [], "finished": []}
+
+    def claim(source, student_id=None):
+        box["claims"].append((source, student_id))
+        return len(box["claims"])
+
+    monkeypatch.setattr(ts.ai_budget, "claim_ai_call", claim)
+    monkeypatch.setattr(ts.ai_budget, "finish_ai_call", lambda lid, ok: box["finished"].append((lid, ok)))
+    return box
+
+
+@pytest.fixture
+def live_key(monkeypatch, ledger):
     monkeypatch.setenv("TYPESAFE_API_KEY", "test-key")
 
 
@@ -154,3 +168,47 @@ def test_legacy_key_name_is_accepted(monkeypatch):
     monkeypatch.setenv("TYPESAFE_KEY", "legacy")
 
     assert ts.TypeSafeService().api_key == "legacy"
+
+
+def test_live_call_is_claimed_and_finished_in_ledger(live_key, capture, ledger):
+    capture["answers"] = _evaluate_answers()
+
+    ts.TypeSafeService().evaluate(RESPONSES, "Asha", student_id="s-1")
+
+    assert ledger["claims"] == [("typesafe_evaluate", "s-1")]
+    assert ledger["finished"] == [(1, True)]
+
+
+def test_budget_refusal_makes_no_api_call(live_key, capture, monkeypatch):
+    def refuse(source, student_id=None):
+        raise ts.ai_budget.BudgetRefused("daily_cap_reached")
+
+    monkeypatch.setattr(ts.ai_budget, "claim_ai_call", refuse)
+
+    res = ts.TypeSafeService().featurize("Built Kafka consumers in Go.", "Ravi")
+
+    assert capture["request"] is None
+    assert res.is_live_api is False
+
+
+def test_failed_call_is_recorded_as_error(live_key, ledger, monkeypatch):
+    def boom(req, timeout):
+        raise urllib.error.URLError("timeout")
+
+    monkeypatch.setattr(ts.urllib.request, "urlopen", boom)
+
+    ts.TypeSafeService().featurize("Built Kafka consumers in Go.", "Ravi")
+
+    assert ledger["finished"] == [(1, False)]
+
+
+def test_budget_check_failure_refuses_the_call(monkeypatch):
+    class Broken:
+        def rpc(self, *a, **k):
+            raise ConnectionError("db down")
+
+    monkeypatch.setattr(ts.ai_budget, "get_service_client", lambda: Broken())
+
+    with pytest.raises(ts.ai_budget.BudgetRefused) as exc:
+        ts.ai_budget.claim_ai_call("typesafe_featurize")
+    assert exc.value.reason == "budget_check_unavailable"

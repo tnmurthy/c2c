@@ -210,6 +210,25 @@ Cron: daily 6am
 
 ---
 
+## AI Cost Controls
+
+Every paid model call is claimed in the database before it is made
+(`claim_ai_call`, migration `20261022000000_typesafe_feature_cache_and_ai_caps.sql`).
+The database refuses the claim at a cap; if the check itself fails, the call is
+refused and the heuristic estimate (labelled `is_live_api=false`) is used.
+
+| Element | Grows with | Control | Where it is set |
+|---|---|---|---|
+| TypeSafe featurize (Jev) | students whose profile text changed | `candidate_features` cache by text hash; max 25 live per request; daily cap (default 300) | `ai_settings` (Costs page: to build) |
+| TypeSafe evaluate (Jev) | `/api/typesafe/evaluate` requests | daily cap (default 200) | `ai_settings` |
+| All AI calls | everything above | account daily cap (default 500), IST day | `ai_settings` |
+| Gemini (agent-recruiters) | assessments | **not yet metered** | to add |
+| Supabase | tier, egress, storage | plan + spend cap | Supabase dashboard |
+| Vercel / Railway | invocations, bandwidth | Spend Management / usage limits | vendor dashboards |
+
+Prices are never stored in the repo: an admin enters `price_per_call_inr` and
+`monthly_budget_inr` in `ai_settings`. The ledger is `ai_call_ledger`.
+
 ## Key Principle
 
 > **Don't rebuild — rewire.** Every service already works. The integration is entirely in the trigger layer and the shared Supabase schema. The web app just needs to listen for the results.

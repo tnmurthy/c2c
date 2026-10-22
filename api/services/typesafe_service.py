@@ -14,6 +14,7 @@ from api.schemas.typesafe import (
     TypeSafeFeaturizeResponse,
     TypeSafeStatusResponse,
 )
+from api.services import ai_budget
 from api.services.typesafe_heuristics import (
     DIMENSIONS,
     _mean_and_sd,
@@ -109,8 +110,23 @@ class TypeSafeService:
             status="online",
         )
 
-    def _system_one(self, state: Any, questions: Dict[str, Any]) -> Dict[str, Any]:
-        """POST to /v1/systemone and return the `answers` map. Raises on any failure."""
+    def _system_one(
+        self, state: Any, questions: Dict[str, Any], source: str, student_id: Optional[str]
+    ) -> Dict[str, Any]:
+        """
+        Claims the call against the daily caps, then POSTs to /v1/systemone and
+        returns the `answers` map. Raises BudgetRefused or on any API failure.
+        """
+        ledger_id = ai_budget.claim_ai_call(source, student_id)
+        try:
+            answers = self._post(state, questions)
+        except Exception:
+            ai_budget.finish_ai_call(ledger_id, ok=False)
+            raise
+        ai_budget.finish_ai_call(ledger_id, ok=True)
+        return answers
+
+    def _post(self, state: Any, questions: Dict[str, Any]) -> Dict[str, Any]:
         req = urllib.request.Request(
             TYPESAFE_API_URL,
             data=json.dumps({"model": TYPESAFE_MODEL, "state": state, "questions": questions}).encode("utf-8"),
@@ -143,13 +159,16 @@ class TypeSafeService:
         responses: List[Dict[str, Any]],
         candidate_name: str = "Candidate",
         custom_rubrics: Optional[Dict[str, str]] = None,
+        student_id: Optional[str] = None,
     ) -> TypeSafeEvaluateResponse:
         """Raises ValueError when there are no responses to judge."""
         if not responses:
             raise ValueError("No assessment responses to evaluate.")
         if self.api_key:
             try:
-                return self._evaluate_live(responses, candidate_name, custom_rubrics or {})
+                return self._evaluate_live(responses, candidate_name, custom_rubrics or {}, student_id)
+            except ai_budget.BudgetRefused as e:
+                logger.info("TypeSafe evaluate not called (%s); using heuristic estimate", e.reason)
             except Exception as e:
                 logger.warning("TypeSafe evaluate failed, using heuristic estimate: %s", e)
         return evaluate_heuristic(responses, candidate_name)
@@ -188,9 +207,15 @@ class TypeSafeService:
         return questions
 
     def _evaluate_live(
-        self, responses: List[Dict[str, Any]], candidate_name: str, custom_rubrics: Dict[str, str]
+        self,
+        responses: List[Dict[str, Any]],
+        candidate_name: str,
+        custom_rubrics: Dict[str, str],
+        student_id: Optional[str],
     ) -> TypeSafeEvaluateResponse:
-        answers = self._system_one({"responses": responses}, self._evaluate_questions(custom_rubrics))
+        answers = self._system_one(
+            {"responses": responses}, self._evaluate_questions(custom_rubrics), "typesafe_evaluate", student_id
+        )
 
         scores: Dict[str, DimensionScore] = {}
         for dim in DIMENSIONS:
@@ -229,6 +254,7 @@ class TypeSafeService:
         free_text: str,
         candidate_name: str = "Candidate",
         custom_probes: Optional[List[Dict[str, str]]] = None,
+        student_id: Optional[str] = None,
     ) -> TypeSafeFeaturizeResponse:
         """
         Turns candidate free text into a numeric feature vector (Autoresearch Feature Discovery):
@@ -238,13 +264,15 @@ class TypeSafeService:
         # No text means no evidence to judge; skip the paid call.
         if self.api_key and free_text.strip():
             try:
-                return self._featurize_live(free_text, candidate_name, probes)
+                return self._featurize_live(free_text, candidate_name, probes, student_id)
+            except ai_budget.BudgetRefused as e:
+                logger.info("TypeSafe featurize not called (%s); using heuristic estimate", e.reason)
             except Exception as e:
                 logger.warning("TypeSafe featurize failed, using heuristic estimate: %s", e)
         return featurize_heuristic(free_text, candidate_name, probes)
 
     def _featurize_live(
-        self, free_text: str, candidate_name: str, probes: List[Dict[str, str]]
+        self, free_text: str, candidate_name: str, probes: List[Dict[str, str]], student_id: Optional[str]
     ) -> TypeSafeFeaturizeResponse:
         questions = {
             p["name"]: (
@@ -254,7 +282,7 @@ class TypeSafeService:
             )
             for p in probes
         }
-        answers = self._system_one({"profile_text": free_text}, questions)
+        answers = self._system_one({"profile_text": free_text}, questions, "typesafe_featurize", student_id)
 
         features: Dict[str, TypeSafeFeatureColumn] = {}
         vector: List[float] = []
