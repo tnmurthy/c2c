@@ -34,6 +34,7 @@ import { useApiQuery } from "@/hooks/useApiQuery";
 import { authFetch } from '@/lib/authFetch';
 import ProfileCompletionWidget from "@/components/profile/ProfileCompletionWidget";
 import UserJourneyWidget from "@/components/dashboard/UserJourneyWidget";
+import { JobMatchCard } from "@/components/JobMatchCard";
 import { supabase } from "@/lib/supabase";
 
 interface HistoryPoint {
@@ -54,6 +55,14 @@ interface DashboardData {
   student: {
     full_name: string;
     department: string;
+    skills?: string[];
+    target_roles?: string[];
+    location?: string;
+    iq_score?: number;
+    eq_score?: number;
+    aq_score?: number;
+    placement_readiness_score?: number;
+    [key: string]: any;
   };
   assessments: Array<{
     dimension_scores?: DimensionScores;
@@ -483,63 +492,37 @@ export default function Dashboard() {
                   {alerts.slice(0, 5).map((alert: Alert, i: number) => {
                     const jobId = (alert as Alert & { job_id?: string }).job_id || alert.market_leads?.id;
                     const alreadyApplied = jobId ? appliedJobIds.has(jobId) : false;
-                    const isApplying = applyingTo === jobId;
+                    
+                    const candidateProfile = {
+                      full_name: data?.student?.full_name || "",
+                      skills: data?.student?.skills || [],
+                      department: data?.student?.department || "",
+                      target_roles: data?.student?.target_roles || [],
+                      location: data?.student?.location || "",
+                      iq_score: data?.student?.iq_score,
+                      eq_score: data?.student?.eq_score,
+                      aq_score: data?.student?.aq_score,
+                      archetype: founderFitType,
+                      placement_readiness_score: data?.student?.placement_readiness_score || 80,
+                    };
+
+                    const ml = alert.market_leads as Record<string, any> | undefined;
+                    const postingText = `${ml?.name || ""} ${ml?.company || ""} ${ml?.ai_summary || ml?.ai_notes || ""}`;
+
                     return (
-                      <div key={i} className="relative group/alert">
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400/20 to-indigo-600/20 rounded-xl blur opacity-0 group-hover/alert:opacity-100 transition duration-500"></div>
-                        <div className="relative bg-black/60 border border-white/5 p-6 rounded-xl flex flex-col gap-4 backdrop-blur-md transition-all group-hover/alert:bg-black/40">
-                          <div className="flex justify-between items-start gap-6">
-                            <h3 className="text-[#bbc9cd] font-sans font-black group-hover/alert:text-white transition-colors line-clamp-1 uppercase tracking-tight text-lg">
-                              {alert.market_leads?.name || 'High Impact Role'}
-                            </h3>
-                            <div className="shrink-0 flex flex-col items-end">
-                              <div className="font-mono text-[9px] text-cyan-400/40 font-black uppercase tracking-widest mb-1">MATCH</div>
-                              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-sm font-mono text-xs font-black text-cyan-400">
-                                {(alert as Alert & { score?: number }).score || alert.market_leads?.ai_score || 0}%
-                              </span>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/5">
-                            <span className="flex items-center gap-2 font-mono text-[10px] text-white/30 uppercase tracking-widest font-bold">
-                              <Database className="w-3.5 h-3.5" /> {alert.market_leads?.company || 'Confidential'}
-                            </span>
-                            <div className="flex items-center gap-2">
-                              {alert.lead_url && (
-                                <a
-                                  href={alert.lead_url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center gap-1.5 text-[10px] font-black font-mono text-white/30 hover:text-white/60 uppercase tracking-widest transition-colors"
-                                >
-                                  View <ExternalLink className="w-3 h-3" />
-                                </a>
-                              )}
-                              {jobId && (
-                                <button
-                                  id={`apply-btn-${jobId}`}
-                                  onClick={() => handleApply(jobId)}
-                                  disabled={alreadyApplied || isApplying}
-                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm font-mono text-[10px] font-black uppercase tracking-widest transition-all ${
-                                    alreadyApplied
-                                      ? "bg-green-500/10 border border-green-500/20 text-green-400 cursor-default"
-                                      : isApplying
-                                      ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 opacity-60"
-                                      : "bg-[#8aebff]/10 border border-[#8aebff]/30 text-[#8aebff] hover:bg-[#8aebff]/20"
-                                  }`}
-                                >
-                                  {alreadyApplied ? (
-                                    <><CheckCircle className="w-3 h-3" /> Applied</>
-                                  ) : isApplying ? (
-                                    <><div className="w-3 h-3 border border-cyan-400 border-t-transparent rounded-full animate-spin" /> Sending…</>
-                                  ) : (
-                                    <><Send className="w-3 h-3" /> Express_Interest</>
-                                  )}
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <JobMatchCard
+                        key={i}
+                        postingText={postingText}
+                        candidateProfile={candidateProfile}
+                        jobMeta={{
+                          id: jobId,
+                          title: ml?.name || "Target Opportunity",
+                          company: ml?.company || "Partner Employer",
+                          url: alert.lead_url,
+                        }}
+                        onApply={handleApply}
+                        alreadyApplied={alreadyApplied}
+                      />
                     );
                   })}
                 </div>

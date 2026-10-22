@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -51,6 +52,7 @@ export default function RootLayout({
       <body className="font-sans antialiased bg-background text-slate-200">
         {children}
         <UserJourneyGuide />
+        <Analytics />
       </body>
     </html>
   );

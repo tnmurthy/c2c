@@ -105,9 +105,9 @@ _BUDGET_PATTERNS = [
     # $50,000 / $50k / $50K
     re.compile(r"\$\s*[\d,]+\s*(?:k|K)?(?:\s*[-–]\s*\$?\s*[\d,]+\s*(?:k|K)?)?"),
     # INR 5,00,000 / INR 6L / INR 6 LPA
-    re.compile(r"\bINR\s*[\d,]+(?:\s*(?:L|Lakh|LPA|lakhs?))?\b", re.IGNORECASE),
+    re.compile(r"\bINR\s*[\d,]+(?:\s*(?:LPA|Lakh|lakhs?|L))?\b", re.IGNORECASE),
     # ₹ symbol
-    re.compile(r"₹\s*[\d,]+(?:\s*(?:L|Lakh|LPA|lakhs?|k|K))?"),
+    re.compile(r"₹\s*[\d,]+(?:\s*(?:LPA|Lakh|lakhs?|k|K|L))?", re.IGNORECASE),
     # Budget: / Salary: / CTC: / Package: lines
     re.compile(
         r"(?:budget|salary|ctc|package|compensation|stipend)\s*[:–-]\s*"

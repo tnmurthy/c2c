@@ -93,10 +93,39 @@ async def get_employer_candidates(client = Depends(require_admin_supabase), curr
             sid = a["student_id"]
             if sid not in latest or a.get("created_at", "") > latest[sid].get("created_at", ""): latest[sid] = a
         results = []
+        from api.services.typesafe_service import typesafe_service
+
         for s in s_res.data:
             ass = latest.get(s["id"])
             if not ass: continue
             sc = ass.get("dimension_scores", {})
+
+            # TypeSafe AI System One Autoresearch Featurization
+            ts_telemetry = None
+            try:
+                candidate_text = f"{s.get('bio', '')} {' '.join(s.get('skills', []) if isinstance(s.get('skills'), list) else [])} {s.get('department', '')}"
+                ts_feat = typesafe_service.featurize(free_text=candidate_text, candidate_name=s.get("full_name") or "Candidate")
+                if ts_feat:
+                    ts_telemetry = {
+                        "numeric_vector": ts_feat.numeric_vector,
+                        "feature_names": ts_feat.feature_names,
+                        "features": {
+                            k: {
+                                "mean": v.mean,
+                                "spread_sd": v.spread_sd,
+                                "kind": v.kind,
+                                "interpretation": v.interpretation,
+                            }
+                            for k, v in ts_feat.features.items()
+                        },
+                        "model_provider": ts_feat.model_provider,
+                    }
+            except Exception as e:
+                logger.warning(f"TypeSafe featurization skipped for candidate {s.get('id')}: {e}")
+
+            clean_name = (s.get("full_name") or "candidate").lower().replace(" ", "")
+            clean_slug = (s.get("full_name") or "candidate").lower().replace(" ", "-")
+
             results.append({
                 "id": s["id"],
                 "name": s["full_name"],
@@ -112,7 +141,13 @@ async def get_employer_candidates(client = Depends(require_admin_supabase), curr
                 "skills": s.get("skills", []),
                 "image": f"https://api.dicebear.com/7.x/avataaars/svg?seed={s['full_name']}",
                 "status": "online",
-                "summary": ass.get("development_report", {}).get("profile_summary", "")
+                "summary": ass.get("development_report", {}).get("profile_summary", ""),
+                "github_url": s.get("github_url") or f"https://github.com/{clean_name}",
+                "x_url": s.get("x_url") or f"https://x.com/{clean_name}",
+                "meta_url": s.get("meta_url") or f"https://instagram.com/{clean_name}",
+                "linkedin_url": s.get("linkedin_url") or f"https://linkedin.com/in/{clean_slug}",
+                "portfolio_url": s.get("portfolio_url") or f"/portfolio/{s['id']}",
+                "typesafe_telemetry": ts_telemetry,
             })
         return sorted(results, key=lambda x: x["match"], reverse=True)
     except Exception as e:

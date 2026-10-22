@@ -209,7 +209,7 @@ export default function AdminDashboard() {
                     <TrendingUp className="w-4 h-4 text-purple-500" /> Scoring Mechanics Formula
                   </h4>
                   <div className="bg-slate-950 p-4 rounded border border-cyan-900/30 font-mono text-xs leading-relaxed text-cyan-100 overflow-x-auto break-all">
-                    <span className="text-white/40">// Formula: Sum(Score * Weight) - Penalty</span>
+                    <span className="text-white/40">{'// Formula: Sum(Score * Weight) - Penalty'}</span>
                     <div className="mt-2 text-sm font-bold text-cyan-400">
                       {debugResult.formula} = {debugResult.final_score}%
                     </div>

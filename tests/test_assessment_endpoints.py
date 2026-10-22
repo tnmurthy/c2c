@@ -13,6 +13,7 @@ from fastapi import status
 from api.main import app
 from api.deps import get_current_user, require_admin_supabase, require_role
 from api.routers.assessment_router import generate_development_report
+from tests.db_gate import requires_db
 
 # Setup FastAPI test client
 client = TestClient(app)
@@ -34,6 +35,7 @@ class TestAssessmentHardened(unittest.TestCase):
     def tearDown(self):
         app.dependency_overrides.clear()
 
+    @requires_db
     def test_get_assessment_bank(self):
         response = client.get("/api/assessment/bank?page=1&limit=5")
         self.assertEqual(response.status_code, 200)
@@ -62,6 +64,7 @@ class TestAssessmentHardened(unittest.TestCase):
         report_low = generate_development_report(scores_low, "Builder")
         self.assertTrue(any("value-alignment reflection" in feedback for feedback in report_low["actionable_feedback"]))
 
+    @requires_db
     def test_assessment_session_and_cooldown_lifecycle(self):
         db_client = require_admin_supabase()
         
@@ -183,6 +186,7 @@ class TestAssessmentHardened(unittest.TestCase):
             except Exception:
                 pass
 
+    @requires_db
     def test_generate_items_admin(self):
         # Override user as admin
         app.dependency_overrides[get_current_user] = lambda: MockUser("test-admin-uuid", "admin@example.com", "admin")
@@ -207,6 +211,7 @@ class TestAssessmentHardened(unittest.TestCase):
         finally:
             app.dependency_overrides[get_current_user] = get_mock_student_user
 
+    @requires_db
     def test_get_student_history(self):
         db_client = require_admin_supabase()
         student_id = str(uuid.uuid4())
@@ -271,6 +276,7 @@ class TestAssessmentHardened(unittest.TestCase):
             except Exception:
                 pass
 
+    @requires_db
     def test_get_student_history_unauthorized(self):
         db_client = require_admin_supabase()
         student_id = str(uuid.uuid4())
@@ -340,6 +346,7 @@ class TestAssessmentHardened(unittest.TestCase):
             except Exception:
                 pass
 
+    @requires_db
     def test_admin_match_debugger(self):
         db_client = require_admin_supabase()
         student_id = str(uuid.uuid4())
