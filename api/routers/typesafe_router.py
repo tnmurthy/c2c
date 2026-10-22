@@ -32,6 +32,8 @@ def evaluate_candidate(payload: TypeSafeEvaluateRequest):
             candidate_name=payload.candidate_name or "Candidate",
             custom_rubrics=payload.custom_rubrics
         )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"TypeSafe evaluation error: {str(e)}")
 
