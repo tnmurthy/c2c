@@ -21,6 +21,12 @@ from services.market_intelligence import (
     extract_lead_intel,
     generate_outreach_draft,
     score_job_fit,
+    generate_job_match_card,
+    generate_interview_prep,
+    expand_github_profile,
+    expand_candidate_profile,
+    generate_skill_gap_report,
+    run_drafter_reviewer_pipeline,
     build_resume_context,
     build_cover_letter_context,
 )
@@ -35,6 +41,33 @@ router = APIRouter(prefix="/market", tags=["market-intelligence"])
 class ScoreFitRequest(BaseModel):
     posting: str
     candidate: dict[str, Any]
+
+
+class JobMatchCardRequest(BaseModel):
+    posting: str
+    candidate: dict[str, Any]
+    job_meta: dict[str, Any] = {}
+
+
+class InterviewPrepRequest(BaseModel):
+    student: dict[str, Any]
+    job: dict[str, Any]
+
+
+class ExpandProfileRequest(BaseModel):
+    student_profile: dict[str, Any]
+    github_url: str = ""
+
+
+class SkillGapReportRequest(BaseModel):
+    students: list[dict[str, Any]] = []
+    jobs: list[dict[str, Any]] = []
+    institution_id: str = ""
+
+
+class ReviewedApplicationRequest(BaseModel):
+    student: dict[str, Any]
+    job: dict[str, Any]
 
 
 class EvaluateLeadRequest(BaseModel):
@@ -93,6 +126,91 @@ async def score_fit(body: ScoreFitRequest):
         raise HTTPException(500, f"score_job_fit failed: {exc}") from exc
     logger.info("score-fit result: %s", result.get("score"))
     return result
+
+
+@router.post("/job-match-card")
+async def job_match_card(body: JobMatchCardRequest):
+    """
+    Generate a 5-dimension job evaluation report card (H1 implementation).
+    Returns overall score, letter grade, 5 dimensions with weights/statuses,
+    strengths, and growth gaps.
+    """
+    try:
+        result = generate_job_match_card(body.posting, body.candidate, body.job_meta)
+    except Exception as exc:
+        logger.exception("job-match-card error")
+        raise HTTPException(500, f"generate_job_match_card failed: {exc}") from exc
+    return result
+
+
+@router.post("/interview-prep")
+async def interview_prep(body: InterviewPrepRequest):
+    """
+    Generate tailored interview prep kit (H5 implementation).
+    Returns role-specific tech questions, STAR behavioral frameworks,
+    customized elevator pitch, and company research directives.
+    """
+    try:
+        result = generate_interview_prep(body.student, body.job)
+    except Exception as exc:
+        logger.exception("interview-prep error")
+        raise HTTPException(500, f"generate_interview_prep failed: {exc}") from exc
+    return result
+
+
+@router.post("/expand-profile")
+async def expand_profile(body: ExpandProfileRequest):
+    """
+    Auto-enrich candidate skills and competencies from public GitHub / web footprint (H2 implementation).
+    Returns newly discovered skills, merged skills list, repo summaries, and confidence tier.
+    """
+    try:
+        profile = dict(body.student_profile)
+        if body.github_url:
+            profile["github_url"] = body.github_url
+        result = expand_candidate_profile(profile)
+        return result
+    except Exception as exc:
+        logger.exception("expand-profile error")
+        raise HTTPException(500, f"expand_candidate_profile failed: {exc}") from exc
+
+
+@router.post("/skill-gap-report")
+async def skill_gap_report(body: SkillGapReportRequest):
+    """
+    Generate prioritized Cohort vs Market Skill Gap Heatmap (H3 implementation).
+    Automatically fetches institution cohort and active job postings if not explicitly passed.
+    """
+    try:
+        students = body.students
+        jobs = body.jobs
+
+        # Fallback to Supabase data if not explicitly provided
+        if not students or not jobs:
+            client = get_supabase_client()
+            if client:
+                if not students:
+                    q = client.table("students").select("id, full_name, skills, department")
+                    if body.institution_id:
+                        q = q.eq("institution_id", body.institution_id)
+                    s_res = q.limit(100).execute()
+                    students = s_res.data or []
+                if not jobs:
+                    j_res = client.table("job_postings").select("id, title, location, role_type").limit(100).execute()
+                    jobs = j_res.data or []
+                    if not jobs:
+                        # Also check market_leads
+                        ml_res = client.table("market_leads").select("id, name, ai_summary, ai_notes").limit(100).execute()
+                        jobs = [
+                            {"title": m.get("name"), "description": m.get("ai_summary") or m.get("ai_notes")}
+                            for m in (ml_res.data or [])
+                        ]
+
+        result = generate_skill_gap_report(students, jobs)
+        return result
+    except Exception as exc:
+        logger.exception("skill-gap-report error")
+        raise HTTPException(500, f"generate_skill_gap_report failed: {exc}") from exc
 
 
 @router.post("/evaluate-lead")
@@ -252,6 +370,21 @@ async def generate_cover_letter(body: GenerateCoverLetterRequest):
     except Exception as exc:
         logger.exception("generate/cover-letter error")
         raise HTTPException(500, f"build_cover_letter_context failed: {exc}") from exc
+
+
+@router.post("/generate/reviewed-application")
+async def generate_reviewed_application(body: ReviewedApplicationRequest):
+    """
+    Execute two-pass Drafter-Reviewer pipeline (H4 implementation).
+    Drafts tailored cover letter & resume context, reviews ATS keyword alignment,
+    flags generic filler, and outputs revised application package.
+    """
+    try:
+        result = run_drafter_reviewer_pipeline(body.student, body.job)
+        return result
+    except Exception as exc:
+        logger.exception("generate/reviewed-application error")
+        raise HTTPException(500, f"run_drafter_reviewer_pipeline failed: {exc}") from exc
 
 
 @router.post("/generate/outreach")

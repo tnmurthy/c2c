@@ -17,6 +17,22 @@ export interface Candidate {
   image: string;
   status: 'online' | 'away' | 'offline';
   summary: string;
+  github_url?: string;
+  x_url?: string;
+  meta_url?: string;
+  linkedin_url?: string;
+  portfolio_url?: string;
+  typesafe_telemetry?: {
+    numeric_vector: number[];
+    feature_names?: string[];
+    features?: Record<string, {
+      mean: number;
+      spread_sd: number;
+      kind: string;
+      interpretation: string;
+    }>;
+    model_provider?: string;
+  };
 }
 
 export interface Lead {
@@ -72,6 +88,22 @@ export interface CrmCandidate {
   archetype?: string;
   scores?: CrmCandidateScore;
   fit_scores?: Record<string, number>;
+  github_url?: string;
+  x_url?: string;
+  meta_url?: string;
+  linkedin_url?: string;
+  portfolio_url?: string;
+  typesafe_telemetry?: {
+    numeric_vector: number[];
+    feature_names?: string[];
+    features?: Record<string, {
+      mean: number;
+      spread_sd: number;
+      kind: string;
+      interpretation: string;
+    }>;
+    model_provider?: string;
+  };
 }
 
 export interface CrmLead {

@@ -12,7 +12,8 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
-DB_URL = "postgresql://postgres:***REMOVED-LEAKED-PASSWORD***@db.onsmkbwqucvbzggugmmn.supabase.co:5432/postgres"
+# Never hardcode this: the repo is public.
+DB_URL = os.environ["C2C_DATABASE_URL"]
 
 def seed_data():
     print("Starting CRM data seed with psycopg2...")

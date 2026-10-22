@@ -6,23 +6,24 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  // Bypass server-side getUser check for E2E mock sessions to avoid invalid token clearing
+  // Bypass server-side getUser check for E2E mock sessions or local demo sessions
   const ref = 'onsmkbwqucvbzggugmmn';
   const cookiePrefix = `sb-${ref}-auth-token`;
   const allCookies = request.cookies.getAll();
   const isMockToken = allCookies.some(cookie => {
+    if (cookie.name.includes('demo_role') || cookie.name.includes('mock-token')) return true;
     if (!cookie.name.startsWith(cookiePrefix)) return false;
     
     // Check plain / URL-decoded
     try {
       const decodedUrl = decodeURIComponent(cookie.value);
-      if (decodedUrl.includes('mock-access-token')) return true;
+      if (decodedUrl.includes('mock-access-token') || decodedUrl.includes('demo-access-token')) return true;
     } catch (e) {}
     
     // Check base64-decoded
     try {
       const decodedBase64 = Buffer.from(cookie.value, 'base64').toString('utf-8');
-      if (decodedBase64.includes('mock-access-token')) return true;
+      if (decodedBase64.includes('mock-access-token') || decodedBase64.includes('demo-access-token')) return true;
     } catch (e) {}
     
     return false;

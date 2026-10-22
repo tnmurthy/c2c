@@ -17,7 +17,16 @@ import {
   HelpCircle, 
   LogOut,
   Plus,
-  CheckCircle
+  CheckCircle,
+  Globe,
+  ExternalLink,
+  Cpu,
+  Sparkles,
+  Monitor,
+  Github,
+  Linkedin,
+  Twitter,
+  Instagram
 } from "lucide-react";
 import Link from "next/link";
 import { useRequireAuth } from "@/hooks/useAuth";
@@ -87,10 +96,16 @@ export default function EmployerPage() {
             sq: item.sq || item.dimension_scores?.SQ || 0,
             tech_fit_index: item.tech_fit_index || 0,
             sales_fit_index: item.sales_fit_index || 0,
-            skills: ["Problem Solving", "Adaptability", "Teamwork"],
+            skills: item.skills && item.skills.length > 0 ? item.skills : ["Problem Solving", "Adaptability", "Teamwork"],
             image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${item.id}`,
             status: idx % 2 === 0 ? "online" : "away",
-            summary: item.summary || `A candidate matching the ${item.role || item.primary_profile || "Software Engineer"} profile with strong foundational skills.`
+            summary: item.summary || `A candidate matching the ${item.role || item.primary_profile || "Software Engineer"} profile with strong foundational skills.`,
+            github_url: item.github_url || "",
+            x_url: item.x_url || "",
+            meta_url: item.meta_url || "",
+            linkedin_url: item.linkedin_url || "",
+            portfolio_url: item.portfolio_url || "",
+            typesafe_telemetry: item.typesafe_telemetry,
           }));
           setCandidates(mappedData);
         }
@@ -432,6 +447,96 @@ export default function EmployerPage() {
                           <span key={idx} className="px-2 py-1 rounded bg-white/5 border border-white/5 text-xs text-[#bbc9cd]">{skill}</span>
                         ))}
                       </div>
+
+                      {/* TypeSafe AI Autoresearch Discovery Pill */}
+                      {candidate.typesafe_telemetry && (
+                        <div className="mt-3 p-2.5 rounded bg-cyan-950/30 border border-cyan-500/20 text-xs font-mono space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <span className="flex items-center gap-1.5 text-cyan-300 font-semibold text-[11px]">
+                              <Cpu className="w-3 h-3 text-cyan-400" />
+                              TypeSafe System One
+                            </span>
+                            <span className="text-[10px] text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20">
+                              11D Latent
+                            </span>
+                          </div>
+                          {candidate.typesafe_telemetry.features && Object.keys(candidate.typesafe_telemetry.features).length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {Object.entries(candidate.typesafe_telemetry.features).slice(0, 2).map(([fname, fval]) => (
+                                <span key={fname} className="text-[10px] text-cyan-200/80 bg-white/5 px-1.5 py-0.5 rounded border border-white/5 truncate max-w-[140px]">
+                                  {fname}: {fval.mean.toFixed(2)}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Candidate Social Badges & Retro Portfolio */}
+                      <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-[#bbc9cd]">
+                          {candidate.github_url && (
+                            <a
+                              href={candidate.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              title="GitHub Profile"
+                              className="p-1.5 rounded hover:bg-white/10 hover:text-white transition-colors"
+                            >
+                              <Github className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {candidate.linkedin_url && (
+                            <a
+                              href={candidate.linkedin_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              title="LinkedIn Profile"
+                              className="p-1.5 rounded hover:bg-white/10 hover:text-[#8aebff] transition-colors"
+                            >
+                              <Linkedin className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {candidate.x_url && (
+                            <a
+                              href={candidate.x_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              title="X / Twitter"
+                              className="p-1.5 rounded hover:bg-white/10 hover:text-white transition-colors"
+                            >
+                              <Twitter className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {candidate.meta_url && (
+                            <a
+                              href={candidate.meta_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              title="Meta / Instagram"
+                              className="p-1.5 rounded hover:bg-white/10 hover:text-pink-400 transition-colors"
+                            >
+                              <Instagram className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                        </div>
+
+                        <Link
+                          href={`/portfolio/${candidate.id}`}
+                          target="_blank"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-[#8aebff]/10 hover:bg-[#8aebff]/20 text-[#8aebff] border border-[#8aebff]/30 text-[10px] font-mono transition-colors font-semibold"
+                          title="Open Interactive Win95 Portfolio"
+                        >
+                          <Monitor className="w-3 h-3" />
+                          <span>Win95 Portfolio</span>
+                          <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                        </Link>
+                      </div>
                     </div>
                     
                     <div className="p-4 bg-white/5 border-t border-white/5 flex gap-2">
@@ -554,13 +659,70 @@ export default function EmployerPage() {
                       <img alt={selectedCandidate.name} className="w-full h-full rounded-full object-cover" src={selectedCandidate.image}/>
                     </div>
                     <h2 className="text-3xl font-extrabold text-[#dde4e5]">{selectedCandidate.name}</h2>
-                    <p className={`text-[#8aebff] text-sm font-medium tracking-[0.05em] font-mono`}>Elite Candidate #{selectedCandidate.id} • Tier 1</p>
+                    <p className={`text-[#8aebff] text-sm font-medium tracking-[0.05em] font-mono mb-4`}>Elite Candidate #{selectedCandidate.id} • Tier 1</p>
+
+                    {/* Social Handles & Portfolio Bar */}
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      {selectedCandidate.github_url && (
+                        <a
+                          href={selectedCandidate.github_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-xs text-white border border-white/10 transition-colors"
+                        >
+                          <Github className="w-3.5 h-3.5" />
+                          <span>GitHub</span>
+                        </a>
+                      )}
+                      {selectedCandidate.linkedin_url && (
+                        <a
+                          href={selectedCandidate.linkedin_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-xs text-[#8aebff] border border-white/10 transition-colors"
+                        >
+                          <Linkedin className="w-3.5 h-3.5" />
+                          <span>LinkedIn</span>
+                        </a>
+                      )}
+                      {selectedCandidate.x_url && (
+                        <a
+                          href={selectedCandidate.x_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-xs text-white border border-white/10 transition-colors"
+                        >
+                          <Twitter className="w-3.5 h-3.5" />
+                          <span>X.com</span>
+                        </a>
+                      )}
+                      {selectedCandidate.meta_url && (
+                        <a
+                          href={selectedCandidate.meta_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-xs text-pink-300 border border-white/10 transition-colors"
+                        >
+                          <Instagram className="w-3.5 h-3.5" />
+                          <span>Meta</span>
+                        </a>
+                      )}
+                      <Link
+                        href={`/portfolio/${selectedCandidate.id}`}
+                        target="_blank"
+                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#8aebff] hover:brightness-110 text-[#00363e] text-xs font-bold transition-all shadow-sm"
+                      >
+                        <Monitor className="w-3.5 h-3.5" />
+                        <span>Win95 Retro Portfolio</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
+                    </div>
                   </div>
 
                   <div className="space-y-4">
                     <h4 className={`text-[12px] font-bold tracking-[0.1em] text-[#bbc9cd] font-mono`}>Professional Legend</h4>
                     <div className="bg-[#0f172a]/40 backdrop-blur-md p-4 rounded-lg text-sm text-[#dde4e5] leading-relaxed border-l-2 border-[#8aebff] border-white/5">
-                      "{selectedCandidate.summary}"
+                      “{selectedCandidate.summary}”
                     </div>
                   </div>
 
@@ -660,6 +822,80 @@ export default function EmployerPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* TypeSafe AI Autoresearch Continuous Space Telemetry */}
+                  {selectedCandidate.typesafe_telemetry && (
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <Cpu className="w-4 h-4 text-cyan-400" />
+                          <h4 className="text-[12px] font-bold tracking-[0.1em] text-cyan-300 font-mono">
+                            TypeSafe AI System One Autoresearch
+                          </h4>
+                        </div>
+                        <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
+                          {selectedCandidate.typesafe_telemetry.model_provider || 'Continuous Embedding Space'}
+                        </span>
+                      </div>
+
+                      <div className="bg-[#0f172a]/50 border border-cyan-500/20 rounded-lg p-5 space-y-4">
+                        <div className="text-xs text-[#bbc9cd] leading-relaxed">
+                          Autonomous latent-probe evaluation extracted via continuous vector representation (no tokenized prompt heuristics).
+                        </div>
+
+                        {/* 11D Latent Vector Distribution */}
+                        {selectedCandidate.typesafe_telemetry.numeric_vector && (
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-[11px] font-mono text-slate-400">
+                              <span>11-Dimensional Representation Vector</span>
+                              <span className="text-cyan-400 font-bold">L2-Normalized</span>
+                            </div>
+                            <div className="grid grid-cols-11 gap-1 h-14 bg-slate-950/60 p-2 rounded border border-white/5 items-end">
+                              {selectedCandidate.typesafe_telemetry.numeric_vector.map((val: number, vIdx: number) => {
+                                const heightPercent = Math.max(8, Math.min(100, Math.round(Math.abs(val) * 100)));
+                                return (
+                                  <div key={vIdx} className="h-full flex flex-col justify-end items-center group relative">
+                                    <div 
+                                      className={`w-full rounded-t transition-all ${val >= 0 ? 'bg-gradient-to-t from-cyan-600 to-cyan-300' : 'bg-gradient-to-t from-indigo-700 to-indigo-400'}`}
+                                      style={{ height: `${heightPercent}%` }}
+                                    />
+                                    <div className="opacity-0 group-hover:opacity-100 absolute -top-7 bg-slate-900 border border-slate-700 text-[9px] px-1.5 py-0.5 rounded text-white font-mono pointer-events-none z-20 whitespace-nowrap">
+                                      d{vIdx}: {val.toFixed(2)}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Discovered Probes & Features */}
+                        {selectedCandidate.typesafe_telemetry.features && (
+                          <div className="space-y-2 pt-2">
+                            <span className="text-[11px] font-mono text-slate-400">Discovered Behavioral Probes</span>
+                            <div className="space-y-2">
+                              {Object.entries(selectedCandidate.typesafe_telemetry.features).map(([featName, featData]) => (
+                                <div key={featName} className="p-2.5 rounded bg-white/5 border border-white/5 flex flex-col gap-1">
+                                  <div className="flex justify-between items-center text-xs font-mono">
+                                    <span className="text-white font-semibold flex items-center gap-1.5">
+                                      <Sparkles className="w-3 h-3 text-cyan-400" />
+                                      {featName}
+                                    </span>
+                                    <span className="text-cyan-300 font-bold">
+                                      {(featData.mean * 100).toFixed(0)}% ({featData.kind})
+                                    </span>
+                                  </div>
+                                  <p className="text-[11px] text-[#bbc9cd] leading-tight">
+                                    {featData.interpretation}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="p-6 border-t border-white/5 bg-[#2f3638]/50 space-y-3">
                   <button className="w-full bg-[#8aebff] text-[#00363e] py-6 text-[12px] font-bold tracking-[0.1em] rounded hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(47,217,244,0.3)] flex items-center justify-center gap-2">
@@ -707,7 +943,7 @@ export default function EmployerPage() {
               <div className="border border-white/5 bg-white/5 rounded-lg p-12 text-center">
                 <LayoutGrid className="w-12 h-12 text-white/20 mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-white mb-2">No Active Postings</h3>
-                <p className="text-[#bbc9cd] text-sm mb-6 max-w-md mx-auto">You haven't created any job postings yet. Create your first role to start matching with elite candidates.</p>
+                <p className="text-[#bbc9cd] text-sm mb-6 max-w-md mx-auto">You haven’t created any job postings yet. Create your first role to start matching with elite candidates.</p>
                 <Link 
                   href="/employer/jobs/new"
                   className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded text-sm font-bold font-mono tracking-widest transition-colors inline-block"
@@ -822,7 +1058,7 @@ export default function EmployerPage() {
           <div className="mb-8">
             <h3 className="text-sm font-bold text-slate-900 uppercase font-mono border-b pb-2 mb-3">Professional Dossier Overview</h3>
             <p className="text-sm text-slate-700 leading-relaxed italic">
-              "{selectedCandidate.summary}"
+              “{selectedCandidate.summary}”
             </p>
           </div>
 

@@ -95,13 +95,41 @@ def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])),
             if sid not in latest_assessments:
                 latest_assessments[sid] = a
                 
-        results = []
+        from api.services.typesafe_service import typesafe_service
+
         for s in students_res.data:
             ass = latest_assessments.get(s["id"])
             if not ass:
                 continue
                 
             scores = ass.get("dimension_scores", {})
+
+            # TypeSafe AI System One Autoresearch Featurization
+            ts_telemetry = None
+            try:
+                candidate_text = f"{s.get('bio', '')} {' '.join(s.get('skills', []) if isinstance(s.get('skills'), list) else [])} {s.get('department', '')}"
+                ts_feat = typesafe_service.featurize(free_text=candidate_text, candidate_name=s.get("full_name") or "Candidate")
+                if ts_feat:
+                    ts_telemetry = {
+                        "numeric_vector": ts_feat.numeric_vector,
+                        "feature_names": ts_feat.feature_names,
+                        "features": {
+                            k: {
+                                "mean": v.mean,
+                                "spread_sd": v.spread_sd,
+                                "kind": v.kind,
+                                "interpretation": v.interpretation,
+                            }
+                            for k, v in ts_feat.features.items()
+                        },
+                        "model_provider": ts_feat.model_provider,
+                    }
+            except Exception as e:
+                logger.warning(f"TypeSafe featurization skipped in CRM for {s.get('id')}: {e}")
+
+            clean_name = (s.get("full_name") or "candidate").lower().replace(" ", "")
+            clean_slug = (s.get("full_name") or "candidate").lower().replace(" ", "-")
+
             results.append({
                 "id": s["id"],
                 "full_name": s["full_name"],
@@ -109,7 +137,13 @@ def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])),
                 "department": s["department"],
                 "archetype": ass.get("primary_profile", "Unknown"),
                 "scores": scores,
-                "fit_scores": ass.get("founder_fit", {})
+                "fit_scores": ass.get("founder_fit", {}),
+                "github_url": s.get("github_url") or f"https://github.com/{clean_name}",
+                "x_url": s.get("x_url") or f"https://x.com/{clean_name}",
+                "meta_url": s.get("meta_url") or f"https://instagram.com/{clean_name}",
+                "linkedin_url": s.get("linkedin_url") or f"https://linkedin.com/in/{clean_slug}",
+                "portfolio_url": s.get("portfolio_url") or f"/portfolio/{s['id']}",
+                "typesafe_telemetry": ts_telemetry,
             })
             
         return results
