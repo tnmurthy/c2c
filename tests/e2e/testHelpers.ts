@@ -115,6 +115,38 @@ export async function setupMocks(
 
   // 2. Intercept Supabase DB Rest queries
   await page.route('**/rest/v1/**', async (route) => {
+    const url = route.request().url();
+    if (url.includes('/rest/v1/students')) {
+      const mockStudent = {
+        id: 'mock-student-id',
+        full_name: 'Aarav Sharma',
+        email: 'aarav@example.com',
+        graduation_year: 2026,
+        department: 'Computer Science',
+        bio: 'Full-stack builder specializing in scalable distributed systems.',
+        skills: ['TypeScript', 'Python', 'Playwright', 'FastAPI'],
+        github_url: 'https://github.com/aaravsharma',
+        x_url: 'https://x.com/aaravsharma',
+        meta_url: 'https://instagram.com/aaravsharma',
+        linkedin_url: 'https://linkedin.com/in/aaravsharma',
+        portfolio_url: 'https://aaravsharma.dev',
+        assessments: [
+          {
+            id: 'mock-assessment-id',
+            student_id: 'mock-student-id',
+            primary_profile: 'Builder',
+            dimension_scores: { IQ: 85, EQ: 90, SQ: 75, AQ: 80, SpQ: 70 },
+            founder_fit: { Builder: 165, Leader: 165, Rainmaker: 155, Anchor: 175 }
+          }
+        ]
+      };
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockStudent)
+      });
+      return;
+    }
     // Return empty list or basic mock rows
     await route.fulfill({
       status: 200,
@@ -251,6 +283,10 @@ export async function setupMocks(
             skills: ['TypeScript', 'Playwright'],
             phone: '1234567890',
             linkedin_url: 'https://linkedin.com',
+            github_url: 'https://github.com/aaravsharma',
+            x_url: 'https://x.com/aaravsharma',
+            meta_url: 'https://instagram.com/aaravsharma',
+            portfolio_url: 'https://aaravsharma.dev',
             resume_url: 'https://resume.com'
           },
           assessments: [

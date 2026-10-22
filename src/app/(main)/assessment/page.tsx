@@ -59,7 +59,19 @@ export default function Assessment() {
         const res = await authFetch('/api/assessment/generate?num_per_section=5');
         if (!res.ok) throw new Error('PROTOCOL_FETCH_FAILURE');
         const data = await res.json();
-        setQuestions(data);
+        
+        // Guarantee strict question uniqueness (by stem fingerprint and id)
+        const seenFingerprints = new Set<string>();
+        const uniqueQuestions = [];
+        for (const q of (Array.isArray(data) ? data : [])) {
+          const stemText = (q.stem || q.text || '').trim();
+          const fp = stemText.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 50);
+          if (fp && !seenFingerprints.has(fp)) {
+            seenFingerprints.add(fp);
+            uniqueQuestions.push(q);
+          }
+        }
+        setQuestions(uniqueQuestions.length > 0 ? uniqueQuestions : data);
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : 'PROTOCOL_FETCH_FAILURE');
       } finally {
