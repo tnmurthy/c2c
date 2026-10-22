@@ -107,6 +107,7 @@ from api.routers.crm_router import router as crm_router
 from api.routers.analytics_router import router as analytics_router
 from api.routers.market_router import router as market_router
 from api.routers.typesafe_router import router as typesafe_router
+from api.routers.costs_router import router as costs_router
 
 app.include_router(student_router, prefix="/api")
 app.include_router(employer_router, prefix="/api")
@@ -116,6 +117,7 @@ app.include_router(crm_router, prefix="/api")
 app.include_router(analytics_router, prefix="/api")
 app.include_router(market_router, prefix="/api")
 app.include_router(typesafe_router, prefix="/api")
+app.include_router(costs_router, prefix="/api")
 
 # --- ROOT & HEALTH ENDPOINTS ---
 
