@@ -22,10 +22,11 @@ function Tile({ label, calls, price, sub, warn }: {
 export default function SpendSummary({ s }: { s: AiSpendSummary }) {
   const price = s.price_per_call_inr === null ? null : Number(s.price_per_call_inr);
   const budget = s.monthly_budget_inr === null ? null : Number(s.monthly_budget_inr);
-  const today = s.today_calls.featurize_calls + s.today_calls.evaluate_calls;
+  const today = s.today_calls.featurize_calls + s.today_calls.evaluate_calls + (s.today_calls.match_calls ?? 0);
   const projectedCost = price === null ? null : s.projected_month_calls * price;
   const overBudget = budget !== null && projectedCost !== null && projectedCost > budget;
-  const busiest = Math.max(1, ...s.by_day.map((d) => d.featurize_calls + d.evaluate_calls));
+  const dayTotal = (d: AiSpendSummary['by_day'][number]) => d.featurize_calls + d.evaluate_calls + (d.match_calls ?? 0);
+  const busiest = Math.max(1, ...s.by_day.map(dayTotal));
 
   return (
     <section aria-labelledby="spend-heading" className="rounded-2xl border border-slate-800 bg-slate-900/40">
@@ -36,7 +37,7 @@ export default function SpendSummary({ s }: { s: AiSpendSummary }) {
 
       <div className="grid grid-cols-2 gap-3 p-5 lg:grid-cols-4">
         <Tile label="Today" calls={today} price={price}
-          sub={`${s.today_calls.featurize_calls} profile · ${s.today_calls.evaluate_calls} assessment`} />
+          sub={`${s.today_calls.featurize_calls} profile · ${s.today_calls.match_calls ?? 0} match · ${s.today_calls.evaluate_calls} assessment`} />
         <Tile label="This month so far" calls={s.month_to_date_calls} price={price}
           sub={s.month_error_calls > 0 ? `${s.month_error_calls} failed` : undefined} />
         <Tile label="Projected this month" calls={s.projected_month_calls} price={price} warn={overBudget} />
@@ -53,12 +54,14 @@ export default function SpendSummary({ s }: { s: AiSpendSummary }) {
         <div className="flex h-28 items-end gap-[3px]" role="img"
           aria-label={`Daily TypeSafe calls for the last ${s.by_day.length} days; busiest day ${busiest}`}>
           {s.by_day.map((d) => {
-            const total = d.featurize_calls + d.evaluate_calls;
+            const total = dayTotal(d);
+            const match = d.match_calls ?? 0;
             return (
               <div key={d.day} className="group relative flex h-full flex-1 flex-col justify-end"
-                title={`${d.day}: ${d.featurize_calls} profile, ${d.evaluate_calls} assessment`}>
+                title={`${d.day}: ${d.featurize_calls} profile, ${match} match, ${d.evaluate_calls} assessment`}>
                 <div className="rounded-t-sm bg-amber-400/80" style={{ height: `${(d.evaluate_calls / busiest) * 100}%` }} />
-                <div className={`bg-blue-500/80 transition-colors group-hover:bg-blue-400 ${d.evaluate_calls ? '' : 'rounded-t-sm'}`}
+                <div className={`bg-emerald-400/80 ${d.evaluate_calls ? '' : 'rounded-t-sm'}`} style={{ height: `${(match / busiest) * 100}%` }} />
+                <div className={`bg-blue-500/80 transition-colors group-hover:bg-blue-400 ${d.evaluate_calls || match ? '' : 'rounded-t-sm'}`}
                   style={{ height: `${(d.featurize_calls / busiest) * 100}%`, minHeight: total === 0 ? 1 : undefined }} />
               </div>
             );
@@ -68,6 +71,7 @@ export default function SpendSummary({ s }: { s: AiSpendSummary }) {
           <span>{s.by_day[0]?.day}</span>
           <span className="flex gap-4">
             <span><span className="mr-1.5 inline-block h-2 w-2 rounded-sm bg-blue-500/80" />Profile features</span>
+            <span><span className="mr-1.5 inline-block h-2 w-2 rounded-sm bg-emerald-400/80" />Job matching</span>
             <span><span className="mr-1.5 inline-block h-2 w-2 rounded-sm bg-amber-400/80" />Assessment evaluation</span>
           </span>
           <span>{s.today}</span>

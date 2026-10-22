@@ -219,8 +219,9 @@ refused and the heuristic estimate (labelled `is_live_api=false`) is used.
 
 | Element | Grows with | Control | Where it is set |
 |---|---|---|---|
-| TypeSafe featurize (Jev) | students whose profile text changed | `candidate_features` cache by text hash; max 25 live per request; daily cap (default 300) | `ai_settings` (Costs page: to build) |
+| TypeSafe featurize (Jev) | students whose profile text changed | `candidate_features` cache by text hash; max 25 live per request; daily cap (default 300) | `ai_settings` (Costs page) |
 | TypeSafe evaluate (Jev) | `/api/typesafe/evaluate` requests | daily cap (default 200) | `ai_settings` |
+| TypeSafe job matching (Jev) | jobs × shortlisted candidates | only top 40 by 5Q judged; stored judgment reused until profile/job changes; daily cap (default 200) | `ai_settings` (Costs page) |
 | All AI calls | everything above | account daily cap (default 500), IST day | `ai_settings` |
 | Gemini (agent-recruiters) | assessments | **not yet metered** | to add |
 | Supabase | tier, egress, storage | plan + spend cap | Supabase dashboard |

@@ -3,17 +3,18 @@ import { setupMocks } from './testHelpers';
 
 const SUMMARY = {
   today: '2026-10-22',
-  today_calls: { featurize_calls: 4, evaluate_calls: 1 },
+  today_calls: { featurize_calls: 4, evaluate_calls: 1, match_calls: 0 },
   month_to_date_calls: 120,
   month_error_calls: 0,
   projected_month_calls: 170,
   by_day: [
-    { day: '2026-10-21', featurize_calls: 10, evaluate_calls: 2 },
-    { day: '2026-10-22', featurize_calls: 4, evaluate_calls: 1 },
+    { day: '2026-10-21', featurize_calls: 10, evaluate_calls: 2, match_calls: 6 },
+    { day: '2026-10-22', featurize_calls: 4, evaluate_calls: 1, match_calls: 0 },
   ],
   account_max_calls_per_day: null,
   featurize_max_calls_per_day: 300,
   evaluate_max_calls_per_day: 200,
+  match_max_calls_per_day: 200,
   price_per_call_inr: null,
   monthly_budget_inr: null,
   settings_updated_at: '2026-10-22T10:00:00Z',
