@@ -1,4 +1,5 @@
 import os
+import hmac
 import sys
 import logging
 import subprocess
@@ -8,6 +9,8 @@ from fastapi.concurrency import run_in_threadpool
 
 from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client
 from api.services.candidate_features import features_for_students
+from api.db import get_service_client
+from services.matching.scorer import ROLE_WEIGHTS, calculate_match_score, score_candidates_for_job
 from api.schemas.employer import EmployerOnboard, JobCreate
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 
@@ -18,31 +21,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 # --- 5Q MATCHING ENGINE ---
 
-ROLE_WEIGHTS: Dict[str, Dict[str, float]] = {
-    "tech":       {"IQ": 0.40, "AQ": 0.30, "EQ": 0.20, "SQ": 0.05, "SpQ": 0.05},
-    "sales":      {"IQ": 0.10, "AQ": 0.20, "EQ": 0.35, "SQ": 0.35, "SpQ": 0.00},
-    "ops":        {"IQ": 0.30, "AQ": 0.25, "EQ": 0.25, "SQ": 0.15, "SpQ": 0.05},
-    "leadership": {"IQ": 0.20, "AQ": 0.20, "EQ": 0.30, "SQ": 0.25, "SpQ": 0.05},
-}
-
-def calculate_match_score(dimension_scores: Dict[str, Any], role_type: str = "tech") -> float:
-    """Compute weighted 5Q match score (0-100) for a given role type."""
-    weights = ROLE_WEIGHTS.get(role_type, ROLE_WEIGHTS["tech"])
-    max_possible = sum(w * 100 for w in weights.values())
-    raw = sum(weights.get(dim, 0) * float(score) for dim, score in dimension_scores.items())
-    return round((raw / max_possible) * 100, 1) if max_possible > 0 else 0.0
+# Weights and the 5Q score live in services/matching/scorer.py; imported here so
+# existing callers of api.routers.employer_router.calculate_match_score keep working.
 
 # --- BACKGROUND TASKS ---
 
-async def run_scoring_engine(job_id: str):
-    logger.info(f"🚀 [WORKER] Running Scoring Engine for new job {job_id}...")
+def run_scoring_engine(job_id: str) -> None:
+    """Background task: rank candidates for a job (P3-B). Sync, so FastAPI runs it in a thread."""
     try:
-        client = get_supabase_client()
-        students_res = client.table("students").select("id").execute()
-        student_ids = [s["id"] for s in (students_res.data or [])]
-        logger.info(f"✅ [WORKER] Scoring Engine evaluated {len(student_ids)} candidates against job {job_id}")
+        score_candidates_for_job(get_service_client(), job_id)
     except Exception as e:
-        logger.error(f"❌ [WORKER] Scoring Engine failed: {e}")
+        logger.error(f"[WORKER] Candidate scoring failed for job {job_id}: {e}", exc_info=True)
 
 async def run_auto_apply(lead_url: str):
     logger.info(f"🚀 [WORKER] Running campus-to-corporate auto-apply for lead {lead_url}...")
@@ -137,7 +126,7 @@ async def get_employer_candidates(client = Depends(require_admin_supabase), curr
         raise DatabaseConnectionError(str(e))
 
 @router.post("/employer/jobs")
-async def create_job_posting(job: JobCreate, client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer"]))):
+async def create_job_posting(job: JobCreate, background_tasks: BackgroundTasks, client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer"]))):
     try:
         emp_res = client.table("employers").select("id").eq("auth_id", current_user.id).execute()
         if not emp_res.data:
@@ -149,7 +138,10 @@ async def create_job_posting(job: JobCreate, client = Depends(require_admin_supa
         data["employer_id"] = emp_id
         
         res = client.table("job_postings").insert(data).execute()
-        return res.data[0] if res.data else None
+        posting = res.data[0] if res.data else None
+        if posting:
+            background_tasks.add_task(run_scoring_engine, posting["id"])
+        return posting
     except NotFoundError:
         raise
     except Exception as e:
@@ -170,61 +162,73 @@ async def get_employer_jobs(client = Depends(require_admin_supabase), current_us
         logger.error(f"ERROR get_employer_jobs: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
+def _job_for_user(client, job_id: str, user) -> Dict[str, Any]:
+    """The job, if this user may see its candidates: admins any job, employers only their own."""
+    job_res = client.table("job_postings").select("id, employer_id, title, role_type").eq("id", job_id).execute()
+    if not job_res.data:
+        raise NotFoundError("Job not found")
+    job = job_res.data[0]
+    role = (getattr(user, "app_metadata", {}) or {}).get("role")
+    if role != "admin":
+        emp_res = client.table("employers").select("id").eq("auth_id", user.id).execute()
+        if not emp_res.data or emp_res.data[0]["id"] != job["employer_id"]:
+            raise PermissionDeniedError("This job belongs to another employer")
+    return job
+
 @router.post("/employer/jobs/{job_id}/match")
 async def run_job_matching(
     job_id: str,
-    background_tasks: BackgroundTasks,
     client = Depends(require_admin_supabase),
     current_user = Depends(require_role(["employer", "admin"]))
 ):
+    """Re-scores candidates now. Unchanged profiles reuse their stored judgments."""
     try:
-        job_res = client.table("job_postings").select("*").eq("id", job_id).execute()
-        if not job_res.data:
-            raise NotFoundError("Job not found")
-        job = job_res.data[0]
-        role_type = job.get("role_type") or "tech"
-
-        students_res = client.table("students").select("id, full_name, email").execute()
-        ids = [s["id"] for s in (students_res.data or [])]
-        if not ids:
-            return {"message": "No students to match", "matched": 0}
-
-        assess_res = client.table("assessments").select("student_id, dimension_scores, primary_profile").in_("student_id", ids).execute()
-        latest: Dict[str, Any] = {}
-        for a in (assess_res.data or []):
-            sid = a["student_id"]
-            if sid not in latest:
-                latest[sid] = a
-
-        match_scores_map: Dict[str, float] = {}
-        alert_inserts = []
-        ALERT_THRESHOLD = 75.0
-
-        for student in (students_res.data or []):
-            sid = student["id"]
-            assessment = latest.get(sid)
-            if not assessment:
-                continue
-            scores = assessment.get("dimension_scores") or {}
-            match_pct = calculate_match_score(scores, role_type)
-            match_scores_map[sid] = match_pct
-            if match_pct >= ALERT_THRESHOLD:
-                alert_inserts.append({"student_id": sid, "job_id": job_id, "score": match_pct})
-
-        client.table("job_postings").update({"match_scores": match_scores_map}).eq("id", job_id).execute()
-
-        if alert_inserts:
-            try:
-                client.table("match_alerts").upsert(alert_inserts, on_conflict="student_id,job_id").execute()
-            except Exception as e:
-                logger.warning(f"match_alerts upsert failed: {e}")
-
-        logger.info(f"Matched {len(match_scores_map)} students against job {job_id} (role={role_type})")
-        return {"message": "Matching complete", "matched": len(match_scores_map), "alerts_sent": len(alert_inserts)}
-    except NotFoundError:
+        _job_for_user(client, job_id, current_user)
+        summary = await run_in_threadpool(score_candidates_for_job, client, job_id)
+        return {"message": "Matching complete", "matched": summary["ranked"], "alerts_sent": summary["alerts"], **summary}
+    except (NotFoundError, PermissionDeniedError):
         raise
     except Exception as e:
         logger.error(f"ERROR run_job_matching: {e}", exc_info=True)
+        raise DatabaseConnectionError(str(e))
+
+@router.get("/employer/jobs/{job_id}/candidates")
+async def get_job_candidates(
+    job_id: str,
+    client = Depends(require_admin_supabase),
+    current_user = Depends(require_role(["employer", "admin"]))
+):
+    """Ranked candidates for a job with the fit breakdown (5Q, requirement evidence)."""
+    try:
+        _job_for_user(client, job_id, current_user)
+        m_res = client.table("job_candidate_matches").select("*").eq("job_id", job_id).order("rank").execute()
+        matches = m_res.data or []
+        if not matches:
+            return []
+        s_res = client.table("students").select("id, full_name, department, graduation_year, skills").in_(
+            "id", [m["student_id"] for m in matches]
+        ).execute()
+        students = {s["id"]: s for s in (s_res.data or [])}
+        return [
+            {
+                "student_id": m["student_id"],
+                "name": students.get(m["student_id"], {}).get("full_name"),
+                "department": students.get(m["student_id"], {}).get("department"),
+                "graduation_year": students.get(m["student_id"], {}).get("graduation_year"),
+                "skills": students.get(m["student_id"], {}).get("skills") or [],
+                "rank": m["rank"],
+                "fit_score": float(m["fit_score"]),
+                "five_q_score": float(m["five_q_score"]),
+                "evidence_score": None if m.get("evidence_score") is None else float(m["evidence_score"]),
+                "evidence": m.get("evidence") or {},
+                "status": m["status"],
+            }
+            for m in matches
+        ]
+    except (NotFoundError, PermissionDeniedError):
+        raise
+    except Exception as e:
+        logger.error(f"ERROR get_job_candidates: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
 @router.get("/employer/jobs/{job_id}/matches")
@@ -234,6 +238,7 @@ async def get_job_matches(
     current_user = Depends(require_role(["employer", "admin"]))
 ):
     try:
+        _job_for_user(client, job_id, current_user)
         job_res = client.table("job_postings").select("match_scores, role_type").eq("id", job_id).execute()
         if not job_res.data:
             raise NotFoundError("Job not found")
@@ -255,7 +260,7 @@ async def get_job_matches(
                 "image": f"https://api.dicebear.com/7.x/avataaars/svg?seed={s['full_name']}"
             })
         return sorted(results, key=lambda x: x["match_score"], reverse=True)
-    except NotFoundError:
+    except (NotFoundError, PermissionDeniedError):
         raise
     except Exception as e:
         logger.error(f"ERROR get_job_matches: {e}", exc_info=True)
@@ -359,6 +364,12 @@ async def get_leads(client = Depends(require_admin_supabase), current_user = Dep
 
 @router.post("/webhook/job-posted")
 async def webhook_job_posted(request: Request, background_tasks: BackgroundTasks):
+    # Scoring makes paid AI calls, so only a caller holding the shared secret may start it.
+    secret = os.getenv("SUPABASE_WEBHOOK_SECRET")
+    if not secret:
+        raise HTTPException(status_code=503, detail="Webhook secret not configured")
+    if not hmac.compare_digest(request.headers.get("x-webhook-secret", ""), secret):
+        raise HTTPException(status_code=401, detail="Invalid webhook secret")
     payload = await request.json()
     logger.info(f"WEBHOOK: job-posted received. Payload: {payload}")
     record = payload.get("record", {})

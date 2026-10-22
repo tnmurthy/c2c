@@ -21,6 +21,7 @@ const SAVINGS_BUILT_IN = [
   'An empty profile is never sent; it gets a free heuristic estimate.',
   'A page with many new candidates sends at most 25 at a time; the rest fill in on later visits.',
   'Each profile is judged with all seven questions in a single call.',
+  'Job matching judges only the 40 best candidates by assessment, and reuses a judgment until the profile or job changes.',
   'Failed calls are not retried in a loop; the page shows a labelled estimate instead.',
 ];
 

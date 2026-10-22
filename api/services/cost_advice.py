@@ -17,6 +17,7 @@ MIN_CALLS_FOR_ERROR_RATE = 20
 FEATURES = (
     ("featurize", "Candidate profile features", "featurize_max_calls_per_day", "featurize_calls"),
     ("evaluate", "Assessment evaluation", "evaluate_max_calls_per_day", "evaluate_calls"),
+    ("match", "Job candidate matching", "match_max_calls_per_day", "match_calls"),
 )
 
 

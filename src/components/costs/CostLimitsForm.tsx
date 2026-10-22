@@ -12,6 +12,7 @@ const FIELDS: Field[] = [
   { key: 'account_max_calls_per_day', label: 'Account limit per day', hint: 'All TypeSafe calls. Empty = no limit.', integer: true },
   { key: 'featurize_max_calls_per_day', label: 'Profile features per day', hint: 'Talent Pool and employer views. 0 switches it off.', integer: true },
   { key: 'evaluate_max_calls_per_day', label: 'Assessment evaluations per day', hint: '0 switches it off.', integer: true },
+  { key: 'match_max_calls_per_day', label: 'Job matches per day', hint: 'One call per shortlisted candidate. 0 ranks on 5Q only.', integer: true },
   { key: 'price_per_call_inr', label: 'Price per call (₹)', hint: 'From your TypeSafe account. Display only.', integer: false },
   { key: 'monthly_budget_inr', label: 'Monthly budget (₹)', hint: 'Display and advice only.', integer: false },
 ];

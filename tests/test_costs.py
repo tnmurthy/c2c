@@ -24,6 +24,7 @@ def _summary(**over) -> dict:
         "account_max_calls_per_day": 500,
         "featurize_max_calls_per_day": 300,
         "evaluate_max_calls_per_day": 200,
+        "match_max_calls_per_day": 200,
         "price_per_call_inr": 0.05,
         "monthly_budget_inr": 1000,
     }
@@ -149,7 +150,8 @@ def test_settings_saved_with_who_changed_them():
 
     res = _client("tenant_admin", fake).put("/api/costs/settings", json={
         "account_max_calls_per_day": None, "featurize_max_calls_per_day": 0,
-        "evaluate_max_calls_per_day": 50, "price_per_call_inr": 0.05, "monthly_budget_inr": 1000,
+        "evaluate_max_calls_per_day": 50, "match_max_calls_per_day": 25,
+        "price_per_call_inr": 0.05, "monthly_budget_inr": 1000,
     })
 
     assert res.status_code == 200
@@ -158,6 +160,12 @@ def test_settings_saved_with_who_changed_them():
     assert params["p_updated_by"] == ADMIN_ID
     assert params["p_account_max_calls_per_day"] is None
     assert params["p_featurize_max_calls_per_day"] == 0
+    assert params["p_match_max_calls_per_day"] == 25
+
+
+def test_match_cap_reached_today_is_flagged():
+    s = _summary(today_calls={"featurize_calls": 0, "evaluate_calls": 0, "match_calls": 200})
+    assert "match-cap-reached" in _ids(s)
 
 
 def test_settings_refuse_negative_values():

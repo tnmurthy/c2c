@@ -70,6 +70,14 @@ DIMENSION_LEVELS = [
     "The responses show this quality as an exceptional, defining strength",
 ]
 
+REQUIREMENT_LEVELS = [
+    "The profile shows no sign of this requirement",
+    "The profile mentions it only in passing, with no work behind it",
+    "The profile shows coursework or a small project using it",
+    "The profile shows solid hands-on work with it in real projects",
+    "The profile shows deep, repeated, or leading work with it",
+]
+
 ARCHETYPE_CRITERIA = {
     "Builder": "Systems architect, iterative problem-solver, high technical curiosity.",
     "Leader": "Visionary, rallies groups, culture builder, high emotional intelligence.",
@@ -320,5 +328,50 @@ class TypeSafeService:
             timestamp=_now(),
         )
 
+
+    # ------------------------------------------------------- requirement match
+
+    def judge_requirements(
+        self,
+        profile_text: str,
+        job: Dict[str, str],
+        requirements: List[str],
+        student_id: Optional[str] = None,
+    ) -> Optional[Dict[str, Dict[str, float]]]:
+        """
+        One call per candidate: how strongly the profile shows each job requirement.
+        Returns {requirement: {"level", "confidence"}} with level on 0-4, or None
+        when not judged (no key, no text, budget refused, or API failure). There is
+        no heuristic fallback: an unjudged candidate is ranked on 5Q alone.
+        """
+        if not self.api_key or not profile_text.strip() or not requirements:
+            return None
+        questions = {
+            f"req_{i}": {
+                "type": "score",
+                "instructions": (
+                    f'How strongly does `candidate.profile_text` show the requirement "{req}" '
+                    "for the role described in `job`?"
+                ),
+                "criteria": REQUIREMENT_LEVELS,
+            }
+            for i, req in enumerate(requirements)
+        }
+        state = {"candidate": {"profile_text": profile_text}, "job": job}
+        try:
+            answers = self._system_one(state, questions, "typesafe_match", student_id)
+        except ai_budget.BudgetRefused as e:
+            logger.info("TypeSafe match not called (%s)", e.reason)
+            return None
+        except Exception as e:
+            logger.warning("TypeSafe match failed: %s", e)
+            return None
+        return {
+            req: {
+                "level": round(float(answers[f"req_{i}"]["score"]), 2),
+                "confidence": round(float(answers[f"req_{i}"].get("confidence") or 0.0), 2),
+            }
+            for i, req in enumerate(requirements)
+        }
 
 typesafe_service = TypeSafeService()
