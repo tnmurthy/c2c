@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
+import { getDemoUser } from '@/lib/demoSession';
 
 export interface UseAuthSessionReturn {
   session: Session | null;
@@ -13,58 +14,14 @@ export interface UseAuthSessionReturn {
 }
 
 function getDemoSession(): { user: any; role: string; tenantId: string } | null {
-  if (typeof document === 'undefined') return null;
+  const user = getDemoUser();
+  if (!user) return null;
 
-  try {
-    const cookies = document.cookie;
-    const matchRole = cookies.match(/demo_role=([^;]+)/);
-    const matchUser = cookies.match(/demo_user=([^;]+)/);
-
-    let user: any = null;
-    let role: string = 'admin';
-
-    if (matchUser) {
-      try {
-        user = JSON.parse(decodeURIComponent(matchUser[1]));
-        role = user.app_metadata?.role || user.user_metadata?.role || 'admin';
-      } catch {}
-    } else if (matchRole) {
-      role = matchRole[1];
-      const profileId = role === 'student' ? 'stu-001' : role === 'institution' ? 'inst-001' : role === 'employer' ? 'emp-001' : 'admin-001';
-      user = {
-        id: `${role}-001`,
-        email: `${role}@c2c.demo`,
-        app_metadata: { role, profile_id: profileId, tenant_id: 'tenant-001' },
-        user_metadata: { role, profile_id: profileId, tenant_id: 'tenant-001' },
-      };
-    } else {
-      const localRole = localStorage.getItem('demo_role');
-      const localUser = localStorage.getItem('demo_user');
-      if (localUser) {
-        user = JSON.parse(localUser);
-        role = user.app_metadata?.role || user.user_metadata?.role || 'admin';
-      } else if (localRole) {
-        role = localRole;
-        const profileId = role === 'student' ? 'stu-001' : role === 'institution' ? 'inst-001' : role === 'employer' ? 'emp-001' : 'admin-001';
-        user = {
-          id: `${role}-001`,
-          email: `${role}@c2c.demo`,
-          app_metadata: { role, profile_id: profileId, tenant_id: 'tenant-001' },
-          user_metadata: { role, profile_id: profileId, tenant_id: 'tenant-001' },
-        };
-      }
-    }
-
-    if (user) {
-      return {
-        user,
-        role,
-        tenantId: user.app_metadata?.tenant_id || user.user_metadata?.tenant_id || 'tenant-001',
-      };
-    }
-  } catch {}
-
-  return null;
+  return {
+    user,
+    role: user.app_metadata.role,
+    tenantId: user.app_metadata.tenant_id,
+  };
 }
 
 export function useAuthSession(): UseAuthSessionReturn {

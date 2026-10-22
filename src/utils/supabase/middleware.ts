@@ -6,8 +6,10 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  // Bypass server-side getUser check for E2E mock sessions or local demo sessions
-  const ref = 'onsmkbwqucvbzggugmmn';
+  // Bypass server-side getUser check for E2E mock sessions or local demo sessions.
+  // Derive the project ref from the configured URL — hardcoding it means the
+  // cookie name silently stops matching if the Supabase project is rotated.
+  const ref = process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0] || 'placeholder';
   const cookiePrefix = `sb-${ref}-auth-token`;
   const allCookies = request.cookies.getAll();
   const isMockToken = allCookies.some(cookie => {

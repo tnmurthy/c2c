@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import type { User } from '@supabase/supabase-js';
+import { getDemoUser } from '@/lib/demoSession';
 
 interface UseAuthOptions {
   /** If set, only users with emails ending in this domain are allowed */
@@ -17,53 +18,6 @@ interface UseAuthOptions {
 interface UseAuthReturn {
   user: User | null;
   loading: boolean;
-}
-
-function getDemoUserFromStorage(): any {
-  if (typeof document === 'undefined') return null;
-
-  try {
-    // 1. Check demo_user cookie
-    const cookies = document.cookie;
-    const matchUser = cookies.match(/demo_user=([^;]+)/);
-    if (matchUser) {
-      try {
-        const parsed = JSON.parse(decodeURIComponent(matchUser[1]));
-        if (parsed?.app_metadata?.role) return parsed;
-      } catch {}
-    }
-
-    // 2. Check demo_role cookie
-    const matchRole = cookies.match(/demo_role=([^;]+)/);
-    if (matchRole) {
-      const role = matchRole[1];
-      const profileId = role === 'student' ? 'stu-001' : role === 'institution' ? 'inst-001' : role === 'employer' ? 'emp-001' : 'admin-001';
-      return {
-        id: `${role}-001`,
-        email: `${role}@c2c.demo`,
-        app_metadata: { role, profile_id: profileId },
-        user_metadata: { role, profile_id: profileId },
-      };
-    }
-
-    // 3. Check localStorage
-    const localDemo = localStorage.getItem('demo_user');
-    if (localDemo) {
-      return JSON.parse(localDemo);
-    }
-    const localRole = localStorage.getItem('demo_role');
-    if (localRole) {
-      const profileId = localRole === 'student' ? 'stu-001' : localRole === 'institution' ? 'inst-001' : localRole === 'employer' ? 'emp-001' : 'admin-001';
-      return {
-        id: `${localRole}-001`,
-        email: `${localRole}@c2c.demo`,
-        app_metadata: { role: localRole, profile_id: profileId },
-        user_metadata: { role: localRole, profile_id: profileId },
-      };
-    }
-  } catch {}
-
-  return null;
 }
 
 export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
@@ -93,7 +47,7 @@ export function useRequireAuth(options: UseAuthOptions = {}): UseAuthReturn {
 
         // Fallback to demo credentials
         if (!authUser) {
-          authUser = getDemoUserFromStorage();
+          authUser = getDemoUser();
         }
 
         if (!authUser) {

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import type { Candidate } from "@/types";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { signOutEverywhere } from "@/lib/signOut";
 import { 
   Users, 
   LayoutGrid, 
@@ -40,7 +41,7 @@ export default function EmployerPage() {
   const [jobs, setJobs] = useState<any[]>([]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOutEverywhere();
     router.push('/login');
   };
   const [isLoading, setIsLoading] = useState(true);

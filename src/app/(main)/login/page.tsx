@@ -4,6 +4,14 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, Loader2, Mail, Lock, KeyRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import {
+  DEMO_ACCOUNTS,
+  DEMO_PASSWORD,
+  DemoRole,
+  buildDemoUser,
+  resolveDemoAccount,
+  setDemoSession,
+} from "@/lib/demoSession";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,35 +40,10 @@ export default function LoginPage() {
     if (authError) { setError(authError.message); setLoading(false); }
   };
 
-  const loginDemo = async (role: 'student' | 'institution' | 'employer' | 'admin', profileId: string = 'demo-profile', customEmail?: string) => {
+  const loginDemo = (role: DemoRole, customEmail?: string) => {
     setLoading(true);
-    const effectiveEmail = customEmail || `${role}@c2c.demo`;
-    const demoUser = {
-      id: `${role}-001`,
-      email: effectiveEmail,
-      app_metadata: { role, profile_id: profileId },
-      user_metadata: { role, profile_id: profileId },
-    };
-    
-    // Write cookie readable by middleware
-    const ref = 'onsmkbwqucvbzggugmmn';
-    const cookieName = `sb-${ref}-auth-token`;
-    const tokenVal = JSON.stringify({
-      access_token: 'demo-access-token',
-      token_type: 'bearer',
-      user: demoUser,
-      expires_at: Math.floor(Date.now() / 1000) + 86400 * 7,
-    });
-    
-    document.cookie = `${cookieName}=${encodeURIComponent(tokenVal)}; path=/; max-age=604800; SameSite=Lax`;
-    document.cookie = `demo_role=${role}; path=/; max-age=604800; SameSite=Lax`;
-    document.cookie = `demo_user=${encodeURIComponent(JSON.stringify(demoUser))}; path=/; max-age=604800; SameSite=Lax`;
-    try {
-      localStorage.setItem(cookieName, tokenVal);
-      localStorage.setItem('demo_user', JSON.stringify(demoUser));
-      localStorage.setItem('demo_role', role);
-    } catch (e) {}
-
+    const demoUser = buildDemoUser(role, customEmail);
+    setDemoSession(demoUser);
     router.refresh();
     routeUser(demoUser);
   };
@@ -72,63 +55,36 @@ export default function LoginPage() {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // Standard mock accounts mapping
-    const mockMap: Record<string, { role: 'student' | 'institution' | 'employer' | 'admin'; profileId: string }> = {
-      'student@c2c.demo': { role: 'student', profileId: 'stu-001' },
-      'student@c2c.edu': { role: 'student', profileId: 'stu-001' },
-      'student@mytestbed.tech': { role: 'student', profileId: 'stu-001' },
-      'institution@c2c.demo': { role: 'institution', profileId: 'inst-001' },
-      'institution@c2c.edu': { role: 'institution', profileId: 'inst-001' },
-      'tpo@c2c.demo': { role: 'institution', profileId: 'inst-001' },
-      'employer@c2c.demo': { role: 'employer', profileId: 'emp-001' },
-      'employer@c2c.edu': { role: 'employer', profileId: 'emp-001' },
-      'admin@c2c.demo': { role: 'admin', profileId: 'admin-001' },
-      'admin@c2c.edu': { role: 'admin', profileId: 'admin-001' },
-      'admin@taliatech.in': { role: 'admin', profileId: 'admin-001' },
-    };
-
-    let match = mockMap[cleanEmail];
-    if (!match) {
-      if (cleanEmail.includes('student')) match = { role: 'student', profileId: 'stu-001' };
-      else if (cleanEmail.includes('institution') || cleanEmail.includes('tpo')) match = { role: 'institution', profileId: 'inst-001' };
-      else if (cleanEmail.includes('employer')) match = { role: 'employer', profileId: 'emp-001' };
-      else if (cleanEmail.includes('admin')) match = { role: 'admin', profileId: 'admin-001' };
+    // A demo login requires an exact demo email AND the exact demo password.
+    // Never infer a role from a substring of the address, and never accept a
+    // password just because it is long enough — either grants any visitor the
+    // role of their choosing.
+    const demoRole = resolveDemoAccount(cleanEmail, password);
+    if (demoRole) {
+      loginDemo(demoRole, cleanEmail);
+      return;
     }
 
-    // Check if matching mock account with standard password
-    if (match) {
-      if (password === 'c2c@2026' || password === 'demo1234' || password === 'password' || password.length >= 6) {
-        await loginDemo(match.role, match.profileId, cleanEmail);
-        return;
-      } else {
-        setError("Invalid password. For demo accounts, use standard password: c2c@2026");
-        setLoading(false);
-        return;
-      }
+    if (cleanEmail in DEMO_ACCOUNTS) {
+      setError(`Wrong password for the demo account. Use ${DEMO_PASSWORD}.`);
+      setLoading(false);
+      return;
     }
 
-    // Try Supabase auth for real custom accounts
+    // Everything else is a real Supabase account. A failed sign-in is a failed
+    // sign-in; it must not silently fall back to a demo session.
     try {
       const result = returning
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/auth/callback` } });
+        ? await supabase.auth.signInWithPassword({ email: cleanEmail, password })
+        : await supabase.auth.signUp({ email: cleanEmail, password, options: { emailRedirectTo: `${window.location.origin}/auth/callback` } });
       if (result.error) {
-        if (password === 'c2c@2026') {
-          await loginDemo('student', 'stu-001', cleanEmail);
-          return;
-        }
         setError(result.error.message);
-        setLoading(false);
         return;
       }
       if (result.data.user && (returning || result.data.session)) routeUser(result.data.user);
       else setError("Check your email to confirm your account, then return here to sign in.");
     } catch {
-      if (password === 'c2c@2026') {
-        await loginDemo('student', 'stu-001', cleanEmail);
-        return;
-      }
-      setError("Authentication error. For demo access, use standard password: c2c@2026");
+      setError(`Could not reach the authentication service. Demo accounts work offline with the password ${DEMO_PASSWORD}.`);
     } finally {
       setLoading(false);
     }
@@ -136,7 +92,7 @@ export default function LoginPage() {
 
   const autofill = (roleEmail: string) => {
     setEmail(roleEmail);
-    setPassword("c2c@2026");
+    setPassword(DEMO_PASSWORD);
     setShowEmail(true);
   };
 
@@ -245,28 +201,28 @@ export default function LoginPage() {
         <div className="grid grid-cols-2 gap-2 font-mono text-xs">
           <button
             type="button"
-            onClick={() => loginDemo('student', 'stu-001')}
+            onClick={() => loginDemo('student')}
             className="p-2.5 rounded-lg bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/10 text-cyan-300 transition-all font-semibold"
           >
             🎓 Student
           </button>
           <button
             type="button"
-            onClick={() => loginDemo('institution', 'inst-001')}
+            onClick={() => loginDemo('institution')}
             className="p-2.5 rounded-lg bg-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 border border-white/10 text-emerald-300 transition-all font-semibold"
           >
             🏛️ TPO
           </button>
           <button
             type="button"
-            onClick={() => loginDemo('employer', 'emp-001')}
+            onClick={() => loginDemo('employer')}
             className="p-2.5 rounded-lg bg-white/5 hover:bg-indigo-500/10 hover:border-indigo-500/40 border border-white/10 text-indigo-300 transition-all font-semibold"
           >
             💼 Employer
           </button>
           <button
             type="button"
-            onClick={() => loginDemo('admin', 'admin-001')}
+            onClick={() => loginDemo('admin')}
             className="p-2.5 rounded-lg bg-white/5 hover:bg-rose-500/10 hover:border-rose-500/40 border border-white/10 text-rose-300 transition-all font-semibold"
           >
             🛡️ Admin

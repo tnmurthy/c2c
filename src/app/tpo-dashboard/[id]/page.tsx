@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from 'next/link';
 import type { Candidate } from "@/types";
 import { useParams, useRouter } from "next/navigation";
+import { signOutEverywhere } from "@/lib/signOut";
 import { 
   Users, 
   Download, 
@@ -54,7 +55,7 @@ export default function TPODashboard() {
   const [interventionCollapsed, setInterventionCollapsed] = useState(false);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOutEverywhere();
     router.push("/login");
   };
 

@@ -3,6 +3,7 @@
 import React from "react";
 import Link from 'next/link';
 import { useParams, useRouter, usePathname } from "next/navigation";
+import { signOutEverywhere } from "@/lib/signOut";
 import { 
   Users, 
   Calendar,
@@ -28,7 +29,7 @@ export default function TPODashboardLayout({
   const { user, loading: authLoading } = useRequireAuth({ allowedRoles: ['institution'] });
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOutEverywhere();
     router.push("/login");
   };
 

@@ -1,10 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { LogIn, LogOut, Menu, X } from "lucide-react";
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
+import { getDemoUser } from '@/lib/demoSession';
+import { signOutEverywhere } from '@/lib/signOut';
 
 const navLinks = [
   { href: '/onboard', label: 'Onboard', labelUpper: 'ONBOARD', requiresAuth: false },
@@ -13,26 +16,28 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
+    // A demo session is not a Supabase session, so fall back to it — otherwise
+    // the navbar offers "Login" to someone who is already signed in.
+    const resolve = (session: { user: User } | null) =>
+      setUser(session?.user ?? (getDemoUser() as unknown as User | null));
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+    supabase.auth.getSession().then(({ data: { session } }) => resolve(session));
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => resolve(session));
 
     return () => subscription.unsubscribe();
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOutEverywhere();
+    setUser(null);
     setIsMenuOpen(false);
+    router.push('/login');
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
