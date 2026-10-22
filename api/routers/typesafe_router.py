@@ -30,8 +30,11 @@ def evaluate_candidate(payload: TypeSafeEvaluateRequest):
         return typesafe_service.evaluate(
             responses=payload.responses,
             candidate_name=payload.candidate_name or "Candidate",
-            custom_rubrics=payload.custom_rubrics
+            custom_rubrics=payload.custom_rubrics,
+            student_id=payload.student_id,
         )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"TypeSafe evaluation error: {str(e)}")
 
@@ -47,7 +50,8 @@ def featurize_candidate_text(payload: TypeSafeFeaturizeRequest):
         return typesafe_service.featurize(
             free_text=payload.free_text,
             candidate_name=payload.candidate_name or "Candidate",
-            custom_probes=payload.custom_probes
+            custom_probes=payload.custom_probes,
+            student_id=payload.student_id,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"TypeSafe featurization error: {str(e)}")

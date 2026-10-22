@@ -11,9 +11,12 @@ export interface TypeSafeEvaluateResponse {
   candidate_name: string;
   primary_archetype: FounderArchetype;
   archetype_probabilities: Record<FounderArchetype, number>;
-  scores: Record<'IQ' | 'EQ' | 'AQ' | 'SQ' | 'SpQ', TypeSafeDimensionScore>;
+  // Heuristic fallback omits dimensions that had no responses.
+  scores: Partial<Record<'IQ' | 'EQ' | 'AQ' | 'SQ' | 'SpQ', TypeSafeDimensionScore>>;
   placement_ready: boolean;
+  placement_ready_probability?: number | null;
   requires_intervention: boolean;
+  requires_intervention_probability?: number | null;
   ai_confidence: number;
   model_provider: string;
   is_live_api: boolean;

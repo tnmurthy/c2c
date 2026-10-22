@@ -95,7 +95,7 @@ class TestPortfolioAndMatchingEndpoints(unittest.TestCase):
         self.assertIn("Behavioral & Culture Fit", dimension_names)
         self.assertIn("Location & Logistics", dimension_names)
         self.assertIn("Placement & Career Alignment", dimension_names)
-        self.assertIn("TypeSafe AI Neural Rigor", dimension_names)
+        self.assertTrue({"TypeSafe AI Neural Rigor", "Profile Rigor (heuristic)"} & set(dimension_names))
 
         # Verify TypeSafe telemetry
         self.assertIn("typesafe_telemetry", data)

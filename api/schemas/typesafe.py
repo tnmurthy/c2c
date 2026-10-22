@@ -38,7 +38,9 @@ class TypeSafeEvaluateResponse(BaseModel):
     archetype_probabilities: Dict[str, float]
     scores: Dict[str, DimensionScore]
     placement_ready: bool
+    placement_ready_probability: Optional[float] = None
     requires_intervention: bool
+    requires_intervention_probability: Optional[float] = None
     ai_confidence: float
     model_provider: str = "TypeSafe AI System One (Jev)"
     is_live_api: bool = False
