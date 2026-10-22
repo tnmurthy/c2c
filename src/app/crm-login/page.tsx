@@ -4,6 +4,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { Lock, Mail, AlertCircle, Loader2, ArrowRight, KeyRound } from 'lucide-react'
+import {
+  DEMO_ACCOUNTS,
+  DEMO_PASSWORD,
+  buildDemoUser,
+  resolveDemoAccount,
+  setDemoSession,
+} from '@/lib/demoSession'
 
 export default function CRMLoginPage() {
   const router = useRouter()
@@ -14,28 +21,7 @@ export default function CRMLoginPage() {
   const [loading, setLoading] = useState(false)
 
   const loginDemoCRM = (cleanEmail: string) => {
-    const demoUser = {
-      id: 'admin-001',
-      email: cleanEmail,
-      app_metadata: { role: 'admin', profile_id: 'admin-001' },
-      user_metadata: { role: 'admin', profile_id: 'admin-001' },
-    }
-    const ref = 'onsmkbwqucvbzggugmmn'
-    const cookieName = `sb-${ref}-auth-token`
-    const tokenVal = JSON.stringify({
-      access_token: 'demo-access-token',
-      token_type: 'bearer',
-      user: demoUser,
-      expires_at: Math.floor(Date.now() / 1000) + 86400 * 7,
-    })
-    document.cookie = `${cookieName}=${encodeURIComponent(tokenVal)}; path=/; max-age=604800; SameSite=Lax`
-    document.cookie = `demo_role=admin; path=/; max-age=604800; SameSite=Lax`
-    document.cookie = `demo_user=${encodeURIComponent(JSON.stringify(demoUser))}; path=/; max-age=604800; SameSite=Lax`
-    try { 
-      localStorage.setItem(cookieName, tokenVal);
-      localStorage.setItem('demo_user', JSON.stringify(demoUser));
-      localStorage.setItem('demo_role', 'admin');
-    } catch (e) {}
+    setDemoSession(buildDemoUser('admin', cleanEmail))
     router.refresh()
     router.push('/crm')
   }
@@ -47,48 +33,33 @@ export default function CRMLoginPage() {
 
     const cleanEmail = email.trim().toLowerCase()
 
-    if (
-      cleanEmail === 'admin@taliatech.in' || 
-      cleanEmail === 'admin@c2c.demo' || 
-      cleanEmail === 'admin@example.com' ||
-      cleanEmail.includes('admin')
-    ) {
-      if (password === 'c2c@2026' || password === 'demo1234' || password === 'password' || password.length >= 6) {
-        loginDemoCRM(cleanEmail)
-        setLoading(false)
-        return
-      } else {
-        setError('Invalid password. For demo access, use standard password: c2c@2026')
-        setLoading(false)
-        return
-      }
+    // Exact demo email + exact demo password only. Matching on `includes('admin')`
+    // with any six-character password handed CRM admin to any visitor.
+    if (resolveDemoAccount(cleanEmail, password) === 'admin') {
+      loginDemoCRM(cleanEmail)
+      setLoading(false)
+      return
+    }
+
+    if (DEMO_ACCOUNTS[cleanEmail] === 'admin') {
+      setError(`Wrong password for the demo account. Use ${DEMO_PASSWORD}.`)
+      setLoading(false)
+      return
     }
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: cleanEmail,
         password,
       })
 
-      if (error) {
-        if (password === 'c2c@2026') {
-          loginDemoCRM(cleanEmail)
-          setLoading(false)
-          return
-        }
-        throw error
-      }
+      if (error) throw error
 
       if (data.user) {
         router.refresh()
         router.push('/crm')
       }
     } catch (err: any) {
-      if (password === 'c2c@2026') {
-        loginDemoCRM(cleanEmail)
-        setLoading(false)
-        return
-      }
       setError(err.message || 'Failed to authenticate')
     } finally {
       setLoading(false)
