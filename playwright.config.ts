@@ -1,4 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import { loadEnvConfig } from '@next/env';
+
+// Load the same .env files Next.js uses, so tests derive the Supabase cookie
+// name from the same NEXT_PUBLIC_SUPABASE_URL as the app under test.
+loadEnvConfig(process.cwd());
 
 export default defineConfig({
   testDir: './tests/e2e',

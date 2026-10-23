@@ -21,7 +21,7 @@ test.describe('Candidate Portfolio, Socials & TypeSafe AI Features', () => {
     await expect(page.getByText('GitHub').first()).toBeVisible();
     await expect(page.getByText('LinkedIn').first()).toBeVisible();
     await expect(page.getByText('X / Twitter').first()).toBeVisible();
-    await expect(page.getByText('Meta / Instagram').first()).toBeVisible();
+    await expect(page.locator('.desktop-shortcut-label', { hasText: /^Meta$/ })).toBeVisible();
   });
 
   test('opens About window and validates social badges and archetype details', async ({ page }) => {
@@ -31,12 +31,12 @@ test.describe('Candidate Portfolio, Socials & TypeSafe AI Features', () => {
     await page.waitForSelector('.desktop-shortcut', { timeout: 15000 });
 
     // Open About Candidate window
-    const aboutShortcut = page.locator('.desktop-shortcut').filter({ hasText: 'About Candidate' });
+    const aboutShortcut = page.locator('.desktop-shortcut').filter({ hasText: 'My Computer' });
     await expect(aboutShortcut).toBeVisible();
     await aboutShortcut.dblclick();
 
     // Verify About window opened
-    await expect(page.locator('.retro-window-header').filter({ hasText: 'About Candidate' })).toBeVisible();
+    await expect(page.locator('.win95-title-bar').filter({ hasText: 'About Candidate' })).toBeVisible();
 
     // Verify candidate details in About window
     await expect(page.getByText('Aarav Sharma')).toBeVisible();
@@ -61,8 +61,8 @@ test.describe('Candidate Portfolio, Socials & TypeSafe AI Features', () => {
     await cvTailorShortcut.dblclick();
 
     // Verify CV Tailor window is open
-    await expect(page.locator('.retro-window-header').filter({ hasText: 'CV Tailor' })).toBeVisible();
-    await expect(page.getByText(/Select Target Role/i)).toBeVisible();
+    await expect(page.locator('.win95-title-bar').filter({ hasText: 'CV Tailor' })).toBeVisible();
+    await expect(page.getByText(/Select Opportunity Alert/i)).toBeVisible();
     await expect(page.getByRole('button', { name: /Tailor CV/i })).toBeVisible();
   });
 
@@ -74,7 +74,7 @@ test.describe('Candidate Portfolio, Socials & TypeSafe AI Features', () => {
     await expect(footer).toBeVisible();
 
     // Verify brand copyright and slogan
-    await expect(footer.getByText(/Campus To Corporate/i)).toBeVisible();
+    await expect(footer.getByText(/C2C\.OS_BUILD/i)).toBeVisible();
 
     // Verify social links exist in footer
     const twitterLink = footer.locator('a[aria-label="X / Twitter"]');
@@ -91,6 +91,6 @@ test.describe('Candidate Portfolio, Socials & TypeSafe AI Features', () => {
 
     const githubLink = footer.locator('a[aria-label="GitHub"]');
     await expect(githubLink).toBeVisible();
-    await expect(githubLink).toHaveAttribute('href', 'https://github.com');
+    await expect(githubLink).toHaveAttribute('href', /^https:\/\/github\.com\//);
   });
 });

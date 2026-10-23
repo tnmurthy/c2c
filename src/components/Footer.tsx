@@ -19,6 +19,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               title="X / Twitter"
+              aria-label="X / Twitter"
               className="p-2 rounded-lg bg-white/5 hover:bg-cyan-500/10 border border-white/5 hover:border-cyan-500/30 text-white/60 hover:text-cyan-400 transition-all duration-200 group"
             >
               <svg className="w-4 h-4 fill-current group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]" viewBox="0 0 24 24">
@@ -30,6 +31,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               title="Meta (Instagram / Threads)"
+              aria-label="Meta"
               className="p-2 rounded-lg bg-white/5 hover:bg-cyan-500/10 border border-white/5 hover:border-cyan-500/30 text-white/60 hover:text-cyan-400 transition-all duration-200 group"
             >
               <svg className="w-4 h-4 fill-none stroke-current stroke-2 group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]" viewBox="0 0 24 24">
@@ -43,6 +45,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               title="LinkedIn"
+              aria-label="LinkedIn"
               className="p-2 rounded-lg bg-white/5 hover:bg-cyan-500/10 border border-white/5 hover:border-cyan-500/30 text-white/60 hover:text-cyan-400 transition-all duration-200 group"
             >
               <svg className="w-4 h-4 fill-current group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]" viewBox="0 0 24 24">
@@ -54,6 +57,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               title="GitHub"
+              aria-label="GitHub"
               className="p-2 rounded-lg bg-white/5 hover:bg-cyan-500/10 border border-white/5 hover:border-cyan-500/30 text-white/60 hover:text-cyan-400 transition-all duration-200 group"
             >
               <svg className="w-4 h-4 fill-current group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]" viewBox="0 0 24 24">
