@@ -79,6 +79,11 @@ def require_admin_supabase():
         raise HTTPException(status_code=503, detail=f"Failed to initialize admin database client: {str(e)}")
 
 
+def demo_auth_allowed() -> bool:
+    """Demo/dev identities are accepted only when explicitly enabled (never set in production)."""
+    return os.environ.get("ALLOW_DEMO_AUTH", "").strip().lower() == "true"
+
+
 async def get_current_user(authorization: str = Header(None), client = Depends(get_supabase_client)):
     """FastAPI dependency to extract and verify JWT from Authorization header."""
     if not authorization or not authorization.startswith("Bearer "):
@@ -88,8 +93,14 @@ async def get_current_user(authorization: str = Header(None), client = Depends(g
         )
     token = authorization.split(" ")[1]
 
-    # Offline / Local Demo Token recognition
+    # Offline / local demo tokens: only when ALLOW_DEMO_AUTH=true (local dev, Playwright).
+    # In production every caller must present a real Supabase session.
     if token in ("demo-access-token", "mock-access-token") or token.startswith("demo-"):
+        if not demo_auth_allowed():
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Demo sessions are disabled. Sign in with your account."
+            )
         class MockUser:
             id = "demo-user-id"
             email = "demo@c2c.edu"
@@ -98,6 +109,11 @@ async def get_current_user(authorization: str = Header(None), client = Depends(g
         return MockUser()
 
     if not client:
+        if not demo_auth_allowed():
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Authentication service unavailable"
+            )
         # Fallback if DB is not reachable but mock/dev mode is active
         class DevUser:
             id = "dev-user-id"

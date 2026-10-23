@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import NavItem from '@/components/crm/NavItem';
+import { DEMO_AUTH_ENABLED } from '@/lib/demoSession';
 
 export default async function CRMLayout({ children }: { children: React.ReactNode }) {
   let user: any = null;
@@ -17,8 +18,8 @@ export default async function CRMLayout({ children }: { children: React.ReactNod
     // Supabase server client might be offline
   }
 
-  // Fallback to demo cookie authentication
-  if (!user) {
+  // Fallback to demo cookie authentication (only where demo auth is switched on)
+  if (!user && DEMO_AUTH_ENABLED) {
     const cookieStore = cookies();
     const demoRole = cookieStore.get('demo_role')?.value;
     const demoUserRaw = cookieStore.get('demo_user')?.value;

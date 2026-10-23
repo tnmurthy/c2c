@@ -16,6 +16,13 @@
 
 export type DemoRole = 'student' | 'institution' | 'employer' | 'admin';
 
+/**
+ * Demo sessions exist only where NEXT_PUBLIC_ALLOW_DEMO_AUTH=true (local dev,
+ * Playwright). The backend has the matching ALLOW_DEMO_AUTH switch; production
+ * sets neither, so every visitor signs in with a real account there.
+ */
+export const DEMO_AUTH_ENABLED = process.env.NEXT_PUBLIC_ALLOW_DEMO_AUTH === 'true';
+
 export interface DemoUser {
   id: string;
   email: string;
@@ -58,7 +65,7 @@ export const DEMO_ACCOUNTS: Record<string, DemoRole> = {
  * Both the email and the password must match exactly.
  */
 export function resolveDemoAccount(email: string, password: string): DemoRole | null {
-  if (password !== DEMO_PASSWORD) return null;
+  if (!DEMO_AUTH_ENABLED || password !== DEMO_PASSWORD) return null;
   return DEMO_ACCOUNTS[email.trim().toLowerCase()] ?? null;
 }
 
@@ -101,7 +108,7 @@ function deleteCookie(name: string) {
 }
 
 export function setDemoSession(user: DemoUser): void {
-  if (typeof document === 'undefined') return;
+  if (!DEMO_AUTH_ENABLED || typeof document === 'undefined') return;
 
   const tokenKey = getAuthTokenKey();
   const token = JSON.stringify({
@@ -161,7 +168,7 @@ function parseDemoUser(raw: string): DemoUser | null {
 
 /** Read the current demo session, from cookies first and localStorage second. */
 export function getDemoUser(): DemoUser | null {
-  if (typeof document === 'undefined') return null;
+  if (!DEMO_AUTH_ENABLED || typeof document === 'undefined') return null;
 
   try {
     const cookieUser = readCookie('demo_user');
