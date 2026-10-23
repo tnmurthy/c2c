@@ -4,13 +4,18 @@ This file is the standing brief for Claude Code working on this repo.
 Work items are ordered by priority. Complete each phase fully before moving to the next.
 **RLS audit is intentionally left to the end — do not tackle it in earlier phases.**
 
+> **Before you start:** read `AGENTS.md` (rules for AI agents: metered AI calls,
+> no fake results, demo auth off in production) and `GO_LIVE.md` (go-live
+> blockers B1–B8 and per-workflow status, evaluated 2026-10-23). Update
+> `GO_LIVE.md` when you fix an item. Production is `c2c.mytestbed.tech`.
+
 ---
 
 ## Context
 
 **Repo:** Campus to Corporate (c2c) — AI-first campus recruitment platform
 **Stack:** Next.js 14 (App Router) · FastAPI (Python) · Supabase (PostgreSQL + Auth + Storage + Realtime) · Vercel
-**Live URL:** makeover.mytestbed.tech
+**Live URL:** c2c.mytestbed.tech (makeover.mytestbed.tech no longer resolves)
 **Key file to understand the intended architecture:** `c2c_hld.md`
 
 The platform has a solid assessment engine and clean FastAPI skeleton, but the AI intelligence
