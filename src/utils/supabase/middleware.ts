@@ -12,7 +12,9 @@ export async function updateSession(request: NextRequest) {
   const ref = process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0] || 'placeholder';
   const cookiePrefix = `sb-${ref}-auth-token`;
   const allCookies = request.cookies.getAll();
-  const isMockToken = allCookies.some(cookie => {
+  // Only where demo auth is switched on (local dev, Playwright); never in production.
+  const demoAuthEnabled = process.env.NEXT_PUBLIC_ALLOW_DEMO_AUTH === 'true';
+  const isMockToken = demoAuthEnabled && allCookies.some(cookie => {
     if (cookie.name.includes('demo_role') || cookie.name.includes('mock-token')) return true;
     if (!cookie.name.startsWith(cookiePrefix)) return false;
     

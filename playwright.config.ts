@@ -23,5 +23,7 @@ export default defineConfig({
     url: 'http://127.0.0.1:3011',
     reuseExistingServer: false,
     timeout: 120 * 1000,
+    // The test backend accepts the mock/demo tokens used by tests/e2e; production never sets this.
+    env: { ALLOW_DEMO_AUTH: 'true', NEXT_PUBLIC_ALLOW_DEMO_AUTH: 'true' },
   },
 });

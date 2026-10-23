@@ -6,6 +6,7 @@ import { ChevronDown, Loader2, Mail, Lock, KeyRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import {
   DEMO_ACCOUNTS,
+  DEMO_AUTH_ENABLED,
   DEMO_PASSWORD,
   DemoRole,
   buildDemoUser,
@@ -65,7 +66,7 @@ export default function LoginPage() {
       return;
     }
 
-    if (cleanEmail in DEMO_ACCOUNTS) {
+    if (DEMO_AUTH_ENABLED && cleanEmail in DEMO_ACCOUNTS) {
       setError(`Wrong password for the demo account. Use ${DEMO_PASSWORD}.`);
       setLoading(false);
       return;
@@ -84,7 +85,9 @@ export default function LoginPage() {
       if (result.data.user && (returning || result.data.session)) routeUser(result.data.user);
       else setError("Check your email to confirm your account, then return here to sign in.");
     } catch {
-      setError(`Could not reach the authentication service. Demo accounts work offline with the password ${DEMO_PASSWORD}.`);
+      setError(DEMO_AUTH_ENABLED
+        ? `Could not reach the authentication service. Demo accounts work offline with the password ${DEMO_PASSWORD}.`
+        : "Could not reach the authentication service. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -102,9 +105,10 @@ export default function LoginPage() {
       <header className="mb-6 text-center">
         <p className="text-xs font-mono font-bold tracking-[.2em] text-cyan-400">SECURE ACCESS</p>
         <h1 className="mt-2 font-mono text-3xl font-bold text-white">CAMPUS.<span className="text-cyan-400">TO</span>_CORP</h1>
-        <p className="mt-2 text-xs text-[#bbc9cd]">Sign in with standard client demo credentials or Google.</p>
+        <p className="mt-2 text-xs text-[#bbc9cd]">{DEMO_AUTH_ENABLED ? "Sign in with standard client demo credentials or Google." : "Sign in with your account or Google."}</p>
       </header>
 
+      {DEMO_AUTH_ENABLED && (<>
       {/* Client Test Credentials Card */}
       <div className="mb-6 p-4 rounded-xl bg-black/50 border border-cyan-500/30 text-xs font-mono space-y-2.5">
         <div className="flex items-center justify-between border-b border-white/10 pb-2">
@@ -146,6 +150,8 @@ export default function LoginPage() {
         </p>
       </div>
 
+      </>)}
+
       {/* Email / Password Form */}
       {showEmail && (
         <form onSubmit={emailAuth} className="space-y-3.5">
@@ -157,7 +163,7 @@ export default function LoginPage() {
                 required 
                 type="email" 
                 value={email} 
-                placeholder="student@c2c.demo"
+                placeholder={DEMO_AUTH_ENABLED ? "student@c2c.demo" : "you@college.edu"}
                 onChange={e => setEmail(e.target.value)} 
                 className="w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" 
               />
@@ -171,7 +177,7 @@ export default function LoginPage() {
                 required 
                 type="password" 
                 value={password} 
-                placeholder="c2c@2026"
+                placeholder={DEMO_AUTH_ENABLED ? DEMO_PASSWORD : "••••••••"}
                 onChange={e => setPassword(e.target.value)} 
                 className="w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" 
               />
@@ -188,13 +194,14 @@ export default function LoginPage() {
             <button type="button" onClick={() => setReturning(!returning)} className="hover:text-cyan-400">
               {returning ? "Need to create account?" : "Already registered? Sign in"}
             </button>
-            <span className="text-slate-500">Demo Password: c2c@2026</span>
+            {DEMO_AUTH_ENABLED && <span className="text-slate-500">Demo Password: {DEMO_PASSWORD}</span>}
           </div>
         </form>
       )}
 
       {error && <p role="alert" className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-2.5 text-xs text-red-300 text-center">{error}</p>}
 
+      {DEMO_AUTH_ENABLED && (<>
       {/* 1-Click Fast Access Section */}
       <div className="mt-6 pt-5 border-t border-white/10 space-y-2">
         <p className="text-[11px] font-mono text-slate-400 text-center uppercase tracking-wider mb-2">Or 1-Click Fast Access</p>
@@ -229,6 +236,8 @@ export default function LoginPage() {
           </button>
         </div>
       </div>
+
+      </>)}
 
       <div className="mt-4 pt-3 border-t border-white/10">
         <button onClick={continueWithGoogle} disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2.5 font-mono text-xs font-semibold text-slate-300 transition hover:bg-white/10 disabled:opacity-50">

@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Lock, Mail, AlertCircle, Loader2, ArrowRight, KeyRound } from 'lucide-react'
 import {
   DEMO_ACCOUNTS,
+  DEMO_AUTH_ENABLED,
   DEMO_PASSWORD,
   buildDemoUser,
   resolveDemoAccount,
@@ -41,7 +42,7 @@ export default function CRMLoginPage() {
       return
     }
 
-    if (DEMO_ACCOUNTS[cleanEmail] === 'admin') {
+    if (DEMO_AUTH_ENABLED && DEMO_ACCOUNTS[cleanEmail] === 'admin') {
       setError(`Wrong password for the demo account. Use ${DEMO_PASSWORD}.`)
       setLoading(false)
       return
@@ -76,6 +77,7 @@ export default function CRMLoginPage() {
           <p className="text-slate-400 text-sm">Internal Team Portal</p>
         </div>
 
+        {DEMO_AUTH_ENABLED && (<>
         {/* Demo Credentials Box */}
         <div className="mb-6 p-3.5 rounded-xl bg-slate-900 border border-blue-500/30 text-xs font-mono space-y-2">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -91,6 +93,8 @@ export default function CRMLoginPage() {
             <code className="text-blue-300">admin@taliatech.in</code>
           </div>
         </div>
+
+        </>)}
 
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
           <form onSubmit={handleLogin} className="space-y-6">
