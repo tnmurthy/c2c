@@ -9,7 +9,9 @@ export async function setupMocks(
   role?: 'student' | 'employer' | 'institution' | 'admin'
 ) {
   // Inject mock supabase session to localStorage before page loads
-  const ref = 'onsmkbwqucvbzggugmmn';
+  // Same derivation as the app (src/lib/demoSession.ts, middleware): the cookie
+  // name follows NEXT_PUBLIC_SUPABASE_URL, so a hardcoded ref breaks other envs.
+  const ref = process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0] || 'placeholder';
   const tokenKey = `sb-${ref}-auth-token`;
 
   page.on('console', msg => {

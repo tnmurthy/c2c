@@ -24,9 +24,11 @@ export async function updateSession(request: NextRequest) {
       if (decodedUrl.includes('mock-access-token') || decodedUrl.includes('demo-access-token')) return true;
     } catch (e) {}
     
-    // Check base64-decoded
+    // Check base64-decoded. @supabase/ssr writes `base64-<payload>`; strip the
+    // prefix first or the decode is misaligned and never matches.
     try {
-      const decodedBase64 = Buffer.from(cookie.value, 'base64').toString('utf-8');
+      const payload = cookie.value.startsWith('base64-') ? cookie.value.slice('base64-'.length) : cookie.value;
+      const decodedBase64 = Buffer.from(payload, 'base64').toString('utf-8');
       if (decodedBase64.includes('mock-access-token') || decodedBase64.includes('demo-access-token')) return true;
     } catch (e) {}
     

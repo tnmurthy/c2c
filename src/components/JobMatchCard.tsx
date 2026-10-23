@@ -202,6 +202,7 @@ export const JobMatchCard: React.FC<JobMatchCardProps> = ({
 
             {jobMeta?.id && onApply && (
               <button
+                id={`apply-btn-${jobMeta.id}`}
                 onClick={() => onApply(jobMeta.id!)}
                 disabled={alreadyApplied}
                 className={`px-3.5 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
