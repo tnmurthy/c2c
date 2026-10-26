@@ -16,19 +16,20 @@ from api.exceptions import APIException, NotFoundError, PermissionDeniedError, D
 router = APIRouter(tags=["Assessment"])
 logger = logging.getLogger("c2c_api.assessment")
 
-# Try to import C2C_Orchestrator_V2
+# The agent-recruiters orchestrator. If it cannot be imported, agent evaluation
+# is disabled and reported by /api/health/agents. Never substitute a stand-in:
+# a stub that always returned "CERTIFIED" used to hide this failure.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ORCHESTRATOR_IMPORT_ERROR: Optional[str] = None
 try:
     from scripts.c2c_orchestrator_v2 import C2C_Orchestrator_V2
-except ImportError:
-    class C2C_Orchestrator_V2:
-        def __init__(self, candidate_name, audit_gaps):
-            self.candidate = candidate_name
-            self.gaps = audit_gaps
-            self.evidence_scores = {str(gap): 0 for gap in audit_gaps}
-            self.logs = []
-        def run_ordeal_session(self):
-            return {"candidate": self.candidate, "final_status": "CERTIFIED"}
+except ImportError as e:
+    C2C_Orchestrator_V2 = None
+    ORCHESTRATOR_IMPORT_ERROR = str(e)
+    logger.critical(
+        f"❌ CRITICAL: C2C_Orchestrator_V2 failed to import: {e}. "
+        "Agent evaluation will be DISABLED until this is resolved."
+    )
 
 # --- HELPERS ---
 
@@ -121,6 +122,9 @@ def select_distinct_items(items: List[Dict[str, Any]], count: int, seen_fingerpr
 # --- BACKGROUND TASKS ---
 
 async def run_agent_recruiters(student_id: str):
+    if C2C_Orchestrator_V2 is None:
+        logger.error(f"[WORKER] Skipping agent-recruiters for {student_id} — orchestrator unavailable")
+        return
     logger.info(f"🚀 [WORKER] Running agent-recruiters (Psychologist, Narratologist) for {student_id}...")
     try:
         orch = C2C_Orchestrator_V2(candidate_name=student_id, audit_gaps=[])
@@ -130,6 +134,13 @@ async def run_agent_recruiters(student_id: str):
         logger.error(f"❌ [WORKER] agent-recruiters failed: {e}")
 
 # --- ENDPOINTS ---
+
+@router.get("/health/agents")
+async def agents_health():
+    """Ops check: is agent evaluation available? (GO_LIVE B7, CLAUDE.md P1-B)"""
+    if C2C_Orchestrator_V2 is None:
+        return {"orchestrator": "unavailable", "error": "import failed"}
+    return {"orchestrator": "ok"}
 
 @router.get("/assessment/bank")
 async def get_assessment_bank(
