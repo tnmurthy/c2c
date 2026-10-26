@@ -30,11 +30,8 @@ production database); do not try to work around them.
   `{"orchestrator": "unavailable", "error": "import failed"}` (404 live today).
   Tests: import failure → health says unavailable and no `CERTIFIED` row/result
   is produced; import success → ok. Acceptance as in CLAUDE.md P1-B.
-- [ ] **T2 — human: apply migration `20261026000000_webhook_triggers_vault.sql` to Talia**
-  (GO_LIVE B5/B6). Code is merged (PR #36); the agent's `apply_migration` call is
-  blocked by permissions. After it is applied, run the Supabase security advisor
-  and confirm the `webhook_*`, `handle_user_signup_role` and
-  `check_whitelist_email` findings are gone.
+- [x] **T2 — human: apply migration `20261026000000_webhook_triggers_vault.sql` to Talia**
+  (GO_LIVE B5/B6). Done 2026-10-26; security advisor confirmed.
 - [ ] **T3 — human: Vercel production env** — `SUPABASE_SERVICE_ROLE_KEY` (B2;
   CRM/employer/matching/Costs return 503 without it) and `TYPESAFE_API_KEY` (B3).
   Verify: `GET /api/typesafe/status` → `api_key_configured: true`.
