@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 import subprocess
+from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from fastapi.concurrency import run_in_threadpool
@@ -10,7 +11,7 @@ from api.deps import require_admin_supabase, require_role, get_current_user, get
 from api.services.candidate_features import features_for_students
 from api.db import get_service_client
 from services.matching.scorer import ROLE_WEIGHTS, calculate_match_score, score_candidates_for_job
-from api.schemas.employer import EmployerOnboard, JobCreate
+from api.schemas.employer import EmployerOnboard, JobCreate, MatchStatusUpdate
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 
 router = APIRouter(tags=["Employer"])
@@ -189,6 +190,48 @@ async def run_job_matching(
         raise
     except Exception as e:
         logger.error(f"ERROR run_job_matching: {e}", exc_info=True)
+        raise DatabaseConnectionError(str(e))
+
+@router.get("/employer/jobs/{job_id}")
+async def get_job(
+    job_id: str,
+    client = Depends(require_admin_supabase),
+    current_user = Depends(require_role(["employer", "admin"]))
+):
+    """One job posting (header of the ranked-candidates screen)."""
+    try:
+        _job_for_user(client, job_id, current_user)
+        res = client.table("job_postings").select(
+            "id, title, description, requirements, role_type, location, is_remote, status, created_at"
+        ).eq("id", job_id).execute()
+        return res.data[0]
+    except (NotFoundError, PermissionDeniedError):
+        raise
+    except Exception as e:
+        logger.error(f"ERROR get_job: {e}", exc_info=True)
+        raise DatabaseConnectionError(str(e))
+
+@router.patch("/employer/jobs/{job_id}/candidates/{student_id}")
+async def update_candidate_status(
+    job_id: str,
+    student_id: str,
+    payload: MatchStatusUpdate,
+    client = Depends(require_admin_supabase),
+    current_user = Depends(require_role(["employer", "admin"]))
+):
+    """Record the employer's decision. Re-scoring keeps it (see services/matching/scorer.py)."""
+    try:
+        _job_for_user(client, job_id, current_user)
+        res = client.table("job_candidate_matches").update(
+            {"status": payload.status, "updated_at": datetime.now(timezone.utc).isoformat()}
+        ).eq("job_id", job_id).eq("student_id", student_id).execute()
+        if not res.data:
+            raise NotFoundError("This candidate is not ranked for this job")
+        return {"student_id": student_id, "status": payload.status}
+    except (NotFoundError, PermissionDeniedError):
+        raise
+    except Exception as e:
+        logger.error(f"ERROR update_candidate_status: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
 @router.get("/employer/jobs/{job_id}/candidates")

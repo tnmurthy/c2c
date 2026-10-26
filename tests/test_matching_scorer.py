@@ -307,3 +307,64 @@ def test_job_posted_webhook_requires_secret(monkeypatch):
 
     monkeypatch.setenv("SUPABASE_WEBHOOK_SECRET", "s3cret")
     assert client.post("/api/webhook/job-posted", json={}, headers={"x-webhook-secret": "nope"}).status_code == 401
+
+
+# ── employer ranked-candidates screen: job header and status decisions ─────
+
+def _owned_db(judge_calls):
+    db = _db()
+    db.tables["employers"] = [{"id": "emp1", "auth_id": "user1"}, {"id": "emp2", "auth_id": "user2"}]
+    scorer.score_candidates_for_job(db, "job1")
+    return db
+
+
+def test_owner_reads_job_header(judge_calls):
+    res = _app(_owned_db(judge_calls), "employer", "user1").get("/api/employer/jobs/job1")
+
+    assert res.status_code == 200
+    assert res.json()["requirements"] == ["Python", "Testing"]
+
+
+def test_other_employer_cannot_read_job_header(judge_calls):
+    assert _app(_owned_db(judge_calls), "employer", "user2").get("/api/employer/jobs/job1").status_code == 403
+
+
+def test_owner_shortlists_a_candidate(judge_calls):
+    db = _owned_db(judge_calls)
+
+    res = _app(db, "employer", "user1").patch("/api/employer/jobs/job1/candidates/0", json={"status": "SHORTLISTED"})
+
+    assert res.status_code == 200
+    row = next(r for r in db.tables["job_candidate_matches"] if r["student_id"] == "0")
+    assert row["status"] == "SHORTLISTED"
+
+
+def test_status_must_be_a_known_decision(judge_calls):
+    res = _app(_owned_db(judge_calls), "employer", "user1").patch(
+        "/api/employer/jobs/job1/candidates/0", json={"status": "HIRED_ALREADY"})
+    assert res.status_code == 422
+
+
+def test_other_employer_cannot_change_status(judge_calls):
+    db = _owned_db(judge_calls)
+
+    res = _app(db, "employer", "user2").patch("/api/employer/jobs/job1/candidates/0", json={"status": "REJECTED"})
+
+    assert res.status_code == 403
+    assert all(r["status"] == "PENDING" for r in db.tables["job_candidate_matches"])
+
+
+def test_status_on_unranked_candidate_is_404(judge_calls):
+    res = _app(_owned_db(judge_calls), "employer", "user1").patch(
+        "/api/employer/jobs/job1/candidates/nobody", json={"status": "SHORTLISTED"})
+    assert res.status_code == 404
+
+
+def test_shortlist_survives_rescore(judge_calls):
+    db = _owned_db(judge_calls)
+    _app(db, "employer", "user1").patch("/api/employer/jobs/job1/candidates/2", json={"status": "SHORTLISTED"})
+
+    scorer.score_candidates_for_job(db, "job1")
+
+    row = next(r for r in db.tables["job_candidate_matches"] if r["student_id"] == "2")
+    assert row["status"] == "SHORTLISTED"

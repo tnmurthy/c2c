@@ -47,9 +47,10 @@ production database); do not try to work around them.
   `20261026010000_meter_gemini.sql`; add `SUPABASE_SERVICE_ROLE_KEY` as a GitHub
   Actions secret (until then the scout stores jobs unscored); set a quota on the
   Gemini key in Google AI Studio.
-- [ ] **T6 — Employer screen for ranked candidates** using
-  `GET /api/employer/jobs/{job_id}/candidates` (fit, 5Q, per-requirement evidence,
-  status). API and tests exist; no UI yet.
+- [x] **T6 — Employer screen for ranked candidates.** Done in PR `feat/employer-ranked-candidates`:
+  `/employer/jobs/[id]` (fit, 5Q vs evidence, level per requirement, decisions
+  with rollback, re-run matching); `GET /api/employer/jobs/{id}` and
+  `PATCH /api/employer/jobs/{id}/candidates/{student_id}`; job cards link to it.
 - [ ] **T7 — CLAUDE.md P1-A and P1-C:** remove `sys.path.append` hacks
   (`api/main.py`) and the duplicate StreamHandler.
 - [ ] **T8 — Run Playwright in CI** so green CI means the journeys work

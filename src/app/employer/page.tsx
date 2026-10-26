@@ -975,13 +975,16 @@ export default function EmployerPage() {
                         <span className="text-white capitalize">{job.employment_type}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-[#bbc9cd]">Target Matches</span>
-                        <span className="text-white font-bold">{Math.floor(Math.random() * 20) + 5}</span>
+                        <span className="text-[#bbc9cd]">Ranked Matches</span>
+                        <span className="text-white font-bold">{Object.keys(job.match_scores || {}).length}</span>
                       </div>
                     </div>
-                    <button className="w-full bg-white/5 hover:bg-white/10 text-white py-2 rounded text-xs font-bold font-mono tracking-widest transition-colors">
+                    <Link
+                      href={`/employer/jobs/${job.id}`}
+                      className="block w-full text-center bg-white/5 hover:bg-white/10 text-white py-2 rounded text-xs font-bold font-mono tracking-widest transition-colors"
+                    >
                       VIEW_MATCHES
-                    </button>
+                    </Link>
                   </div>
                 ))}
               </div>
