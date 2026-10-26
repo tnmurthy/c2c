@@ -31,5 +31,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          # Meters each Gemini call against the daily cap (claim_ai_call). Without it
+          # the scout still runs but makes no Gemini calls (jobs stored unscored).
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           PYTHONPATH: services/market-scout
         run: python services/market-scout/scraper/main.py

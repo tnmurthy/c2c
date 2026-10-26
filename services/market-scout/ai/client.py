@@ -3,6 +3,14 @@ import json
 import time
 import requests
 
+try:  # imported as the scout's `ai` package, or loaded by file path from the c2c API
+    from ai import budget
+except ImportError:  # pragma: no cover - exercised when loaded by path
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("c2c_gemini_budget", os.path.join(os.path.dirname(__file__), "budget.py"))
+    budget = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(budget)
+
 _last_call = 0.0
 
 MODEL_FALLBACK = [
@@ -12,8 +20,12 @@ MODEL_FALLBACK = [
     "gemini-1.5-flash",
 ]
 
-def generate(prompt: str, model: str = "", rate_limit: float = 7.0) -> dict:
-    """Call Gemini with auto-fallback on 429. Returns parsed JSON or {}."""
+def generate(prompt: str, model: str = "", rate_limit: float = 7.0, source: str = "gemini_scout") -> dict:
+    """
+    Call Gemini with auto-fallback on 429. Returns parsed JSON or {}.
+    Every HTTP attempt (including fallback models) is billable, so each one is
+    claimed against the daily cap for `source` first; a refusal returns {}.
+    """
     global _last_call
 
     api_key = os.environ.get("GEMINI_API_KEY", "")
@@ -39,16 +51,23 @@ def generate(prompt: str, model: str = "", rate_limit: float = 7.0) -> dict:
             },
         }
         try:
+            ledger_id = budget.claim(source)
+        except budget.BudgetRefused as e:
+            print(f"[AI] Gemini call not made ({source}): {e.reason}")
+            return {}
+        try:
             resp = requests.post(url, json=payload, timeout=30)
+            budget.finish(ledger_id, ok=resp.status_code == 200)
             if resp.status_code == 200:
                 return _parse(resp)
             if resp.status_code in (429, 404):
                 print(f"[AI] Model {m} throttled or unavailable, falling back...")
                 time.sleep(1)
                 continue
-            print(f"[AI] Error {resp.status_code}: {resp.text}")
+            print(f"[AI] Error {resp.status_code}: {resp.text[:300]}")
             return {}
         except requests.RequestException as e:
+            budget.finish(ledger_id, ok=False)
             print(f"[AI] Request failed: {e}")
             continue
 

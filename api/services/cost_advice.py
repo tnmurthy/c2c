@@ -18,6 +18,8 @@ FEATURES = (
     ("featurize", "Candidate profile features", "featurize_max_calls_per_day", "featurize_calls"),
     ("evaluate", "Assessment evaluation", "evaluate_max_calls_per_day", "evaluate_calls"),
     ("match", "Job candidate matching", "match_max_calls_per_day", "match_calls"),
+    ("gemini-scout", "Market scout (Gemini)", "gemini_scout_max_calls_per_day", "gemini_scout_calls"),
+    ("gemini-item-gen", "Item generator (Gemini)", "gemini_item_gen_max_calls_per_day", "gemini_item_gen_calls"),
 )
 
 
@@ -64,7 +66,7 @@ def build_advice(summary: Dict[str, Any]) -> List[Dict[str, str]]:
     else:
         out.append(_advice(
             "no-budget", "consider", "No price or budget set",
-            "With the price of one TypeSafe call and a monthly budget, this page shows rupees and suggests a daily limit.",
+            "With an average price per AI call and a monthly budget, this page shows rupees and suggests a daily limit.",
         ))
 
     today = summary.get("today_calls") or {}

@@ -25,6 +25,8 @@ def _summary(**over) -> dict:
         "featurize_max_calls_per_day": 300,
         "evaluate_max_calls_per_day": 200,
         "match_max_calls_per_day": 200,
+        "gemini_scout_max_calls_per_day": 60,
+        "gemini_item_gen_max_calls_per_day": 50,
         "price_per_call_inr": 0.05,
         "monthly_budget_inr": 1000,
     }
@@ -161,6 +163,13 @@ def test_settings_saved_with_who_changed_them():
     assert params["p_account_max_calls_per_day"] is None
     assert params["p_featurize_max_calls_per_day"] == 0
     assert params["p_match_max_calls_per_day"] == 25
+    assert params["p_gemini_scout_max_calls_per_day"] is None
+
+
+def test_gemini_scout_cap_reached_today_is_flagged():
+    s = _summary(today_calls={"featurize_calls": 0, "evaluate_calls": 0, "match_calls": 0,
+                              "gemini_scout_calls": 60, "gemini_item_gen_calls": 0})
+    assert "gemini-scout-cap-reached" in _ids(s)
 
 
 def test_match_cap_reached_today_is_flagged():

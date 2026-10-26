@@ -37,9 +37,16 @@ production database); do not try to work around them.
   Verify: `GET /api/typesafe/status` → `api_key_configured: true`.
 - [ ] **T4 — human: real Supabase demo accounts** for sales demos (B8); demo
   sessions are off in production by decision.
-- [ ] **T5 — Meter Gemini calls** (agent-recruiters) in `ai_call_ledger` with their
-  own cap and a Costs-page line, like `typesafe_match`. Required before anyone
-  sets the Vault webhook secrets, because `assessment-completed` starts agent runs.
+- [x] **T5 — Meter Gemini calls.** Done in PR `feat/meter-gemini`. Finding: the
+  agent-recruiters orchestrator makes **no** model calls (it is a random-number
+  simulation and, called with `audit_gaps=[]`, always returns CERTIFIED — see T9),
+  and the item generator never reached Gemini (hyphenated import path). Metered
+  now: `gemini_scout` (market-scout Action) and `gemini_item_gen` (admin item
+  generator), each claimed per HTTP attempt in `services/market-scout/ai/budget.py`
+  with its own cap on `/crm/costs`. **Human:** apply migration
+  `20261026010000_meter_gemini.sql`; add `SUPABASE_SERVICE_ROLE_KEY` as a GitHub
+  Actions secret (until then the scout stores jobs unscored); set a quota on the
+  Gemini key in Google AI Studio.
 - [ ] **T6 — Employer screen for ranked candidates** using
   `GET /api/employer/jobs/{job_id}/candidates` (fit, 5Q, per-requirement evidence,
   status). API and tests exist; no UI yet.
@@ -47,7 +54,7 @@ production database); do not try to work around them.
   (`api/main.py`) and the duplicate StreamHandler.
 - [ ] **T8 — Run Playwright in CI** so green CI means the journeys work
   (27/27 pass locally as of 2026-10-23).
-- [ ] **T9 — CLAUDE.md Phase 2:** `development_reports` table, agents webhook →
+- [ ] **T9 — CLAUDE.md Phase 2 (agents are simulated today: `scripts/c2c_orchestrator_v2.py` uses `random`):** `development_reports` table, agents webhook →
   report, dashboard card (table does not exist in production yet).
 
 ## Rules that are easy to break

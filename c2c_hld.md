@@ -223,7 +223,8 @@ refused and the heuristic estimate (labelled `is_live_api=false`) is used.
 | TypeSafe evaluate (Jev) | `/api/typesafe/evaluate` requests | daily cap (default 200) | `ai_settings` |
 | TypeSafe job matching (Jev) | jobs × shortlisted candidates | only top 40 by 5Q judged; stored judgment reused until profile/job changes; daily cap (default 200) | `ai_settings` (Costs page) |
 | All AI calls | everything above | account daily cap (default 500), IST day | `ai_settings` |
-| Gemini (agent-recruiters) | assessments | **not yet metered** | to add |
+| Gemini: market scout | every 6 h, 1 call per 5 jobs (+ fallback retries) | daily cap `gemini_scout` (default 60); fails closed without service key | `ai_settings` (Costs page) |
+| Gemini: item generator | admin item generation, ≤3 attempts per item | daily cap `gemini_item_gen` (default 50) | `ai_settings` (Costs page) |
 | Supabase | tier, egress, storage | plan + spend cap | Supabase dashboard |
 | Vercel / Railway | invocations, bandwidth | Spend Management / usage limits | vendor dashboards |
 

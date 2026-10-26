@@ -5,16 +5,29 @@ import random
 import time
 from typing import Dict, Any, Optional, List
 
-# Add project root and market-scout directory to path
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if PROJECT_ROOT not in sys.path:
-    sys.path.append(PROJECT_ROOT)
+GEMINI_CLIENT_PATH = os.path.join(PROJECT_ROOT, "services", "market-scout", "ai", "client.py")
+ITEM_GEN_SOURCE = "gemini_item_gen"
 
-# Try to import generative model client
-try:
-    from services.market_scout.ai.client import generate as gemini_generate
-except ImportError:
-    gemini_generate = None
+
+def _load_gemini_generate():
+    """
+    Load the shared Gemini client by file path: `services/market-scout` has a
+    hyphen, so `import services.market_scout...` never worked and every item
+    silently came from the mock generator. Calls are metered as ITEM_GEN_SOURCE.
+    """
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("c2c_gemini_client", GEMINI_CLIENT_PATH)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+    except Exception as e:
+        print(f"[item_generator] Gemini client unavailable, using mock items: {e}")
+        return None
+    return lambda prompt, model="": module.generate(prompt, model=model, rate_limit=0, source=ITEM_GEN_SOURCE)
+
+
+gemini_generate = _load_gemini_generate()
 
 def generate_llm_item(dimension: str, item_type: str, context: str, recent_stems: Optional[List[str]] = None) -> Dict[str, Any]:
     """

@@ -36,7 +36,7 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 | Portfolio: public retro page, social badges (P4-B) | ❌ | All 4 `portfolio_social_typesafe.spec.ts` tests fail. `api/routers/portfolio_router.py` is a 421-byte stub. Migration `20261015000000_add_social_media_handles` never applied to production (`github_url`, `x_url`, `meta_url` missing). |
 | CV Tailor | ✅ | `cv_tailor_journey.spec.ts` passes. |
 | CRM: talent pool, leads, accounts, opportunities | ⚠️ | Built on its own schema (`leads`, `accounts`, `opportunities`), not the CLAUDE.md `crm_leads` design. Live API 503 until B2. Talent-pool NameError fixed; mobile layout fixed. |
-| Costs page + AI call caps | ✅ | DB-enforced caps, ledger and `/crm/costs` live; E2E passes. Enter price and budget. Gemini (agent-recruiters) is not metered. |
+| Costs page + AI call caps | ✅ | DB-enforced caps, ledger and `/crm/costs` live; E2E passes. Enter price and budget. Gemini is metered (scout, item generator); agent-recruiters makes no model calls. |
 | Admin root dashboard | ❌ | Happy path fails; RBAC redirects pass. |
 | Auth / login | ⚠️ | Works. Supabase leaked-password protection is off. CRM layout treats any `@taliatech.in` email as admin. |
 | API health | ✅ | `/api/health` → `{"status":"ok","db":"connected"}`. |
@@ -52,7 +52,7 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 - [ ] Run Playwright in CI — CI runs only unit tests and the build, so it stays green while journeys fail.
 - [ ] Costs page: enter price per call and monthly budget.
 - [ ] Vendor spend caps: Vercel Spend Management, Supabase spend cap.
-- [ ] Meter Gemini calls in `ai_call_ledger` with their own cap.
+- [x] Meter Gemini calls — `gemini_scout` and `gemini_item_gen` with their own caps (PR `feat/meter-gemini`). Apply migration `20261026010000_meter_gemini.sql` and add the `SUPABASE_SERVICE_ROLE_KEY` GitHub Actions secret.
 
 ## 4. After launch (CLAUDE.md order)
 
