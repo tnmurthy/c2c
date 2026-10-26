@@ -1,4 +1,4 @@
-# Campus to Corporate (c2c) 👔
+# Campus to Corporate (c2c)  .👔
 ## The Unified AI-First Recruitment & Branding Suite
 
 > **"Transforming individual technical brilliance into cohesive enterprise impact."**
