@@ -31,7 +31,7 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 | Student: assessment evaluation (TypeSafe) | ⚠️ | Contract fixed and tested; live judgments need B3. |
 | TPO: onboard → dashboard → verify cohort | ❌ | Both `tpo.spec.ts` flows and the Tier 3/Tier 4 TPO workflows fail. |
 | Employer: onboard → post job → talent discovery | ❌ | `employer.spec.ts` happy path + both validation tests fail; live API 503 (B2). |
-| Employer: job matching (P3-B) | ⚠️ | Merged (PR #32) with unit tests; needs B2 + B3. Scoring runs as a FastAPI background task on Vercel serverless — verify it completes there. No employer UI for `/api/employer/jobs/{id}/candidates` yet. Tier 4 employer flow fails. |
+| Employer: job matching (P3-B) | ⚠️ | Merged (PR #32) with unit tests; needs B2 + B3. Scoring runs as a FastAPI background task on Vercel serverless — verify it completes there. Employer screen `/employer/jobs/[id]` shows the ranking and records decisions (shortlist/contacted/reject). Tier 4 employer flow fails. |
 | Employer: dossier PDF export | ❌ | Tier 4 Scenario 2 fails. |
 | Portfolio: public retro page, social badges (P4-B) | ❌ | All 4 `portfolio_social_typesafe.spec.ts` tests fail. `api/routers/portfolio_router.py` is a 421-byte stub. Migration `20261015000000_add_social_media_handles` never applied to production (`github_url`, `x_url`, `meta_url` missing). |
 | CV Tailor | ✅ | `cv_tailor_journey.spec.ts` passes. |

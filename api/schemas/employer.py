@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Literal
 
 class EmployerOnboard(BaseModel):
     company_name: str
@@ -17,3 +17,8 @@ class JobCreate(BaseModel):
 
 class JobMatchRequest(BaseModel):
     role_type: Optional[str] = "tech"
+
+
+class MatchStatusUpdate(BaseModel):
+    """An employer's decision on a ranked candidate (job_candidate_matches.status)."""
+    status: Literal["PENDING", "SHORTLISTED", "CONTACTED", "REJECTED"]
