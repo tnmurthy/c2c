@@ -43,8 +43,8 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 
 ## 3. Should do before launch
 
-- [ ] P1-A: remove `sys.path.append` hacks (`api/main.py:10-12`).
-- [ ] P1-C: remove the duplicate StreamHandler (`api/main.py:28`).
+- [x] P1-A: `sys.path.append` hacks removed from `api/main.py` (PR `fix/t7-packaging-logging`).
+- [x] P1-C: duplicate StreamHandler removed; each log line prints once.
 - [ ] Set `search_path` on the 9 remaining functions flagged by the advisor (was 14; `ai_day_start` and the webhook functions done).
 - [ ] Enable leaked-password protection in Supabase Auth.
 - [ ] Delete test data in production (2 "E2E Test Job" postings, test students).

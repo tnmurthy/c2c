@@ -50,8 +50,10 @@ production database); do not try to work around them.
 - [ ] **T6 — Employer screen for ranked candidates** using
   `GET /api/employer/jobs/{job_id}/candidates` (fit, 5Q, per-requirement evidence,
   status). API and tests exist; no UI yet.
-- [ ] **T7 — CLAUDE.md P1-A and P1-C:** remove `sys.path.append` hacks
-  (`api/main.py`) and the duplicate StreamHandler.
+- [x] **T7 — CLAUDE.md P1-A and P1-C.** Done in PR `fix/t7-packaging-logging`: no
+  `sys.path` edits in `api/main.py` (imports resolve from the repo root;
+  `scripts/` is a package), one log handler. Hyphenated `services/*` folders get
+  no `__init__.py`: they cannot be Python packages; load them by file path.
 - [ ] **T8 — Run Playwright in CI** so green CI means the journeys work
   (27/27 pass locally as of 2026-10-23).
 - [ ] **T9 — CLAUDE.md Phase 2 (agents are simulated today: `scripts/c2c_orchestrator_v2.py` uses `random`):** `development_reports` table, agents webhook →
