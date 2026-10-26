@@ -26,6 +26,8 @@ class AiSettingsUpdate(BaseModel):
     featurize_max_calls_per_day: Optional[int] = Field(None, ge=0, le=1_000_000)
     evaluate_max_calls_per_day: Optional[int] = Field(None, ge=0, le=1_000_000)
     match_max_calls_per_day: Optional[int] = Field(None, ge=0, le=1_000_000)
+    gemini_scout_max_calls_per_day: Optional[int] = Field(None, ge=0, le=1_000_000)
+    gemini_item_gen_max_calls_per_day: Optional[int] = Field(None, ge=0, le=1_000_000)
     price_per_call_inr: Optional[float] = Field(None, ge=0, le=100_000)
     monthly_budget_inr: Optional[float] = Field(None, ge=0, le=100_000_000)
 
@@ -71,6 +73,8 @@ def update_cost_settings(
             "p_featurize_max_calls_per_day": payload.featurize_max_calls_per_day,
             "p_evaluate_max_calls_per_day": payload.evaluate_max_calls_per_day,
             "p_match_max_calls_per_day": payload.match_max_calls_per_day,
+            "p_gemini_scout_max_calls_per_day": payload.gemini_scout_max_calls_per_day,
+            "p_gemini_item_gen_max_calls_per_day": payload.gemini_item_gen_max_calls_per_day,
             "p_price_per_call_inr": payload.price_per_call_inr,
             "p_monthly_budget_inr": payload.monthly_budget_inr,
             "p_updated_by": user_id,

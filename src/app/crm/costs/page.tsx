@@ -22,6 +22,7 @@ const SAVINGS_BUILT_IN = [
   'A page with many new candidates sends at most 25 at a time; the rest fill in on later visits.',
   'Each profile is judged with all seven questions in a single call.',
   'Job matching judges only the 40 best candidates by assessment, and reuses a judgment until the profile or job changes.',
+  'The market scout scores 5 jobs per Gemini call, and every Gemini call (including retries on fallback models) is counted against its cap.',
   'Failed calls are not retried in a loop; the page shows a labelled estimate instead.',
 ];
 
@@ -30,6 +31,7 @@ const VENDOR_CAPS = [
   { name: 'Supabase', where: 'Organization → Billing → Spend cap', why: 'Stops usage-based database charges.' },
   { name: 'Railway', where: 'Workspace → Usage → Usage limits', why: 'Caps the backend service if it runs there.' },
   { name: 'TypeSafe', where: 'Your TypeSafe account', why: 'The price per call to enter in Limits.' },
+  { name: 'Google AI Studio', where: 'Gemini API → Billing / quotas', why: 'Set a hard monthly limit on the Gemini key used by the scout.' },
 ];
 
 export default function CostsPage() {

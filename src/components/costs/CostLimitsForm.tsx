@@ -9,11 +9,13 @@ import type { AiCostLimits, AiSpendSummary } from '@/types/costs';
 type Field = { key: keyof AiCostLimits; label: string; hint: string; integer: boolean };
 
 const FIELDS: Field[] = [
-  { key: 'account_max_calls_per_day', label: 'Account limit per day', hint: 'All TypeSafe calls. Empty = no limit.', integer: true },
+  { key: 'account_max_calls_per_day', label: 'Account limit per day', hint: 'All AI calls, TypeSafe and Gemini. Empty = no limit.', integer: true },
   { key: 'featurize_max_calls_per_day', label: 'Profile features per day', hint: 'Talent Pool and employer views. 0 switches it off.', integer: true },
   { key: 'evaluate_max_calls_per_day', label: 'Assessment evaluations per day', hint: '0 switches it off.', integer: true },
   { key: 'match_max_calls_per_day', label: 'Job matches per day', hint: 'One call per shortlisted candidate. 0 ranks on 5Q only.', integer: true },
-  { key: 'price_per_call_inr', label: 'Price per call (₹)', hint: 'From your TypeSafe account. Display only.', integer: false },
+  { key: 'gemini_scout_max_calls_per_day', label: 'Market scout (Gemini) per day', hint: 'One call per 5 jobs, every 6 h. 0 stores jobs unscored.', integer: true },
+  { key: 'gemini_item_gen_max_calls_per_day', label: 'Item generator (Gemini) per day', hint: 'Admin question generation. 0 uses template items.', integer: true },
+  { key: 'price_per_call_inr', label: 'Price per call (₹)', hint: 'Average across TypeSafe and Gemini. Display only.', integer: false },
   { key: 'monthly_budget_inr', label: 'Monthly budget (₹)', hint: 'Display and advice only.', integer: false },
 ];
 
