@@ -4,7 +4,7 @@ import logging
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request, Response
 
-from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client
+from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client, require_webhook_secret
 from api.schemas.student import StudentOnboard, StudentProfileUpdate, ApplicationCreate
 from api.schemas.assessment import InstitutionOnboard
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
@@ -692,10 +692,10 @@ async def verify_student(institution_id: str, payload: dict, client = Depends(re
         logger.error(f"ERROR verify_student: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
-@router.post("/webhook/student-onboarded")
+@router.post("/webhook/student-onboarded", dependencies=[Depends(require_webhook_secret)])
 async def webhook_student_onboarded(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
-    logger.info(f"WEBHOOK: student-onboarded received. Payload: {payload}")
+    logger.info(f"WEBHOOK: student-onboarded received (record id={payload.get('record', {}).get('id')})")
     record = payload.get("record", {})
     if student_id := record.get("id"):
         background_tasks.add_task(run_optimizers, student_id)

@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from fastapi.responses import JSONResponse
 
-from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client
+from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client, require_webhook_secret
 from api.schemas.assessment import AssessmentSubmit, FeedbackSubmit, SessionStart, AnswerSubmit
 from api.exceptions import APIException, NotFoundError, PermissionDeniedError, DatabaseConnectionError
 
@@ -702,10 +702,10 @@ async def get_item_analysis(client = Depends(require_admin_supabase), current_us
         logger.error(f"ERROR get_item_analysis: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
-@router.post("/webhook/assessment-completed")
+@router.post("/webhook/assessment-completed", dependencies=[Depends(require_webhook_secret)])
 async def webhook_assessment_completed(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
-    logger.info(f"WEBHOOK: assessment-completed received. Payload: {payload}")
+    logger.info(f"WEBHOOK: assessment-completed received (record id={payload.get('record', {}).get('id')})")
     record = payload.get("record", {})
     if student_id := record.get("student_id"):
         background_tasks.add_task(run_agent_recruiters, student_id)

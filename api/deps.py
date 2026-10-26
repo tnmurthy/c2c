@@ -1,4 +1,5 @@
 import os
+import hmac
 import jwt
 import logging
 from functools import lru_cache
@@ -77,6 +78,19 @@ def require_admin_supabase():
     except Exception as e:
         logger.error("Failed to create admin client: %s", e)
         raise HTTPException(status_code=503, detail=f"Failed to initialize admin database client: {str(e)}")
+
+
+def require_webhook_secret(x_webhook_secret: str = Header(None)) -> None:
+    """
+    Guards /webhook/* endpoints: they start background work (some of it paid AI
+    calls), so only a caller holding SUPABASE_WEBHOOK_SECRET may trigger them.
+    Fails closed when the secret is not configured.
+    """
+    secret = os.environ.get("SUPABASE_WEBHOOK_SECRET")
+    if not secret:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Webhook secret not configured")
+    if not x_webhook_secret or not hmac.compare_digest(x_webhook_secret, secret):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid webhook secret")
 
 
 def demo_auth_allowed() -> bool:

@@ -1,5 +1,4 @@
 import os
-import hmac
 import sys
 import logging
 import subprocess
@@ -7,7 +6,7 @@ from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from fastapi.concurrency import run_in_threadpool
 
-from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client
+from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client, require_webhook_secret
 from api.services.candidate_features import features_for_students
 from api.db import get_service_client
 from services.matching.scorer import ROLE_WEIGHTS, calculate_match_score, score_candidates_for_job
@@ -362,33 +361,27 @@ async def get_leads(client = Depends(require_admin_supabase), current_user = Dep
         logger.error(f"ERROR get_leads: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))
 
-@router.post("/webhook/job-posted")
+@router.post("/webhook/job-posted", dependencies=[Depends(require_webhook_secret)])
 async def webhook_job_posted(request: Request, background_tasks: BackgroundTasks):
-    # Scoring makes paid AI calls, so only a caller holding the shared secret may start it.
-    secret = os.getenv("SUPABASE_WEBHOOK_SECRET")
-    if not secret:
-        raise HTTPException(status_code=503, detail="Webhook secret not configured")
-    if not hmac.compare_digest(request.headers.get("x-webhook-secret", ""), secret):
-        raise HTTPException(status_code=401, detail="Invalid webhook secret")
     payload = await request.json()
-    logger.info(f"WEBHOOK: job-posted received. Payload: {payload}")
+    logger.info(f"WEBHOOK: job-posted received (record id={payload.get('record', {}).get('id')})")
     record = payload.get("record", {})
     if job_id := record.get("id"):
         background_tasks.add_task(run_scoring_engine, job_id)
     return {"status": "received"}
 
-@router.post("/webhook/lead-approved")
+@router.post("/webhook/lead-approved", dependencies=[Depends(require_webhook_secret)])
 async def webhook_lead_approved(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
-    logger.info(f"WEBHOOK: lead-approved received. Payload: {payload}")
+    logger.info(f"WEBHOOK: lead-approved received (record id={payload.get('record', {}).get('id')})")
     record = payload.get("record", {})
     if url := record.get("url"):
         background_tasks.add_task(run_auto_apply, url)
     return {"status": "received"}
 
-@router.post("/webhook/daily-sweep")
+@router.post("/webhook/daily-sweep", dependencies=[Depends(require_webhook_secret)])
 async def webhook_daily_sweep(request: Request, background_tasks: BackgroundTasks):
     payload = await request.json()
-    logger.info(f"WEBHOOK: daily-sweep received. Payload: {payload}")
+    logger.info(f"WEBHOOK: daily-sweep received (record id={payload.get('record', {}).get('id')})")
     background_tasks.add_task(run_market_scout)
     return {"status": "received"}
