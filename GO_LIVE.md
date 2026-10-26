@@ -17,8 +17,8 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 | B2 | Set `SUPABASE_SERVICE_ROLE_KEY` in Vercel (production) | ❌ | `/api/crm/candidates`, `/api/employer/candidates`, `/api/leads`, `/api/costs/summary` return 503 "SUPABASE_SERVICE_ROLE_KEY ... not configured". |
 | B3 | Set `TYPESAFE_API_KEY` in Vercel | ❌ | `/api/typesafe/status` → `api_key_configured: false`; all AI judgments fall back to labelled heuristics. |
 | B4 | Fix the 17 failing Playwright tests (every happy path) | ✅ fixed in PR `fix/e2e-journeys` | 27/27 pass locally. Causes: tests hardcoded the Supabase cookie name (app derives it from `NEXT_PUBLIC_SUPABASE_URL` since PR #30); middleware did not decode `@supabase/ssr` `base64-` cookies; portfolio tests targeted UI that never shipped; apply button lost its id. Was: | 17/27 fail on `master` with and without PR #33 (identical set). Typical failure: timeout waiting for `input[name="full_name"]` on onboarding. Likely one shared cause, possibly the login/session changes in PR #30. |
-| B5 | Fix or remove the 4 DB webhook triggers | ⚠️ code merged (PR #36); migration not applied — AGENTS.md T2 | Triggers now read `c2c_webhook_base_url` and `c2c_webhook_secret` from Supabase Vault and post nothing until both are set. All 5 `/api/webhook/*` endpoints (4 were open to anyone, incl. paid agent runs and the scraper) require `x-webhook-secret`. To do: apply migration `20261026000000_webhook_triggers_vault.sql` to Talia; set `SUPABASE_WEBHOOK_SECRET` in Vercel and both Vault secrets when webhooks should run (meter Gemini first). |
-| B6 | Revoke `anon`/`authenticated` EXECUTE on SECURITY DEFINER functions | ⚠️ in the same migration — not applied, AGENTS.md T2 | Revokes the 4 `webhook_*` trigger functions, `handle_user_signup_role`, `check_whitelist_email` (backend calls it with the service role). `get_auth_tenant_id` stays: 20 RLS policies call it and it returns only the caller's own tenant. |
+| B5 | Fix or remove the 4 DB webhook triggers | ✅ | PR #36 + migration `20261026000000` applied to Talia 2026-10-26. Triggers post via `c2c_post_webhook` (Vault: `c2c_webhook_base_url`, `c2c_webhook_secret`); no secrets set, so webhooks are off by design. All `/api/webhook/*` endpoints require `x-webhook-secret`. To enable later (after Gemini metering, AGENTS.md T5): set `SUPABASE_WEBHOOK_SECRET` in Vercel and both Vault secrets. |
+| B6 | Revoke `anon`/`authenticated` EXECUTE on SECURITY DEFINER functions | ✅ | Applied 2026-10-26. Advisor: anon-callable SECURITY DEFINER functions 7 → 1. Remaining `get_auth_tenant_id` is intentional (20 RLS policies call it; returns only the caller's own tenant). |
 | B7 | Remove the silent fake `CERTIFIED` result (CLAUDE.md P1-B) | ❌ queued: AGENTS.md task T1 | `api/routers/assessment_router.py:31` still returns `{"final_status": "CERTIFIED"}` when the orchestrator import fails. `/api/health/agents` does not exist (404 live). |
 | B8 | Real demo accounts for sales demos | ❌ | Needed once B1 lands: demo logins are off in production by decision (see `ALLOW_DEMO_AUTH` below). |
 
@@ -45,7 +45,7 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 
 - [ ] P1-A: remove `sys.path.append` hacks (`api/main.py:10-12`).
 - [ ] P1-C: remove the duplicate StreamHandler (`api/main.py:28`).
-- [ ] Set `search_path` on 14 functions flagged by the advisor (includes `ai_day_start`).
+- [ ] Set `search_path` on the 9 remaining functions flagged by the advisor (was 14; `ai_day_start` and the webhook functions done).
 - [ ] Enable leaked-password protection in Supabase Auth.
 - [ ] Delete test data in production (2 "E2E Test Job" postings, test students).
 - [ ] Fix the live URL in CLAUDE.md: `makeover.mytestbed.tech` does not resolve; production is `c2c.mytestbed.tech`.
