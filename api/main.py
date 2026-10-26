@@ -5,11 +5,9 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse, Response
 from dotenv import load_dotenv
 
-# Add service directories to sys.path
+# Imports resolve from the repository root as packages (api, scripts, services.*).
+# No sys.path edits: they hid import errors and behaved differently on Vercel.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "services", "job-intel-desk", "backend"))
-sys.path.append(os.path.join(BASE_DIR, "services", "market-scout"))
 
 load_dotenv(os.path.join(BASE_DIR, ".env.local"))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -18,17 +16,11 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 logger = logging.getLogger("c2c_api")
 logger.setLevel(logging.INFO)
 
-# Create a file handler
-fh = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter('%(asctime)s [%(name)s] %(levelname)s: %(message)s')
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-
-# Also keep console output
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-ch.setFormatter(formatter)
-logger.addHandler(ch)
+# One stdout handler. A second StreamHandler printed every log line twice.
+if not logger.handlers:
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(logging.Formatter('%(asctime)s [%(name)s] %(levelname)s: %(message)s'))
+    logger.addHandler(handler)
 
 # Imports from exceptions
 from api.exceptions import APIException, DatabaseConnectionError, NotFoundError, PermissionDeniedError
