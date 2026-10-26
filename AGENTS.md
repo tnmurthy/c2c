@@ -20,7 +20,7 @@ Work top to bottom. One PR per task; update `GO_LIVE.md` and tick the box here
 in the same PR. Items marked **human** need the owner (secrets, dashboards,
 production database); do not try to work around them.
 
-- [ ] **T1 — GO_LIVE B7: no fake `CERTIFIED` result (CLAUDE.md P1-B).**
+- [x] **T1 — GO_LIVE B7: no fake `CERTIFIED` result (CLAUDE.md P1-B).** Done in PR `fix/b7-no-fake-certified`.
   `api/routers/assessment_router.py` (around line 19–31) substitutes a stub class
   when `C2C_Orchestrator_V2` fails to import; the stub always returns
   `{"final_status": "CERTIFIED"}`, so students get fake results with no error.
