@@ -17,14 +17,40 @@ export default function CRMLoginPage() {
   const router = useRouter()
   const supabase = createClient()
   const [email, setEmail] = useState('admin@taliatech.in')
-  const [password, setPassword] = useState('c2c@2026')
+  const [password, setPassword] = useState(DEMO_PASSWORD)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const loginDemoCRM = (cleanEmail: string) => {
-    setDemoSession(buildDemoUser('admin', cleanEmail))
-    router.refresh()
-    router.push('/crm')
+  const loginDemoCRM = async (cleanEmail: string) => {
+    setEmail(cleanEmail)
+    setPassword(DEMO_PASSWORD)
+
+    if (DEMO_AUTH_ENABLED) {
+      setDemoSession(buildDemoUser('admin', cleanEmail))
+      router.refresh()
+      router.push('/crm')
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password: DEMO_PASSWORD,
+      })
+
+      if (error) throw error
+
+      if (data.user) {
+        router.refresh()
+        router.push('/crm')
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to authenticate')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -34,9 +60,7 @@ export default function CRMLoginPage() {
 
     const cleanEmail = email.trim().toLowerCase()
 
-    // Exact demo email + exact demo password only. Matching on `includes('admin')`
-    // with any six-character password handed CRM admin to any visitor.
-    if (resolveDemoAccount(cleanEmail, password) === 'admin') {
+    if (resolveDemoAccount(cleanEmail, password) === 'admin' && DEMO_AUTH_ENABLED) {
       loginDemoCRM(cleanEmail)
       setLoading(false)
       return
@@ -77,7 +101,6 @@ export default function CRMLoginPage() {
           <p className="text-slate-400 text-sm">Internal Team Portal</p>
         </div>
 
-        {DEMO_AUTH_ENABLED && (<>
         {/* Demo Credentials Box */}
         <div className="mb-6 p-3.5 rounded-xl bg-slate-900 border border-blue-500/30 text-xs font-mono space-y-2">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -85,16 +108,20 @@ export default function CRMLoginPage() {
               <KeyRound className="h-3.5 w-3.5 text-blue-400" /> Client Demo Account
             </span>
             <span className="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded text-[11px] font-semibold">
-              PW: c2c@2026
+              PW: {DEMO_PASSWORD}
             </span>
           </div>
           <div className="flex justify-between items-center text-slate-300">
             <span className="text-slate-400">Admin Email:</span>
-            <code className="text-blue-300">admin@taliatech.in</code>
+            <button
+              type="button"
+              onClick={() => { setEmail('admin@taliatech.in'); setPassword(DEMO_PASSWORD); }}
+              className="text-blue-300 hover:text-blue-200 hover:underline"
+            >
+              admin@taliatech.in
+            </button>
           </div>
         </div>
-
-        </>)}
 
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
           <form onSubmit={handleLogin} className="space-y-6">
@@ -159,7 +186,8 @@ export default function CRMLoginPage() {
               <button
                 type="button"
                 onClick={() => loginDemoCRM('admin@taliatech.in')}
-                className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono font-bold rounded-lg border border-slate-700 transition-all"
+                disabled={loading}
+                className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono font-bold rounded-lg border border-slate-700 transition-all disabled:opacity-50"
               >
                 ⚡ 1-Click Demo Access (Admin)
               </button>
