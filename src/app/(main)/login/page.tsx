@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Mail, Lock, KeyRound } from "lucide-react";
+import { Loader2, Mail, Lock, KeyRound, ShieldAlert } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import {
   DEMO_ACCOUNTS,
@@ -14,13 +14,15 @@ import {
   setDemoSession,
 } from "@/lib/demoSession";
 
+const LOGINS_DISABLED = true;
+
 export default function LoginPage() {
   const router = useRouter();
   const [showEmail, setShowEmail] = useState(true);
   const [returning, setReturning] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(LOGINS_DISABLED ? "Logins are temporarily disabled for all roles." : "");
   const [loading, setLoading] = useState(false);
 
   const routeUser = (user: { app_metadata?: Record<string, unknown>; user_metadata?: Record<string, unknown> }) => {
@@ -36,6 +38,10 @@ export default function LoginPage() {
   };
 
   const continueWithGoogle = async () => {
+    if (LOGINS_DISABLED) {
+      setError("Logins are temporarily disabled for all roles.");
+      return;
+    }
     setLoading(true); setError("");
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -45,6 +51,10 @@ export default function LoginPage() {
   };
 
   const loginDemo = async (role: DemoRole, customEmail?: string) => {
+    if (LOGINS_DISABLED) {
+      setError("Logins are temporarily disabled for all roles.");
+      return;
+    }
     const demoEmail = customEmail || `${role}@c2c.demo`;
     setLoading(true);
     setError("");
@@ -81,12 +91,15 @@ export default function LoginPage() {
 
   const emailAuth = async (event: FormEvent) => {
     event.preventDefault();
+    if (LOGINS_DISABLED) {
+      setError("Logins are temporarily disabled for all roles.");
+      return;
+    }
     setLoading(true);
     setError("");
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // A demo login requires an exact demo email AND the exact demo password.
     const demoRole = resolveDemoAccount(cleanEmail, password);
     if (demoRole && DEMO_AUTH_ENABLED) {
       loginDemo(demoRole, cleanEmail);
@@ -99,8 +112,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Everything else is a real Supabase account. A failed sign-in is a failed
-    // sign-in; it must not silently fall back to a demo session.
     try {
       const result = returning
         ? await supabase.auth.signInWithPassword({ email: cleanEmail, password })
@@ -125,6 +136,10 @@ export default function LoginPage() {
   };
 
   const autofill = (roleEmail: string) => {
+    if (LOGINS_DISABLED) {
+      setError("Logins are temporarily disabled for all roles.");
+      return;
+    }
     setEmail(roleEmail);
     setPassword(DEMO_PASSWORD);
     setShowEmail(true);
@@ -141,8 +156,20 @@ export default function LoginPage() {
         <p className="mt-2 text-xs text-[#bbc9cd]">Sign in with your account or demo credentials.</p>
       </header>
 
+      {/* Disabled Notification Banner */}
+      {LOGINS_DISABLED && (
+        <div className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-center">
+          <div className="flex items-center justify-center gap-2 text-amber-400 font-mono text-xs font-bold uppercase tracking-wider">
+            <ShieldAlert className="h-4 w-4" /> Logins Temporarily Disabled
+          </div>
+          <p className="mt-1.5 text-xs text-amber-200/80 leading-relaxed">
+            Portal authentication is currently suspended for all roles (Students, Institutions, Employers, and Admins).
+          </p>
+        </div>
+      )}
+
       {/* Demo Credentials Card */}
-      <div className="mb-6 p-4 rounded-xl bg-black/50 border border-cyan-500/30 text-xs font-mono space-y-2.5">
+      <div className={`mb-6 p-4 rounded-xl bg-black/50 border border-cyan-500/30 text-xs font-mono space-y-2.5 ${LOGINS_DISABLED ? 'opacity-50 pointer-events-none' : ''}`}>
         <div className="flex items-center justify-between border-b border-white/10 pb-2">
           <span className="text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
             <KeyRound className="h-3.5 w-3.5 text-cyan-400" /> Demo Credentials
@@ -154,25 +181,25 @@ export default function LoginPage() {
         <div className="space-y-1.5 text-slate-300">
           <div className="flex justify-between items-center">
             <span className="text-slate-400">🎓 Student:</span>
-            <button type="button" onClick={() => autofill('student@c2c.demo')} className="text-cyan-300 hover:text-cyan-200 hover:underline">
+            <button type="button" disabled={LOGINS_DISABLED} onClick={() => autofill('student@c2c.demo')} className="text-cyan-300 hover:text-cyan-200 hover:underline disabled:opacity-60 disabled:cursor-not-allowed">
               student@c2c.demo
             </button>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-slate-400">🏛️ TPO (Inst):</span>
-            <button type="button" onClick={() => autofill('institution@c2c.demo')} className="text-emerald-300 hover:text-emerald-200 hover:underline">
+            <button type="button" disabled={LOGINS_DISABLED} onClick={() => autofill('institution@c2c.demo')} className="text-emerald-300 hover:text-emerald-200 hover:underline disabled:opacity-60 disabled:cursor-not-allowed">
               institution@c2c.demo
             </button>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-slate-400">💼 Employer:</span>
-            <button type="button" onClick={() => autofill('employer@c2c.demo')} className="text-indigo-300 hover:text-indigo-200 hover:underline">
+            <button type="button" disabled={LOGINS_DISABLED} onClick={() => autofill('employer@c2c.demo')} className="text-indigo-300 hover:text-indigo-200 hover:underline disabled:opacity-60 disabled:cursor-not-allowed">
               employer@c2c.demo
             </button>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-slate-400">🛡️ Admin:</span>
-            <button type="button" onClick={() => autofill('admin@c2c.demo')} className="text-rose-300 hover:text-rose-200 hover:underline">
+            <button type="button" disabled={LOGINS_DISABLED} onClick={() => autofill('admin@c2c.demo')} className="text-rose-300 hover:text-rose-200 hover:underline disabled:opacity-60 disabled:cursor-not-allowed">
               admin@c2c.demo
             </button>
           </div>
@@ -193,9 +220,10 @@ export default function LoginPage() {
                 required 
                 type="email" 
                 value={email} 
+                disabled={LOGINS_DISABLED}
                 placeholder="student@c2c.demo" 
                 onChange={e => setEmail(e.target.value)} 
-                className="w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" 
+                className="w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed" 
               />
             </div>
           </div>
@@ -207,21 +235,22 @@ export default function LoginPage() {
                 required 
                 type="password" 
                 value={password} 
+                disabled={LOGINS_DISABLED}
                 placeholder={DEMO_PASSWORD} 
                 onChange={e => setPassword(e.target.value)} 
-                className="w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" 
+                className="w-full rounded-lg border border-white/10 bg-black/30 pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed" 
               />
             </div>
           </div>
           <button 
             type="submit" 
-            disabled={loading} 
-            className="w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 py-3 font-mono text-sm font-bold text-[#0e1416] transition disabled:opacity-50"
+            disabled={loading || LOGINS_DISABLED} 
+            className="w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 py-3 font-mono text-sm font-bold text-[#0e1416] transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : (returning ? "SIGN IN WITH CREDENTIALS" : "CREATE EMAIL ACCOUNT")}
+            {loading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : (LOGINS_DISABLED ? "LOGINS CURRENTLY DISABLED" : (returning ? "SIGN IN WITH CREDENTIALS" : "CREATE EMAIL ACCOUNT"))}
           </button>
           <div className="flex justify-between items-center text-[11px] text-[#bbc9cd]">
-            <button type="button" onClick={() => setReturning(!returning)} className="hover:text-cyan-400">
+            <button type="button" disabled={LOGINS_DISABLED} onClick={() => setReturning(!returning)} className="hover:text-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed">
               {returning ? "Need to create account?" : "Already registered? Sign in"}
             </button>
             <span className="text-slate-500">Demo Password: {DEMO_PASSWORD}</span>
@@ -232,34 +261,38 @@ export default function LoginPage() {
       {error && <p role="alert" className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-2.5 text-xs text-red-300 text-center">{error}</p>}
 
       {/* 1-Click Fast Access Section */}
-      <div className="mt-6 pt-5 border-t border-white/10 space-y-2">
+      <div className={`mt-6 pt-5 border-t border-white/10 space-y-2 ${LOGINS_DISABLED ? 'opacity-50 pointer-events-none' : ''}`}>
         <p className="text-[11px] font-mono text-slate-400 text-center uppercase tracking-wider mb-2">Or 1-Click Fast Access</p>
         <div className="grid grid-cols-2 gap-2 font-mono text-xs">
           <button
             type="button"
+            disabled={LOGINS_DISABLED}
             onClick={() => loginDemo('student')}
-            className="p-2.5 rounded-lg bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/10 text-cyan-300 transition-all font-semibold"
+            className="p-2.5 rounded-lg bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/10 text-cyan-300 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             🎓 Student
           </button>
           <button
             type="button"
+            disabled={LOGINS_DISABLED}
             onClick={() => loginDemo('institution')}
-            className="p-2.5 rounded-lg bg-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 border border-white/10 text-emerald-300 transition-all font-semibold"
+            className="p-2.5 rounded-lg bg-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 border border-white/10 text-emerald-300 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             🏛️ TPO
           </button>
           <button
             type="button"
+            disabled={LOGINS_DISABLED}
             onClick={() => loginDemo('employer')}
-            className="p-2.5 rounded-lg bg-white/5 hover:bg-indigo-500/10 hover:border-indigo-500/40 border border-white/10 text-indigo-300 transition-all font-semibold"
+            className="p-2.5 rounded-lg bg-white/5 hover:bg-indigo-500/10 hover:border-indigo-500/40 border border-white/10 text-indigo-300 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             💼 Employer
           </button>
           <button
             type="button"
+            disabled={LOGINS_DISABLED}
             onClick={() => loginDemo('admin')}
-            className="p-2.5 rounded-lg bg-white/5 hover:bg-rose-500/10 hover:border-rose-500/40 border border-white/10 text-rose-300 transition-all font-semibold"
+            className="p-2.5 rounded-lg bg-white/5 hover:bg-rose-500/10 hover:border-rose-500/40 border border-white/10 text-rose-300 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             🛡️ Admin
           </button>
@@ -267,7 +300,7 @@ export default function LoginPage() {
       </div>
 
       <div className="mt-4 pt-3 border-t border-white/10">
-        <button onClick={continueWithGoogle} disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2.5 font-mono text-xs font-semibold text-slate-300 transition hover:bg-white/10 disabled:opacity-50">
+        <button onClick={continueWithGoogle} disabled={loading || LOGINS_DISABLED} className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-2.5 font-mono text-xs font-semibold text-slate-300 transition hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed">
           <GoogleMark /> Continue with Google
         </button>
       </div>
