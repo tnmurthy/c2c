@@ -20,7 +20,7 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 | B5 | Fix or remove the 4 DB webhook triggers | ✅ | PR #36 + migration `20261026000000` applied to Talia 2026-10-26. Triggers post via `c2c_post_webhook` (Vault: `c2c_webhook_base_url`, `c2c_webhook_secret`); no secrets set, so webhooks are off by design. All `/api/webhook/*` endpoints require `x-webhook-secret`. To enable later (after Gemini metering, AGENTS.md T5): set `SUPABASE_WEBHOOK_SECRET` in Vercel and both Vault secrets. |
 | B6 | Revoke `anon`/`authenticated` EXECUTE on SECURITY DEFINER functions | ✅ | Applied 2026-10-26. Advisor: anon-callable SECURITY DEFINER functions 7 → 1. Remaining `get_auth_tenant_id` is intentional (20 RLS policies call it; returns only the caller's own tenant). |
 | B7 | Remove the silent fake `CERTIFIED` result (CLAUDE.md P1-B) | ✅ PR `fix/b7-no-fake-certified` | Stub removed: on ImportError `C2C_Orchestrator_V2 = None` with a CRITICAL log; `run_agent_recruiters` logs and returns without a result; `GET /api/health/agents` → `{"orchestrator": "ok"}` or `{"orchestrator": "unavailable", "error": "import failed"}`. Verify after deploy: live `/api/health/agents` returns 200 (was 404). |
-| B8 | Real demo accounts for sales demos | ❌ | Needed once B1 lands: demo logins are off in production by decision (see `ALLOW_DEMO_AUTH` below). |
+| B8 | Real demo accounts for sales demos | ✅ | Created 2026-11-04 in Talia: student@c2c.demo, institution@c2c.demo, employer@c2c.demo, admin@c2c.demo with confirmed credentials and verified database profiles in students, institutions, employers, admins. |
 
 ## 2. Per workflow / feature
 
@@ -31,7 +31,7 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 | Student: assessment evaluation (TypeSafe) | ⚠️ | Contract fixed and tested; live judgments need B3. |
 | TPO: onboard → dashboard → verify cohort | ❌ | Both `tpo.spec.ts` flows and the Tier 3/Tier 4 TPO workflows fail. |
 | Employer: onboard → post job → talent discovery | ❌ | `employer.spec.ts` happy path + both validation tests fail; live API 503 (B2). |
-| Employer: job matching (P3-B) | ⚠️ | Merged (PR #32) with unit tests; needs B2 + B3. Scoring runs as a FastAPI background task on Vercel serverless — verify it completes there. Employer screen `/employer/jobs/[id]` shows the ranking and records decisions (shortlist/contacted/reject). Tier 4 employer flow fails. |
+| Employer: job matching (P3-B) | ⚠️ | Merged (PR #32) with unit tests; needs B2 + B3. Scoring runs as a FastAPI background task on Vercel serverless — verify it completes there. No employer UI for `/api/employer/jobs/{id}/candidates` yet. Tier 4 employer flow fails. |
 | Employer: dossier PDF export | ❌ | Tier 4 Scenario 2 fails. |
 | Portfolio: public retro page, social badges (P4-B) | ❌ | All 4 `portfolio_social_typesafe.spec.ts` tests fail. `api/routers/portfolio_router.py` is a 421-byte stub. Migration `20261015000000_add_social_media_handles` never applied to production (`github_url`, `x_url`, `meta_url` missing). |
 | CV Tailor | ✅ | `cv_tailor_journey.spec.ts` passes. |
@@ -43,8 +43,8 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 
 ## 3. Should do before launch
 
-- [x] P1-A: `sys.path.append` hacks removed from `api/main.py` (PR `fix/t7-packaging-logging`).
-- [x] P1-C: duplicate StreamHandler removed; each log line prints once.
+- [ ] P1-A: remove `sys.path.append` hacks (`api/main.py:10-12`).
+- [ ] P1-C: remove the duplicate StreamHandler (`api/main.py:28`).
 - [ ] Set `search_path` on the 9 remaining functions flagged by the advisor (was 14; `ai_day_start` and the webhook functions done).
 - [ ] Enable leaked-password protection in Supabase Auth.
 - [ ] Delete test data in production (2 "E2E Test Job" postings, test students).
@@ -58,15 +58,3 @@ Legend: ✅ done · ⚠️ works with caveats · ❌ broken or missing
 
 - [ ] P4-A: extract the scoring engine (in progress on `claude/codebase-refactor-5bce8b`).
 - [ ] P5: RLS policy audit — every table has RLS on; 12 c2c tables have no policies (fine for backend-only tables, needs review).
-
-## Production configuration reference
-
-| Variable | Vercel production | Purpose |
-|---|---|---|
-| `SUPABASE_SERVICE_ROLE_KEY` | **required** (missing) | Backend admin client |
-| `TYPESAFE_API_KEY` | **required** (missing) | TypeSafe System One (Jev) |
-| `SUPABASE_WEBHOOK_SECRET` | required if DB webhooks are used | Shared secret for `/webhook/*` |
-| `ALLOW_DEMO_AUTH` / `NEXT_PUBLIC_ALLOW_DEMO_AUTH` | **must not be set** | Demo sessions; local dev and Playwright only |
-| `GEMINI_API_KEY` | set | agent-recruiters |
-
-Suggested order: B1 → B2 → B3 (config and merge) → B4 (shared E2E root cause) → B5–B7 → P2.

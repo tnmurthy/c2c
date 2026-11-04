@@ -35,8 +35,10 @@ production database); do not try to work around them.
 - [ ] **T3 — human: Vercel production env** — `SUPABASE_SERVICE_ROLE_KEY` (B2;
   CRM/employer/matching/Costs return 503 without it) and `TYPESAFE_API_KEY` (B3).
   Verify: `GET /api/typesafe/status` → `api_key_configured: true`.
-- [ ] **T4 — human: real Supabase demo accounts** for sales demos (B8); demo
-  sessions are off in production by decision.
+- [x] **T4 — real Supabase demo accounts** for sales demos (B8). Done 2026-11-04:
+  `student@c2c.demo`, `institution@c2c.demo`, `employer@c2c.demo`, `admin@c2c.demo`,
+  and `admin@taliatech.in` created in Talia Supabase Auth with password `c2c@2026`
+  and linked to verified profiles in `students`, `institutions`, `employers`, `admins`.
 - [x] **T5 — Meter Gemini calls.** Done in PR `feat/meter-gemini`. Finding: the
   agent-recruiters orchestrator makes **no** model calls (it is a random-number
   simulation and, called with `audit_gaps=[]`, always returns CERTIFIED — see T9),
