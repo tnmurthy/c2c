@@ -23,12 +23,15 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const routeUser = (user: { app_metadata?: Record<string, unknown> }) => {
-    const { role, profile_id: profileId } = user.app_metadata ?? {};
+  const routeUser = (user: { app_metadata?: Record<string, unknown>; user_metadata?: Record<string, unknown> }) => {
+    const role = (user.app_metadata?.role || user.user_metadata?.role) as string | undefined;
+    const profileId = (user.app_metadata?.profile_id || user.user_metadata?.profile_id) as string | undefined;
     if (role === "admin") return router.push("/admin");
     if (role === "employer") return router.push("/employer");
     if (role === "student" && profileId) return router.push(`/dashboard/${profileId}`);
     if (role === "institution" && profileId) return router.push(`/tpo-dashboard/${profileId}`);
+    if (role === "student") return router.push("/dashboard");
+    if (role === "institution") return router.push("/tpo-dashboard");
     router.push("/onboard");
   };
 
@@ -66,6 +69,7 @@ export default function LoginPage() {
         return;
       }
       if (result.data.user) {
+        router.refresh();
         routeUser(result.data.user);
       }
     } catch {
@@ -105,8 +109,12 @@ export default function LoginPage() {
         setError(result.error.message);
         return;
       }
-      if (result.data.user && (returning || result.data.session)) routeUser(result.data.user);
-      else setError("Check your email to confirm your account, then return here to sign in.");
+      if (result.data.user && (returning || result.data.session)) {
+        router.refresh();
+        routeUser(result.data.user);
+      } else {
+        setError("Check your email to confirm your account, then return here to sign in.");
+      }
     } catch {
       setError(DEMO_AUTH_ENABLED
         ? `Could not reach the authentication service. Demo accounts work offline with the password ${DEMO_PASSWORD}.`
