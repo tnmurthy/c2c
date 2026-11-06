@@ -1,113 +1,115 @@
-# Campus to Corporate (c2c)  .👔
-## The Unified AI-First Recruitment & Branding Suite
+# Campus to Corporate (C2C) 👔
+## Unified AI-First Talent Evaluation, Remediation & Placement Suite
 
-> **"Transforming individual technical brilliance into cohesive enterprise impact."**
+> **"Bridging technical competence, 5Q developmental readiness, and automated career placement with deterministic AI cost controls."**
 
 ---
 
-### 📂 AGENCY SERVICE DIRECTORY
+### 📂 Architecture & Service Directory
 
 ```text
-  ┌────────────────────────────┬───────────────────────────────┬─────────────────────────────────┬───┐
-  │ Service Unit               │ Business Vision               │ Technical Highlights            │   │
-  ├────────────────────────────┼───────────────────────────────┼─────────────────────────────────┼───┤
-  │ brand-optimizer            │ Identity / Core Vision        │ Windows 95 Interactive Desktop  │   │
-  │ git-optimizer              │ GitHub Profile Engineering    │ README ASCII / Code Auditing    │   │
-  │ job-intel-desk             │ Recruitment Intelligence      │ Scrapers + Fit Ranking          │   │
-  │ agent-recruiters           │ Automated Interview Swarm     │ Multi-Agent Coordinated Hiring  │   │
-  │ campus-to-corporate        │ Talent Pipeline Bridge        │ Training + Career Readiness     │   │
-  └────────────────────────────┴───────────────────────────────┴─────────────────────────────────┴───┘
+┌─────────────────────────────────┬────────────────────────────────────┬──────────────────────────────────────┐
+│ Service Unit                    │ Business Vision                    │ Technical Stack & Capabilities       │
+├─────────────────────────────────┼────────────────────────────────────┼──────────────────────────────────────┤
+│ Web Application (Next.js 14)    │ Multi-Persona Unified Experience   │ React 18, Tailwind CSS, Lucide Icons │
+│ API Backend (FastAPI)           │ High-Performance Core Engine       │ Python 3.12, Uvicorn, Pydantic v2    │
+│ Learning Subsystem (Moodle LMS) │ Zero-Token Remediation Academy     │ Docker, Alpine Moodle, Postgres 17   │
+│ Assessment & 5Q Match Engine    │ Holistic Candidate Evaluation      │ 5Q Psychometric + Role Weighting     │
+│ LTI 1.3 Advantage Gateway       │ Standardized Interoperability      │ IMS Global LTI 1.3 AGS 2.0, RSA JWKS │
+│ AI Cost Ledger & Metering       │ Budget-Capped Model Controls       │ DB-level claim_ai_call, TypeSafe/Gemini│
+│ Market Intelligence Desk        │ Real-Time Opportunity Sourcing     │ Headless Scraping, Job Enrichment    │
+└─────────────────────────────────┴────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
 ---
 
 ### 🏗️ Monorepo Structure
 
-The **Campus to Corporate (c2c)** monorepo organizes specialized AI services into cohesive business units.
-
-*   **/services/brand-optimizer:** [Interactive Branding] Nostalgic UI for modern portfolios.
-*   **/services/git-optimizer:** [Technical Presence] Optimizing GitHub profiles for impact.
-*   **/services/job-intel-desk:** [Market Intelligence] High-signal role matching and scraping.
-*   **/services/agent-recruiters:** [Process Automation] Domain-specific expert agent swarms.
-*   **/services/campus-to-corporate:** [Pipeline Development] Bridging the gap for new graduates.
-
----
-
-### 🧠 Core Competencies
-
-*   **GenAI Integration:** RAG Pipelines, Fine-tuning, Prompt Engineering.
-*   **Agentic Workflows:** LangGraph, CrewAI, AutoGen orchestration.
-*   **Technical Branding:** Portfolio optimization and GitHub profile engineering.
-*   **Pipeline Development:** Bridging the gap for new technical talent.
+*   **/src/app**: Next.js 14 App Router (Student, Employer, TPO, Admin, Academy, and Assessment portals).
+*   **/api**: FastAPI REST backend:
+    *   `/api/routers/assessment_router.py`: Assessment submission, dimension scoring, and remediation sync.
+    *   `/api/routers/lti_router.py`: LTI 1.3 Advantage endpoints (`/jwks`, `/config`, `/login`, `/launch`, `/auto-enrol`).
+    *   `/api/routers/employer_router.py`: Job management and candidate fit evaluation.
+    *   `/api/routers/costs_router.py`: AI call budget enforcement and administrative ledger.
+    *   `/api/services/ai_budget.py`: Pre-call quota reservation preventing unmetered consumption.
+    *   `/api/services/lti_ags.py`: LTI Assignment and Grade Services 2.0 grade passback engine.
+    *   `/api/services/moodle_client.py`: Moodle REST API client for automated course enrolment.
+*   **/services/lms**: Containerized Moodle LMS environment (`docker-compose.yml`, custom Nginx and PHP configuration).
+*   **/services/market-scout**: Automated job scraping and opportunity enrichment daemon.
+*   **/supabase/migrations**: Versioned database schemas, RLS policies, and Postgres functions.
 
 ---
 
+### 🧠 5Q Developmental Matching Model
+
+The C2C evaluation engine assesses candidates across five developmental quotients:
+*   **IQ (Intelligence Quotient)**: Technical problem solving, algorithmic ability, and core concepts.
+*   **AQ (Adversity Quotient)**: Resilience under debugging constraints and system failures.
+*   **EQ (Emotional Quotient)**: Collaboration, constructive communication, and feedback handling.
+*   **SQ (Social Quotient)**: Team dynamics, leadership presence, and peer negotiation.
+*   **SpQ (Spiritual / Purpose Quotient)**: Alignment with organizational ethics, values, and long-term vision.
+
+| Role Profile | IQ Weight | AQ Weight | EQ Weight | SQ Weight | SpQ Weight |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| **Technical / Engineering** | 40% | 30% | 20% | 5% | 5% |
+| **Sales & Business Dev** | 10% | 20% | 35% | 35% | 0% |
+| **Operations & Delivery** | 30% | 25% | 25% | 15% | 5% |
+| **Leadership / Management** | 20% | 20% | 30% | 25% | 5% |
+
 ---
 
-### 🚀 Production Deployment (Vercel)
+### 🛡️ Deterministic AI Cost Controls
 
-The **Campus to Corporate (c2c)** platform is structured to deploy seamlessly on **Vercel** with a Next.js frontend and a FastAPI Python backend hosted as serverless functions.
+No third-party LLM call is executed without a pre-allocated quota claim in PostgreSQL:
+*   **Pre-Execution Lock**: Every billable model invocation calls `claim_ai_call(source, candidate_id)`.
+*   **Hard Budget Caps**: Strict daily limits configured in `ai_settings` (`candidate_features`, `typesafe_evaluate`, `typesafe_match`, `gemini_scout`, `gemini_item_gen`).
+*   **Graceful Degradation**: When quotas are exhausted or credentials unavailable, the system fails closed to verified heuristics (`is_live_api=False`) without blocking platform journeys.
+*   **Audit Ledger**: Every consumed token event is tracked in `ai_call_ledger`. Zero pricing details are persisted in code.
 
-#### 1. Configuration (`vercel.json`)
-The routing configuration in `vercel.json` directs all frontend traffic to the Next.js application while proxying `/api/*` request paths to the FastAPI python entrypoint `/api/main.py`:
-```json
-{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/main.py"
-    }
-  ]
-}
+---
+
+### 🎓 LMS & Remediation Academy (/lms & /learn)
+
+C2C features a unified, zero-token learning management architecture:
+1. **Unified Routing**: Next.js proxies `/lms/*` to internal container port `8080` transparently, retaining the master domain `c2c.mytestbed.tech/lms`.
+2. **Automated Gap Remediation**: Student assessment deficiencies automatically register curriculum tracks in Moodle via deterministic REST calls.
+3. **LTI 1.3 AGS Passback**: Course completion and quiz evaluations synchronize back to the candidate's development report.
+4. **Data Isolation**: Moodle operates on an isolated PostgreSQL instance (`moodle_c2c`), guaranteeing zero schema pollution on the primary Supabase cluster (`Talia`).
+
+---
+
+### 💻 Local Development Setup
+
+#### 1. Prerequisites
+*   Node.js 18+ and npm
+*   Python 3.12+ with virtual environment
+*   Docker Desktop (for LMS co-location)
+*   PowerShell 7 / Bash
+
+#### 2. Start LMS Infrastructure
+```bash
+cd services/lms
+docker compose up -d
+cd ../..
 ```
 
-#### 2. Environment Variables
-Configure the following environment variables in your Vercel Dashboard:
-- `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase Project URL.
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase public anonymous API key.
-- `SUPABASE_URL`: Database connection URL.
-- `SUPABASE_KEY`: General api key.
-- `SUPABASE_SERVICE_ROLE_KEY`: Service role secret key (required for updating user JWT `app_metadata` during onboarding).
+#### 3. Start C2C Web & API Services
+```bash
+# Installs dependencies & runs Next.js (port 3030) + FastAPI (port 8000) concurrently
+npm run start:c2c
+```
+
+Access the development interfaces:
+*   **Web Portal**: [http://localhost:3030](http://localhost:3030)
+*   **Remediation Terminal**: [http://localhost:3030/learn](http://localhost:3030/learn)
+*   **Embedded LMS**: [http://localhost:3030/lms](http://localhost:3030/lms)
+*   **FastAPI Documentation**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
 
-### 🔌 Database Connection Pooling
+### 🚀 Production Deployment (Vercel + Supabase)
 
-For serverless deployments (such as Vercel Functions), database connection exhaustion is a primary concern. Always configure **Supabase connection pooling** to prevent serverless execution threads from flooding Postgres.
-
-- **Transaction Connection URL (Recommended):** Use port `6543` (transaction mode via Supabase Supavisor) for your `SUPABASE_URL` connection strings in serverless deployments.
-- **Session Connection URL:** Use port `5432` only for short-lived database migrations and setup scripts.
-
----
-
-### ⚖️ 5Q Match Engine Weighting
-
-The **Campus to Corporate (c2c)** match engine uses a deterministic, weighted system based on five developmental quotients (**5Q**):
-- **IQ** (Intelligence Quotient)
-- **AQ** (Adversity Quotient)
-- **EQ** (Emotional Quotient)
-- **SQ** (Social Quotient)
-- **SpQ** (Spiritual/Purpose Quotient)
-
-Depending on the job's `role_type` profile, the quotients are weighted as follows to calculate a score from `0` to `100`:
-
-| Role Type | IQ Weight | AQ Weight | EQ Weight | SQ Weight | SpQ Weight |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Tech** | 40% | 30% | 20% | 5% | 5% |
-| **Sales** | 10% | 20% | 35% | 35% | 0% |
-| **Ops** | 30% | 25% | 25% | 15% | 5% |
-| **Leadership**| 20% | 20% | 30% | 25% | 5% |
-
----
-
-### 📫 Connect with the Agency
-
-*   **Principal:** [Narayanamurthy T](https://www.linkedin.com/in/narayanamurthy-t/)
-*   **GitHub:** [tnmurthy](https://github.com/tnmurthy)
-*   **Launch Center:** [c2c Platform](https://makeover.mytestbed.tech)
-
----
-
-<p align="center">
-  <img src="https://win98icons.alexmeub.com/icons/png/briefcase-2.png" width="50" height="50">
-</p>
+*   **Frontend**: Deployed via Vercel with automatic App Router edge optimization.
+*   **Backend Serverless**: `api/main.py` runs as a high-efficiency Vercel Serverless Function via `vercel.json` rewrites.
+*   **Database**: Supabase PostgreSQL with connection pooling via port `6543` (transaction mode) for serverless handlers.
+*   **Environment Flags**: `ALLOW_DEMO_AUTH=false` and `NEXT_PUBLIC_ALLOW_DEMO_AUTH=false` are enforced in production environments.
