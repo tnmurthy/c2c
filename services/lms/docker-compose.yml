@@ -1,41 +1,57 @@
 # Co-located LMS Service for Campus-to-Corporate (C2C)
-# Routed seamlessly under https://c2c.mytestbed.tech/lms
-
-version: '3.8'
+# Serves Moodle unified under https://c2c.mytestbed.tech/lms
 
 services:
   moodle-db:
-    image: bitnami/postgresql:16
+    image: postgres:17-alpine
     container_name: c2c-lms-db
     restart: unless-stopped
     environment:
-      - POSTGRESQL_USERNAME=moodle_user
-      - POSTGRESQL_PASSWORD=moodle_secure_password
-      - POSTGRESQL_DATABASE=moodle_c2c
+      POSTGRES_USER: moodle_user
+      POSTGRES_PASSWORD: moodle_secure_password
+      POSTGRES_DB: moodle_c2c
     volumes:
-      - moodle_db_data:/bitnami/postgresql
+      - moodle_db_data:/var/lib/postgresql/data
     networks:
       - c2c-lms-net
 
   moodle:
-    image: bitnami/moodle:4.4
+    image: erseco/alpine-moodle:latest
     container_name: c2c-lms-app
     restart: unless-stopped
     ports:
       - "127.0.0.1:8080:8080"
     environment:
-      - MOODLE_DATABASE_TYPE=pgsql
-      - MOODLE_DATABASE_HOST=moodle-db
-      - MOODLE_DATABASE_PORT_NUMBER=5432
-      - MOODLE_DATABASE_USER=moodle_user
-      - MOODLE_DATABASE_PASSWORD=moodle_secure_password
-      - MOODLE_DATABASE_NAME=moodle_c2c
-      - MOODLE_REVERSEPROXY=yes
-      - MOODLE_SSLPROXY=yes
-      - MOODLE_URL=https://c2c.mytestbed.tech/lms
+      # Unified URL & Reverse Proxy
+      SITE_URL: https://c2c.mytestbed.tech/lms
+      REVERSEPROXY: "true"
+      SSLPROXY: "true"
+
+      # Dedicated Postgres Database
+      DB_TYPE: pgsql
+      DB_HOST: moodle-db
+      DB_PORT: 5432
+      DB_NAME: moodle_c2c
+      DB_USER: moodle_user
+      DB_PASS: moodle_secure_password
+      DB_PREFIX: mdl_
+
+      # Site Identity & Default Admin
+      MOODLE_SITENAME: C2C_Academy
+      MOODLE_USERNAME: admin
+      MOODLE_PASSWORD: C2cAdmin2026!
+      MOODLE_EMAIL: admin@taliatech.in
+      MOODLE_LANGUAGE: en
+
+      # PHP Tuning
+      client_max_body_size: 100M
+      post_max_size: 100M
+      upload_max_filesize: 100M
+      memory_limit: 512M
+      max_input_vars: 5000
     volumes:
-      - moodle_data:/bitnami/moodle
-      - moodledata_data:/bitnami/moodledata
+      - moodledata_data:/var/www/moodledata
+      - moodlehtml_data:/var/www/html
     depends_on:
       - moodle-db
     networks:
@@ -44,9 +60,9 @@ services:
 volumes:
   moodle_db_data:
     driver: local
-  moodle_data:
-    driver: local
   moodledata_data:
+    driver: local
+  moodlehtml_data:
     driver: local
 
 networks:

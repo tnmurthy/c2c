@@ -132,3 +132,35 @@ def test_grade_passback_endpoint(client, monkeypatch):
     assert data["success"] is True
     assert data["status_code"] == 200
 
+
+def test_moodle_client_auto_remediate_simulation():
+    from api.services.moodle_client import MoodleClient
+    client = MoodleClient(token=None)
+    assert not client.is_configured()
+    res = client.auto_remediate_gaps(
+        student_id="std_99",
+        student_email="std99@c2c.demo",
+        audit_gaps=["Distributed Concurrency", "Incident Triage", "Founder Alignment"],
+    )
+    assert res["success"] is True
+    assert res["simulated"] is True
+    assert len(res["enrolled_courses"]) == 3
+    titles = [c["title"] for c in res["enrolled_courses"]]
+    assert any("Concurrency" in t for t in titles)
+    assert any("Incident" in t for t in titles)
+    assert any("Founder" in t for t in titles)
+
+
+def test_auto_enrol_endpoint(client):
+    req_body = {
+        "student_id": "std_101",
+        "student_email": "std101@c2c.demo",
+        "audit_gaps": ["FastAPI Concurrency", "JWT Security"],
+    }
+    res = client.post("/api/lti/auto-enrol", json=req_body)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["success"] is True
+    assert len(data["enrolled_courses"]) >= 2
+
+

@@ -254,3 +254,23 @@ def trigger_grade_passback(req: LTIGradePassbackRequest):
         access_token=req.access_token,
     )
     return result
+
+
+from api.services.moodle_client import moodle_client
+
+
+class AutoEnrolRequest(BaseModel):
+    student_id: str
+    student_email: str
+    audit_gaps: list[str]
+
+
+@router.post("/auto-enrol")
+def auto_enrol_remediation(req: AutoEnrolRequest):
+    """Auto-enrols student into Moodle remediation courses based on assessment gaps."""
+    res = moodle_client.auto_remediate_gaps(
+        student_id=req.student_id,
+        student_email=req.student_email,
+        audit_gaps=req.audit_gaps,
+    )
+    return res
