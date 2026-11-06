@@ -12,6 +12,7 @@ import { signOutEverywhere } from '@/lib/signOut';
 const navLinks = [
   { href: '/onboard', label: 'Onboard', labelUpper: 'ONBOARD', requiresAuth: false },
   { href: '/assessment', label: 'The_Ordeal', labelUpper: 'THE_ORDEAL', requiresAuth: false },
+  { href: '/learn', label: 'Academy', labelUpper: 'ACADEMY', requiresAuth: false },
   { href: '/dashboard', label: 'Dashboard', labelUpper: 'DASHBOARD', requiresAuth: true },
 ];
 

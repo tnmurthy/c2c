@@ -36,6 +36,7 @@ class InstitutionOnboard(BaseModel):
 class AssessmentSubmit(BaseModel):
     student_id: str
     responses: List[Dict[str, Any]] # Expected: { "item_id": "...", "response": "..." }
+    lti_context: Optional[Dict[str, Any]] = None # Optional LTI AGS context: { "lineitem_url": "...", "user_id": "..." }
 
 
 class FeedbackSubmit(BaseModel):

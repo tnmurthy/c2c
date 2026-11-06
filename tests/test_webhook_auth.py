@@ -7,6 +7,7 @@ from api.routers import assessment_router, employer_router, student_router
 
 WEBHOOKS = [
     ("/api/webhook/assessment-completed", assessment_router, "run_agent_recruiters", {"record": {"id": 1, "student_id": "s1"}}),
+    ("/api/webhook/moodle-course-completed", assessment_router, "run_moodle_remediation_sync", {"record": {"student_id": "s1", "course_name": "DevOps"}}),
     ("/api/webhook/student-onboarded", student_router, "run_optimizers", {"record": {"id": "s1"}}),
     ("/api/webhook/job-posted", employer_router, "run_scoring_engine", {"record": {"id": "job1"}}),
     ("/api/webhook/lead-approved", employer_router, "run_auto_apply", {"record": {"id": 1, "url": "https://x"}}),

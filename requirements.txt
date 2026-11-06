@@ -6,3 +6,4 @@ fpdf2==2.7.9
 supabase==2.5.1
 python-dotenv==1.0.1
 requests==2.32.3
+cryptography>=42.0.0

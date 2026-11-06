@@ -428,9 +428,12 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-4">
-                {(report.actionable_feedback || []).map((directive: string, i: number) => (
-                  <div key={i} className="group/card relative">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-indigo-600/20 rounded-xl blur opacity-0 group-hover/card:opacity-100 transition duration-500"></div>
+                {(report.actionable_feedback || []).map((directive: string, i: number) => {
+                  const remediationUrl = process.env.NEXT_PUBLIC_MOODLE_URL 
+                    ? `${process.env.NEXT_PUBLIC_MOODLE_URL.replace(/\/+$/, "")}/course/search.php?search=${encodeURIComponent(directive)}`
+                    : `/learn?topic=${encodeURIComponent(directive)}`;
+
+                  const cardContent = (
                     <div className="relative bg-black/60 border border-white/5 p-6 rounded-xl flex items-start gap-6 backdrop-blur-md transition-all group-hover/card:bg-black/40 group-hover/card:translate-x-2">
                       <div className="shrink-0 w-12 h-12 rounded-sm bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-mono text-indigo-400 font-black text-lg">
                         {String(i + 1).padStart(2, '0')}
@@ -439,11 +442,24 @@ export default function Dashboard() {
                         <p className="text-[#bbc9cd] font-sans font-medium leading-relaxed text-sm md:text-base group-hover/card:text-white transition-colors uppercase tracking-tight">
                           {directive}
                         </p>
+                        <span className="inline-flex items-center gap-1.5 mt-2 font-mono text-[10px] text-cyan-400 font-bold uppercase tracking-wider">
+                          <span>Open Remediation Protocol</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </span>
                       </div>
                       <ChevronRight className="shrink-0 w-6 h-6 text-white/5 group-hover/card:text-indigo-400 transition-all self-center transform group-hover/card:translate-x-1" />
                     </div>
-                  </div>
-                ))}
+                  );
+
+                  return (
+                    <div key={i} className="group/card relative">
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-indigo-600/20 rounded-xl blur opacity-0 group-hover/card:opacity-100 transition duration-500"></div>
+                      <Link href={remediationUrl} className="block focus:outline-none">
+                        {cardContent}
+                      </Link>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="mt-12 p-8 bg-indigo-600/5 border border-indigo-600/20 rounded-xl text-center relative overflow-hidden group/cta">

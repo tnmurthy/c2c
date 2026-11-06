@@ -133,6 +133,26 @@ async def run_agent_recruiters(student_id: str):
     except Exception as e:
         logger.error(f"❌ [WORKER] agent-recruiters failed: {e}")
 
+async def run_moodle_remediation_sync(student_id: str, course_name: str, grade: Optional[float] = None):
+    logger.info(f"🚀 [WORKER] Running Moodle remediation sync for {student_id} (course: {course_name})...")
+    try:
+        from api.deps import require_admin_supabase
+        client = require_admin_supabase()
+        res = client.table("students").select("id, skills").eq("id", student_id).execute()
+        if res.data:
+            current_skills = res.data[0].get("skills") or []
+            if isinstance(current_skills, list):
+                if course_name not in current_skills:
+                    current_skills.append(course_name)
+                    client.table("students").update({"skills": current_skills}).eq("id", student_id).execute()
+                    logger.info(f"✅ [WORKER] Added completed skill '{course_name}' for student {student_id}")
+            elif isinstance(current_skills, dict):
+                current_skills[course_name] = {"status": "completed", "grade": grade}
+                client.table("students").update({"skills": current_skills}).eq("id", student_id).execute()
+                logger.info(f"✅ [WORKER] Updated completed skill '{course_name}' for student {student_id}")
+    except Exception as e:
+        logger.error(f"❌ [WORKER] Moodle remediation sync failed for {student_id}: {e}")
+
 # --- ENDPOINTS ---
 
 @router.get("/health/agents")
@@ -405,7 +425,12 @@ async def generate_assessment(num_per_section: int = 5, client = Depends(require
         raise DatabaseConnectionError(str(e))
 
 @router.post("/assessment/submit")
-async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_admin_supabase), current_user = Depends(require_role(["student", "admin"]))):
+async def submit_assessment(
+    submit: AssessmentSubmit, 
+    background_tasks: BackgroundTasks, 
+    client = Depends(require_admin_supabase), 
+    current_user = Depends(require_role(["student", "admin"]))
+):
     scores = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
     try:
         # Extract student's tenant_id from their profile/record
@@ -588,6 +613,22 @@ async def submit_assessment(submit: AssessmentSubmit, client = Depends(require_a
             }).eq("student_id", submit.student_id).eq("status", "in_progress").execute()
         except Exception as ex_sess:
             logger.warning(f"Failed to update assessment session status to completed: {ex_sess}")
+
+        # Check if LTI AGS grade passback is requested
+        if submit.lti_context:
+            lineitem_url = submit.lti_context.get("lineitem_url")
+            lti_user_id = submit.lti_context.get("user_id") or submit.student_id
+            if lineitem_url and lti_user_id:
+                composite_score = sum(normalized_scores.values()) / max(len(normalized_scores), 1)
+                from api.services.lti_ags import send_lti_grade
+                background_tasks.add_task(
+                    send_lti_grade,
+                    lineitem_url=lineitem_url,
+                    user_id=str(lti_user_id),
+                    score=float(composite_score),
+                    max_score=100.0,
+                    comment=f"C2C Assessment Result: {primary_profile} (Composite: {composite_score:.1f})"
+                )
             
         return {
             "student_id": submit.student_id, 
@@ -721,6 +762,18 @@ async def webhook_assessment_completed(request: Request, background_tasks: Backg
     if student_id := record.get("student_id"):
         background_tasks.add_task(run_agent_recruiters, student_id)
     return {"status": "received"}
+
+@router.post("/webhook/moodle-course-completed", dependencies=[Depends(require_webhook_secret)])
+async def webhook_moodle_course_completed(request: Request, background_tasks: BackgroundTasks):
+    payload = await request.json()
+    logger.info(f"WEBHOOK: moodle-course-completed received: {payload}")
+    record = payload.get("record", payload)
+    student_id = record.get("student_id")
+    course_name = record.get("course_name") or record.get("course_id") or "Remediation Course"
+    grade = record.get("grade")
+    if student_id:
+        background_tasks.add_task(run_moodle_remediation_sync, student_id, str(course_name), grade)
+    return {"status": "received", "student_id": student_id, "course": course_name}
 
 from pydantic import BaseModel
 
