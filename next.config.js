@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  skipTrailingSlashRedirect: true,
   rewrites: async () => {
     // Only bypass in Vercel where vercel.json handles serverless routing. In self-hosted (dev or prod), proxy to FastAPI.
     if (!process.env.VERCEL) {
@@ -15,8 +16,20 @@ const nextConfig = {
           destination: `http://127.0.0.1:${apiPort}/api/:path*`,
         },
         {
+          source: '/lms',
+          destination: `http://127.0.0.1:${lmsPort}/lms/`,
+        },
+        {
+          source: '/lms/',
+          destination: `http://127.0.0.1:${lmsPort}/lms/`,
+        },
+        {
+          source: '/lms/:path*/',
+          destination: `http://127.0.0.1:${lmsPort}/lms/:path*/`,
+        },
+        {
           source: '/lms/:path*',
-          destination: `http://127.0.0.1:${lmsPort}/:path*`,
+          destination: `http://127.0.0.1:${lmsPort}/lms/:path*`,
         },
       ];
     }

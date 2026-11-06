@@ -52,6 +52,8 @@ services:
     volumes:
       - moodledata_data:/var/www/moodledata
       - moodlehtml_data:/var/www/html
+      - ./config.php:/var/www/html/config.php:rw
+      - ./nginx-conf/custom.conf:/etc/nginx/server-conf.d/custom.conf:ro
     depends_on:
       - moodle-db
     networks:

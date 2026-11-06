@@ -14,7 +14,7 @@ import {
   setDemoSession,
 } from "@/lib/demoSession";
 
-const LOGINS_DISABLED = true;
+const LOGINS_DISABLED = process.env.NEXT_PUBLIC_DISABLE_LOGINS === "true";
 
 export default function LoginPage() {
   const router = useRouter();
