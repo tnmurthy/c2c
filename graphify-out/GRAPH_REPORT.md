@@ -1,16 +1,16 @@
 # Graph Report - makeover-talent-agency  (2026-11-07)
 
 ## Corpus Check
-- 279 files · ~428,310 words
+- 280 files · ~428,591 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1625 nodes · 2156 edges · 250 communities (97 shown, 153 thin omitted)
+- 1627 nodes · 2159 edges · 257 communities (103 shown, 154 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 70 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ee1ea857`
+- Built from commit: `1e427889`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -82,6 +82,7 @@
 - [[_COMMUNITY_Community 65|Community 65]]
 - [[_COMMUNITY_Community 66|Community 66]]
 - [[_COMMUNITY_Community 67|Community 67]]
+- [[_COMMUNITY_Community 68|Community 68]]
 - [[_COMMUNITY_Investor Deck Investor Deck|Investor Deck Investor Deck]]
 - [[_COMMUNITY_Landing Page Landing Page|Landing Page Landing Page]]
 - [[_COMMUNITY_Community 71|Community 71]]
@@ -120,6 +121,7 @@
 - [[_COMMUNITY_Query Missing Indexes Query Missing Inde|Query Missing Indexes Query Missing Inde]]
 - [[_COMMUNITY_Query Partial Indexes Query Partial Inde|Query Partial Indexes Query Partial Inde]]
 - [[_COMMUNITY_Readme Readme|Readme Readme]]
+- [[_COMMUNITY_Community 109|Community 109]]
 - [[_COMMUNITY_Review Report Review Report|Review Report Review Report]]
 - [[_COMMUNITY_Robots Robots|Robots Robots]]
 - [[_COMMUNITY_Schema Constraints Schema Constraints|Schema Constraints Schema Constraints]]
@@ -147,6 +149,7 @@
 - [[_COMMUNITY_Test Infra Test Infra|Test Infra Test Infra]]
 - [[_COMMUNITY_Test Ready Test Ready|Test Ready Test Ready]]
 - [[_COMMUNITY_Tpo Dashboard Tpo Dashboard|Tpo Dashboard Tpo Dashboard]]
+- [[_COMMUNITY_Community 137|Community 137]]
 - [[_COMMUNITY_Types Assessment Assessmentoption|Types Assessment Assessmentoption]]
 - [[_COMMUNITY_Types Assessment Assessmentquestion|Types Assessment Assessmentquestion]]
 - [[_COMMUNITY_Types Assessment Assessmentresponse|Types Assessment Assessmentresponse]]
@@ -221,6 +224,7 @@
 - [[_COMMUNITY_Community 213|Community 213]]
 - [[_COMMUNITY_Community 214|Community 214]]
 - [[_COMMUNITY_Community 218|Community 218]]
+- [[_COMMUNITY_Community 219|Community 219]]
 - [[_COMMUNITY_Community 220|Community 220]]
 - [[_COMMUNITY_Community 221|Community 221]]
 - [[_COMMUNITY_Community 222|Community 222]]
@@ -228,8 +232,10 @@
 - [[_COMMUNITY_Community 230|Community 230]]
 - [[_COMMUNITY_Community 231|Community 231]]
 - [[_COMMUNITY_Community 232|Community 232]]
+- [[_COMMUNITY_Community 233|Community 233]]
 - [[_COMMUNITY_Community 234|Community 234]]
 - [[_COMMUNITY_Community 235|Community 235]]
+- [[_COMMUNITY_Community 236|Community 236]]
 - [[_COMMUNITY_Community 237|Community 237]]
 - [[_COMMUNITY_Community 238|Community 238]]
 - [[_COMMUNITY_Community 239|Community 239]]
@@ -246,13 +252,14 @@
 - [[_COMMUNITY_Community 250|Community 250]]
 - [[_COMMUNITY_Community 251|Community 251]]
 - [[_COMMUNITY_Community 252|Community 252]]
+- [[_COMMUNITY_Community 253|Community 253]]
 - [[_COMMUNITY_Community 254|Community 254]]
 - [[_COMMUNITY_Community 256|Community 256]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `DatabaseConnectionError` - 38 edges
 2. `authFetch()` - 29 edges
-3. `supabase` - 26 edges
+3. `supabase` - 27 edges
 4. `NotFoundError` - 24 edges
 5. `PermissionDeniedError` - 20 edges
 6. `useRequireAuth()` - 20 edges
@@ -268,23 +275,23 @@
   tests/test_matching_scorer.py → api/exceptions.py
 - `_Query` --uses--> `APIException`  [INFERRED]
   tests/test_matching_scorer.py → api/exceptions.py
+- `TestPortfolioAndMatchingEndpoints` --uses--> `TypeSafeFeaturizeRequest`  [INFERRED]
+  tests/test_portfolio_matching_endpoints.py → api/schemas/typesafe.py
 - `FakeTable` --uses--> `TypeSafeFeaturizeResponse`  [INFERRED]
   tests/test_candidate_features.py → api/schemas/typesafe.py
-- `run_agent_recruiters()` --calls--> `C2C_Orchestrator_V2`  [EXTRACTED]
-  api/routers/assessment_router.py → scripts/c2c_orchestrator_v2.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (250 total, 153 thin omitted)
+## Communities (257 total, 154 thin omitted)
 
 ### Community 0 - "Portfolio Schema"
 Cohesion: 0.10
 Nodes (21): type, type, type, type, properties, folder, id, impact (+13 more)
 
 ### Community 1 - "API Exception Handling"
-Cohesion: 0.11
-Nodes (26): FastAPI dependency factory to enforce RBAC constraints using app_metadata., require_role(), PermissionDeniedError, Raised when permission is denied for the action., generate_interview_guide_pdf(), generate_student_pdf(), get_candidate_interview_guide_pdf(), get_candidate_profile_pdf() (+18 more)
+Cohesion: 0.13
+Nodes (20): Guards /webhook/* endpoints: they start background work (some of it paid AI, require_webhook_secret(), PermissionDeniedError, Raised when permission is denied for the action., apply_to_job(), export_interview_guide(), export_student_pdf(), get_assessment_history() (+12 more)
 
 ### Community 2 - "Frontend Package Config"
 Cohesion: 0.06
@@ -295,12 +302,12 @@ Cohesion: 0.13
 Nodes (17): Client, main(), market_daily_sweep.py — Native Market Intelligence Cron ========================, Run the native market intelligence daily sweep., Map C2C assessment & student data → native score_job_fit candidate schema., Execute the full job × student scoring matrix and upsert qualified leads.      R, run_sweep(), student_to_candidate() (+9 more)
 
 ### Community 4 - "Assessment Engine"
-Cohesion: 0.10
-Nodes (26): DiscoveryRunRequest, evaluate_lead(), EvaluateLeadRequest, generate_cover_letter(), generate_reviewed_application(), GenerateCoverLetterRequest, interview_prep(), InterviewPrepRequest (+18 more)
+Cohesion: 0.07
+Nodes (38): DiscoveryRunRequest, evaluate_lead(), EvaluateLeadRequest, expand_profile(), ExpandProfileRequest, extract_intel(), ExtractIntelRequest, generate_cover_letter() (+30 more)
 
 ### Community 5 - "Assessment Webhooks"
-Cohesion: 0.08
-Nodes (26): ApplicationReviewModal(), ApplicationReviewModalProps, ReviewedApplicationData, InterviewPrepData, InterviewPrepModal(), InterviewPrepModalProps, JobMatchCardData, JobMatchCardProps (+18 more)
+Cohesion: 0.09
+Nodes (21): CohortSkillGapHeatmap(), CohortSkillGapHeatmapProps, SkillGapItem, SkillGapReportData, UseApiQueryReturn, authFetch(), hasDemoSession(), evaluateWithTypeSafeAI() (+13 more)
 
 ### Community 6 - "TypeScript Config"
 Cohesion: 0.11
@@ -319,8 +326,8 @@ Cohesion: 0.19
 Nodes (7): run_agent_recruiters(), C2C_Orchestrator_V2, V2 Orchestrator implementing the AGENT_HARNESS_SPEC.     Moves from simple prom, Micro-tool: Retrieves detailed evidence for a specific gap., Micro-tool: Directly searches candidate GitHub., Macro-tool: Runs a high-pressure interview scenario., Checks for convergence based on completion criteria.
 
 ### Community 10 - "E2E Test Suite"
-Cohesion: 0.16
-Nodes (16): api_exception_handler(), db_connection_error_handler(), health(), http_exception_handler(), not_found_error_handler(), permission_denied_error_handler(), APIException, BackgroundTasks (+8 more)
+Cohesion: 0.17
+Nodes (15): api_exception_handler(), db_connection_error_handler(), http_exception_handler(), not_found_error_handler(), permission_denied_error_handler(), APIException, BackgroundTasks, PermissionDeniedError (+7 more)
 
 ### Community 12 - "Agent Test Simulation"
 Cohesion: 0.08
@@ -347,16 +354,16 @@ Cohesion: 0.12
 Nodes (15): 1. Concrete Transformation Patterns, 2. Error-First Structure, 3. Quantified Impact, 4. Self-Contained Examples, 5. Semantic Naming, Code Example Standards, Comments, Impact Level Guidelines (+7 more)
 
 ### Community 21 - "CRM & Assessment Types"
-Cohesion: 0.10
-Nodes (21): Assessment(), HistoryPoint, TrendLineChartProps, DashboardData, HistoryPoint, STAGE_COLORS, ActionableFeedback, AssessmentOption (+13 more)
+Cohesion: 0.12
+Nodes (17): HistoryPoint, TrendLineChartProps, ActionableFeedback, AssessmentOption, AssessmentQuestion, AssessmentResponse, AssessmentResult, DevelopmentReport (+9 more)
 
 ### Community 30 - "Api Crm Router"
 Cohesion: 0.31
 Nodes (5): ApiError, requireRole(), AppRole, AuthUser, extractRole()
 
 ### Community 36 - "C2C Hld C2C Hld"
-Cohesion: 0.25
-Nodes (10): HTTPException, AiSettingsUpdate, get_cost_summary(), Admin Costs page API: AI spend, the limits on it, and advice to spend less. Lim, null = uncapped (caps) or not set (price, budget). 0 on a feature cap switches i, Demo/dev sessions are not real accounts and must not change spend limits., _real_user_id(), update_cost_settings() (+2 more)
+Cohesion: 0.32
+Nodes (7): AiSettingsUpdate, get_cost_summary(), Admin Costs page API: AI spend, the limits on it, and advice to spend less. Lim, null = uncapped (caps) or not set (price, budget). 0 on a feature cap switches i, Demo/dev sessions are not real accounts and must not change spend limits., _real_user_id(), update_cost_settings()
 
 ### Community 37 - "Callback Page Authcallbackpage"
 Cohesion: 0.09
@@ -367,16 +374,16 @@ Cohesion: 0.06
 Nodes (24): TestClient, _app(), _candidates(), _db(), _evidence(), FakeDB, _Query, P3-B candidate matching: pure scoring, the cheap 5Q filter before paid calls, r (+16 more)
 
 ### Community 41 - "Components Statcard Statcard"
-Cohesion: 0.13
-Nodes (24): AccountsPage(), ActivitiesPage(), Activity, DropdownItem, CandidatesPage(), Account, Contact, ContactsPage() (+16 more)
+Cohesion: 0.15
+Nodes (22): AccountsPage(), ActivitiesPage(), Activity, DropdownItem, CandidatesPage(), Account, Contact, ContactsPage() (+14 more)
 
 ### Community 47 - "Crm Layout Crmlayout"
-Cohesion: 0.09
-Nodes (21): Footer(), navLinks, CRMLayout(), CRMLoginPage(), NavItem(), NavItemProps, buildDemoUser(), clearDemoSession() (+13 more)
+Cohesion: 0.15
+Nodes (18): CRMLoginPage(), getDemoSession(), buildDemoUser(), clearDemoSession(), deleteCookie(), DEMO_ACCOUNTS, DEMO_PROFILE_IDS, DemoRole (+10 more)
 
 ### Community 48 - "Crm Navitem Navitem"
-Cohesion: 0.09
-Nodes (22): LoadingScreen(), LoadingScreenProps, CohortSkillGapHeatmap(), CohortSkillGapHeatmapProps, SkillGapItem, SkillGapReportData, EmployerPage(), UseAuthOptions (+14 more)
+Cohesion: 0.16
+Nodes (12): Assessment(), EmployerPage(), UseAuthOptions, UseAuthReturn, useRequireAuth(), NewJobPage(), ROLE_TYPES, Onboard() (+4 more)
 
 ### Community 49 - "Dashboard Page Dashboardredirect"
 Cohesion: 0.13
@@ -402,9 +409,13 @@ Nodes (13): 1. The Problem: The "Raw Talent" Gap, 2. The Solution: The "Scientif
 Cohesion: 0.16
 Nodes (13): Field, FIELDS, COST_ROLES, CostsPage(), SAVINGS_BUILT_IN, VENDOR_CAPS, inr(), SpendSummary() (+5 more)
 
+### Community 68 - "Community 68"
+Cohesion: 0.22
+Nodes (10): get_anon_client(), get_current_claims(), _jwt_secret(), FastAPI dependency that provides a Supabase client or raises 503., require_supabase(), HTTPAuthorizationCredentials, get_assessment_history(), get_portfolio_placeholder() (+2 more)
+
 ### Community 71 - "Community 71"
-Cohesion: 0.38
-Nodes (6): get_funnel_metrics(), get_summary_metrics(), get_tenant_id_from_user(), Extracts the tenant_id from the user metadata or database., Return total leads count, active opportunities value sum, win rate percentage, a, For the authenticated tenant, query leads, contacts, and opportunities tables.
+Cohesion: 0.21
+Nodes (12): HTTPException, get_funnel_metrics(), get_summary_metrics(), get_tenant_id_from_user(), Extracts the tenant_id from the user metadata or database., Return total leads count, active opportunities value sum, win rate percentage, a, For the authenticated tenant, query leads, contacts, and opportunities tables., download_resume() (+4 more)
 
 ### Community 78 - "Main Layout Mainlayout"
 Cohesion: 0.17
@@ -412,7 +423,7 @@ Nodes (11): 2026-07-13T03:13:18Z, Acceptance Criteria, Automated Tests, Document
 
 ### Community 83 - "Community 83"
 Cohesion: 0.16
-Nodes (12): AdminDashboard(), ItemAnalysis, JobMatchCard(), StatCard(), StatCardProps, CRMDashboard(), FunnelData, SummaryData (+4 more)
+Nodes (12): AdminDashboard(), ItemAnalysis, StatCard(), StatCardProps, CRMDashboard(), FunnelData, SummaryData, useApiQuery() (+4 more)
 
 ### Community 89 - "Profile Profilecompletionwidget Profilec"
 Cohesion: 0.17
@@ -421,6 +432,10 @@ Nodes (11): Acceptance Criteria, Backend Router Isolation, Compilation & Build V
 ### Community 108 - "Readme Readme"
 Cohesion: 0.67
 Nodes (3): generate_test(), Generates a 25-question test (5 per dimension), simulate_agent()
+
+### Community 109 - "Community 109"
+Cohesion: 0.14
+Nodes (3): Opt-in gate for tests that write to a real Supabase database.  These tests see, TestAssessmentAttempts, TestRLSPolicies
 
 ### Community 119 - "Scripts Inspect Schema"
 Cohesion: 0.17
@@ -445,6 +460,10 @@ Nodes (24): _client(), FakeRpc, _ids(), Tests for the admin Costs page backend: 
 ### Community 130 - "Supabase Middleware Updatesession"
 Cohesion: 0.60
 Nodes (3): config, middleware(), updateSession()
+
+### Community 137 - "Community 137"
+Cohesion: 0.18
+Nodes (10): ApplicationReviewModal(), ApplicationReviewModalProps, ReviewedApplicationData, InterviewPrepData, InterviewPrepModal(), InterviewPrepModalProps, JobMatchCard(), JobMatchCardData (+2 more)
 
 ### Community 138 - "Types Assessment Assessmentoption"
 Cohesion: 0.25
@@ -496,7 +515,7 @@ Nodes (4): Architecture, Interface Contracts, Milestones, Project: Makeover Tale
 
 ### Community 150 - "Types Crm Crmopportunity"
 Cohesion: 0.08
-Nodes (12): hanken, jetbrains, metadata, Candidate, CandidateScore, Opportunity, PipelineStage, STAGE_COLORS (+4 more)
+Nodes (13): LoadingScreen(), LoadingScreenProps, navLinks, LayoutProps, TPODashboardLayout(), size, TPOCohortData, TPODashboard() (+5 more)
 
 ### Community 155 - "User Journeys User Journeys"
 Cohesion: 0.04
@@ -507,20 +526,20 @@ Cohesion: 0.18
 Nodes (10): FakeTable, _live(), Unit tests for api/services/candidate_features.py: the model is not called for, _student(), test_cached_unchanged_profile_is_not_featurized_again(), test_changed_profile_is_featurized_and_cache_updated(), test_cold_cache_is_truncated_to_max_live_per_request(), test_empty_profile_is_not_sent_to_the_model() (+2 more)
 
 ### Community 157 - "Community 157"
-Cohesion: 0.10
-Nodes (16): featurize_candidate_text(), get_typesafe_status(), Returns the current status of the TypeSafe AI System One integration., Transforms candidate free-text (resume, project README, interview notes) into a, TypeSafeFeaturizeRequest, tests/test_portfolio_matching_endpoints.py ====================================, Verifies fit scorer calculates match score and breakdown., Verifies profile expander standardizes full suite of social media links. (+8 more)
+Cohesion: 0.17
+Nodes (7): Verifies fit scorer calculates match score and breakdown., Verifies profile expander standardizes full suite of social media links., Unit verification for handle parsing from different URL variants., Verifies select_distinct_items tracks served stems and eliminates duplicates., Zero-socket integration and unit tests for candidate matching, portfolio, and Ty, Verifies job match card generation returns 6 dimensions and TypeSafe AI telemetr, TestPortfolioAndMatchingEndpoints
 
 ### Community 165 - "Community 165"
-Cohesion: 0.40
-Nodes (4): required, $schema, title, type
+Cohesion: 0.33
+Nodes (8): demo_auth_allowed(), Demo/dev identities are accepted only when explicitly enabled (never set in prod, _call(), Demo/dev identities must be refused unless ALLOW_DEMO_AUTH=true., test_demo_tokens_accepted_when_enabled(), test_demo_tokens_refused_by_default(), test_flag_parsing(), test_missing_auth_client_does_not_grant_admin()
 
 ### Community 166 - "Community 166"
 Cohesion: 0.17
 Nodes (24): Any, DatabaseConnectionError, NotFoundError, agents_health(), generate_assessment(), generate_development_report(), generate_items_endpoint(), get_assessment_bank() (+16 more)
 
 ### Community 167 - "Community 167"
-Cohesion: 0.13
-Nodes (19): get_service_client(), get_supabase_client(), Create and return a Supabase client. Returns None if env vars are missing., Guards /webhook/* endpoints: they start background work (some of it paid AI, require_webhook_secret(), DatabaseConnectionError, Raised when database connection fails or is unavailable., create_job_posting() (+11 more)
+Cohesion: 0.17
+Nodes (19): DatabaseConnectionError, NotFoundError, Raised when database connection fails or is unavailable., Raised when a requested resource is not found., create_job_posting(), get_employer_candidates(), get_employer_jobs(), get_job_candidates() (+11 more)
 
 ### Community 168 - "Community 168"
 Cohesion: 0.17
@@ -534,6 +553,10 @@ Nodes (6): 1. The Core Wedge: High-Volume, Low-Cost Placement Analytics, 2. Prod
 Cohesion: 0.33
 Nodes (5): 1. Blockers — before any external user, 2. Per workflow / feature, 3. Should do before launch, 4. After launch (CLAUDE.md order), Go-live checklist
 
+### Community 219 - "Community 219"
+Cohesion: 0.28
+Nodes (8): BaseModel, onboard_institution(), AssessmentAttemptRead, InstitutionOnboard, JobMatchRequest, AuditRequest, OrdealRequest, PortfolioRequest
+
 ### Community 220 - "Community 220"
 Cohesion: 0.18
 Nodes (10): CompositeTypes, Constants, Database, DatabaseWithoutInternals, DefaultSchema, Enums, Json, Tables (+2 more)
@@ -543,44 +566,52 @@ Cohesion: 0.33
 Nodes (3): tests/test_market_intelligence.py ================================= Comprehens, Unit tests for services/market_intelligence/interview_prep.py, TestInterviewPrep
 
 ### Community 232 - "Community 232"
-Cohesion: 0.20
-Nodes (11): required, type, items, type, required, items, type, properties (+3 more)
+Cohesion: 0.15
+Nodes (12): required, type, type, type, properties, candidate, certifications, projects (+4 more)
+
+### Community 233 - "Community 233"
+Cohesion: 0.43
+Nodes (4): CRMLayout(), NavItem(), NavItemProps, createClient()
 
 ### Community 234 - "Community 234"
-Cohesion: 0.33
-Nodes (6): generate_tailored_resume_pdf(), download_resume(), generate_resume(), GenerateResumeRequest, Generate resume context for a candidate and job posting., Generate tailored resume context and return the PDF file stream.
+Cohesion: 0.31
+Nodes (7): generate_interview_guide_pdf(), generate_student_pdf(), generate_tailored_resume_pdf(), get_candidate_interview_guide_pdf(), get_candidate_profile_pdf(), get_candidates(), Returns all candidates for the CRM talent pool.
 
 ### Community 235 - "Community 235"
 Cohesion: 0.33
 Nodes (5): AGENTS.md — notes for AI coding agents, Current state (2026-10-26), Next tasks — pick the top open one, Rules that are easy to break, Verification
 
+### Community 236 - "Community 236"
+Cohesion: 0.29
+Nodes (5): Candidate, CandidateScore, Opportunity, PipelineStage, STAGE_COLORS
+
 ### Community 237 - "Community 237"
-Cohesion: 0.67
-Nodes (3): expand_profile(), ExpandProfileRequest, Auto-enrich candidate skills and competencies from public GitHub / web footprint
+Cohesion: 0.33
+Nodes (6): get_service_client(), get_supabase_client(), Create and return a Supabase client. Returns None if env vars are missing., health(), Background task: rank candidates for a job (P3-B). Sync, so FastAPI runs it in a, run_scoring_engine()
 
 ### Community 238 - "Community 238"
-Cohesion: 0.06
-Nodes (28): get_anon_client(), demo_auth_allowed(), get_current_claims(), get_current_user(), _jwt_secret(), FastAPI dependency to extract and verify JWT from Authorization header., FastAPI dependency that provides a Supabase client or raises 503., Demo/dev identities are accepted only when explicitly enabled (never set in prod (+20 more)
+Cohesion: 0.16
+Nodes (8): get_current_user(), FastAPI dependency to extract and verify JWT from Authorization header., FastAPI dependency factory to enforce RBAC constraints using app_metadata., require_admin_supabase(), require_role(), get_mock_student_user(), MockUser, TestAssessmentHardened
 
 ### Community 240 - "Community 240"
-Cohesion: 0.67
-Nodes (3): extract_intel(), ExtractIntelRequest, Extract structured intel from raw JD text:     company, location, budget, urgen
+Cohesion: 0.33
+Nodes (4): get_typesafe_status(), Returns the current status of the TypeSafe AI System One integration., tests/test_portfolio_matching_endpoints.py ====================================, Verifies GET /typesafe/status returns active service status.
 
 ### Community 242 - "Community 242"
-Cohesion: 0.22
-Nodes (13): BaseModel, evaluate_candidate(), Evaluates candidate responses using TypeSafe AI's System One (Choice, Score, Nou, JobMatchRequest, AuditRequest, OrdealRequest, PortfolioRequest, DimensionScore (+5 more)
+Cohesion: 0.27
+Nodes (9): evaluate_candidate(), Evaluates candidate responses using TypeSafe AI's System One (Choice, Score, Nou, DimensionScore, TypeSafeEvaluateRequest, TypeSafeEvaluateResponse, TypeSafeFeatureColumn, TypeSafeFeaturizeRequest, TypeSafeFeaturizeResponse (+1 more)
 
 ### Community 244 - "Community 244"
 Cohesion: 0.17
 Nodes (11): 1. Executive Summary & Information Architecture Vision, 2. Confluence Space Hierarchy & Page Tree, 3. Master Wiki Portal / Home Page Layout, 4. Cross-Linking Matrix (Personas × Lifecycle × 9 Processes), 5.1. Three-Tier Progressive Disclosure Model, 5.2. Standard Breadcrumbs, 5.3. Clickable Mermaid Diagram Hotspots, 5. Navigation Affordances & Progressive Disclosure (+3 more)
 
 ### Community 245 - "Community 245"
-Cohesion: 0.15
-Nodes (12): APIException, NotFoundError, Raised when a requested resource is not found., Base exception class for custom API errors., Exception, convert_lead(), Converts a Lead into an Account and Contact.     Optionally creates an Opportun, get_job_matches() (+4 more)
+Cohesion: 0.20
+Nodes (5): APIException, Base exception class for custom API errors., Exception, convert_lead(), Converts a Lead into an Account and Contact.     Optionally creates an Opportun
 
 ### Community 246 - "Community 246"
-Cohesion: 0.67
-Nodes (3): Score a job description against a student profile.     Uses the native determin, score_fit(), ScoreFitRequest
+Cohesion: 0.40
+Nodes (3): hanken, jetbrains, metadata
 
 ### Community 247 - "Community 247"
 Cohesion: 0.67
@@ -591,27 +622,27 @@ Cohesion: 0.33
 Nodes (7): Enum, enum, type, icon, AppRole, FounderArchetype, str
 
 ### Community 250 - "Community 250"
-Cohesion: 0.29
-Nodes (7): items, type, type, certifications, roles, items, type
+Cohesion: 0.22
+Nodes (10): items, items, type, required, type, items, folders, roles (+2 more)
 
 ### Community 251 - "Community 251"
-Cohesion: 0.67
-Nodes (3): generate_outreach(), GenerateOutreachRequest, Generate a hiring manager outreach draft.     Styles: cold_email | linkedin_not
+Cohesion: 0.40
+Nodes (4): featurize_candidate_text(), Transforms candidate free-text (resume, project README, interview notes) into a, Verifies POST /typesafe/featurize transforms candidate text into 11D feature vec, TypeSafeFeaturizeRequest
 
 ## Knowledge Gaps
 - **594 isolated node(s):** `JobItem`, `ProcessItem`, `PROCESSES`, `Backend Structure`, `Frontend Structure` (+589 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **153 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **154 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `properties` connect `Portfolio Schema` to `Community 232`, `Community 248`, `Community 250`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Why does `enum` connect `Community 248` to `Community 242`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Why does `icon` connect `Community 248` to `Portfolio Schema`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
+- **Why does `properties` connect `Portfolio Schema` to `Community 248`, `Community 250`?**
+  _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **Are the 35 inferred relationships involving `HTTPException` (e.g. with `get_current_claims()` and `get_current_user()`) actually correct?**
   _`HTTPException` has 35 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `JobItem`, `ProcessItem`, `PROCESSES` to the rest of the system?**
@@ -619,4 +650,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Portfolio Schema` be split into smaller, more focused modules?**
   _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
 - **Should `API Exception Handling` be split into smaller, more focused modules?**
-  _Cohesion score 0.10685483870967742 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13405797101449277 - nodes in this community are weakly interconnected._

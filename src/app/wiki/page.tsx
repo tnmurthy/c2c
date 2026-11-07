@@ -487,8 +487,122 @@ Downloading cryptographic verification dossier... [OK]`,
   }
 ];
 
+interface WorkflowItem {
+  id: string;
+  name: string;
+  uiRoute: string;
+  uiHref: string;
+  router: string;
+  dbEntities: string;
+  aiQuota: string;
+  outcome: string;
+  processId: string;
+}
+
+const WORKFLOWS: WorkflowItem[] = [
+  {
+    id: "WF-1",
+    name: "Candidate Assessment & Gap Extraction",
+    uiRoute: "/assessment",
+    uiHref: "/assessment",
+    router: "assessment_router.py, scorer.py",
+    dbEntities: "psychometric_items, assessment_submissions, dimension_scores",
+    aiQuota: "Deterministic (0 Tokens)",
+    outcome: "5Q scores normalized, cognitive archetype classified, gaps flagged",
+    processId: "P1"
+  },
+  {
+    id: "WF-2",
+    name: "Zero-Token LMS Course Enrolment",
+    uiRoute: "Automated trigger from WF-1 (/learn)",
+    uiHref: "/learn",
+    router: "moodle_client.py, lti_router.py",
+    dbEntities: "moodle_c2c (Postgres 17)",
+    aiQuota: "Deterministic REST (0 Tokens)",
+    outcome: "Candidate enrolled in Moodle courses without LLM token expense",
+    processId: "P2"
+  },
+  {
+    id: "WF-3",
+    name: "LTI 1.3 Grade Passback & Mastery",
+    uiRoute: "Moodle Quiz completion (/lms)",
+    uiHref: "/lms",
+    router: "lti_router.py, lti_ags.py",
+    dbEntities: "lti_deployments, student_grades",
+    aiQuota: "Cryptographic RSA256",
+    outcome: "AGS 2.0 grade synchronized to Supabase; skill gap resolved on radar",
+    processId: "P3"
+  },
+  {
+    id: "WF-4",
+    name: "Employer Job Posting & Candidate Matching",
+    uiRoute: "/employer/jobs/[id]",
+    uiHref: "/employer/jobs",
+    router: "employer_router.py, typesafe_service.py",
+    dbEntities: "job_postings, job_candidate_matches",
+    aiQuota: "typesafe_match (Cap: 200/d)",
+    outcome: "Tier-1 5Q pre-filtering + Tier-2 guarded deep fit evaluation",
+    processId: "P4"
+  },
+  {
+    id: "WF-5",
+    name: "AI Cost Control & Pre-Flight Ledger",
+    uiRoute: "/crm/costs",
+    uiHref: "/crm/costs",
+    router: "costs_router.py, ai_budget.py",
+    dbEntities: "ai_settings, ai_call_ledger",
+    aiQuota: "Financial Governor",
+    outcome: "Pre-execution lock via claim_ai_call(); real-time spend dashboards",
+    processId: "P5"
+  },
+  {
+    id: "WF-6",
+    name: "Market Scout Sourcing Pipeline",
+    uiRoute: "Background Daemon / HN & RemoteOK",
+    uiHref: "/admin",
+    router: "market-scout/scraper/main.py",
+    dbEntities: "public.jobs, market_entities",
+    aiQuota: "gemini_scout (Cap: 60/d)",
+    outcome: "Deduplicated job ingestion with Gemini opportunity scoring",
+    processId: "P6"
+  },
+  {
+    id: "WF-7",
+    name: "Psychometric Item Generation",
+    uiRoute: "Admin Console / Item Generator",
+    uiHref: "/admin",
+    router: "item_generator.py, generate_bank_llm.py",
+    dbEntities: "public.psychometric_items",
+    aiQuota: "gemini_item_gen (Cap: 50/d)",
+    outcome: "Calibrated 5Q test questions with static fallback bank",
+    processId: "P7"
+  },
+  {
+    id: "WF-8",
+    name: "Student Retro Portfolio & Dossier",
+    uiRoute: "/portfolio/[id]",
+    uiHref: "/portfolio",
+    router: "portfolio_router.py, pdf_generator.py",
+    dbEntities: "students, Supabase Storage",
+    aiQuota: "Deterministic ReportLab",
+    outcome: "Windows 95 desktop emulator, DOS query terminal, signed PDF dossier",
+    processId: "P8"
+  },
+  {
+    id: "WF-9",
+    name: "Institutional Cohort Analytics",
+    uiRoute: "/tpo-dashboard/[id]",
+    uiHref: "/tpo-dashboard",
+    router: "analytics_router.py, Realtime channel",
+    dbEntities: "students, assessments, institutions",
+    aiQuota: "Deterministic SQL",
+    outcome: "Cohort quotient averages, national benchmarks, student interventions",
+    processId: "P9"
+  }
+];
+
 export default function WikiPortal() {
-  const [activeTab, setActiveTab] = useState<"portal" | "process" | "hld" | "sops" | "blockers">("portal");
+  const [activeTab, setActiveTab] = useState<"portal" | "workflows" | "process" | "hld" | "sops" | "blockers">("portal");
   const [selectedProcessId, setSelectedProcessId] = useState<string>("P1");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [processDetailTab, setProcessDetailTab] = useState<"overview" | "contracts" | "governance">("overview");
@@ -585,6 +699,19 @@ export default function WikiPortal() {
               <span className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-indigo-400" />
                 00. Master Home Portal
+              </span>
+              <ChevronRight className="w-3 h-3 opacity-60" />
+            </button>
+
+            <button
+              onClick={() => setActiveTab("workflows")}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors ${
+                activeTab === "workflows" ? "bg-indigo-600/20 text-indigo-300 border border-indigo-500/40" : "text-slate-300 hover:bg-slate-800/60"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <Activity className="w-4 h-4 text-emerald-400" />
+                01. App Workflows Map
               </span>
               <ChevronRight className="w-3 h-3 opacity-60" />
             </button>
@@ -799,6 +926,82 @@ export default function WikiPortal() {
                       <p className="text-[11px] text-slate-400 line-clamp-2 mb-2">{proc.overview}</p>
                       <div className="text-[10px] font-mono text-slate-400 truncate">{proc.router}</div>
                     </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: END-TO-END APPLICATION WORKFLOWS MAP */}
+          {activeTab === "workflows" && (
+            <div className="max-w-6xl mx-auto space-y-6">
+              <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 shadow-lg">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    WF-1 to WF-9 Mapping
+                  </span>
+                  <span className="text-xs text-slate-400">Complete Execution Topology</span>
+                </div>
+                <h2 className="text-xl font-bold text-white mb-2">Application-to-Workflow Relationship Map</h2>
+                <p className="text-xs text-slate-300 leading-relaxed max-w-4xl">
+                  Every user action, background scraper, and assessment trigger executes through a deterministic chain connecting specific UI routes, FastAPI routers, isolated databases, and database-level AI cost caps.
+                </p>
+              </div>
+
+              {/* Workflows Table */}
+              <div className="border border-slate-800 rounded-xl bg-slate-900/40 overflow-hidden">
+                <div className="p-4 border-b border-slate-800 bg-slate-900/80 flex items-center justify-between">
+                  <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-200">
+                    End-to-End Workflow Execution Matrix
+                  </h3>
+                  <span className="text-[11px] text-slate-400 font-mono">9 Active Pipelines</span>
+                </div>
+
+                <div className="divide-y divide-slate-800/60">
+                  {WORKFLOWS.map((wf) => (
+                    <div key={wf.id} className="p-4 hover:bg-slate-800/30 transition-colors space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+                            {wf.id}
+                          </span>
+                          <h4 className="text-sm font-semibold text-white">{wf.name}</h4>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                            AI: {wf.aiQuota}
+                          </span>
+                          <button
+                            onClick={() => {
+                              setSelectedProcessId(wf.processId);
+                              setActiveTab("process");
+                            }}
+                            className="text-xs font-mono font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 px-2 py-0.5 rounded hover:bg-indigo-500/10 transition-colors"
+                          >
+                            Inspect {wf.processId} LLD <ArrowRight className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-slate-300">{wf.outcome}</p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] font-mono text-slate-400 pt-1">
+                        <div className="truncate">
+                          <span className="text-slate-500">UI Trigger: </span>
+                          <Link href={wf.uiHref} className="text-cyan-400 hover:underline">
+                            {wf.uiRoute}
+                          </Link>
+                        </div>
+                        <div className="truncate">
+                          <span className="text-slate-500">Backend: </span>
+                          <span className="text-slate-300">{wf.router}</span>
+                        </div>
+                        <div className="truncate">
+                          <span className="text-slate-500">Storage: </span>
+                          <span className="text-emerald-400">{wf.dbEntities}</span>
+                        </div>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
