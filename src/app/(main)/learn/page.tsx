@@ -193,7 +193,7 @@ function LearnContent() {
               /* Embedded Local LMS Terminal / Runner */
               <div className="bg-black/90 border border-cyan-500/30 rounded-xl p-6 font-mono text-xs text-cyan-300 min-h-[380px] flex flex-col justify-between">
                 <div className="space-y-3">
-                  <p className="text-white/40">// Initializing native learning runner for {selectedTrack.id}...</p>
+                  <p className="text-white/40">{"//"} Initializing native learning runner for {selectedTrack.id}...</p>
                   <p className="text-cyan-400">&gt; Connecting to host endpoint: c2c.mytestbed.tech/lms</p>
                   <p className="text-emerald-400">&gt; Authenticated student telemetry verified (0 AI tokens consumed)</p>
                   <div className="p-4 bg-white/5 border border-white/10 rounded my-4 text-white/90">
