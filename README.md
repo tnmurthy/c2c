@@ -5,111 +5,239 @@
 
 ---
 
-### 📂 Architecture & Service Directory
+## 📑 Architecture & Process Navigation
 
-```text
-┌─────────────────────────────────┬────────────────────────────────────┬──────────────────────────────────────┐
-│ Service Unit                    │ Business Vision                    │ Technical Stack & Capabilities       │
-├─────────────────────────────────┼────────────────────────────────────┼──────────────────────────────────────┤
-│ Web Application (Next.js 14)    │ Multi-Persona Unified Experience   │ React 18, Tailwind CSS, Lucide Icons │
-│ API Backend (FastAPI)           │ High-Performance Core Engine       │ Python 3.12, Uvicorn, Pydantic v2    │
-│ Learning Subsystem (Moodle LMS) │ Zero-Token Remediation Academy     │ Docker, Alpine Moodle, Postgres 17   │
-│ Assessment & 5Q Match Engine    │ Holistic Candidate Evaluation      │ 5Q Psychometric + Role Weighting     │
-│ LTI 1.3 Advantage Gateway       │ Standardized Interoperability      │ IMS Global LTI 1.3 AGS 2.0, RSA JWKS │
-│ AI Cost Ledger & Metering       │ Budget-Capped Model Controls       │ DB-level claim_ai_call, TypeSafe/Gemini│
-│ Market Intelligence Desk        │ Real-Time Opportunity Sourcing     │ Headless Scraping, Job Enrichment    │
-└─────────────────────────────────┴────────────────────────────────────┴──────────────────────────────────────┘
+*   📖 **High-Level Design (HLD)**: [`c2c_hld.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/c2c_hld.md) — Multi-tier topology, block diagrams, edge proxy ingress, security boundary, and 4-reviewer board review.
+*   🔬 **Low-Level Design (LLD)**: [`c2c_lld.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/c2c_lld.md) — Detailed class/function signatures, PostgreSQL DDL schemas, API JSON contracts, state machines, and failure recovery policies for all 9 platform processes.
+*   📚 **Enterprise Wiki & Confluence Hub**: [`WIKI_ARCHITECTURE.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/WIKI_ARCHITECTURE.md) — Confluence space hierarchy, MOC hub-and-spoke layout, persona portals, search taxonomy, and Docs-as-Code pipeline.
+*   ⚙️ **Master Workflow SOP**: [`WORKFLOW_INTEGRATION.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/WORKFLOW_INTEGRATION.md) — Standard operating procedures uniting discovery, audit, assessment, refinement, and launch.
+*   🚀 **Go-Live Readiness Audit**: [`GO_LIVE.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/GO_LIVE.md) — Current release blockers, environment verification, and production readiness proof.
+
+---
+
+## 🏛️ High-Level Design (HLD) Overview
+
+C2C operates as a cohesive, multi-tenant monolith with containerized edge extensions:
+1. **Presentation & Edge Layer**: Next.js 14 App Router (Port 3030) serving student, employer, TPO, and admin interfaces, while transparently reverse-proxying `/lms/*` to internal port 8080 and `/api/*` to FastAPI.
+2. **Application Core Engine**: FastAPI REST backend (Port 8000 / Vercel Serverless) orchestrating 5Q scoring, LTI 1.3 Advantage protocols, employer candidate matching, and PDF generation.
+3. **Isolated Learning Subsystem**: Alpine Moodle 4.5+ and PostgreSQL 17 running on Docker bridge (`c2c-lms-net`), ensuring zero schema contamination on primary business tables.
+4. **Guarded AI Integration**: TypeSafe Jev (candidate featurization/matching) and Google Gemini Flash (market opportunity sourcing and question item generation), strictly governed by pre-flight database quota claims (`claim_ai_call`).
+
+```mermaid
+graph TB
+    subgraph CLIENT["Client Ingress (Port 3030)"]
+        direction LR
+        STU["🎓 Student\n(/dashboard, /learn, /portfolio)"]
+        EMP["🏢 Employer\n(/employer/jobs)"]
+        TPO["🏫 TPO\n(/tpo-dashboard)"]
+        ADM["⚙️ Admin\n(/crm/costs)"]
+    end
+
+    subgraph PROXY["Next.js Edge Proxy"]
+        NEXT["Next.js App Router Gateway"]
+        REW_LMS["Proxy: /lms/* ➔ :8080"]
+        REW_API["Proxy: /api/* ➔ :8000"]
+        NEXT --> REW_LMS
+        NEXT --> REW_API
+    end
+
+    CLIENT --> NEXT
+
+    subgraph BACKEND["Core FastAPI Engine (:8000)"]
+        API["api/main.py"]
+        ROUTERS["Routers:\nassessment · lti · employer · costs · portfolio"]
+        ENGINES["5Q Match Engine · Moodle Client · LTI AGS 2.0"]
+        API --> ROUTERS --> ENGINES
+    end
+
+    subgraph LMS["Containerized LMS (:8080)"]
+        NGINX["Nginx Front"]
+        MOODLE["Alpine Moodle 4.5"]
+        LMS_DB[("Postgres 17\nmoodle_c2c")]
+        NGINX --> MOODLE --> LMS_DB
+    end
+
+    subgraph DATA["Supabase Talia Cluster"]
+        AUTH["Supabase Auth"]
+        MAIN_DB[("PostgreSQL\nstudents · employers · jobs\nai_settings · ai_call_ledger")]
+    end
+
+    subgraph AI["Guarded AI Providers"]
+        LEDGER{{"claim_ai_call() Gate"}}
+        TYPESAFE["TypeSafe Jev AI"]
+        GEMINI["Gemini Flash"]
+        FALLBACK["Heuristic Engine"]
+        LEDGER -->|Approved| TYPESAFE
+        LEDGER -->|Approved| GEMINI
+        LEDGER -.->|Blocked| FALLBACK
+    end
+
+    REW_LMS --> NGINX
+    REW_API --> API
+    ENGINES --> DATA
+    ENGINES --> LEDGER
 ```
 
 ---
 
-### 🏗️ Monorepo Structure
+## 🔬 Low-Level Design (LLD): Process & Workflow Catalog
 
-*   **/src/app**: Next.js 14 App Router (Student, Employer, TPO, Admin, Academy, and Assessment portals).
-*   **/api**: FastAPI REST backend:
-    *   `/api/routers/assessment_router.py`: Assessment submission, dimension scoring, and remediation sync.
-    *   `/api/routers/lti_router.py`: LTI 1.3 Advantage endpoints (`/jwks`, `/config`, `/login`, `/launch`, `/auto-enrol`).
-    *   `/api/routers/employer_router.py`: Job management and candidate fit evaluation.
-    *   `/api/routers/costs_router.py`: AI call budget enforcement and administrative ledger.
-    *   `/api/services/ai_budget.py`: Pre-call quota reservation preventing unmetered consumption.
-    *   `/api/services/lti_ags.py`: LTI Assignment and Grade Services 2.0 grade passback engine.
-    *   `/api/services/moodle_client.py`: Moodle REST API client for automated course enrolment.
-*   **/services/lms**: Containerized Moodle LMS environment (`docker-compose.yml`, custom Nginx and PHP configuration).
-*   **/services/market-scout**: Automated job scraping and opportunity enrichment daemon.
-*   **/supabase/migrations**: Versioned database schemas, RLS policies, and Postgres functions.
+| # | Process Name | Router / Script | DB Tables / Storage | AI Quota Source | Fallback Mechanism |
+|:---:|---|---|---|---|---|
+| **P1** | **Candidate Assessment & 5Q Scoring** | `api/routers/assessment_router.py` | `psychometric_items`, `assessment_submissions`, `dimension_scores` | *None (Deterministic)* | Standardized item scoring algorithms |
+| **P2** | **Zero-Token Gap Remediation** | `api/services/moodle_client.py` | Isolated DB `moodle_c2c` | *Zero Token (Deterministic REST)* | Direct curriculum roadmap in `/learn` |
+| **P3** | **LTI 1.3 Gateway & AGS 2.0 Passback** | `api/routers/lti_router.py`, `api/services/lti_ags.py` | `lti_deployments`, `student_grades` | *None (Cryptographic RSA256)* | Local session auth redirect |
+| **P4** | **Employer Matching & Decisions** | `api/routers/employer_router.py`, `services/matching/scorer.py` | `job_postings`, `job_candidate_matches` | `typesafe_match` (Cap: 200/day) | Labeled heuristic estimate (`is_live_api: false`) |
+| **P5** | **AI Cost Ledger & Spend Controls** | `api/routers/costs_router.py`, `api/services/ai_budget.py` | `ai_settings`, `ai_call_ledger` | System Governor | Rejection of unmetered calls (HTTP 429/Fallback) |
+| **P6** | **Market Scout Headless Pipeline** | `services/market-scout/scraper/main.py` | `public.jobs` | `gemini_scout` (Cap: 60/day) | Regex parser & neutral score (50) |
+| **P7** | **Assessment Item Generation** | `api/item_generator.py` | `public.psychometric_items` | `gemini_item_gen` (Cap: 50/day) | Static backup bank (`api/fallback_bank.json`) |
+| **P8** | **Retro Portfolio & Dossier Export** | `api/routers/portfolio_router.py`, `api/pdf_generator.py` | `students`, Supabase Storage | *None (Local ReportLab)* | Plain-text résumé / JSON export |
+| **P9** | **Multi-Tenant Ingress & Demo Guard** | `api/deps.py`, `src/app/auth` | `auth.users`, role profiles | *None (JWT / RLS)* | Redirect to `/login` |
 
----
-
-### 🧠 5Q Developmental Matching Model
-
-The C2C evaluation engine assesses candidates across five developmental quotients:
-*   **IQ (Intelligence Quotient)**: Technical problem solving, algorithmic ability, and core concepts.
-*   **AQ (Adversity Quotient)**: Resilience under debugging constraints and system failures.
-*   **EQ (Emotional Quotient)**: Collaboration, constructive communication, and feedback handling.
-*   **SQ (Social Quotient)**: Team dynamics, leadership presence, and peer negotiation.
-*   **SpQ (Spiritual / Purpose Quotient)**: Alignment with organizational ethics, values, and long-term vision.
-
-| Role Profile | IQ Weight | AQ Weight | EQ Weight | SQ Weight | SpQ Weight |
-|:---|:---:|:---:|:---:|:---:|:---:|
-| **Technical / Engineering** | 40% | 30% | 20% | 5% | 5% |
-| **Sales & Business Dev** | 10% | 20% | 35% | 35% | 0% |
-| **Operations & Delivery** | 30% | 25% | 25% | 15% | 5% |
-| **Leadership / Management** | 20% | 20% | 30% | 25% | 5% |
+*Complete technical DDL, function signatures, and JSON schemas are specified in [`c2c_lld.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/c2c_lld.md).*
 
 ---
 
-### 🛡️ Deterministic AI Cost Controls
+## 🔄 Core System Workflows
 
-No third-party LLM call is executed without a pre-allocated quota claim in PostgreSQL:
-*   **Pre-Execution Lock**: Every billable model invocation calls `claim_ai_call(source, candidate_id)`.
-*   **Hard Budget Caps**: Strict daily limits configured in `ai_settings` (`candidate_features`, `typesafe_evaluate`, `typesafe_match`, `gemini_scout`, `gemini_item_gen`).
-*   **Graceful Degradation**: When quotas are exhausted or credentials unavailable, the system fails closed to verified heuristics (`is_live_api=False`) without blocking platform journeys.
-*   **Audit Ledger**: Every consumed token event is tracked in `ai_call_ledger`. Zero pricing details are persisted in code.
+### Workflow 1: Assessment Submission, 5Q Scoring & Remediation Sync
+1. Student submits Likert, Situational Judgment Test (SJT), and Cognitive answers to `POST /api/assessment/submit`.
+2. Router parses scoring logic via `parse_scoring_logic()` and normalizes quotients [0-100] across IQ, AQ, EQ, SQ, and SpQ.
+3. Cognitive archetype (`THE_BUILDER`, `THE_LEADER`, or `THE_ANCHOR`) is determined; deficient competencies (<60%) are tagged as gaps.
+4. If gaps exist, `MoodleClient.auto_remediate_gaps()` invokes Moodle REST API (`enrol_manual_enrol_users`) to enrol the student in corresponding modules (`C2C-PY-102`, `C2C-DB-201`) with **zero LLM tokens**.
+5. Assessment results and remediation links are immediately returned to the student dashboard and `/learn` terminal.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Student as 🎓 Candidate
+    participant Next as 🌐 Next.js (/assessment)
+    participant Fast as 🐍 FastAPI Backend
+    participant DB as 🗄️ Supabase Talia
+    participant LMS as 🎓 Moodle LMS (/lms)
+
+    Student->>Next: Submit Assessment
+    Next->>Fast: POST /api/assessment/submit
+    Fast->>Fast: 5Q Scoring & Archetype Classification
+    Fast->>DB: Persist Submissions & Dimension Scores
+    opt Has Gaps
+        Fast->>LMS: Deterministic REST Enrol
+        LMS-->>Fast: Enrolment OK
+        Fast->>DB: Log Active Remediation
+    end
+    Fast-->>Next: Return Results & Remediation Plan
+    Next-->>Student: Display Radar Chart & /learn Modules
+```
 
 ---
 
-### 🎓 LMS & Remediation Academy (/lms & /learn)
-
-C2C features a unified, zero-token learning management architecture:
-1. **Unified Routing**: Next.js proxies `/lms/*` to internal container port `8080` transparently, retaining the master domain `c2c.mytestbed.tech/lms`.
-2. **Automated Gap Remediation**: Student assessment deficiencies automatically register curriculum tracks in Moodle via deterministic REST calls.
-3. **LTI 1.3 AGS Passback**: Course completion and quiz evaluations synchronize back to the candidate's development report.
-4. **Data Isolation**: Moodle operates on an isolated PostgreSQL instance (`moodle_c2c`), guaranteeing zero schema pollution on the primary Supabase cluster (`Talia`).
+### Workflow 2: LTI 1.3 Advantage Launch & AGS 2.0 Grade Passback
+1. Candidate launches an embedded learning activity from `/learn` into `/lms`.
+2. Moodle initiates OpenID Connect handshake via `GET /api/lti/login`.
+3. FastAPI responds with 302 redirect carrying `state` and `nonce`.
+4. Moodle posts signed LTI JWT launch token to `POST /api/lti/launch`.
+5. FastAPI verifies cryptographic signature against rotating RSA public keys (`GET /api/lti/jwks`).
+6. Upon completing quizzes/tasks in Moodle, Moodle issues AGS 2.0 passback to `POST /api/lti/grade-passback`.
+7. Student development record and verified skills are automatically updated in Supabase.
 
 ---
 
-### 💻 Local Development Setup
+### Workflow 3: Employer Candidate Ranking & Cost-Guarded Evaluation
+1. Employer accesses job candidate console (`/employer/jobs/[id]`).
+2. FastAPI fetches all candidate quotients and performs **Tier-1 Deterministic 5Q Ranking** weighted by job profile (e.g., Technical: 40% IQ, 30% AQ, 20% EQ, 5% SQ, 5% SpQ).
+3. The top 40 candidates enter **Tier-2 Deep Evaluation**.
+4. For each candidate, the engine calls database RPC `claim_ai_call('typesafe_match', candidate_id)`.
+5. **Approved Quota**: TypeSafe Jev evaluates deep requirement alignment; result persisted with `is_live_api=True`.
+6. **Exhausted / Missing Quota**: System fails closed to labeled heuristic match (`is_live_api=False`, provider "Heuristic estimate") without blocking the recruiter.
+7. Employer reviews candidates, requests introductions, or marks decisions (`SHORTLISTED`, `INTERVIEWING`, `OFFERED`, `REJECTED`) with full audit rollback.
 
-#### 1. Prerequisites
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Emp as 🏢 Employer
+    participant UI as 🌐 Next.js (/employer/jobs/:id)
+    participant API as 🐍 FastAPI Backend
+    participant Ledger as 🛡️ DB claim_ai_call()
+    participant TypeSafe as 🤖 TypeSafe Jev Engine
+    participant DB as 🗄️ Supabase Talia
+
+    Emp->>UI: View Job Candidates
+    UI->>API: GET /api/employer/jobs/{id}
+    API->>API: 5Q Role-Weighted Pre-Filter (Top 40)
+    loop For Each Candidate
+        API->>Ledger: claim_ai_call('typesafe_match', candidate_id)
+        alt Quota Approved
+            API->>TypeSafe: Evaluate Fit Criteria
+            TypeSafe-->>API: Match Vector
+        else Quota Refused / Offline
+            API->>API: Compute Labeled Heuristic Match
+        end
+    end
+    API->>DB: Upsert job_candidate_matches
+    API-->>UI: Return Ranked Dossiers
+    UI-->>Emp: Render Candidates & Fit Evidence
+```
+
+---
+
+### Workflow 4: Market Scout Opportunity Ingestion
+1. Headless daemon executes scheduled scrape across HackerNews Hiring and RemoteOK.
+2. Content hash deduplication checks ensure zero redundant job entries.
+3. Scraper claims quota via `claim_ai_call('gemini_scout')`.
+4. Gemini Flash extracts role requirements, tech stacks, and opportunity scores.
+5. Ingested opportunities sync directly to `public.jobs` in Supabase Talia.
+
+---
+
+## 💻 Local Development Setup
+
+### 1. Prerequisites
 *   Node.js 18+ and npm
 *   Python 3.12+ with virtual environment
 *   Docker Desktop (for LMS co-location)
 *   PowerShell 7 / Bash
 
-#### 2. Start LMS Infrastructure
+### 2. Start LMS Subsystem
 ```bash
 cd services/lms
 docker compose up -d
 cd ../..
 ```
 
-#### 3. Start C2C Web & API Services
+### 3. Start C2C Web & API Services
 ```bash
 # Installs dependencies & runs Next.js (port 3030) + FastAPI (port 8000) concurrently
 npm run start:c2c
 ```
 
-Access the development interfaces:
+Access local endpoints:
 *   **Web Portal**: [http://localhost:3030](http://localhost:3030)
 *   **Remediation Terminal**: [http://localhost:3030/learn](http://localhost:3030/learn)
-*   **Embedded LMS**: [http://localhost:3030/lms](http://localhost:3030/lms)
+*   **Embedded Moodle LMS**: [http://localhost:3030/lms](http://localhost:3030/lms)
 *   **FastAPI Documentation**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+*   **AI Cost Governance**: [http://localhost:3030/crm/costs](http://localhost:3030/crm/costs)
 
 ---
 
-### 🚀 Production Deployment (Vercel + Supabase)
+## 🧪 Verification Commands
 
-*   **Frontend**: Deployed via Vercel with automatic App Router edge optimization.
-*   **Backend Serverless**: `api/main.py` runs as a high-efficiency Vercel Serverless Function via `vercel.json` rewrites.
-*   **Database**: Supabase PostgreSQL with connection pooling via port `6543` (transaction mode) for serverless handlers.
-*   **Environment Flags**: `ALLOW_DEMO_AUTH=false` and `NEXT_PUBLIC_ALLOW_DEMO_AUTH=false` are enforced in production environments.
+```bash
+# Backend unit & integration test suite
+python -m pytest tests -q --ignore=tests/e2e --ignore=tests/e2e_flow_test.py
+
+# TypeScript static type check
+npx tsc --noEmit
+
+# Frontend linter & production build verification
+npm run lint
+npm run build
+```
+
+---
+
+## 🚢 Production Deployment
+
+*   **Frontend**: Vercel App Router deployment (`c2c.mytestbed.tech`).
+*   **Backend**: Serverless execution of `api/main.py` via `vercel.json` rewrites.
+*   **Database**: Supabase PostgreSQL with transaction pooling (`port 6543`).
+*   **Security Guard**: `ALLOW_DEMO_AUTH=false` and `NEXT_PUBLIC_ALLOW_DEMO_AUTH=false` strictly enforced in production.

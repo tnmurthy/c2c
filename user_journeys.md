@@ -99,3 +99,11 @@ The Admin journey provides global oversight of the platform's psychometric engin
   - **Stats Summary:** Total Active Nodes, Market Entities, Psychometric Items, and Flagged items.
   - **Market Leads Stream:** A live feed of market opportunities showing Identifier/Role, Target Vector/Entity, and an AI Confidence Score.
   - **Psychometric Item Analysis:** A detailed audit table of assessment questions (items) showing the dimension tested, attempts, success rate, and validity status (e.g., "Too Easy", "Too Hard", "Optimal"). Admins use this to calibrate the assessment engine.
+
+---
+
+## 5. Architectural References
+- **High-Level Design (HLD)**: [`c2c_hld.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/c2c_hld.md)
+- **Low-Level Design (LLD)**: [`c2c_lld.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/c2c_lld.md)
+- **Workflow SOP**: [`WORKFLOW_INTEGRATION.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/WORKFLOW_INTEGRATION.md)
+

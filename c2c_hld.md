@@ -23,7 +23,7 @@ graph TB
     %% ==========================================
     subgraph CLIENT["🌐 Client Layer (User Personas)"]
         direction LR
-        STU["🎓 Student / Candidate\n(/dashboard, /learn, /assessment)"]
+        STU["🎓 Student / Candidate\n(/dashboard, /learn, /assessment, /portfolio)"]
         TPO["🏫 Training & Placement Officer\n(/tpo-dashboard)"]
         EMP["🏢 Enterprise Employer\n(/employer/jobs, /employer/candidates)"]
         ADM["⚙️ Platform Administrator\n(/crm/costs, /admin)"]
@@ -54,19 +54,23 @@ graph TB
         ROUTER_LTI["LTI 1.3 Advantage Router\n(/api/lti/*)"]
         ROUTER_EMP["Employer Router\n(/api/employer/*)"]
         ROUTER_COST["AI Cost Ledger Router\n(/api/crm/costs)"]
+        ROUTER_PORT["Portfolio & Export Router\n(/api/portfolio, /api/student)"]
 
         API_MAIN --> ROUTER_ASSESS
         API_MAIN --> ROUTER_LTI
         API_MAIN --> ROUTER_EMP
         API_MAIN --> ROUTER_COST
+        API_MAIN --> ROUTER_PORT
 
         ENGINE_5Q["5Q Match Engine\n(IQ, AQ, EQ, SQ, SpQ Deterministic Scorer)"]
         ENGINE_AGS["LTI AGS 2.0 Engine\n(Assignment & Grade Passback Service)"]
         CLIENT_MOODLE["Moodle REST Client\n(Gap-Driven Auto-Enrolment)"]
+        ITEM_GEN["Assessment Item Generator\n(api/item_generator.py)"]
         
         ROUTER_ASSESS --> ENGINE_5Q
         ROUTER_ASSESS --> CLIENT_MOODLE
         ROUTER_LTI --> ENGINE_AGS
+        ROUTER_ASSESS --> ITEM_GEN
     end
 
     REWRITE_API -->|"Direct / Proxy Route"| API_MAIN
@@ -89,6 +93,19 @@ graph TB
     MOODLE_CORE -.->|"LTI 1.3 AGS Passback"| ROUTER_LTI
 
     %% ==========================================
+    %% MARKET SCOUT SUBSYSTEM
+    %% ==========================================
+    subgraph MARKET_SCOUT["🔎 Market Scout Pipeline (Daemon / Actions)"]
+        direction TB
+        SCOUT_SCRAPER["Headless Job Scraper\n(HN Hiring + RemoteOK)"]
+        SCOUT_PIPE["AI Opportunity Scorer\n(services/market-scout/ai/pipeline.py)"]
+        SCOUT_SYNC["Supabase Sync Engine\n(services/market-scout/storage)"]
+        
+        SCOUT_SCRAPER --> SCOUT_PIPE
+        SCOUT_PIPE --> SCOUT_SYNC
+    end
+
+    %% ==========================================
     %% AI COST CONTROL & EXTERNAL PROVIDERS
     %% ==========================================
     subgraph AI_SUBSYSTEM["🛡️ AI Cost Controls & Intelligence Providers"]
@@ -97,7 +114,7 @@ graph TB
         LEDGER_GATE["PostgreSQL claim_ai_call()\n(Atomic Daily Limit Check)"]
         
         PROVIDER_TYPESAFE["TypeSafe AI (Jev Engine)\nCandidate Featurization & Match"]
-        PROVIDER_GEMINI["Google Gemini\nMarket Scout & Item Generator"]
+        PROVIDER_GEMINI["Google Gemini Flash\nMarket Scout & Item Generator"]
 
         BUDGET_SVC --> LEDGER_GATE
         LEDGER_GATE -->|"Approved Call"| PROVIDER_TYPESAFE
@@ -107,6 +124,7 @@ graph TB
 
     ROUTER_ASSESS --> BUDGET_SVC
     ROUTER_EMP --> BUDGET_SVC
+    SCOUT_PIPE --> BUDGET_SVC
 
     %% ==========================================
     %% PERSISTENCE & DATA BACKBONE
@@ -114,12 +132,13 @@ graph TB
     subgraph PERSISTENCE["🗄️ Primary Data Backbone (Supabase Talia Cluster)"]
         direction TB
         SUPA_AUTH["Supabase Auth\n(JWT, Role Metadata, Demo Bypass)"]
-        SUPA_DB[("PostgreSQL Talia Cluster\n(Schema: public)\nstudents · institutions · employers\nassessment_submissions · job_matches\nai_settings · ai_call_ledger")]
+        SUPA_DB[("PostgreSQL Talia Cluster\n(Schema: public)\nstudents · institutions · employers\nassessment_submissions · job_matches\nai_settings · ai_call_ledger · jobs")]
         SUPA_STORE["Supabase Storage\n(Portfolios · Resumes · Reports)"]
     end
 
     API_MAIN <-->|"JWT Validation & RLS Queries"| PERSISTENCE
     LEDGER_GATE <-->|"Atomic Ledger Claims"| SUPA_DB
+    SCOUT_SYNC -->|"Upsert Scored Jobs"| SUPA_DB
 ```
 
 ---
@@ -129,6 +148,7 @@ graph TB
 ### 3.1. Presentation Tier (Next.js 14)
 *   **App Router Structure**: Modular route grouping under `src/app/(main)` for students, employers, institutions, administrators, and the C2C Academy.
 *   **Universal Remediation Terminal (`/learn`)**: Embedded learning track viewer parsing student assessment gaps and rendering curated curriculum modules directly inside the platform.
+*   **Interactive Retro Portfolio (`/portfolio/[id]`)**: Gamified Windows 95 desktop environment visualizing cognitive radar charts, live credentials, and an interactive DOS terminal.
 *   **Passwordless Fast Authentication**: Zero-friction demo switcher on `/login` supported by `ALLOW_DEMO_AUTH` for local and staging workflows while enforcing strict production guards.
 
 ### 3.2. Edge & Routing Ingress
@@ -163,9 +183,21 @@ graph TB
 
 ---
 
-## 4. Key End-to-End User Journeys
+## 4. Comprehensive Process & Workflow Architecture
 
-### 4.1. Candidate Assessment & Automated Remediation Flow
+The C2C platform organizes all capabilities into 9 standard processes:
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 C2C PROCESS ARCHITECTURE                               │
+├─────────────────────────┬───────────────────────────────┬──────────────────────────────┤
+│ 1. 5Q Assessment Engine │ 2. Zero-Token LMS Remediation │ 3. LTI 1.3 Advantage Gateway │
+│ 4. Employer Match & Fit │ 5. AI Cost Control & Ledger   │ 6. Market Scout Pipeline     │
+│ 7. Item Generation Bank │ 8. Retro Portfolio & Dossier  │ 9. Multi-Tenant Role Ingress │
+└─────────────────────────┴───────────────────────────────┴──────────────────────────────┘
+```
+
+### 4.1. Process 1: Candidate Assessment & 5Q Psychometric Scoring Flow
 
 ```mermaid
 sequenceDiagram
@@ -173,7 +205,6 @@ sequenceDiagram
     actor Candidate as 🎓 Candidate
     participant Web as 🌐 Next.js (/assessment)
     participant API as 🐍 FastAPI Backend
-    participant Ledger as 🛡️ AI Cost Ledger (DB)
     participant DB as 🗄️ Supabase Talia
     participant Moodle as 🎓 Moodle LMS (/lms)
 
@@ -194,7 +225,7 @@ sequenceDiagram
     Web->>Candidate: Renders Target Remediation Modules & Direct /lms Links
 ```
 
-### 4.2. LTI 1.3 Advantage Launch & AGS Grade Passback
+### 4.2. Process 2 & 3: LTI 1.3 Advantage Launch & AGS Grade Passback
 
 ```mermaid
 sequenceDiagram
@@ -219,7 +250,7 @@ sequenceDiagram
     AGS-->>Moodle: 200 OK (Grade Synchronized)
 ```
 
-### 4.3. Employer Candidate Matching & Cost Enforcement
+### 4.3. Process 4 & 5: Employer Candidate Matching & Cost Enforcement
 
 ```mermaid
 sequenceDiagram
@@ -251,6 +282,34 @@ sequenceDiagram
     Web-->>Employer: Render Visual Breakdown, Decision Cards & Fit Matrix
 ```
 
+### 4.4. Process 6: Market Intelligence Desk & Opportunity Sourcing
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Daemon as ⏱️ Market Scout Daemon
+    participant Scraper as 🌐 Scrapers (HN/RemoteOK)
+    participant Budget as 🛡️ claim_ai_call('gemini_scout')
+    participant Gemini as 🤖 Google Gemini Flash
+    participant DB as 🗄️ Supabase Talia (public.jobs)
+
+    Daemon->>Scraper: Execute Periodic Scrape
+    Scraper-->>Daemon: Raw Job Postings
+    Daemon->>Daemon: Hash Deduplication against stored jobs
+    
+    Daemon->>Budget: claim_ai_call('gemini_scout')
+    alt Quota Approved & Key Present
+        Budget-->>Daemon: Quota Approved
+        Daemon->>Gemini: Parse Requirements & Opportunity Score
+        Gemini-->>Daemon: Structured Fit Vector
+    else Quota Refused or Unmetered
+        Budget-->>Daemon: Quota Refused
+        Daemon->>Daemon: Apply Regex Extraction (Default Score 50)
+    end
+    
+    Daemon->>DB: Upsert into public.jobs
+```
+
 ---
 
 ## 5. Security Architecture & Access Control
@@ -272,22 +331,22 @@ Following the architecture standard (`04_playbooks/REVIEW_BOARD.md`), this desig
 
 ### 1. Systems Architect Review
 *   **Assessment**: The decision to keep Moodle inside an isolated container while proxying through Next.js prevents domain fragmentation and retains single sign-on simplicity.
-*   **Resolution**: Implemented `skipTrailingSlashRedirect: true` in Next.js and `absolute_redirect off;` in Nginx to eliminate reverse proxy trailing-slash ping-pong loops.
+*   **Resolution**: Implemented `skipTrailingSlashRedirect: true` in Next.js and `absolute_redirect off;` in Nginx to eliminate reverse proxy trailing-slash ping-pong loops. All 9 platform processes have strictly decoupled boundaries.
 *   **Verdict**: **APPROVED**
 
 ### 2. Cost Engineer Review
 *   **Assessment**: High-volume candidate onboarding risks runaway token expense if LLMs are used for grading or routing.
-*   **Resolution**: 100% of remediation routing and 5Q initial matching is mathematically deterministic. All generative model invocations (TypeSafe, Gemini) are guarded by database-level daily limits with heuristic fallback. AI token consumption for LMS is zero.
+*   **Resolution**: 100% of remediation routing and 5Q initial matching is mathematically deterministic. All generative model invocations (TypeSafe, Gemini) are guarded by database-level daily limits (`claim_ai_call`) with heuristic fallback. AI token consumption for LMS is zero.
 *   **Verdict**: **APPROVED**
 
 ### 3. Security Reviewer Review
 *   **Assessment**: Subpath proxying must not expose internal container ports or leak administrative database tables.
-*   **Resolution**: Container port `8080` binds strictly to `127.0.0.1`. The Moodle database runs on a private Docker bridge with no host port mapping. Primary Supabase Talia cluster tables are guarded by RLS policies.
+*   **Resolution**: Container port `8080` binds strictly to `127.0.0.1`. The Moodle database runs on a private Docker bridge with no host port mapping. Primary Supabase Talia cluster tables are guarded by RLS policies. Demo auth is strictly gated by environment flags.
 *   **Verdict**: **APPROVED**
 
 ### 4. Product Engineer Review
 *   **Assessment**: Students and employers must have a seamless, single-window journey without jarring login screens or disconnected URLs.
-*   **Resolution**: The `/learn` terminal allows students to view curriculum roadmaps and launch directly into `/lms` with guest auto-access. Employers review candidate fit directly inside `/employer/jobs/[id]`.
+*   **Resolution**: The `/learn` terminal allows students to view curriculum roadmaps and launch directly into `/lms` with guest auto-access. Employers review candidate fit directly inside `/employer/jobs/[id]`. Candidates share high-converting retro portfolios on `/portfolio/[id]`.
 *   **Verdict**: **APPROVED**
 
 ---
@@ -301,6 +360,7 @@ Following the architecture standard (`04_playbooks/REVIEW_BOARD.md`), this desig
 | **LTI 1.3 Advantage** | JWKS, OIDC initiation, AGS 2.0 grade passback engine | **Done** | Current |
 | **5Q Match Engine** | Role-weighted psychometric and technical fit engine | **Done** | Current |
 | **AI Cost Ledger** | Pre-flight quota reservation (`claim_ai_call`) & daily caps | **Done** | Current |
+| **Low-Level Design** | Full technical LLD covering all 9 processes (`c2c_lld.md`) | **Done** | Current |
 | **Demo Auth Engine** | Passwordless 1-click switcher for local and test runs | **Done** | Current |
 | **Playwright in CI** | Comprehensive E2E test automation in GitHub Actions | Open | Next 14 Days |
 | **Production Secrets** | Vercel configuration for `SUPABASE_SERVICE_ROLE_KEY` | Open (Human) | Next 7 Days |

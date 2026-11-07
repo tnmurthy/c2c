@@ -76,3 +76,10 @@ src/
 - Database Migrations: `supabase/migrations/*_refactor_changes.sql`
 - CV Tailor backend files: `api/routers/market_router.py` and `api/pdf_generator.py`
 
+## Architecture & Design References
+- High-Level Design (HLD): [`c2c_hld.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/c2c_hld.md)
+- Low-Level Design (LLD): [`c2c_lld.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/c2c_lld.md)
+- System README: [`README.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/README.md)
+- Master SOP: [`WORKFLOW_INTEGRATION.md`](file:///C:/tt-ai-stack/01_projects/active/makeover-talent-agency/WORKFLOW_INTEGRATION.md)
+
+
