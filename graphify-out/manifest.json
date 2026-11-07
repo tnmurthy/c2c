@@ -8620,8 +8620,8 @@
     "semantic_hash": ""
   },
   "src/app/(main)/learn/page.tsx": {
-    "mtime": 1793980003.7817917,
-    "ast_hash": "3fa98be21b428a443af82c7e2527e43d",
+    "mtime": 1794028071.6261902,
+    "ast_hash": "fed8c58695e4119ed7c032b63c2ea3d0",
     "semantic_hash": ""
   },
   "tests/test_lti_router.py": {
@@ -8637,6 +8637,16 @@
   "c2c_lld.md": {
     "mtime": 1794020109.381068,
     "ast_hash": "fac8b2c9a2a7e351cf5bb21122f195a0",
+    "semantic_hash": ""
+  },
+  "src/app/docs/page.tsx": {
+    "mtime": 1794027508.461713,
+    "ast_hash": "fcd68fea171604bb1c82ae9121fdac71",
+    "semantic_hash": ""
+  },
+  "src/app/wiki/page.tsx": {
+    "mtime": 1794027626.4415567,
+    "ast_hash": "d62f86892db844d9a280d6ad5d99078f",
     "semantic_hash": ""
   }
 }

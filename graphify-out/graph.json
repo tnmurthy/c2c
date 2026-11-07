@@ -4,14 +4,74 @@
   "graph": {},
   "nodes": [
     {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "src/app/docs/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_page",
+      "community": 257,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "DocsPage()",
+      "file_type": "code",
+      "source_file": "src/app/docs/page.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "docs_page_docspage",
+      "community": 257,
+      "norm_label": "docspage()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "src/app/wiki/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "wiki_page",
+      "community": 256,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "ProcessItem",
+      "file_type": "code",
+      "source_file": "src/app/wiki/page.tsx",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "wiki_page_processitem",
+      "community": 256,
+      "norm_label": "processitem"
+    },
+    {
+      "label": "PROCESSES",
+      "file_type": "code",
+      "source_file": "src/app/wiki/page.tsx",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "wiki_page_processes",
+      "community": 256,
+      "norm_label": "processes"
+    },
+    {
+      "label": "WikiPortal()",
+      "file_type": "code",
+      "source_file": "src/app/wiki/page.tsx",
+      "source_location": "L490",
+      "_origin": "ast",
+      "id": "wiki_page_wikiportal",
+      "community": 256,
+      "norm_label": "wikiportal()"
+    },
+    {
       "label": "PROJECT.md",
       "file_type": "document",
       "source_file": "PROJECT.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "project",
       "community": 120,
-      "norm_label": "project.md"
+      "norm_label": "project.md",
+      "id": "project"
     },
     {
       "label": "Project: C2C Talent Platform Refactoring",
@@ -19,9 +79,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "project_project_c2c_talent_platform_refactoring",
       "community": 120,
-      "norm_label": "project: c2c talent platform refactoring"
+      "norm_label": "project: c2c talent platform refactoring",
+      "id": "project_project_c2c_talent_platform_refactoring"
     },
     {
       "label": "Architecture",
@@ -29,9 +89,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "project_architecture",
       "community": 120,
-      "norm_label": "architecture"
+      "norm_label": "architecture",
+      "id": "project_architecture"
     },
     {
       "label": "Backend Structure",
@@ -39,9 +99,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "project_backend_structure",
       "community": 120,
-      "norm_label": "backend structure"
+      "norm_label": "backend structure",
+      "id": "project_backend_structure"
     },
     {
       "label": "Frontend Structure",
@@ -49,9 +109,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "project_frontend_structure",
       "community": 120,
-      "norm_label": "frontend structure"
+      "norm_label": "frontend structure",
+      "id": "project_frontend_structure"
     },
     {
       "label": "Milestones",
@@ -59,9 +119,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L44",
       "_origin": "ast",
-      "id": "project_milestones",
       "community": 120,
-      "norm_label": "milestones"
+      "norm_label": "milestones",
+      "id": "project_milestones"
     },
     {
       "label": "Interface Contracts",
@@ -69,9 +129,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "project_interface_contracts",
       "community": 120,
-      "norm_label": "interface contracts"
+      "norm_label": "interface contracts",
+      "id": "project_interface_contracts"
     },
     {
       "label": "API Routers \u2194 FastAPI App",
@@ -79,9 +139,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "project_api_routers_fastapi_app",
       "community": 120,
-      "norm_label": "api routers \u2194 fastapi app"
+      "norm_label": "api routers \u2194 fastapi app",
+      "id": "project_api_routers_fastapi_app"
     },
     {
       "label": "Opportunities \u2194 Candidates (Schema Link)",
@@ -89,9 +149,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "project_opportunities_candidates_schema_link",
       "community": 120,
-      "norm_label": "opportunities \u2194 candidates (schema link)"
+      "norm_label": "opportunities \u2194 candidates (schema link)",
+      "id": "project_opportunities_candidates_schema_link"
     },
     {
       "label": "CV Tailor \u2194 Backend / PDF",
@@ -99,9 +159,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L66",
       "_origin": "ast",
-      "id": "project_cv_tailor_backend_pdf",
       "community": 120,
-      "norm_label": "cv tailor \u2194 backend / pdf"
+      "norm_label": "cv tailor \u2194 backend / pdf",
+      "id": "project_cv_tailor_backend_pdf"
     },
     {
       "label": "Code Layout",
@@ -109,9 +169,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L70",
       "_origin": "ast",
-      "id": "project_code_layout",
       "community": 120,
-      "norm_label": "code layout"
+      "norm_label": "code layout",
+      "id": "project_code_layout"
     },
     {
       "label": "Architecture & Design References",
@@ -119,9 +179,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L79",
       "_origin": "ast",
-      "id": "project_architecture_design_references",
       "community": 120,
-      "norm_label": "architecture & design references"
+      "norm_label": "architecture & design references",
+      "id": "project_architecture_design_references"
     },
     {
       "label": "README.md",
@@ -129,9 +189,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme",
       "community": 65,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "readme"
     },
     {
       "label": "Campus to Corporate (C2C) \ud83d\udc54",
@@ -139,9 +199,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_campus_to_corporate_c2c",
       "community": 65,
-      "norm_label": "campus to corporate (c2c) \ud83d\udc54"
+      "norm_label": "campus to corporate (c2c) \ud83d\udc54",
+      "id": "readme_campus_to_corporate_c2c"
     },
     {
       "label": "Unified AI-First Talent Evaluation, Remediation & Placement Suite",
@@ -149,9 +209,9 @@
       "source_file": "README.md",
       "source_location": "L2",
       "_origin": "ast",
-      "id": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
       "community": 65,
-      "norm_label": "unified ai-first talent evaluation, remediation & placement suite"
+      "norm_label": "unified ai-first talent evaluation, remediation & placement suite",
+      "id": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite"
     },
     {
       "label": "\ud83d\udcd1 Architecture & Process Navigation",
@@ -159,9 +219,9 @@
       "source_file": "README.md",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "readme_architecture_process_navigation",
       "community": 65,
-      "norm_label": "\ud83d\udcd1 architecture & process navigation"
+      "norm_label": "\ud83d\udcd1 architecture & process navigation",
+      "id": "readme_architecture_process_navigation"
     },
     {
       "label": "\ud83c\udfdb\ufe0f High-Level Design (HLD) Overview",
@@ -169,9 +229,9 @@
       "source_file": "README.md",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "readme_high_level_design_hld_overview",
       "community": 65,
-      "norm_label": "\ud83c\udfdb\ufe0f high-level design (hld) overview"
+      "norm_label": "\ud83c\udfdb\ufe0f high-level design (hld) overview",
+      "id": "readme_high_level_design_hld_overview"
     },
     {
       "label": "\ud83d\udd2c Low-Level Design (LLD): Process & Workflow Catalog",
@@ -179,9 +239,9 @@
       "source_file": "README.md",
       "source_location": "L83",
       "_origin": "ast",
-      "id": "readme_low_level_design_lld_process_workflow_catalog",
       "community": 65,
-      "norm_label": "\ud83d\udd2c low-level design (lld): process & workflow catalog"
+      "norm_label": "\ud83d\udd2c low-level design (lld): process & workflow catalog",
+      "id": "readme_low_level_design_lld_process_workflow_catalog"
     },
     {
       "label": "\ud83d\udd04 Core System Workflows",
@@ -189,9 +249,9 @@
       "source_file": "README.md",
       "source_location": "L101",
       "_origin": "ast",
-      "id": "readme_core_system_workflows",
       "community": 65,
-      "norm_label": "\ud83d\udd04 core system workflows"
+      "norm_label": "\ud83d\udd04 core system workflows",
+      "id": "readme_core_system_workflows"
     },
     {
       "label": "Workflow 1: Assessment Submission, 5Q Scoring & Remediation Sync",
@@ -199,9 +259,9 @@
       "source_file": "README.md",
       "source_location": "L103",
       "_origin": "ast",
-      "id": "readme_workflow_1_assessment_submission_5q_scoring_remediation_sync",
       "community": 65,
-      "norm_label": "workflow 1: assessment submission, 5q scoring & remediation sync"
+      "norm_label": "workflow 1: assessment submission, 5q scoring & remediation sync",
+      "id": "readme_workflow_1_assessment_submission_5q_scoring_remediation_sync"
     },
     {
       "label": "Workflow 2: LTI 1.3 Advantage Launch & AGS 2.0 Grade Passback",
@@ -209,9 +269,9 @@
       "source_file": "README.md",
       "source_location": "L134",
       "_origin": "ast",
-      "id": "readme_workflow_2_lti_1_3_advantage_launch_ags_2_0_grade_passback",
       "community": 65,
-      "norm_label": "workflow 2: lti 1.3 advantage launch & ags 2.0 grade passback"
+      "norm_label": "workflow 2: lti 1.3 advantage launch & ags 2.0 grade passback",
+      "id": "readme_workflow_2_lti_1_3_advantage_launch_ags_2_0_grade_passback"
     },
     {
       "label": "Workflow 3: Employer Candidate Ranking & Cost-Guarded Evaluation",
@@ -219,9 +279,9 @@
       "source_file": "README.md",
       "source_location": "L145",
       "_origin": "ast",
-      "id": "readme_workflow_3_employer_candidate_ranking_cost_guarded_evaluation",
       "community": 65,
-      "norm_label": "workflow 3: employer candidate ranking & cost-guarded evaluation"
+      "norm_label": "workflow 3: employer candidate ranking & cost-guarded evaluation",
+      "id": "readme_workflow_3_employer_candidate_ranking_cost_guarded_evaluation"
     },
     {
       "label": "Workflow 4: Market Scout Opportunity Ingestion",
@@ -229,9 +289,9 @@
       "source_file": "README.md",
       "source_location": "L183",
       "_origin": "ast",
-      "id": "readme_workflow_4_market_scout_opportunity_ingestion",
       "community": 65,
-      "norm_label": "workflow 4: market scout opportunity ingestion"
+      "norm_label": "workflow 4: market scout opportunity ingestion",
+      "id": "readme_workflow_4_market_scout_opportunity_ingestion"
     },
     {
       "label": "\ud83d\udcbb Local Development Setup",
@@ -239,9 +299,9 @@
       "source_file": "README.md",
       "source_location": "L192",
       "_origin": "ast",
-      "id": "readme_local_development_setup",
       "community": 65,
-      "norm_label": "\ud83d\udcbb local development setup"
+      "norm_label": "\ud83d\udcbb local development setup",
+      "id": "readme_local_development_setup"
     },
     {
       "label": "1. Prerequisites",
@@ -249,9 +309,9 @@
       "source_file": "README.md",
       "source_location": "L194",
       "_origin": "ast",
-      "id": "readme_1_prerequisites",
       "community": 65,
-      "norm_label": "1. prerequisites"
+      "norm_label": "1. prerequisites",
+      "id": "readme_1_prerequisites"
     },
     {
       "label": "2. Start LMS Subsystem",
@@ -259,9 +319,9 @@
       "source_file": "README.md",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "readme_2_start_lms_subsystem",
       "community": 65,
-      "norm_label": "2. start lms subsystem"
+      "norm_label": "2. start lms subsystem",
+      "id": "readme_2_start_lms_subsystem"
     },
     {
       "label": "3. Start C2C Web & API Services",
@@ -269,9 +329,9 @@
       "source_file": "README.md",
       "source_location": "L207",
       "_origin": "ast",
-      "id": "readme_3_start_c2c_web_api_services",
       "community": 65,
-      "norm_label": "3. start c2c web & api services"
+      "norm_label": "3. start c2c web & api services",
+      "id": "readme_3_start_c2c_web_api_services"
     },
     {
       "label": "\ud83e\uddea Verification Commands",
@@ -279,9 +339,9 @@
       "source_file": "README.md",
       "source_location": "L222",
       "_origin": "ast",
-      "id": "readme_verification_commands",
       "community": 65,
-      "norm_label": "\ud83e\uddea verification commands"
+      "norm_label": "\ud83e\uddea verification commands",
+      "id": "readme_verification_commands"
     },
     {
       "label": "\ud83d\udea2 Production Deployment",
@@ -289,9 +349,9 @@
       "source_file": "README.md",
       "source_location": "L238",
       "_origin": "ast",
-      "id": "readme_production_deployment",
       "community": 65,
-      "norm_label": "\ud83d\udea2 production deployment"
+      "norm_label": "\ud83d\udea2 production deployment",
+      "id": "readme_production_deployment"
     },
     {
       "label": "WIKI_ARCHITECTURE.md",
@@ -299,9 +359,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "wiki_architecture",
       "community": 244,
-      "norm_label": "wiki_architecture.md"
+      "norm_label": "wiki_architecture.md",
+      "id": "wiki_architecture"
     },
     {
       "label": "Campus-to-Corporate (C2C) \u2014 Enterprise Wiki & Confluence Architecture",
@@ -309,9 +369,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
       "community": 244,
-      "norm_label": "campus-to-corporate (c2c) \u2014 enterprise wiki & confluence architecture"
+      "norm_label": "campus-to-corporate (c2c) \u2014 enterprise wiki & confluence architecture",
+      "id": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture"
     },
     {
       "label": "1. Executive Summary & Information Architecture Vision",
@@ -319,9 +379,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "wiki_architecture_1_executive_summary_information_architecture_vision",
       "community": 244,
-      "norm_label": "1. executive summary & information architecture vision"
+      "norm_label": "1. executive summary & information architecture vision",
+      "id": "wiki_architecture_1_executive_summary_information_architecture_vision"
     },
     {
       "label": "2. Confluence Space Hierarchy & Page Tree",
@@ -329,9 +389,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "wiki_architecture_2_confluence_space_hierarchy_page_tree",
       "community": 244,
-      "norm_label": "2. confluence space hierarchy & page tree"
+      "norm_label": "2. confluence space hierarchy & page tree",
+      "id": "wiki_architecture_2_confluence_space_hierarchy_page_tree"
     },
     {
       "label": "3. Master Wiki Portal / Home Page Layout",
@@ -339,9 +399,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L89",
       "_origin": "ast",
-      "id": "wiki_architecture_3_master_wiki_portal_home_page_layout",
       "community": 244,
-      "norm_label": "3. master wiki portal / home page layout"
+      "norm_label": "3. master wiki portal / home page layout",
+      "id": "wiki_architecture_3_master_wiki_portal_home_page_layout"
     },
     {
       "label": "4. Cross-Linking Matrix (Personas \u00d7 Lifecycle \u00d7 9 Processes)",
@@ -349,9 +409,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L139",
       "_origin": "ast",
-      "id": "wiki_architecture_4_cross_linking_matrix_personas_lifecycle_9_processes",
       "community": 244,
-      "norm_label": "4. cross-linking matrix (personas \u00d7 lifecycle \u00d7 9 processes)"
+      "norm_label": "4. cross-linking matrix (personas \u00d7 lifecycle \u00d7 9 processes)",
+      "id": "wiki_architecture_4_cross_linking_matrix_personas_lifecycle_9_processes"
     },
     {
       "label": "5. Navigation Affordances & Progressive Disclosure",
@@ -359,9 +419,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L155",
       "_origin": "ast",
-      "id": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
       "community": 244,
-      "norm_label": "5. navigation affordances & progressive disclosure"
+      "norm_label": "5. navigation affordances & progressive disclosure",
+      "id": "wiki_architecture_5_navigation_affordances_progressive_disclosure"
     },
     {
       "label": "5.1. Three-Tier Progressive Disclosure Model",
@@ -369,9 +429,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L157",
       "_origin": "ast",
-      "id": "wiki_architecture_5_1_three_tier_progressive_disclosure_model",
       "community": 244,
-      "norm_label": "5.1. three-tier progressive disclosure model"
+      "norm_label": "5.1. three-tier progressive disclosure model",
+      "id": "wiki_architecture_5_1_three_tier_progressive_disclosure_model"
     },
     {
       "label": "5.2. Standard Breadcrumbs",
@@ -379,9 +439,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L163",
       "_origin": "ast",
-      "id": "wiki_architecture_5_2_standard_breadcrumbs",
       "community": 244,
-      "norm_label": "5.2. standard breadcrumbs"
+      "norm_label": "5.2. standard breadcrumbs",
+      "id": "wiki_architecture_5_2_standard_breadcrumbs"
     },
     {
       "label": "5.3. Clickable Mermaid Diagram Hotspots",
@@ -389,9 +449,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L169",
       "_origin": "ast",
-      "id": "wiki_architecture_5_3_clickable_mermaid_diagram_hotspots",
       "community": 244,
-      "norm_label": "5.3. clickable mermaid diagram hotspots"
+      "norm_label": "5.3. clickable mermaid diagram hotspots",
+      "id": "wiki_architecture_5_3_clickable_mermaid_diagram_hotspots"
     },
     {
       "label": "6. Docs-as-Code Synchronization Pipeline",
@@ -399,9 +459,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L187",
       "_origin": "ast",
-      "id": "wiki_architecture_6_docs_as_code_synchronization_pipeline",
       "community": 244,
-      "norm_label": "6. docs-as-code synchronization pipeline"
+      "norm_label": "6. docs-as-code synchronization pipeline",
+      "id": "wiki_architecture_6_docs_as_code_synchronization_pipeline"
     },
     {
       "label": "Pull Request Definition of Done (DoD) Gate",
@@ -409,9 +469,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L202",
       "_origin": "ast",
-      "id": "wiki_architecture_pull_request_definition_of_done_dod_gate",
       "community": 244,
-      "norm_label": "pull request definition of done (dod) gate"
+      "norm_label": "pull request definition of done (dod) gate",
+      "id": "wiki_architecture_pull_request_definition_of_done_dod_gate"
     },
     {
       "label": "WORKFLOW_INTEGRATION.md",
@@ -419,9 +479,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "workflow_integration",
       "community": 119,
-      "norm_label": "workflow_integration.md"
+      "norm_label": "workflow_integration.md",
+      "id": "workflow_integration"
     },
     {
       "label": "WORKFLOW INTEGRATION: campus2corporate (c2c) \ud83d\udc54",
@@ -429,9 +489,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "workflow_integration_workflow_integration_campus2corporate_c2c",
       "community": 119,
-      "norm_label": "workflow integration: campus2corporate (c2c) \ud83d\udc54"
+      "norm_label": "workflow integration: campus2corporate (c2c) \ud83d\udc54",
+      "id": "workflow_integration_workflow_integration_campus2corporate_c2c"
     },
     {
       "label": "Master Standard Operating Procedure (SOP) & Process Workflows",
@@ -439,9 +499,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L2",
       "_origin": "ast",
-      "id": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
       "community": 119,
-      "norm_label": "master standard operating procedure (sop) & process workflows"
+      "norm_label": "master standard operating procedure (sop) & process workflows",
+      "id": "workflow_integration_master_standard_operating_procedure_sop_process_workflows"
     },
     {
       "label": "1. Architectural Foundation & References",
@@ -449,9 +509,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "workflow_integration_1_architectural_foundation_references",
       "community": 119,
-      "norm_label": "1. architectural foundation & references"
+      "norm_label": "1. architectural foundation & references",
+      "id": "workflow_integration_1_architectural_foundation_references"
     },
     {
       "label": "2. The Integrated 5-Phase Candidate Lifecycle",
@@ -459,9 +519,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "workflow_integration_2_the_integrated_5_phase_candidate_lifecycle",
       "community": 119,
-      "norm_label": "2. the integrated 5-phase candidate lifecycle"
+      "norm_label": "2. the integrated 5-phase candidate lifecycle",
+      "id": "workflow_integration_2_the_integrated_5_phase_candidate_lifecycle"
     },
     {
       "label": "3. Detailed Process SOPs & Inter-Service Handshakes",
@@ -469,9 +529,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
       "community": 119,
-      "norm_label": "3. detailed process sops & inter-service handshakes"
+      "norm_label": "3. detailed process sops & inter-service handshakes",
+      "id": "workflow_integration_3_detailed_process_sops_inter_service_handshakes"
     },
     {
       "label": "SOP 1: Sourcing to Assessment Trigger (Signal \u2794 Ingress)",
@@ -479,9 +539,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "workflow_integration_sop_1_sourcing_to_assessment_trigger_signal_ingress",
       "community": 119,
-      "norm_label": "sop 1: sourcing to assessment trigger (signal \u2794 ingress)"
+      "norm_label": "sop 1: sourcing to assessment trigger (signal \u2794 ingress)",
+      "id": "workflow_integration_sop_1_sourcing_to_assessment_trigger_signal_ingress"
     },
     {
       "label": "SOP 2: Assessment to Automated Remediation (Audit & Ordeal \u2794 Fix)",
@@ -489,9 +549,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "workflow_integration_sop_2_assessment_to_automated_remediation_audit_ordeal_fix",
       "community": 119,
-      "norm_label": "sop 2: assessment to automated remediation (audit & ordeal \u2794 fix)"
+      "norm_label": "sop 2: assessment to automated remediation (audit & ordeal \u2794 fix)",
+      "id": "workflow_integration_sop_2_assessment_to_automated_remediation_audit_ordeal_fix"
     },
     {
       "label": "SOP 3: Moodle Completion to Developmental Record Sync (Fix \u2794 Verification)",
@@ -499,9 +559,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "workflow_integration_sop_3_moodle_completion_to_developmental_record_sync_fix_verification",
       "community": 119,
-      "norm_label": "sop 3: moodle completion to developmental record sync (fix \u2794 verification)"
+      "norm_label": "sop 3: moodle completion to developmental record sync (fix \u2794 verification)",
+      "id": "workflow_integration_sop_3_moodle_completion_to_developmental_record_sync_fix_verification"
     },
     {
       "label": "SOP 4: Employer Job Posting to Candidate Match & Hiring (Deployment \u2794 Win)",
@@ -509,9 +569,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L67",
       "_origin": "ast",
-      "id": "workflow_integration_sop_4_employer_job_posting_to_candidate_match_hiring_deployment_win",
       "community": 119,
-      "norm_label": "sop 4: employer job posting to candidate match & hiring (deployment \u2794 win)"
+      "norm_label": "sop 4: employer job posting to candidate match & hiring (deployment \u2794 win)",
+      "id": "workflow_integration_sop_4_employer_job_posting_to_candidate_match_hiring_deployment_win"
     },
     {
       "label": "4. Deterministic Cost & Governance Standard",
@@ -519,9 +579,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L80",
       "_origin": "ast",
-      "id": "workflow_integration_4_deterministic_cost_governance_standard",
       "community": 119,
-      "norm_label": "4. deterministic cost & governance standard"
+      "norm_label": "4. deterministic cost & governance standard",
+      "id": "workflow_integration_4_deterministic_cost_governance_standard"
     },
     {
       "label": "5. Verification & Service Health Checks",
@@ -529,9 +589,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L88",
       "_origin": "ast",
-      "id": "workflow_integration_5_verification_service_health_checks",
       "community": 119,
-      "norm_label": "5. verification & service health checks"
+      "norm_label": "5. verification & service health checks",
+      "id": "workflow_integration_5_verification_service_health_checks"
     },
     {
       "label": "c2c_hld.md",
@@ -539,9 +599,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "c2c_hld",
       "community": 17,
-      "norm_label": "c2c_hld.md"
+      "norm_label": "c2c_hld.md",
+      "id": "c2c_hld"
     },
     {
       "label": "Campus-to-Corporate (C2C) \u2014 High-Level Design (HLD)",
@@ -549,9 +609,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
       "community": 17,
-      "norm_label": "campus-to-corporate (c2c) \u2014 high-level design (hld)"
+      "norm_label": "campus-to-corporate (c2c) \u2014 high-level design (hld)",
+      "id": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld"
     },
     {
       "label": "1. Executive Summary & Design Principles",
@@ -559,9 +619,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "c2c_hld_1_executive_summary_design_principles",
       "community": 17,
-      "norm_label": "1. executive summary & design principles"
+      "norm_label": "1. executive summary & design principles",
+      "id": "c2c_hld_1_executive_summary_design_principles"
     },
     {
       "label": "Core Architectural Axioms",
@@ -569,9 +629,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "c2c_hld_core_architectural_axioms",
       "community": 17,
-      "norm_label": "core architectural axioms"
+      "norm_label": "core architectural axioms",
+      "id": "c2c_hld_core_architectural_axioms"
     },
     {
       "label": "2. End-to-End System Block Diagram",
@@ -579,9 +639,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "c2c_hld_2_end_to_end_system_block_diagram",
       "community": 17,
-      "norm_label": "2. end-to-end system block diagram"
+      "norm_label": "2. end-to-end system block diagram",
+      "id": "c2c_hld_2_end_to_end_system_block_diagram"
     },
     {
       "label": "3. Tiered System Architecture",
@@ -589,9 +649,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L146",
       "_origin": "ast",
-      "id": "c2c_hld_3_tiered_system_architecture",
       "community": 17,
-      "norm_label": "3. tiered system architecture"
+      "norm_label": "3. tiered system architecture",
+      "id": "c2c_hld_3_tiered_system_architecture"
     },
     {
       "label": "3.1. Presentation Tier (Next.js 14)",
@@ -599,9 +659,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L148",
       "_origin": "ast",
-      "id": "c2c_hld_3_1_presentation_tier_next_js_14",
       "community": 17,
-      "norm_label": "3.1. presentation tier (next.js 14)"
+      "norm_label": "3.1. presentation tier (next.js 14)",
+      "id": "c2c_hld_3_1_presentation_tier_next_js_14"
     },
     {
       "label": "3.2. Edge & Routing Ingress",
@@ -609,9 +669,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L154",
       "_origin": "ast",
-      "id": "c2c_hld_3_2_edge_routing_ingress",
       "community": 17,
-      "norm_label": "3.2. edge & routing ingress"
+      "norm_label": "3.2. edge & routing ingress",
+      "id": "c2c_hld_3_2_edge_routing_ingress"
     },
     {
       "label": "3.3. Application Core (FastAPI)",
@@ -619,9 +679,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L159",
       "_origin": "ast",
-      "id": "c2c_hld_3_3_application_core_fastapi",
       "community": 17,
-      "norm_label": "3.3. application core (fastapi)"
+      "norm_label": "3.3. application core (fastapi)",
+      "id": "c2c_hld_3_3_application_core_fastapi"
     },
     {
       "label": "3.4. Learning Subsystem (Moodle LMS)",
@@ -629,9 +689,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L170",
       "_origin": "ast",
-      "id": "c2c_hld_3_4_learning_subsystem_moodle_lms",
       "community": 17,
-      "norm_label": "3.4. learning subsystem (moodle lms)"
+      "norm_label": "3.4. learning subsystem (moodle lms)",
+      "id": "c2c_hld_3_4_learning_subsystem_moodle_lms"
     },
     {
       "label": "3.5. AI Cost Control Subsystem",
@@ -639,9 +699,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L174",
       "_origin": "ast",
-      "id": "c2c_hld_3_5_ai_cost_control_subsystem",
       "community": 17,
-      "norm_label": "3.5. ai cost control subsystem"
+      "norm_label": "3.5. ai cost control subsystem",
+      "id": "c2c_hld_3_5_ai_cost_control_subsystem"
     },
     {
       "label": "4. Comprehensive Process & Workflow Architecture",
@@ -649,9 +709,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L186",
       "_origin": "ast",
-      "id": "c2c_hld_4_comprehensive_process_workflow_architecture",
       "community": 17,
-      "norm_label": "4. comprehensive process & workflow architecture"
+      "norm_label": "4. comprehensive process & workflow architecture",
+      "id": "c2c_hld_4_comprehensive_process_workflow_architecture"
     },
     {
       "label": "4.1. Process 1: Candidate Assessment & 5Q Psychometric Scoring Flow",
@@ -659,9 +719,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "c2c_hld_4_1_process_1_candidate_assessment_5q_psychometric_scoring_flow",
       "community": 17,
-      "norm_label": "4.1. process 1: candidate assessment & 5q psychometric scoring flow"
+      "norm_label": "4.1. process 1: candidate assessment & 5q psychometric scoring flow",
+      "id": "c2c_hld_4_1_process_1_candidate_assessment_5q_psychometric_scoring_flow"
     },
     {
       "label": "4.2. Process 2 & 3: LTI 1.3 Advantage Launch & AGS Grade Passback",
@@ -669,9 +729,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L228",
       "_origin": "ast",
-      "id": "c2c_hld_4_2_process_2_3_lti_1_3_advantage_launch_ags_grade_passback",
       "community": 17,
-      "norm_label": "4.2. process 2 & 3: lti 1.3 advantage launch & ags grade passback"
+      "norm_label": "4.2. process 2 & 3: lti 1.3 advantage launch & ags grade passback",
+      "id": "c2c_hld_4_2_process_2_3_lti_1_3_advantage_launch_ags_grade_passback"
     },
     {
       "label": "4.3. Process 4 & 5: Employer Candidate Matching & Cost Enforcement",
@@ -679,9 +739,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L253",
       "_origin": "ast",
-      "id": "c2c_hld_4_3_process_4_5_employer_candidate_matching_cost_enforcement",
       "community": 17,
-      "norm_label": "4.3. process 4 & 5: employer candidate matching & cost enforcement"
+      "norm_label": "4.3. process 4 & 5: employer candidate matching & cost enforcement",
+      "id": "c2c_hld_4_3_process_4_5_employer_candidate_matching_cost_enforcement"
     },
     {
       "label": "4.4. Process 6: Market Intelligence Desk & Opportunity Sourcing",
@@ -689,9 +749,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L285",
       "_origin": "ast",
-      "id": "c2c_hld_4_4_process_6_market_intelligence_desk_opportunity_sourcing",
       "community": 17,
-      "norm_label": "4.4. process 6: market intelligence desk & opportunity sourcing"
+      "norm_label": "4.4. process 6: market intelligence desk & opportunity sourcing",
+      "id": "c2c_hld_4_4_process_6_market_intelligence_desk_opportunity_sourcing"
     },
     {
       "label": "5. Security Architecture & Access Control",
@@ -699,9 +759,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L315",
       "_origin": "ast",
-      "id": "c2c_hld_5_security_architecture_access_control",
       "community": 17,
-      "norm_label": "5. security architecture & access control"
+      "norm_label": "5. security architecture & access control",
+      "id": "c2c_hld_5_security_architecture_access_control"
     },
     {
       "label": "6. Mandatory 4-Reviewer Architecture Board Review",
@@ -709,9 +769,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L328",
       "_origin": "ast",
-      "id": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review",
       "community": 17,
-      "norm_label": "6. mandatory 4-reviewer architecture board review"
+      "norm_label": "6. mandatory 4-reviewer architecture board review",
+      "id": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review"
     },
     {
       "label": "1. Systems Architect Review",
@@ -719,9 +779,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L332",
       "_origin": "ast",
-      "id": "c2c_hld_1_systems_architect_review",
       "community": 17,
-      "norm_label": "1. systems architect review"
+      "norm_label": "1. systems architect review",
+      "id": "c2c_hld_1_systems_architect_review"
     },
     {
       "label": "2. Cost Engineer Review",
@@ -729,9 +789,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L337",
       "_origin": "ast",
-      "id": "c2c_hld_2_cost_engineer_review",
       "community": 17,
-      "norm_label": "2. cost engineer review"
+      "norm_label": "2. cost engineer review",
+      "id": "c2c_hld_2_cost_engineer_review"
     },
     {
       "label": "3. Security Reviewer Review",
@@ -739,9 +799,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L342",
       "_origin": "ast",
-      "id": "c2c_hld_3_security_reviewer_review",
       "community": 17,
-      "norm_label": "3. security reviewer review"
+      "norm_label": "3. security reviewer review",
+      "id": "c2c_hld_3_security_reviewer_review"
     },
     {
       "label": "4. Product Engineer Review",
@@ -749,9 +809,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L347",
       "_origin": "ast",
-      "id": "c2c_hld_4_product_engineer_review",
       "community": 17,
-      "norm_label": "4. product engineer review"
+      "norm_label": "4. product engineer review",
+      "id": "c2c_hld_4_product_engineer_review"
     },
     {
       "label": "7. Implementation Tracker & Roadmap",
@@ -759,9 +819,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L354",
       "_origin": "ast",
-      "id": "c2c_hld_7_implementation_tracker_roadmap",
       "community": 17,
-      "norm_label": "7. implementation tracker & roadmap"
+      "norm_label": "7. implementation tracker & roadmap",
+      "id": "c2c_hld_7_implementation_tracker_roadmap"
     },
     {
       "label": "c2c_lld.md",
@@ -769,9 +829,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "c2c_lld",
       "community": 155,
-      "norm_label": "c2c_lld.md"
+      "norm_label": "c2c_lld.md",
+      "id": "c2c_lld"
     },
     {
       "label": "Campus-to-Corporate (C2C) \u2014 Low-Level Design (LLD)",
@@ -779,9 +839,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
       "community": 155,
-      "norm_label": "campus-to-corporate (c2c) \u2014 low-level design (lld)"
+      "norm_label": "campus-to-corporate (c2c) \u2014 low-level design (lld)",
+      "id": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld"
     },
     {
       "label": "1. Document Overview & Scope",
@@ -789,9 +849,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "c2c_lld_1_document_overview_scope",
       "community": 155,
-      "norm_label": "1. document overview & scope"
+      "norm_label": "1. document overview & scope",
+      "id": "c2c_lld_1_document_overview_scope"
     },
     {
       "label": "System Process Catalog",
@@ -799,9 +859,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "c2c_lld_system_process_catalog",
       "community": 155,
-      "norm_label": "system process catalog"
+      "norm_label": "system process catalog",
+      "id": "c2c_lld_system_process_catalog"
     },
     {
       "label": "2. Process 1: Candidate Assessment & 5Q Psychometric Scoring Engine",
@@ -809,9 +869,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
       "community": 155,
-      "norm_label": "2. process 1: candidate assessment & 5q psychometric scoring engine"
+      "norm_label": "2. process 1: candidate assessment & 5q psychometric scoring engine",
+      "id": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine"
     },
     {
       "label": "2.1. Module & Component Map",
@@ -819,9 +879,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L24",
       "_origin": "ast",
-      "id": "c2c_lld_2_1_module_component_map",
       "community": 155,
-      "norm_label": "2.1. module & component map"
+      "norm_label": "2.1. module & component map",
+      "id": "c2c_lld_2_1_module_component_map"
     },
     {
       "label": "2.2. Class & Function Signatures",
@@ -829,9 +889,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "c2c_lld_2_2_class_function_signatures",
       "community": 155,
-      "norm_label": "2.2. class & function signatures"
+      "norm_label": "2.2. class & function signatures",
+      "id": "c2c_lld_2_2_class_function_signatures"
     },
     {
       "label": "2.3. Database Schema (PostgreSQL Talia Cluster)",
@@ -839,9 +899,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L66",
       "_origin": "ast",
-      "id": "c2c_lld_2_3_database_schema_postgresql_talia_cluster",
       "community": 155,
-      "norm_label": "2.3. database schema (postgresql talia cluster)"
+      "norm_label": "2.3. database schema (postgresql talia cluster)",
+      "id": "c2c_lld_2_3_database_schema_postgresql_talia_cluster"
     },
     {
       "label": "2.4. API Request & Response Contracts",
@@ -849,9 +909,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L101",
       "_origin": "ast",
-      "id": "c2c_lld_2_4_api_request_response_contracts",
       "community": 155,
-      "norm_label": "2.4. api request & response contracts"
+      "norm_label": "2.4. api request & response contracts",
+      "id": "c2c_lld_2_4_api_request_response_contracts"
     },
     {
       "label": "2.5. Sequence Diagram: Assessment Submission & Evaluation",
@@ -859,9 +919,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L135",
       "_origin": "ast",
-      "id": "c2c_lld_2_5_sequence_diagram_assessment_submission_evaluation",
       "community": 155,
-      "norm_label": "2.5. sequence diagram: assessment submission & evaluation"
+      "norm_label": "2.5. sequence diagram: assessment submission & evaluation",
+      "id": "c2c_lld_2_5_sequence_diagram_assessment_submission_evaluation"
     },
     {
       "label": "3. Process 2: Automated Gap Remediation & Zero-Token Moodle Enrolment",
@@ -869,9 +929,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L164",
       "_origin": "ast",
-      "id": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
       "community": 155,
-      "norm_label": "3. process 2: automated gap remediation & zero-token moodle enrolment"
+      "norm_label": "3. process 2: automated gap remediation & zero-token moodle enrolment",
+      "id": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment"
     },
     {
       "label": "3.1. Module & Component Map",
@@ -879,9 +939,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L166",
       "_origin": "ast",
-      "id": "c2c_lld_3_1_module_component_map",
       "community": 155,
-      "norm_label": "3.1. module & component map"
+      "norm_label": "3.1. module & component map",
+      "id": "c2c_lld_3_1_module_component_map"
     },
     {
       "label": "3.2. Class & Function Signatures",
@@ -889,9 +949,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L173",
       "_origin": "ast",
-      "id": "c2c_lld_3_2_class_function_signatures",
       "community": 155,
-      "norm_label": "3.2. class & function signatures"
+      "norm_label": "3.2. class & function signatures",
+      "id": "c2c_lld_3_2_class_function_signatures"
     },
     {
       "label": "3.3. Deterministic Gap-to-Curriculum Mapping Table",
@@ -899,9 +959,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L193",
       "_origin": "ast",
-      "id": "c2c_lld_3_3_deterministic_gap_to_curriculum_mapping_table",
       "community": 155,
-      "norm_label": "3.3. deterministic gap-to-curriculum mapping table"
+      "norm_label": "3.3. deterministic gap-to-curriculum mapping table",
+      "id": "c2c_lld_3_3_deterministic_gap_to_curriculum_mapping_table"
     },
     {
       "label": "3.4. Reverse Proxy Ingress Specification",
@@ -909,9 +969,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L202",
       "_origin": "ast",
-      "id": "c2c_lld_3_4_reverse_proxy_ingress_specification",
       "community": 155,
-      "norm_label": "3.4. reverse proxy ingress specification"
+      "norm_label": "3.4. reverse proxy ingress specification",
+      "id": "c2c_lld_3_4_reverse_proxy_ingress_specification"
     },
     {
       "label": "4. Process 3: LTI 1.3 Advantage Gateway & AGS 2.0 Grade Passback",
@@ -919,9 +979,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L229",
       "_origin": "ast",
-      "id": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
       "community": 155,
-      "norm_label": "4. process 3: lti 1.3 advantage gateway & ags 2.0 grade passback"
+      "norm_label": "4. process 3: lti 1.3 advantage gateway & ags 2.0 grade passback",
+      "id": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback"
     },
     {
       "label": "4.1. Module & Component Map",
@@ -929,9 +989,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L231",
       "_origin": "ast",
-      "id": "c2c_lld_4_1_module_component_map",
       "community": 155,
-      "norm_label": "4.1. module & component map"
+      "norm_label": "4.1. module & component map",
+      "id": "c2c_lld_4_1_module_component_map"
     },
     {
       "label": "4.2. Endpoints & Protocol Specifications",
@@ -939,9 +999,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L237",
       "_origin": "ast",
-      "id": "c2c_lld_4_2_endpoints_protocol_specifications",
       "community": 155,
-      "norm_label": "4.2. endpoints & protocol specifications"
+      "norm_label": "4.2. endpoints & protocol specifications",
+      "id": "c2c_lld_4_2_endpoints_protocol_specifications"
     },
     {
       "label": "4.3. AGS 2.0 Payload Structure",
@@ -949,9 +1009,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L246",
       "_origin": "ast",
-      "id": "c2c_lld_4_3_ags_2_0_payload_structure",
       "community": 155,
-      "norm_label": "4.3. ags 2.0 payload structure"
+      "norm_label": "4.3. ags 2.0 payload structure",
+      "id": "c2c_lld_4_3_ags_2_0_payload_structure"
     },
     {
       "label": "4.4. Sequence Diagram: LTI 1.3 OIDC Launch & AGS Passback",
@@ -959,9 +1019,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L260",
       "_origin": "ast",
-      "id": "c2c_lld_4_4_sequence_diagram_lti_1_3_oidc_launch_ags_passback",
       "community": 155,
-      "norm_label": "4.4. sequence diagram: lti 1.3 oidc launch & ags passback"
+      "norm_label": "4.4. sequence diagram: lti 1.3 oidc launch & ags passback",
+      "id": "c2c_lld_4_4_sequence_diagram_lti_1_3_oidc_launch_ags_passback"
     },
     {
       "label": "5. Process 4: Employer Job Management, Candidate Matching & Decision Pipeline",
@@ -969,9 +1029,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L288",
       "_origin": "ast",
-      "id": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
       "community": 155,
-      "norm_label": "5. process 4: employer job management, candidate matching & decision pipeline"
+      "norm_label": "5. process 4: employer job management, candidate matching & decision pipeline",
+      "id": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline"
     },
     {
       "label": "5.1. Module & Component Map",
@@ -979,9 +1039,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L290",
       "_origin": "ast",
-      "id": "c2c_lld_5_1_module_component_map",
       "community": 155,
-      "norm_label": "5.1. module & component map"
+      "norm_label": "5.1. module & component map",
+      "id": "c2c_lld_5_1_module_component_map"
     },
     {
       "label": "5.2. Role-Weighted 5Q Scoring Formulas",
@@ -989,9 +1049,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L298",
       "_origin": "ast",
-      "id": "c2c_lld_5_2_role_weighted_5q_scoring_formulas",
       "community": 155,
-      "norm_label": "5.2. role-weighted 5q scoring formulas"
+      "norm_label": "5.2. role-weighted 5q scoring formulas",
+      "id": "c2c_lld_5_2_role_weighted_5q_scoring_formulas"
     },
     {
       "label": "5.3. Matching Pipeline Algorithm (Two-Tier Architecture)",
@@ -999,9 +1059,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L314",
       "_origin": "ast",
-      "id": "c2c_lld_5_3_matching_pipeline_algorithm_two_tier_architecture",
       "community": 155,
-      "norm_label": "5.3. matching pipeline algorithm (two-tier architecture)"
+      "norm_label": "5.3. matching pipeline algorithm (two-tier architecture)",
+      "id": "c2c_lld_5_3_matching_pipeline_algorithm_two_tier_architecture"
     },
     {
       "label": "5.4. Candidate Status State Machine",
@@ -1009,9 +1069,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L338",
       "_origin": "ast",
-      "id": "c2c_lld_5_4_candidate_status_state_machine",
       "community": 155,
-      "norm_label": "5.4. candidate status state machine"
+      "norm_label": "5.4. candidate status state machine",
+      "id": "c2c_lld_5_4_candidate_status_state_machine"
     },
     {
       "label": "5.5. API Endpoints",
@@ -1019,9 +1079,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L351",
       "_origin": "ast",
-      "id": "c2c_lld_5_5_api_endpoints",
       "community": 155,
-      "norm_label": "5.5. api endpoints"
+      "norm_label": "5.5. api endpoints",
+      "id": "c2c_lld_5_5_api_endpoints"
     },
     {
       "label": "6. Process 5: Deterministic AI Cost Control, Pre-Flight Quota Ledger & Spend Summary",
@@ -1029,9 +1089,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L358",
       "_origin": "ast",
-      "id": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
       "community": 155,
-      "norm_label": "6. process 5: deterministic ai cost control, pre-flight quota ledger & spend summary"
+      "norm_label": "6. process 5: deterministic ai cost control, pre-flight quota ledger & spend summary",
+      "id": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary"
     },
     {
       "label": "6.1. Module & Component Map",
@@ -1039,9 +1099,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L360",
       "_origin": "ast",
-      "id": "c2c_lld_6_1_module_component_map",
       "community": 155,
-      "norm_label": "6.1. module & component map"
+      "norm_label": "6.1. module & component map",
+      "id": "c2c_lld_6_1_module_component_map"
     },
     {
       "label": "6.2. PostgreSQL Atomic Quota Function DDL",
@@ -1049,9 +1109,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L367",
       "_origin": "ast",
-      "id": "c2c_lld_6_2_postgresql_atomic_quota_function_ddl",
       "community": 155,
-      "norm_label": "6.2. postgresql atomic quota function ddl"
+      "norm_label": "6.2. postgresql atomic quota function ddl",
+      "id": "c2c_lld_6_2_postgresql_atomic_quota_function_ddl"
     },
     {
       "label": "6.3. Pre-Flight Reservation Logic (`ai_budget.py`)",
@@ -1059,9 +1119,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L413",
       "_origin": "ast",
-      "id": "c2c_lld_6_3_pre_flight_reservation_logic_ai_budget_py",
       "community": 155,
-      "norm_label": "6.3. pre-flight reservation logic (`ai_budget.py`)"
+      "norm_label": "6.3. pre-flight reservation logic (`ai_budget.py`)",
+      "id": "c2c_lld_6_3_pre_flight_reservation_logic_ai_budget_py"
     },
     {
       "label": "6.4. Cost Advisory Logic (`cost_advice.py`)",
@@ -1069,9 +1129,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L431",
       "_origin": "ast",
-      "id": "c2c_lld_6_4_cost_advisory_logic_cost_advice_py",
       "community": 155,
-      "norm_label": "6.4. cost advisory logic (`cost_advice.py`)"
+      "norm_label": "6.4. cost advisory logic (`cost_advice.py`)",
+      "id": "c2c_lld_6_4_cost_advisory_logic_cost_advice_py"
     },
     {
       "label": "7. Process 6: Market Intelligence Desk & Headless Scraping Pipeline (Market Scout)",
@@ -1079,9 +1139,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L438",
       "_origin": "ast",
-      "id": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
       "community": 155,
-      "norm_label": "7. process 6: market intelligence desk & headless scraping pipeline (market scout)"
+      "norm_label": "7. process 6: market intelligence desk & headless scraping pipeline (market scout)",
+      "id": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout"
     },
     {
       "label": "7.1. Module & Component Map",
@@ -1089,9 +1149,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L440",
       "_origin": "ast",
-      "id": "c2c_lld_7_1_module_component_map",
       "community": 155,
-      "norm_label": "7.1. module & component map"
+      "norm_label": "7.1. module & component map",
+      "id": "c2c_lld_7_1_module_component_map"
     },
     {
       "label": "7.2. Data Flow & Deduplication Pipeline",
@@ -1099,9 +1159,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L448",
       "_origin": "ast",
-      "id": "c2c_lld_7_2_data_flow_deduplication_pipeline",
       "community": 155,
-      "norm_label": "7.2. data flow & deduplication pipeline"
+      "norm_label": "7.2. data flow & deduplication pipeline",
+      "id": "c2c_lld_7_2_data_flow_deduplication_pipeline"
     },
     {
       "label": "8. Process 7: Assessment Item Generation & Admin Curriculum Authoring",
@@ -1109,9 +1169,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L481",
       "_origin": "ast",
-      "id": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
       "community": 155,
-      "norm_label": "8. process 7: assessment item generation & admin curriculum authoring"
+      "norm_label": "8. process 7: assessment item generation & admin curriculum authoring",
+      "id": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring"
     },
     {
       "label": "8.1. Module & Component Map",
@@ -1119,9 +1179,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L483",
       "_origin": "ast",
-      "id": "c2c_lld_8_1_module_component_map",
       "community": 155,
-      "norm_label": "8.1. module & component map"
+      "norm_label": "8.1. module & component map",
+      "id": "c2c_lld_8_1_module_component_map"
     },
     {
       "label": "8.2. Item Generation Schema & Fallback Contract",
@@ -1129,9 +1189,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L490",
       "_origin": "ast",
-      "id": "c2c_lld_8_2_item_generation_schema_fallback_contract",
       "community": 155,
-      "norm_label": "8.2. item generation schema & fallback contract"
+      "norm_label": "8.2. item generation schema & fallback contract",
+      "id": "c2c_lld_8_2_item_generation_schema_fallback_contract"
     },
     {
       "label": "9. Process 8: Student Portfolio, Retro Terminal Emulator & Dossier Generation",
@@ -1139,9 +1199,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L510",
       "_origin": "ast",
-      "id": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
       "community": 155,
-      "norm_label": "9. process 8: student portfolio, retro terminal emulator & dossier generation"
+      "norm_label": "9. process 8: student portfolio, retro terminal emulator & dossier generation",
+      "id": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation"
     },
     {
       "label": "9.1. Module & Component Map",
@@ -1149,9 +1209,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L512",
       "_origin": "ast",
-      "id": "c2c_lld_9_1_module_component_map",
       "community": 155,
-      "norm_label": "9.1. module & component map"
+      "norm_label": "9.1. module & component map",
+      "id": "c2c_lld_9_1_module_component_map"
     },
     {
       "label": "9.2. Retro Terminal Protocol (DOS Emulator)",
@@ -1159,9 +1219,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L518",
       "_origin": "ast",
-      "id": "c2c_lld_9_2_retro_terminal_protocol_dos_emulator",
       "community": 155,
-      "norm_label": "9.2. retro terminal protocol (dos emulator)"
+      "norm_label": "9.2. retro terminal protocol (dos emulator)",
+      "id": "c2c_lld_9_2_retro_terminal_protocol_dos_emulator"
     },
     {
       "label": "10. Process 9: Multi-Tenant Role Ingress, Authentication & Demo Bypass Guard",
@@ -1169,9 +1229,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L527",
       "_origin": "ast",
-      "id": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
       "community": 155,
-      "norm_label": "10. process 9: multi-tenant role ingress, authentication & demo bypass guard"
+      "norm_label": "10. process 9: multi-tenant role ingress, authentication & demo bypass guard",
+      "id": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard"
     },
     {
       "label": "10.1. Module & Component Map",
@@ -1179,9 +1239,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L529",
       "_origin": "ast",
-      "id": "c2c_lld_10_1_module_component_map",
       "community": 155,
-      "norm_label": "10.1. module & component map"
+      "norm_label": "10.1. module & component map",
+      "id": "c2c_lld_10_1_module_component_map"
     },
     {
       "label": "10.2. Production Demo Auth Boundary",
@@ -1189,9 +1249,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L535",
       "_origin": "ast",
-      "id": "c2c_lld_10_2_production_demo_auth_boundary",
       "community": 155,
-      "norm_label": "10.2. production demo auth boundary"
+      "norm_label": "10.2. production demo auth boundary",
+      "id": "c2c_lld_10_2_production_demo_auth_boundary"
     },
     {
       "label": "11. Comprehensive Error Handling & Fault-Tolerance Policy",
@@ -1199,9 +1259,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L554",
       "_origin": "ast",
-      "id": "c2c_lld_11_comprehensive_error_handling_fault_tolerance_policy",
       "community": 155,
-      "norm_label": "11. comprehensive error handling & fault-tolerance policy"
+      "norm_label": "11. comprehensive error handling & fault-tolerance policy",
+      "id": "c2c_lld_11_comprehensive_error_handling_fault_tolerance_policy"
     },
     {
       "label": "12. Verification & Testing Matrix",
@@ -1209,9 +1269,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L567",
       "_origin": "ast",
-      "id": "c2c_lld_12_verification_testing_matrix",
       "community": 155,
-      "norm_label": "12. verification & testing matrix"
+      "norm_label": "12. verification & testing matrix",
+      "id": "c2c_lld_12_verification_testing_matrix"
     },
     {
       "label": "user_journeys.md",
@@ -1219,9 +1279,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "user_journeys",
       "community": 18,
-      "norm_label": "user_journeys.md"
+      "norm_label": "user_journeys.md",
+      "id": "user_journeys"
     },
     {
       "label": "Campus to Corporate (C2C) User Journeys",
@@ -1229,9 +1289,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "user_journeys_campus_to_corporate_c2c_user_journeys",
       "community": 18,
-      "norm_label": "campus to corporate (c2c) user journeys"
+      "norm_label": "campus to corporate (c2c) user journeys",
+      "id": "user_journeys_campus_to_corporate_c2c_user_journeys"
     },
     {
       "label": "1. Student Journey",
@@ -1239,9 +1299,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "user_journeys_1_student_journey",
       "community": 18,
-      "norm_label": "1. student journey"
+      "norm_label": "1. student journey",
+      "id": "user_journeys_1_student_journey"
     },
     {
       "label": "Step 1: Authentication & Onboarding",
@@ -1249,9 +1309,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "user_journeys_step_1_authentication_onboarding",
       "community": 18,
-      "norm_label": "step 1: authentication & onboarding"
+      "norm_label": "step 1: authentication & onboarding",
+      "id": "user_journeys_step_1_authentication_onboarding"
     },
     {
       "label": "Step 2: The Assessment (The \"Ordeal\")",
@@ -1259,9 +1319,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "user_journeys_step_2_the_assessment_the_ordeal",
       "community": 18,
-      "norm_label": "step 2: the assessment (the \"ordeal\")"
+      "norm_label": "step 2: the assessment (the \"ordeal\")",
+      "id": "user_journeys_step_2_the_assessment_the_ordeal"
     },
     {
       "label": "Step 3: Student Dashboard",
@@ -1269,9 +1329,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "user_journeys_step_3_student_dashboard",
       "community": 18,
-      "norm_label": "step 3: student dashboard"
+      "norm_label": "step 3: student dashboard",
+      "id": "user_journeys_step_3_student_dashboard"
     },
     {
       "label": "Step 4: Retro Portfolio (Shareable Profile)",
@@ -1279,9 +1339,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "user_journeys_step_4_retro_portfolio_shareable_profile",
       "community": 18,
-      "norm_label": "step 4: retro portfolio (shareable profile)"
+      "norm_label": "step 4: retro portfolio (shareable profile)",
+      "id": "user_journeys_step_4_retro_portfolio_shareable_profile"
     },
     {
       "label": "2. Employer Journey",
@@ -1289,9 +1349,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "user_journeys_2_employer_journey",
       "community": 18,
-      "norm_label": "2. employer journey"
+      "norm_label": "2. employer journey",
+      "id": "user_journeys_2_employer_journey"
     },
     {
       "label": "Step 1: Authentication & Onboarding",
@@ -1299,9 +1359,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L44",
       "_origin": "ast",
-      "id": "user_journeys_step_1_authentication_onboarding_44",
       "community": 18,
-      "norm_label": "step 1: authentication & onboarding"
+      "norm_label": "step 1: authentication & onboarding",
+      "id": "user_journeys_step_1_authentication_onboarding_44"
     },
     {
       "label": "Step 2: Recruiter Console (Discover Talent)",
@@ -1309,9 +1369,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L49",
       "_origin": "ast",
-      "id": "user_journeys_step_2_recruiter_console_discover_talent",
       "community": 18,
-      "norm_label": "step 2: recruiter console (discover talent)"
+      "norm_label": "step 2: recruiter console (discover talent)",
+      "id": "user_journeys_step_2_recruiter_console_discover_talent"
     },
     {
       "label": "Step 3: Job Management",
@@ -1319,9 +1379,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L58",
       "_origin": "ast",
-      "id": "user_journeys_step_3_job_management",
       "community": 18,
-      "norm_label": "step 3: job management"
+      "norm_label": "step 3: job management",
+      "id": "user_journeys_step_3_job_management"
     },
     {
       "label": "3. TPO / Institution Journey",
@@ -1329,9 +1389,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L65",
       "_origin": "ast",
-      "id": "user_journeys_3_tpo_institution_journey",
       "community": 18,
-      "norm_label": "3. tpo / institution journey"
+      "norm_label": "3. tpo / institution journey",
+      "id": "user_journeys_3_tpo_institution_journey"
     },
     {
       "label": "Step 1: Authentication & Onboarding",
@@ -1339,9 +1399,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "user_journeys_step_1_authentication_onboarding_69",
       "community": 18,
-      "norm_label": "step 1: authentication & onboarding"
+      "norm_label": "step 1: authentication & onboarding",
+      "id": "user_journeys_step_1_authentication_onboarding_69"
     },
     {
       "label": "Step 2: TPO Command Center",
@@ -1349,9 +1409,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L74",
       "_origin": "ast",
-      "id": "user_journeys_step_2_tpo_command_center",
       "community": 18,
-      "norm_label": "step 2: tpo command center"
+      "norm_label": "step 2: tpo command center",
+      "id": "user_journeys_step_2_tpo_command_center"
     },
     {
       "label": "4. Admin Journey",
@@ -1359,9 +1419,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L87",
       "_origin": "ast",
-      "id": "user_journeys_4_admin_journey",
       "community": 18,
-      "norm_label": "4. admin journey"
+      "norm_label": "4. admin journey",
+      "id": "user_journeys_4_admin_journey"
     },
     {
       "label": "Step 1: Authentication",
@@ -1369,9 +1429,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L91",
       "_origin": "ast",
-      "id": "user_journeys_step_1_authentication",
       "community": 18,
-      "norm_label": "step 1: authentication"
+      "norm_label": "step 1: authentication",
+      "id": "user_journeys_step_1_authentication"
     },
     {
       "label": "Step 2: Global Admin Root",
@@ -1379,9 +1439,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L95",
       "_origin": "ast",
-      "id": "user_journeys_step_2_global_admin_root",
       "community": 18,
-      "norm_label": "step 2: global admin root"
+      "norm_label": "step 2: global admin root",
+      "id": "user_journeys_step_2_global_admin_root"
     },
     {
       "label": "5. Architectural References",
@@ -1389,9 +1449,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L105",
       "_origin": "ast",
-      "id": "user_journeys_5_architectural_references",
       "community": 18,
-      "norm_label": "5. architectural references"
+      "norm_label": "5. architectural references",
+      "id": "user_journeys_5_architectural_references"
     },
     {
       "label": "lti_router.py",
@@ -1769,7 +1829,7 @@
       "source_file": "api/main.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 245,
+      "community": 10,
       "norm_label": "api_exception_handler()",
       "id": "api_main_api_exception_handler"
     },
@@ -1779,7 +1839,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 245,
+      "community": 10,
       "norm_label": "apiexception",
       "id": "apiexception"
     },
@@ -1809,7 +1869,7 @@
       "source_file": "api/main.py",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 167,
+      "community": 10,
       "norm_label": "not_found_error_handler()",
       "id": "api_main_not_found_error_handler"
     },
@@ -1889,7 +1949,7 @@
       "source_file": "api/main.py",
       "source_location": "L128",
       "_origin": "ast",
-      "community": 10,
+      "community": 233,
       "norm_label": "health()",
       "id": "api_main_health"
     },
@@ -2279,7 +2339,7 @@
       "source_file": "src/app/(main)/dashboard/[id]/page.tsx",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "historypoint",
       "id": "id_page_historypoint"
     },
@@ -2299,7 +2359,7 @@
       "source_file": "src/app/(main)/dashboard/[id]/page.tsx",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 83,
+      "community": 41,
       "norm_label": "dashboarddata",
       "id": "id_page_dashboarddata"
     },
@@ -2369,7 +2429,7 @@
       "source_file": "src/components/Navbar.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 47,
       "norm_label": "navbar.tsx",
       "id": "components_navbar"
     },
@@ -2379,7 +2439,7 @@
       "source_file": "src/components/Navbar.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 48,
+      "community": 47,
       "norm_label": "navlinks",
       "id": "components_navbar_navlinks"
     },
@@ -2389,7 +2449,7 @@
       "source_file": "src/components/Navbar.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 48,
+      "community": 47,
       "norm_label": "navbar()",
       "id": "components_navbar_navbar"
     },
@@ -3459,7 +3519,7 @@
       "source_file": "api/db.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 167,
+      "community": 233,
       "norm_label": "get_service_client()",
       "id": "api_db_get_service_client"
     },
@@ -3509,7 +3569,7 @@
       "source_file": "api/deps.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 10,
+      "community": 233,
       "norm_label": "get_supabase_client()",
       "id": "api_deps_get_supabase_client"
     },
@@ -3519,7 +3579,7 @@
       "source_file": "api/deps.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 10,
+      "community": 233,
       "norm_label": "require_supabase()",
       "id": "api_deps_require_supabase"
     },
@@ -3549,7 +3609,7 @@
       "source_file": "api/deps.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "demo_auth_allowed()",
       "id": "api_deps_demo_auth_allowed"
     },
@@ -3569,7 +3629,7 @@
       "source_file": "api/deps.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 67,
+      "community": 238,
       "norm_label": "require_role()",
       "id": "api_deps_require_role"
     },
@@ -3579,7 +3639,7 @@
       "source_file": "api/deps.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 10,
+      "community": 233,
       "norm_label": "create and return a supabase client. returns none if env vars are missing.",
       "id": "api_deps_rationale_46"
     },
@@ -3589,7 +3649,7 @@
       "source_file": "api/deps.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 10,
+      "community": 233,
       "norm_label": "fastapi dependency that provides a supabase client or raises 503.",
       "id": "api_deps_rationale_60"
     },
@@ -3609,7 +3669,7 @@
       "source_file": "api/deps.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "demo/dev identities are accepted only when explicitly enabled (never set in prod",
       "id": "api_deps_rationale_97"
     },
@@ -3629,7 +3689,7 @@
       "source_file": "api/deps.py",
       "source_location": "L156",
       "_origin": "ast",
-      "community": 67,
+      "community": 238,
       "norm_label": "fastapi dependency factory to enforce rbac constraints using app_metadata.",
       "id": "api_deps_rationale_156"
     },
@@ -3639,7 +3699,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 167,
       "norm_label": "exceptions.py",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_exceptions_py"
     },
@@ -3679,7 +3739,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 1,
+      "community": 167,
       "norm_label": "databaseconnectionerror",
       "id": "api_exceptions_databaseconnectionerror"
     },
@@ -3749,7 +3809,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 1,
+      "community": 167,
       "norm_label": "raised when database connection fails or is unavailable.",
       "id": "api_exceptions_rationale_11"
     },
@@ -4159,7 +4219,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 167,
+      "community": 233,
       "norm_label": "run_scoring_engine()",
       "id": "routers_employer_router_run_scoring_engine"
     },
@@ -4319,7 +4379,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 167,
+      "community": 233,
       "norm_label": "background task: rank candidates for a job (p3-b). sync, so fastapi runs it in a",
       "id": "routers_employer_router_rationale_29"
     },
@@ -4899,7 +4959,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L312",
       "_origin": "ast",
-      "community": 1,
+      "community": 167,
       "norm_label": "get_student()",
       "id": "routers_student_router_get_student"
     },
@@ -4909,7 +4969,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L407",
       "_origin": "ast",
-      "community": 1,
+      "community": 167,
       "norm_label": "get_assessment_history()",
       "id": "routers_student_router_get_assessment_history"
     },
@@ -4939,7 +4999,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L488",
       "_origin": "ast",
-      "community": 1,
+      "community": 67,
       "norm_label": "export_student_pdf()",
       "id": "routers_student_router_export_student_pdf"
     },
@@ -4949,7 +5009,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L521",
       "_origin": "ast",
-      "community": 1,
+      "community": 167,
       "norm_label": "export_interview_guide()",
       "id": "routers_student_router_export_interview_guide"
     },
@@ -6309,7 +6369,7 @@
       "source_file": "src/app/(main)/assessment/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 48,
       "norm_label": "page.tsx",
       "id": "assessment_page"
     },
@@ -6319,7 +6379,7 @@
       "source_file": "src/app/(main)/assessment/page.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 21,
+      "community": 48,
       "norm_label": "assessment()",
       "id": "assessment_page_assessment"
     },
@@ -6419,7 +6479,7 @@
       "source_file": "src/app/auth/callback/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "page.tsx",
       "id": "callback_page"
     },
@@ -6429,7 +6489,7 @@
       "source_file": "src/app/auth/callback/page.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "authcallbackpage()",
       "id": "callback_page_authcallbackpage"
     },
@@ -6609,7 +6669,7 @@
       "source_file": "src/app/crm/layout.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 47,
+      "community": 253,
       "norm_label": "layout.tsx",
       "id": "crm_layout"
     },
@@ -6619,7 +6679,7 @@
       "source_file": "src/app/crm/layout.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 47,
+      "community": 253,
       "norm_label": "crmlayout()",
       "id": "crm_layout_crmlayout"
     },
@@ -6719,7 +6779,7 @@
       "source_file": "src/app/crm/page.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 83,
+      "community": 41,
       "norm_label": "crmdashboard()",
       "id": "crm_page_crmdashboard"
     },
@@ -6729,7 +6789,7 @@
       "source_file": "src/app/employer/jobs/new/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 48,
       "norm_label": "page.tsx",
       "id": "new_page"
     },
@@ -6739,7 +6799,7 @@
       "source_file": "src/app/employer/jobs/new/page.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 5,
+      "community": 48,
       "norm_label": "role_types",
       "id": "new_page_role_types"
     },
@@ -6749,7 +6809,7 @@
       "source_file": "src/app/employer/jobs/new/page.tsx",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 5,
+      "community": 48,
       "norm_label": "newjobpage()",
       "id": "new_page_newjobpage"
     },
@@ -6779,7 +6839,7 @@
       "source_file": "src/app/feedback/[id]/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "page.tsx",
       "id": "src_app_feedback_id_page_tsx_id_page"
     },
@@ -6789,7 +6849,7 @@
       "source_file": "src/app/feedback/[id]/page.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "feedbackpage()",
       "id": "id_page_feedbackpage"
     },
@@ -6849,7 +6909,7 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "layout.tsx",
       "id": "src_app_portfolio_id_layout_tsx_id_layout"
     },
@@ -6859,7 +6919,7 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "layoutprops",
       "id": "id_layout_layoutprops"
     },
@@ -6869,7 +6929,7 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "generatemetadata()",
       "id": "id_layout_generatemetadata"
     },
@@ -6879,7 +6939,7 @@
       "source_file": "src/app/portfolio/[id]/layout.tsx",
       "source_location": "L83",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "portfoliolayout()",
       "id": "id_layout_portfoliolayout"
     },
@@ -6889,7 +6949,7 @@
       "source_file": "src/app/portfolio/[id]/opengraph-image.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "opengraph-image.tsx",
       "id": "id_opengraph_image"
     },
@@ -6899,7 +6959,7 @@
       "source_file": "src/app/portfolio/[id]/opengraph-image.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "size",
       "id": "id_opengraph_image_size"
     },
@@ -6909,7 +6969,7 @@
       "source_file": "src/app/portfolio/[id]/opengraph-image.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "image()",
       "id": "id_opengraph_image_image"
     },
@@ -6919,7 +6979,7 @@
       "source_file": "src/app/portfolio/[id]/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "page.tsx",
       "id": "src_app_portfolio_id_page_tsx_id_page"
     },
@@ -6929,7 +6989,7 @@
       "source_file": "src/app/portfolio/[id]/page.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "windowstate",
       "id": "id_page_windowstate"
     },
@@ -6939,7 +6999,7 @@
       "source_file": "src/app/portfolio/[id]/page.tsx",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "retroportfolio()",
       "id": "id_page_retroportfolio"
     },
@@ -6999,7 +7059,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 255,
       "norm_label": "page.tsx",
       "id": "students_page"
     },
@@ -7009,7 +7069,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 5,
+      "community": 255,
       "norm_label": "student",
       "id": "students_page_student"
     },
@@ -7019,7 +7079,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 5,
+      "community": 255,
       "norm_label": "dept_colors",
       "id": "students_page_dept_colors"
     },
@@ -7029,7 +7089,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 5,
+      "community": 255,
       "norm_label": "deptcolor()",
       "id": "students_page_deptcolor"
     },
@@ -7039,7 +7099,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 5,
+      "community": 255,
       "norm_label": "studenttracking()",
       "id": "students_page_studenttracking"
     },
@@ -7259,7 +7319,7 @@
       "source_file": "src/components/UserJourneyGuide.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "userjourneyguide.tsx",
       "id": "components_userjourneyguide"
     },
@@ -7269,7 +7329,7 @@
       "source_file": "src/components/UserJourneyGuide.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "userjourneyguide()",
       "id": "components_userjourneyguide_userjourneyguide"
     },
@@ -7319,7 +7379,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "trendlinechart.tsx",
       "id": "charts_trendlinechart"
     },
@@ -7329,7 +7389,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "historypoint",
       "id": "charts_trendlinechart_historypoint"
     },
@@ -7339,7 +7399,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "trendlinechartprops",
       "id": "charts_trendlinechart_trendlinechartprops"
     },
@@ -7349,7 +7409,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "trendlinechart()",
       "id": "charts_trendlinechart_trendlinechart"
     },
@@ -7359,7 +7419,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "costlimitsform.tsx",
       "id": "costs_costlimitsform"
     },
@@ -7369,7 +7429,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "field",
       "id": "costs_costlimitsform_field"
     },
@@ -7379,7 +7439,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "fields",
       "id": "costs_costlimitsform_fields"
     },
@@ -7389,7 +7449,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "totext()",
       "id": "costs_costlimitsform_totext"
     },
@@ -7399,7 +7459,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "costlimitsform()",
       "id": "costs_costlimitsform_costlimitsform"
     },
@@ -7409,7 +7469,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "spendsummary.tsx",
       "id": "costs_spendsummary"
     },
@@ -7419,7 +7479,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "inr()",
       "id": "costs_spendsummary_inr"
     },
@@ -7429,7 +7489,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "tile()",
       "id": "costs_spendsummary_tile"
     },
@@ -7439,7 +7499,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "spendsummary()",
       "id": "costs_spendsummary_spendsummary"
     },
@@ -7449,7 +7509,7 @@
       "source_file": "src/components/crm/NavItem.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 47,
+      "community": 253,
       "norm_label": "navitem.tsx",
       "id": "crm_navitem"
     },
@@ -7459,7 +7519,7 @@
       "source_file": "src/components/crm/NavItem.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 47,
+      "community": 253,
       "norm_label": "navitemprops",
       "id": "crm_navitem_navitemprops"
     },
@@ -7469,7 +7529,7 @@
       "source_file": "src/components/crm/NavItem.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 47,
+      "community": 253,
       "norm_label": "navitem()",
       "id": "crm_navitem_navitem"
     },
@@ -7599,7 +7659,7 @@
       "source_file": "src/components/profile/ProfileCompletionWidget.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "profilecompletionwidget.tsx",
       "id": "profile_profilecompletionwidget"
     },
@@ -7609,7 +7669,7 @@
       "source_file": "src/components/profile/ProfileCompletionWidget.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "profilecompletionwidgetprops",
       "id": "profile_profilecompletionwidget_profilecompletionwidgetprops"
     },
@@ -7619,7 +7679,7 @@
       "source_file": "src/components/profile/ProfileCompletionWidget.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "profilecompletionwidget()",
       "id": "profile_profilecompletionwidget_profilecompletionwidget"
     },
@@ -7629,7 +7689,7 @@
       "source_file": "src/components/profile/ProfileExpansionModal.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "profileexpansionmodal.tsx",
       "id": "profile_profileexpansionmodal"
     },
@@ -7639,7 +7699,7 @@
       "source_file": "src/components/profile/ProfileExpansionModal.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "profileexpansionmodalprops",
       "id": "profile_profileexpansionmodal_profileexpansionmodalprops"
     },
@@ -7649,7 +7709,7 @@
       "source_file": "src/components/profile/ProfileExpansionModal.tsx",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "profileexpansionmodal()",
       "id": "profile_profileexpansionmodal_profileexpansionmodal"
     },
@@ -7659,7 +7719,7 @@
       "source_file": "src/components/profile/ResumeUploadModal.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "resumeuploadmodal.tsx",
       "id": "profile_resumeuploadmodal"
     },
@@ -7669,7 +7729,7 @@
       "source_file": "src/components/profile/ResumeUploadModal.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "resumeuploadmodalprops",
       "id": "profile_resumeuploadmodal_resumeuploadmodalprops"
     },
@@ -7679,7 +7739,7 @@
       "source_file": "src/components/profile/ResumeUploadModal.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 5,
+      "community": 137,
       "norm_label": "resumeuploadmodal()",
       "id": "profile_resumeuploadmodal_resumeuploadmodal"
     },
@@ -7719,7 +7779,7 @@
       "source_file": "src/hooks/useApiQuery.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 83,
       "norm_label": "useapiquery.ts",
       "id": "hooks_useapiquery"
     },
@@ -7729,7 +7789,7 @@
       "source_file": "src/hooks/useApiQuery.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 5,
+      "community": 83,
       "norm_label": "useapiqueryreturn",
       "id": "hooks_useapiquery_useapiqueryreturn"
     },
@@ -8129,7 +8189,7 @@
       "source_file": "src/lib/signOut.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 47,
       "norm_label": "signout.ts",
       "id": "lib_signout"
     },
@@ -8139,7 +8199,7 @@
       "source_file": "src/lib/signOut.ts",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 48,
+      "community": 47,
       "norm_label": "signouteverywhere()",
       "id": "lib_signout_signouteverywhere"
     },
@@ -8149,7 +8209,7 @@
       "source_file": "src/lib/supabase.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "supabase.ts",
       "id": "lib_supabase"
     },
@@ -8159,7 +8219,7 @@
       "source_file": "src/lib/supabase.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 48,
+      "community": 150,
       "norm_label": "supabase",
       "id": "lib_supabase_supabase"
     },
@@ -8169,7 +8229,7 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafeai.ts",
       "id": "lib_typesafeai"
     },
@@ -8179,7 +8239,7 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "gettypesafestatus()",
       "id": "lib_typesafeai_gettypesafestatus"
     },
@@ -8189,7 +8249,7 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "evaluatewithtypesafeai()",
       "id": "lib_typesafeai_evaluatewithtypesafeai"
     },
@@ -8199,7 +8259,7 @@
       "source_file": "src/lib/typesafeAi.ts",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "featurizecandidateprofile()",
       "id": "lib_typesafeai_featurizecandidateprofile"
     },
@@ -8259,7 +8319,7 @@
       "source_file": "src/types.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "types.ts",
       "id": "src_types"
     },
@@ -8269,7 +8329,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "assessment.ts",
       "id": "types_assessment"
     },
@@ -8279,7 +8339,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "student",
       "id": "types_assessment_student"
     },
@@ -8289,7 +8349,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "assessmentquestion",
       "id": "types_assessment_assessmentquestion"
     },
@@ -8299,7 +8359,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "assessmentoption",
       "id": "types_assessment_assessmentoption"
     },
@@ -8309,7 +8369,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "assessmentresponse",
       "id": "types_assessment_assessmentresponse"
     },
@@ -8319,7 +8379,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "dimensionscores",
       "id": "types_assessment_dimensionscores"
     },
@@ -8329,7 +8389,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "developmentreport",
       "id": "types_assessment_developmentreport"
     },
@@ -8339,7 +8399,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "actionablefeedback",
       "id": "types_assessment_actionablefeedback"
     },
@@ -8349,7 +8409,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "assessmentresult",
       "id": "types_assessment_assessmentresult"
     },
@@ -8399,7 +8459,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "costs.ts",
       "id": "types_costs"
     },
@@ -8409,7 +8469,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "aispendday",
       "id": "types_costs_aispendday"
     },
@@ -8419,7 +8479,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "costadvice",
       "id": "types_costs_costadvice"
     },
@@ -8429,7 +8489,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "aicostlimits",
       "id": "types_costs_aicostlimits"
     },
@@ -8439,7 +8499,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 68,
+      "community": 41,
       "norm_label": "aispendsummary",
       "id": "types_costs_aispendsummary"
     },
@@ -8449,7 +8509,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "crm.ts",
       "id": "types_crm"
     },
@@ -8469,7 +8529,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "lead",
       "id": "types_crm_lead"
     },
@@ -8479,7 +8539,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "cohortdata",
       "id": "types_crm_cohortdata"
     },
@@ -8489,7 +8549,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "alert",
       "id": "types_crm_alert"
     },
@@ -8519,7 +8579,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L109",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "crmlead",
       "id": "types_crm_crmlead"
     },
@@ -8539,7 +8599,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L134",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "pipelinestage",
       "id": "types_crm_pipelinestage"
     },
@@ -8549,7 +8609,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 21,
+      "community": 41,
       "norm_label": "crmopportunity",
       "id": "types_crm_crmopportunity"
     },
@@ -8669,7 +8729,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafe.ts",
       "id": "types_typesafe"
     },
@@ -8679,7 +8739,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "founderarchetype",
       "id": "types_typesafe_founderarchetype"
     },
@@ -8689,7 +8749,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafedimensionscore",
       "id": "types_typesafe_typesafedimensionscore"
     },
@@ -8699,7 +8759,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafeevaluateresponse",
       "id": "types_typesafe_typesafeevaluateresponse"
     },
@@ -8709,7 +8769,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafestatusresponse",
       "id": "types_typesafe_typesafestatusresponse"
     },
@@ -8719,7 +8779,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafefeaturecolumn",
       "id": "types_typesafe_typesafefeaturecolumn"
     },
@@ -8729,7 +8789,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafefeaturizeresponse",
       "id": "types_typesafe_typesafefeaturizeresponse"
     },
@@ -8739,7 +8799,7 @@
       "source_file": "src/types/typesafe.ts",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "typesafefeaturizerequest",
       "id": "types_typesafe_typesafefeaturizerequest"
     },
@@ -8789,7 +8849,7 @@
       "source_file": "src/utils/supabase/server.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 47,
+      "community": 253,
       "norm_label": "server.ts",
       "id": "supabase_server"
     },
@@ -8799,7 +8859,7 @@
       "source_file": "src/utils/supabase/server.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 47,
+      "community": 253,
       "norm_label": "createclient()",
       "id": "supabase_server_createclient"
     },
@@ -8909,7 +8969,7 @@
       "source_file": "tests/db_gate.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": "db_gate.py",
       "id": "tests_db_gate"
     },
@@ -8919,7 +8979,7 @@
       "source_file": "tests/db_gate.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": "opt-in gate for tests that write to a real supabase database.  these tests see",
       "id": "tests_db_gate_rationale_1"
     },
@@ -9149,7 +9209,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": "test_assessment_attempts.py",
       "id": "tests_test_assessment_attempts"
     },
@@ -9159,7 +9219,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": "testassessmentattempts",
       "id": "tests_test_assessment_attempts_testassessmentattempts"
     },
@@ -9169,7 +9229,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".setup()",
       "id": "tests_test_assessment_attempts_testassessmentattempts_setup"
     },
@@ -9179,7 +9239,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".teardown()",
       "id": "tests_test_assessment_attempts_testassessmentattempts_teardown"
     },
@@ -9189,7 +9249,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".test_attempts_increment_and_sync_trigger()",
       "id": "tests_test_assessment_attempts_testassessmentattempts_test_attempts_increment_and_sync_trigger"
     },
@@ -9859,7 +9919,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "test_demo_auth.py",
       "id": "tests_test_demo_auth"
     },
@@ -9869,7 +9929,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "_call()",
       "id": "tests_test_demo_auth_call"
     },
@@ -9879,7 +9939,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "test_demo_tokens_refused_by_default()",
       "id": "tests_test_demo_auth_test_demo_tokens_refused_by_default"
     },
@@ -9889,7 +9949,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "test_missing_auth_client_does_not_grant_admin()",
       "id": "tests_test_demo_auth_test_missing_auth_client_does_not_grant_admin"
     },
@@ -9899,7 +9959,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "test_demo_tokens_accepted_when_enabled()",
       "id": "tests_test_demo_auth_test_demo_tokens_accepted_when_enabled"
     },
@@ -9909,7 +9969,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "test_flag_parsing()",
       "id": "tests_test_demo_auth_test_flag_parsing"
     },
@@ -9919,7 +9979,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 238,
+      "community": 68,
       "norm_label": "demo/dev identities must be refused unless allow_demo_auth=true.",
       "id": "tests_test_demo_auth_rationale_1"
     },
@@ -11139,7 +11199,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": "test_rls_policies.py",
       "id": "tests_test_rls_policies"
     },
@@ -11149,7 +11209,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": "testrlspolicies",
       "id": "tests_test_rls_policies_testrlspolicies"
     },
@@ -11159,7 +11219,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".setup()",
       "id": "tests_test_rls_policies_testrlspolicies_setup"
     },
@@ -11169,7 +11229,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".teardown()",
       "id": "tests_test_rls_policies_testrlspolicies_teardown"
     },
@@ -11179,7 +11239,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".test_students_policies_exist()",
       "id": "tests_test_rls_policies_testrlspolicies_test_students_policies_exist"
     },
@@ -11189,7 +11249,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".test_assessments_policies_exist()",
       "id": "tests_test_rls_policies_testrlspolicies_test_assessments_policies_exist"
     },
@@ -11199,7 +11259,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 238,
+      "community": 21,
       "norm_label": ".test_market_leads_policies_exist()",
       "id": "tests_test_rls_policies_testrlspolicies_test_market_leads_policies_exist"
     },
@@ -16432,12 +16492,52 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/app/docs/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "docs_page",
+      "target": "docs_page_docspage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/wiki/page.tsx",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "wiki_page",
+      "target": "wiki_page_processes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/wiki/page.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "wiki_page",
+      "target": "wiki_page_processitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/wiki/page.tsx",
+      "source_location": "L490",
+      "weight": 1.0,
+      "source": "wiki_page",
+      "target": "wiki_page_wikiportal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "PROJECT.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "project",
-      "target": "project_project_c2c_talent_platform_refactoring",
-      "confidence_score": 1.0
+      "target": "project_project_c2c_talent_platform_refactoring"
     },
     {
       "relation": "contains",
@@ -16455,9 +16555,9 @@
       "source_file": "PROJECT.md",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "project_project_c2c_talent_platform_refactoring",
-      "target": "project_architecture_design_references",
-      "confidence_score": 1.0
+      "target": "project_architecture_design_references"
     },
     {
       "relation": "contains",
@@ -16555,9 +16655,9 @@
       "source_file": "README.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_architecture_process_navigation",
-      "confidence_score": 1.0
+      "target": "readme_architecture_process_navigation"
     },
     {
       "relation": "contains",
@@ -16565,9 +16665,9 @@
       "source_file": "README.md",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_core_system_workflows",
-      "confidence_score": 1.0
+      "target": "readme_core_system_workflows"
     },
     {
       "relation": "contains",
@@ -16575,9 +16675,9 @@
       "source_file": "README.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_high_level_design_hld_overview",
-      "confidence_score": 1.0
+      "target": "readme_high_level_design_hld_overview"
     },
     {
       "relation": "contains",
@@ -16585,9 +16685,9 @@
       "source_file": "README.md",
       "source_location": "L192",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_local_development_setup",
-      "confidence_score": 1.0
+      "target": "readme_local_development_setup"
     },
     {
       "relation": "contains",
@@ -16595,9 +16695,9 @@
       "source_file": "README.md",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_low_level_design_lld_process_workflow_catalog",
-      "confidence_score": 1.0
+      "target": "readme_low_level_design_lld_process_workflow_catalog"
     },
     {
       "relation": "contains",
@@ -16605,9 +16705,9 @@
       "source_file": "README.md",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_production_deployment",
-      "confidence_score": 1.0
+      "target": "readme_production_deployment"
     },
     {
       "relation": "contains",
@@ -16625,9 +16725,9 @@
       "source_file": "README.md",
       "source_location": "L222",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_verification_commands",
-      "confidence_score": 1.0
+      "target": "readme_verification_commands"
     },
     {
       "relation": "contains",
@@ -16645,9 +16745,9 @@
       "source_file": "README.md",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_core_system_workflows",
-      "target": "readme_workflow_1_assessment_submission_5q_scoring_remediation_sync",
-      "confidence_score": 1.0
+      "target": "readme_workflow_1_assessment_submission_5q_scoring_remediation_sync"
     },
     {
       "relation": "contains",
@@ -16655,9 +16755,9 @@
       "source_file": "README.md",
       "source_location": "L134",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_core_system_workflows",
-      "target": "readme_workflow_2_lti_1_3_advantage_launch_ags_2_0_grade_passback",
-      "confidence_score": 1.0
+      "target": "readme_workflow_2_lti_1_3_advantage_launch_ags_2_0_grade_passback"
     },
     {
       "relation": "contains",
@@ -16665,9 +16765,9 @@
       "source_file": "README.md",
       "source_location": "L145",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_core_system_workflows",
-      "target": "readme_workflow_3_employer_candidate_ranking_cost_guarded_evaluation",
-      "confidence_score": 1.0
+      "target": "readme_workflow_3_employer_candidate_ranking_cost_guarded_evaluation"
     },
     {
       "relation": "contains",
@@ -16675,9 +16775,9 @@
       "source_file": "README.md",
       "source_location": "L183",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_core_system_workflows",
-      "target": "readme_workflow_4_market_scout_opportunity_ingestion",
-      "confidence_score": 1.0
+      "target": "readme_workflow_4_market_scout_opportunity_ingestion"
     },
     {
       "relation": "contains",
@@ -16695,9 +16795,9 @@
       "source_file": "README.md",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_local_development_setup",
-      "target": "readme_2_start_lms_subsystem",
-      "confidence_score": 1.0
+      "target": "readme_2_start_lms_subsystem"
     },
     {
       "relation": "contains",
@@ -16715,9 +16815,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture",
-      "target": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture"
     },
     {
       "relation": "contains",
@@ -16725,9 +16825,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
-      "target": "wiki_architecture_1_executive_summary_information_architecture_vision",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_1_executive_summary_information_architecture_vision"
     },
     {
       "relation": "contains",
@@ -16735,9 +16835,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
-      "target": "wiki_architecture_2_confluence_space_hierarchy_page_tree",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_2_confluence_space_hierarchy_page_tree"
     },
     {
       "relation": "contains",
@@ -16745,9 +16845,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
-      "target": "wiki_architecture_3_master_wiki_portal_home_page_layout",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_3_master_wiki_portal_home_page_layout"
     },
     {
       "relation": "contains",
@@ -16755,9 +16855,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
-      "target": "wiki_architecture_4_cross_linking_matrix_personas_lifecycle_9_processes",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_4_cross_linking_matrix_personas_lifecycle_9_processes"
     },
     {
       "relation": "contains",
@@ -16765,9 +16865,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
-      "target": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_5_navigation_affordances_progressive_disclosure"
     },
     {
       "relation": "contains",
@@ -16775,9 +16875,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L187",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
-      "target": "wiki_architecture_6_docs_as_code_synchronization_pipeline",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_6_docs_as_code_synchronization_pipeline"
     },
     {
       "relation": "contains",
@@ -16785,9 +16885,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
-      "target": "wiki_architecture_5_1_three_tier_progressive_disclosure_model",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_5_1_three_tier_progressive_disclosure_model"
     },
     {
       "relation": "contains",
@@ -16795,9 +16895,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L163",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
-      "target": "wiki_architecture_5_2_standard_breadcrumbs",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_5_2_standard_breadcrumbs"
     },
     {
       "relation": "contains",
@@ -16805,9 +16905,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
-      "target": "wiki_architecture_5_3_clickable_mermaid_diagram_hotspots",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_5_3_clickable_mermaid_diagram_hotspots"
     },
     {
       "relation": "contains",
@@ -16815,9 +16915,9 @@
       "source_file": "WIKI_ARCHITECTURE.md",
       "source_location": "L202",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_architecture_6_docs_as_code_synchronization_pipeline",
-      "target": "wiki_architecture_pull_request_definition_of_done_dod_gate",
-      "confidence_score": 1.0
+      "target": "wiki_architecture_pull_request_definition_of_done_dod_gate"
     },
     {
       "relation": "contains",
@@ -16825,9 +16925,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration",
-      "target": "workflow_integration_workflow_integration_campus2corporate_c2c",
-      "confidence_score": 1.0
+      "target": "workflow_integration_workflow_integration_campus2corporate_c2c"
     },
     {
       "relation": "contains",
@@ -16835,9 +16935,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_workflow_integration_campus2corporate_c2c",
-      "target": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
-      "confidence_score": 1.0
+      "target": "workflow_integration_master_standard_operating_procedure_sop_process_workflows"
     },
     {
       "relation": "contains",
@@ -16845,9 +16945,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
-      "target": "workflow_integration_1_architectural_foundation_references",
-      "confidence_score": 1.0
+      "target": "workflow_integration_1_architectural_foundation_references"
     },
     {
       "relation": "contains",
@@ -16855,9 +16955,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
-      "target": "workflow_integration_2_the_integrated_5_phase_candidate_lifecycle",
-      "confidence_score": 1.0
+      "target": "workflow_integration_2_the_integrated_5_phase_candidate_lifecycle"
     },
     {
       "relation": "contains",
@@ -16865,9 +16965,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
-      "target": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
-      "confidence_score": 1.0
+      "target": "workflow_integration_3_detailed_process_sops_inter_service_handshakes"
     },
     {
       "relation": "contains",
@@ -16875,9 +16975,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
-      "target": "workflow_integration_4_deterministic_cost_governance_standard",
-      "confidence_score": 1.0
+      "target": "workflow_integration_4_deterministic_cost_governance_standard"
     },
     {
       "relation": "contains",
@@ -16885,9 +16985,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
-      "target": "workflow_integration_5_verification_service_health_checks",
-      "confidence_score": 1.0
+      "target": "workflow_integration_5_verification_service_health_checks"
     },
     {
       "relation": "contains",
@@ -16895,9 +16995,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
-      "target": "workflow_integration_sop_1_sourcing_to_assessment_trigger_signal_ingress",
-      "confidence_score": 1.0
+      "target": "workflow_integration_sop_1_sourcing_to_assessment_trigger_signal_ingress"
     },
     {
       "relation": "contains",
@@ -16905,9 +17005,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
-      "target": "workflow_integration_sop_2_assessment_to_automated_remediation_audit_ordeal_fix",
-      "confidence_score": 1.0
+      "target": "workflow_integration_sop_2_assessment_to_automated_remediation_audit_ordeal_fix"
     },
     {
       "relation": "contains",
@@ -16915,9 +17015,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
-      "target": "workflow_integration_sop_3_moodle_completion_to_developmental_record_sync_fix_verification",
-      "confidence_score": 1.0
+      "target": "workflow_integration_sop_3_moodle_completion_to_developmental_record_sync_fix_verification"
     },
     {
       "relation": "contains",
@@ -16925,9 +17025,9 @@
       "source_file": "WORKFLOW_INTEGRATION.md",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
-      "target": "workflow_integration_sop_4_employer_job_posting_to_candidate_match_hiring_deployment_win",
-      "confidence_score": 1.0
+      "target": "workflow_integration_sop_4_employer_job_posting_to_candidate_match_hiring_deployment_win"
     },
     {
       "relation": "contains",
@@ -16975,9 +17075,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L186",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_4_comprehensive_process_workflow_architecture",
-      "confidence_score": 1.0
+      "target": "c2c_hld_4_comprehensive_process_workflow_architecture"
     },
     {
       "relation": "contains",
@@ -17075,9 +17175,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L200",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
-      "target": "c2c_hld_4_1_process_1_candidate_assessment_5q_psychometric_scoring_flow",
-      "confidence_score": 1.0
+      "target": "c2c_hld_4_1_process_1_candidate_assessment_5q_psychometric_scoring_flow"
     },
     {
       "relation": "contains",
@@ -17085,9 +17185,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L228",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
-      "target": "c2c_hld_4_2_process_2_3_lti_1_3_advantage_launch_ags_grade_passback",
-      "confidence_score": 1.0
+      "target": "c2c_hld_4_2_process_2_3_lti_1_3_advantage_launch_ags_grade_passback"
     },
     {
       "relation": "contains",
@@ -17095,9 +17195,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L253",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
-      "target": "c2c_hld_4_3_process_4_5_employer_candidate_matching_cost_enforcement",
-      "confidence_score": 1.0
+      "target": "c2c_hld_4_3_process_4_5_employer_candidate_matching_cost_enforcement"
     },
     {
       "relation": "contains",
@@ -17105,9 +17205,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L285",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
-      "target": "c2c_hld_4_4_process_6_market_intelligence_desk_opportunity_sourcing",
-      "confidence_score": 1.0
+      "target": "c2c_hld_4_4_process_6_market_intelligence_desk_opportunity_sourcing"
     },
     {
       "relation": "contains",
@@ -17155,9 +17255,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld",
-      "target": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "confidence_score": 1.0
+      "target": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld"
     },
     {
       "relation": "contains",
@@ -17165,9 +17265,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L527",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
-      "confidence_score": 1.0
+      "target": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard"
     },
     {
       "relation": "contains",
@@ -17175,9 +17275,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L554",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_11_comprehensive_error_handling_fault_tolerance_policy",
-      "confidence_score": 1.0
+      "target": "c2c_lld_11_comprehensive_error_handling_fault_tolerance_policy"
     },
     {
       "relation": "contains",
@@ -17185,9 +17285,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L567",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_12_verification_testing_matrix",
-      "confidence_score": 1.0
+      "target": "c2c_lld_12_verification_testing_matrix"
     },
     {
       "relation": "contains",
@@ -17195,9 +17295,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_1_document_overview_scope",
-      "confidence_score": 1.0
+      "target": "c2c_lld_1_document_overview_scope"
     },
     {
       "relation": "contains",
@@ -17205,9 +17305,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
-      "confidence_score": 1.0
+      "target": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine"
     },
     {
       "relation": "contains",
@@ -17215,9 +17315,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
-      "confidence_score": 1.0
+      "target": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment"
     },
     {
       "relation": "contains",
@@ -17225,9 +17325,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L229",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
-      "confidence_score": 1.0
+      "target": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback"
     },
     {
       "relation": "contains",
@@ -17235,9 +17335,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L288",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
-      "confidence_score": 1.0
+      "target": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline"
     },
     {
       "relation": "contains",
@@ -17245,9 +17345,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L358",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
-      "confidence_score": 1.0
+      "target": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary"
     },
     {
       "relation": "contains",
@@ -17255,9 +17355,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L438",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
-      "confidence_score": 1.0
+      "target": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout"
     },
     {
       "relation": "contains",
@@ -17265,9 +17365,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L481",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
-      "confidence_score": 1.0
+      "target": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring"
     },
     {
       "relation": "contains",
@@ -17275,9 +17375,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L510",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
-      "target": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
-      "confidence_score": 1.0
+      "target": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation"
     },
     {
       "relation": "contains",
@@ -17285,9 +17385,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_1_document_overview_scope",
-      "target": "c2c_lld_system_process_catalog",
-      "confidence_score": 1.0
+      "target": "c2c_lld_system_process_catalog"
     },
     {
       "relation": "contains",
@@ -17295,9 +17395,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
-      "target": "c2c_lld_2_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_2_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17305,9 +17405,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
-      "target": "c2c_lld_2_2_class_function_signatures",
-      "confidence_score": 1.0
+      "target": "c2c_lld_2_2_class_function_signatures"
     },
     {
       "relation": "contains",
@@ -17315,9 +17415,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
-      "target": "c2c_lld_2_3_database_schema_postgresql_talia_cluster",
-      "confidence_score": 1.0
+      "target": "c2c_lld_2_3_database_schema_postgresql_talia_cluster"
     },
     {
       "relation": "contains",
@@ -17325,9 +17425,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
-      "target": "c2c_lld_2_4_api_request_response_contracts",
-      "confidence_score": 1.0
+      "target": "c2c_lld_2_4_api_request_response_contracts"
     },
     {
       "relation": "contains",
@@ -17335,9 +17435,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L135",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
-      "target": "c2c_lld_2_5_sequence_diagram_assessment_submission_evaluation",
-      "confidence_score": 1.0
+      "target": "c2c_lld_2_5_sequence_diagram_assessment_submission_evaluation"
     },
     {
       "relation": "contains",
@@ -17345,9 +17445,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L166",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
-      "target": "c2c_lld_3_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_3_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17355,9 +17455,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L173",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
-      "target": "c2c_lld_3_2_class_function_signatures",
-      "confidence_score": 1.0
+      "target": "c2c_lld_3_2_class_function_signatures"
     },
     {
       "relation": "contains",
@@ -17365,9 +17465,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L193",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
-      "target": "c2c_lld_3_3_deterministic_gap_to_curriculum_mapping_table",
-      "confidence_score": 1.0
+      "target": "c2c_lld_3_3_deterministic_gap_to_curriculum_mapping_table"
     },
     {
       "relation": "contains",
@@ -17375,9 +17475,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L202",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
-      "target": "c2c_lld_3_4_reverse_proxy_ingress_specification",
-      "confidence_score": 1.0
+      "target": "c2c_lld_3_4_reverse_proxy_ingress_specification"
     },
     {
       "relation": "contains",
@@ -17385,9 +17485,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L231",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
-      "target": "c2c_lld_4_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_4_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17395,9 +17495,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L237",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
-      "target": "c2c_lld_4_2_endpoints_protocol_specifications",
-      "confidence_score": 1.0
+      "target": "c2c_lld_4_2_endpoints_protocol_specifications"
     },
     {
       "relation": "contains",
@@ -17405,9 +17505,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L246",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
-      "target": "c2c_lld_4_3_ags_2_0_payload_structure",
-      "confidence_score": 1.0
+      "target": "c2c_lld_4_3_ags_2_0_payload_structure"
     },
     {
       "relation": "contains",
@@ -17415,9 +17515,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L260",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
-      "target": "c2c_lld_4_4_sequence_diagram_lti_1_3_oidc_launch_ags_passback",
-      "confidence_score": 1.0
+      "target": "c2c_lld_4_4_sequence_diagram_lti_1_3_oidc_launch_ags_passback"
     },
     {
       "relation": "contains",
@@ -17425,9 +17525,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L290",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
-      "target": "c2c_lld_5_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_5_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17435,9 +17535,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L298",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
-      "target": "c2c_lld_5_2_role_weighted_5q_scoring_formulas",
-      "confidence_score": 1.0
+      "target": "c2c_lld_5_2_role_weighted_5q_scoring_formulas"
     },
     {
       "relation": "contains",
@@ -17445,9 +17545,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L314",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
-      "target": "c2c_lld_5_3_matching_pipeline_algorithm_two_tier_architecture",
-      "confidence_score": 1.0
+      "target": "c2c_lld_5_3_matching_pipeline_algorithm_two_tier_architecture"
     },
     {
       "relation": "contains",
@@ -17455,9 +17555,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L338",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
-      "target": "c2c_lld_5_4_candidate_status_state_machine",
-      "confidence_score": 1.0
+      "target": "c2c_lld_5_4_candidate_status_state_machine"
     },
     {
       "relation": "contains",
@@ -17465,9 +17565,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L351",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
-      "target": "c2c_lld_5_5_api_endpoints",
-      "confidence_score": 1.0
+      "target": "c2c_lld_5_5_api_endpoints"
     },
     {
       "relation": "contains",
@@ -17475,9 +17575,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L360",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
-      "target": "c2c_lld_6_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_6_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17485,9 +17585,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L367",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
-      "target": "c2c_lld_6_2_postgresql_atomic_quota_function_ddl",
-      "confidence_score": 1.0
+      "target": "c2c_lld_6_2_postgresql_atomic_quota_function_ddl"
     },
     {
       "relation": "contains",
@@ -17495,9 +17595,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L413",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
-      "target": "c2c_lld_6_3_pre_flight_reservation_logic_ai_budget_py",
-      "confidence_score": 1.0
+      "target": "c2c_lld_6_3_pre_flight_reservation_logic_ai_budget_py"
     },
     {
       "relation": "contains",
@@ -17505,9 +17605,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L431",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
-      "target": "c2c_lld_6_4_cost_advisory_logic_cost_advice_py",
-      "confidence_score": 1.0
+      "target": "c2c_lld_6_4_cost_advisory_logic_cost_advice_py"
     },
     {
       "relation": "contains",
@@ -17515,9 +17615,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L440",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
-      "target": "c2c_lld_7_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_7_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17525,9 +17625,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L448",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
-      "target": "c2c_lld_7_2_data_flow_deduplication_pipeline",
-      "confidence_score": 1.0
+      "target": "c2c_lld_7_2_data_flow_deduplication_pipeline"
     },
     {
       "relation": "contains",
@@ -17535,9 +17635,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L483",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
-      "target": "c2c_lld_8_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_8_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17545,9 +17645,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L490",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
-      "target": "c2c_lld_8_2_item_generation_schema_fallback_contract",
-      "confidence_score": 1.0
+      "target": "c2c_lld_8_2_item_generation_schema_fallback_contract"
     },
     {
       "relation": "contains",
@@ -17555,9 +17655,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L512",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
-      "target": "c2c_lld_9_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_9_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17565,9 +17665,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L518",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
-      "target": "c2c_lld_9_2_retro_terminal_protocol_dos_emulator",
-      "confidence_score": 1.0
+      "target": "c2c_lld_9_2_retro_terminal_protocol_dos_emulator"
     },
     {
       "relation": "contains",
@@ -17575,9 +17675,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L529",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
-      "target": "c2c_lld_10_1_module_component_map",
-      "confidence_score": 1.0
+      "target": "c2c_lld_10_1_module_component_map"
     },
     {
       "relation": "contains",
@@ -17585,9 +17685,9 @@
       "source_file": "c2c_lld.md",
       "source_location": "L535",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
-      "target": "c2c_lld_10_2_production_demo_auth_boundary",
-      "confidence_score": 1.0
+      "target": "c2c_lld_10_2_production_demo_auth_boundary"
     },
     {
       "relation": "contains",
@@ -17595,9 +17695,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "user_journeys",
-      "target": "user_journeys_campus_to_corporate_c2c_user_journeys",
-      "confidence_score": 1.0
+      "target": "user_journeys_campus_to_corporate_c2c_user_journeys"
     },
     {
       "relation": "contains",
@@ -17645,9 +17745,9 @@
       "source_file": "user_journeys.md",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
-      "target": "user_journeys_5_architectural_references",
-      "confidence_score": 1.0
+      "target": "user_journeys_5_architectural_references"
     },
     {
       "relation": "contains",
@@ -38688,5 +38788,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d520f5404d0992fa01d94647a4af3c4009a8f10f"
+  "built_at_commit": "6c111dce94f79f71bbcc96e4cf375fb05e9f83dc"
 }
