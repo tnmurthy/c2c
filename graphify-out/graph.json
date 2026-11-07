@@ -4,6 +4,126 @@
   "graph": {},
   "nodes": [
     {
+      "label": "PROJECT.md",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "project",
+      "community": 120,
+      "norm_label": "project.md"
+    },
+    {
+      "label": "Project: C2C Talent Platform Refactoring",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "project_project_c2c_talent_platform_refactoring",
+      "community": 120,
+      "norm_label": "project: c2c talent platform refactoring"
+    },
+    {
+      "label": "Architecture",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "project_architecture",
+      "community": 120,
+      "norm_label": "architecture"
+    },
+    {
+      "label": "Backend Structure",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "project_backend_structure",
+      "community": 120,
+      "norm_label": "backend structure"
+    },
+    {
+      "label": "Frontend Structure",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "project_frontend_structure",
+      "community": 120,
+      "norm_label": "frontend structure"
+    },
+    {
+      "label": "Milestones",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "project_milestones",
+      "community": 120,
+      "norm_label": "milestones"
+    },
+    {
+      "label": "Interface Contracts",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "project_interface_contracts",
+      "community": 120,
+      "norm_label": "interface contracts"
+    },
+    {
+      "label": "API Routers \u2194 FastAPI App",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "project_api_routers_fastapi_app",
+      "community": 120,
+      "norm_label": "api routers \u2194 fastapi app"
+    },
+    {
+      "label": "Opportunities \u2194 Candidates (Schema Link)",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "project_opportunities_candidates_schema_link",
+      "community": 120,
+      "norm_label": "opportunities \u2194 candidates (schema link)"
+    },
+    {
+      "label": "CV Tailor \u2194 Backend / PDF",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L66",
+      "_origin": "ast",
+      "id": "project_cv_tailor_backend_pdf",
+      "community": 120,
+      "norm_label": "cv tailor \u2194 backend / pdf"
+    },
+    {
+      "label": "Code Layout",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L70",
+      "_origin": "ast",
+      "id": "project_code_layout",
+      "community": 120,
+      "norm_label": "code layout"
+    },
+    {
+      "label": "Architecture & Design References",
+      "file_type": "document",
+      "source_file": "PROJECT.md",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "project_architecture_design_references",
+      "community": 120,
+      "norm_label": "architecture & design references"
+    },
+    {
       "label": "README.md",
       "file_type": "document",
       "source_file": "README.md",
@@ -34,60 +154,90 @@
       "norm_label": "unified ai-first talent evaluation, remediation & placement suite"
     },
     {
-      "label": "\ud83d\udcc2 Architecture & Service Directory",
+      "label": "\ud83d\udcd1 Architecture & Process Navigation",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "readme_architecture_service_directory",
+      "id": "readme_architecture_process_navigation",
       "community": 65,
-      "norm_label": "\ud83d\udcc2 architecture & service directory"
+      "norm_label": "\ud83d\udcd1 architecture & process navigation"
     },
     {
-      "label": "\ud83c\udfd7\ufe0f Monorepo Structure",
+      "label": "\ud83c\udfdb\ufe0f High-Level Design (HLD) Overview",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L26",
+      "source_location": "L18",
       "_origin": "ast",
-      "id": "readme_monorepo_structure",
+      "id": "readme_high_level_design_hld_overview",
       "community": 65,
-      "norm_label": "\ud83c\udfd7\ufe0f monorepo structure"
+      "norm_label": "\ud83c\udfdb\ufe0f high-level design (hld) overview"
     },
     {
-      "label": "\ud83e\udde0 5Q Developmental Matching Model",
+      "label": "\ud83d\udd2c Low-Level Design (LLD): Process & Workflow Catalog",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L43",
+      "source_location": "L83",
       "_origin": "ast",
-      "id": "readme_5q_developmental_matching_model",
+      "id": "readme_low_level_design_lld_process_workflow_catalog",
       "community": 65,
-      "norm_label": "\ud83e\udde0 5q developmental matching model"
+      "norm_label": "\ud83d\udd2c low-level design (lld): process & workflow catalog"
     },
     {
-      "label": "\ud83d\udee1\ufe0f Deterministic AI Cost Controls",
+      "label": "\ud83d\udd04 Core System Workflows",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L61",
+      "source_location": "L101",
       "_origin": "ast",
-      "id": "readme_deterministic_ai_cost_controls",
+      "id": "readme_core_system_workflows",
       "community": 65,
-      "norm_label": "\ud83d\udee1\ufe0f deterministic ai cost controls"
+      "norm_label": "\ud83d\udd04 core system workflows"
     },
     {
-      "label": "\ud83c\udf93 LMS & Remediation Academy (/lms & /learn)",
+      "label": "Workflow 1: Assessment Submission, 5Q Scoring & Remediation Sync",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L71",
+      "source_location": "L103",
       "_origin": "ast",
-      "id": "readme_lms_remediation_academy_lms_learn",
+      "id": "readme_workflow_1_assessment_submission_5q_scoring_remediation_sync",
       "community": 65,
-      "norm_label": "\ud83c\udf93 lms & remediation academy (/lms & /learn)"
+      "norm_label": "workflow 1: assessment submission, 5q scoring & remediation sync"
+    },
+    {
+      "label": "Workflow 2: LTI 1.3 Advantage Launch & AGS 2.0 Grade Passback",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L134",
+      "_origin": "ast",
+      "id": "readme_workflow_2_lti_1_3_advantage_launch_ags_2_0_grade_passback",
+      "community": 65,
+      "norm_label": "workflow 2: lti 1.3 advantage launch & ags 2.0 grade passback"
+    },
+    {
+      "label": "Workflow 3: Employer Candidate Ranking & Cost-Guarded Evaluation",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L145",
+      "_origin": "ast",
+      "id": "readme_workflow_3_employer_candidate_ranking_cost_guarded_evaluation",
+      "community": 65,
+      "norm_label": "workflow 3: employer candidate ranking & cost-guarded evaluation"
+    },
+    {
+      "label": "Workflow 4: Market Scout Opportunity Ingestion",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L183",
+      "_origin": "ast",
+      "id": "readme_workflow_4_market_scout_opportunity_ingestion",
+      "community": 65,
+      "norm_label": "workflow 4: market scout opportunity ingestion"
     },
     {
       "label": "\ud83d\udcbb Local Development Setup",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L81",
+      "source_location": "L192",
       "_origin": "ast",
       "id": "readme_local_development_setup",
       "community": 65,
@@ -97,41 +247,291 @@
       "label": "1. Prerequisites",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L83",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "readme_1_prerequisites",
       "community": 65,
       "norm_label": "1. prerequisites"
     },
     {
-      "label": "2. Start LMS Infrastructure",
+      "label": "2. Start LMS Subsystem",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L89",
+      "source_location": "L200",
       "_origin": "ast",
-      "id": "readme_2_start_lms_infrastructure",
+      "id": "readme_2_start_lms_subsystem",
       "community": 65,
-      "norm_label": "2. start lms infrastructure"
+      "norm_label": "2. start lms subsystem"
     },
     {
       "label": "3. Start C2C Web & API Services",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L96",
+      "source_location": "L207",
       "_origin": "ast",
       "id": "readme_3_start_c2c_web_api_services",
       "community": 65,
       "norm_label": "3. start c2c web & api services"
     },
     {
-      "label": "\ud83d\ude80 Production Deployment (Vercel + Supabase)",
+      "label": "\ud83e\uddea Verification Commands",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L110",
+      "source_location": "L222",
       "_origin": "ast",
-      "id": "readme_production_deployment_vercel_supabase",
+      "id": "readme_verification_commands",
       "community": 65,
-      "norm_label": "\ud83d\ude80 production deployment (vercel + supabase)"
+      "norm_label": "\ud83e\uddea verification commands"
+    },
+    {
+      "label": "\ud83d\udea2 Production Deployment",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L238",
+      "_origin": "ast",
+      "id": "readme_production_deployment",
+      "community": 65,
+      "norm_label": "\ud83d\udea2 production deployment"
+    },
+    {
+      "label": "WIKI_ARCHITECTURE.md",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "wiki_architecture",
+      "community": 244,
+      "norm_label": "wiki_architecture.md"
+    },
+    {
+      "label": "Campus-to-Corporate (C2C) \u2014 Enterprise Wiki & Confluence Architecture",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "community": 244,
+      "norm_label": "campus-to-corporate (c2c) \u2014 enterprise wiki & confluence architecture"
+    },
+    {
+      "label": "1. Executive Summary & Information Architecture Vision",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "wiki_architecture_1_executive_summary_information_architecture_vision",
+      "community": 244,
+      "norm_label": "1. executive summary & information architecture vision"
+    },
+    {
+      "label": "2. Confluence Space Hierarchy & Page Tree",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "wiki_architecture_2_confluence_space_hierarchy_page_tree",
+      "community": 244,
+      "norm_label": "2. confluence space hierarchy & page tree"
+    },
+    {
+      "label": "3. Master Wiki Portal / Home Page Layout",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "wiki_architecture_3_master_wiki_portal_home_page_layout",
+      "community": 244,
+      "norm_label": "3. master wiki portal / home page layout"
+    },
+    {
+      "label": "4. Cross-Linking Matrix (Personas \u00d7 Lifecycle \u00d7 9 Processes)",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L139",
+      "_origin": "ast",
+      "id": "wiki_architecture_4_cross_linking_matrix_personas_lifecycle_9_processes",
+      "community": 244,
+      "norm_label": "4. cross-linking matrix (personas \u00d7 lifecycle \u00d7 9 processes)"
+    },
+    {
+      "label": "5. Navigation Affordances & Progressive Disclosure",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L155",
+      "_origin": "ast",
+      "id": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
+      "community": 244,
+      "norm_label": "5. navigation affordances & progressive disclosure"
+    },
+    {
+      "label": "5.1. Three-Tier Progressive Disclosure Model",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L157",
+      "_origin": "ast",
+      "id": "wiki_architecture_5_1_three_tier_progressive_disclosure_model",
+      "community": 244,
+      "norm_label": "5.1. three-tier progressive disclosure model"
+    },
+    {
+      "label": "5.2. Standard Breadcrumbs",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L163",
+      "_origin": "ast",
+      "id": "wiki_architecture_5_2_standard_breadcrumbs",
+      "community": 244,
+      "norm_label": "5.2. standard breadcrumbs"
+    },
+    {
+      "label": "5.3. Clickable Mermaid Diagram Hotspots",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L169",
+      "_origin": "ast",
+      "id": "wiki_architecture_5_3_clickable_mermaid_diagram_hotspots",
+      "community": 244,
+      "norm_label": "5.3. clickable mermaid diagram hotspots"
+    },
+    {
+      "label": "6. Docs-as-Code Synchronization Pipeline",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L187",
+      "_origin": "ast",
+      "id": "wiki_architecture_6_docs_as_code_synchronization_pipeline",
+      "community": 244,
+      "norm_label": "6. docs-as-code synchronization pipeline"
+    },
+    {
+      "label": "Pull Request Definition of Done (DoD) Gate",
+      "file_type": "document",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L202",
+      "_origin": "ast",
+      "id": "wiki_architecture_pull_request_definition_of_done_dod_gate",
+      "community": 244,
+      "norm_label": "pull request definition of done (dod) gate"
+    },
+    {
+      "label": "WORKFLOW_INTEGRATION.md",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "workflow_integration",
+      "community": 119,
+      "norm_label": "workflow_integration.md"
+    },
+    {
+      "label": "WORKFLOW INTEGRATION: campus2corporate (c2c) \ud83d\udc54",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "workflow_integration_workflow_integration_campus2corporate_c2c",
+      "community": 119,
+      "norm_label": "workflow integration: campus2corporate (c2c) \ud83d\udc54"
+    },
+    {
+      "label": "Master Standard Operating Procedure (SOP) & Process Workflows",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
+      "community": 119,
+      "norm_label": "master standard operating procedure (sop) & process workflows"
+    },
+    {
+      "label": "1. Architectural Foundation & References",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "workflow_integration_1_architectural_foundation_references",
+      "community": 119,
+      "norm_label": "1. architectural foundation & references"
+    },
+    {
+      "label": "2. The Integrated 5-Phase Candidate Lifecycle",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "workflow_integration_2_the_integrated_5_phase_candidate_lifecycle",
+      "community": 119,
+      "norm_label": "2. the integrated 5-phase candidate lifecycle"
+    },
+    {
+      "label": "3. Detailed Process SOPs & Inter-Service Handshakes",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
+      "community": 119,
+      "norm_label": "3. detailed process sops & inter-service handshakes"
+    },
+    {
+      "label": "SOP 1: Sourcing to Assessment Trigger (Signal \u2794 Ingress)",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "workflow_integration_sop_1_sourcing_to_assessment_trigger_signal_ingress",
+      "community": 119,
+      "norm_label": "sop 1: sourcing to assessment trigger (signal \u2794 ingress)"
+    },
+    {
+      "label": "SOP 2: Assessment to Automated Remediation (Audit & Ordeal \u2794 Fix)",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "workflow_integration_sop_2_assessment_to_automated_remediation_audit_ordeal_fix",
+      "community": 119,
+      "norm_label": "sop 2: assessment to automated remediation (audit & ordeal \u2794 fix)"
+    },
+    {
+      "label": "SOP 3: Moodle Completion to Developmental Record Sync (Fix \u2794 Verification)",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "workflow_integration_sop_3_moodle_completion_to_developmental_record_sync_fix_verification",
+      "community": 119,
+      "norm_label": "sop 3: moodle completion to developmental record sync (fix \u2794 verification)"
+    },
+    {
+      "label": "SOP 4: Employer Job Posting to Candidate Match & Hiring (Deployment \u2794 Win)",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "workflow_integration_sop_4_employer_job_posting_to_candidate_match_hiring_deployment_win",
+      "community": 119,
+      "norm_label": "sop 4: employer job posting to candidate match & hiring (deployment \u2794 win)"
+    },
+    {
+      "label": "4. Deterministic Cost & Governance Standard",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "workflow_integration_4_deterministic_cost_governance_standard",
+      "community": 119,
+      "norm_label": "4. deterministic cost & governance standard"
+    },
+    {
+      "label": "5. Verification & Service Health Checks",
+      "file_type": "document",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "workflow_integration_5_verification_service_health_checks",
+      "community": 119,
+      "norm_label": "5. verification & service health checks"
     },
     {
       "label": "c2c_hld.md",
@@ -187,7 +587,7 @@
       "label": "3. Tiered System Architecture",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L127",
+      "source_location": "L146",
       "_origin": "ast",
       "id": "c2c_hld_3_tiered_system_architecture",
       "community": 17,
@@ -197,7 +597,7 @@
       "label": "3.1. Presentation Tier (Next.js 14)",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L129",
+      "source_location": "L148",
       "_origin": "ast",
       "id": "c2c_hld_3_1_presentation_tier_next_js_14",
       "community": 17,
@@ -207,7 +607,7 @@
       "label": "3.2. Edge & Routing Ingress",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L134",
+      "source_location": "L154",
       "_origin": "ast",
       "id": "c2c_hld_3_2_edge_routing_ingress",
       "community": 17,
@@ -217,7 +617,7 @@
       "label": "3.3. Application Core (FastAPI)",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L139",
+      "source_location": "L159",
       "_origin": "ast",
       "id": "c2c_hld_3_3_application_core_fastapi",
       "community": 17,
@@ -227,7 +627,7 @@
       "label": "3.4. Learning Subsystem (Moodle LMS)",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L150",
+      "source_location": "L170",
       "_origin": "ast",
       "id": "c2c_hld_3_4_learning_subsystem_moodle_lms",
       "community": 17,
@@ -237,57 +637,67 @@
       "label": "3.5. AI Cost Control Subsystem",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L154",
+      "source_location": "L174",
       "_origin": "ast",
       "id": "c2c_hld_3_5_ai_cost_control_subsystem",
       "community": 17,
       "norm_label": "3.5. ai cost control subsystem"
     },
     {
-      "label": "4. Key End-to-End User Journeys",
+      "label": "4. Comprehensive Process & Workflow Architecture",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L166",
+      "source_location": "L186",
       "_origin": "ast",
-      "id": "c2c_hld_4_key_end_to_end_user_journeys",
+      "id": "c2c_hld_4_comprehensive_process_workflow_architecture",
       "community": 17,
-      "norm_label": "4. key end-to-end user journeys"
+      "norm_label": "4. comprehensive process & workflow architecture"
     },
     {
-      "label": "4.1. Candidate Assessment & Automated Remediation Flow",
+      "label": "4.1. Process 1: Candidate Assessment & 5Q Psychometric Scoring Flow",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L168",
+      "source_location": "L200",
       "_origin": "ast",
-      "id": "c2c_hld_4_1_candidate_assessment_automated_remediation_flow",
+      "id": "c2c_hld_4_1_process_1_candidate_assessment_5q_psychometric_scoring_flow",
       "community": 17,
-      "norm_label": "4.1. candidate assessment & automated remediation flow"
+      "norm_label": "4.1. process 1: candidate assessment & 5q psychometric scoring flow"
     },
     {
-      "label": "4.2. LTI 1.3 Advantage Launch & AGS Grade Passback",
+      "label": "4.2. Process 2 & 3: LTI 1.3 Advantage Launch & AGS Grade Passback",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L197",
+      "source_location": "L228",
       "_origin": "ast",
-      "id": "c2c_hld_4_2_lti_1_3_advantage_launch_ags_grade_passback",
+      "id": "c2c_hld_4_2_process_2_3_lti_1_3_advantage_launch_ags_grade_passback",
       "community": 17,
-      "norm_label": "4.2. lti 1.3 advantage launch & ags grade passback"
+      "norm_label": "4.2. process 2 & 3: lti 1.3 advantage launch & ags grade passback"
     },
     {
-      "label": "4.3. Employer Candidate Matching & Cost Enforcement",
+      "label": "4.3. Process 4 & 5: Employer Candidate Matching & Cost Enforcement",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L222",
+      "source_location": "L253",
       "_origin": "ast",
-      "id": "c2c_hld_4_3_employer_candidate_matching_cost_enforcement",
+      "id": "c2c_hld_4_3_process_4_5_employer_candidate_matching_cost_enforcement",
       "community": 17,
-      "norm_label": "4.3. employer candidate matching & cost enforcement"
+      "norm_label": "4.3. process 4 & 5: employer candidate matching & cost enforcement"
+    },
+    {
+      "label": "4.4. Process 6: Market Intelligence Desk & Opportunity Sourcing",
+      "file_type": "document",
+      "source_file": "c2c_hld.md",
+      "source_location": "L285",
+      "_origin": "ast",
+      "id": "c2c_hld_4_4_process_6_market_intelligence_desk_opportunity_sourcing",
+      "community": 17,
+      "norm_label": "4.4. process 6: market intelligence desk & opportunity sourcing"
     },
     {
       "label": "5. Security Architecture & Access Control",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L256",
+      "source_location": "L315",
       "_origin": "ast",
       "id": "c2c_hld_5_security_architecture_access_control",
       "community": 17,
@@ -297,7 +707,7 @@
       "label": "6. Mandatory 4-Reviewer Architecture Board Review",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L269",
+      "source_location": "L328",
       "_origin": "ast",
       "id": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review",
       "community": 17,
@@ -307,7 +717,7 @@
       "label": "1. Systems Architect Review",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L273",
+      "source_location": "L332",
       "_origin": "ast",
       "id": "c2c_hld_1_systems_architect_review",
       "community": 17,
@@ -317,7 +727,7 @@
       "label": "2. Cost Engineer Review",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L278",
+      "source_location": "L337",
       "_origin": "ast",
       "id": "c2c_hld_2_cost_engineer_review",
       "community": 17,
@@ -327,7 +737,7 @@
       "label": "3. Security Reviewer Review",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L283",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "c2c_hld_3_security_reviewer_review",
       "community": 17,
@@ -337,7 +747,7 @@
       "label": "4. Product Engineer Review",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L288",
+      "source_location": "L347",
       "_origin": "ast",
       "id": "c2c_hld_4_product_engineer_review",
       "community": 17,
@@ -347,11 +757,641 @@
       "label": "7. Implementation Tracker & Roadmap",
       "file_type": "document",
       "source_file": "c2c_hld.md",
-      "source_location": "L295",
+      "source_location": "L354",
       "_origin": "ast",
       "id": "c2c_hld_7_implementation_tracker_roadmap",
       "community": 17,
       "norm_label": "7. implementation tracker & roadmap"
+    },
+    {
+      "label": "c2c_lld.md",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "c2c_lld",
+      "community": 155,
+      "norm_label": "c2c_lld.md"
+    },
+    {
+      "label": "Campus-to-Corporate (C2C) \u2014 Low-Level Design (LLD)",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "community": 155,
+      "norm_label": "campus-to-corporate (c2c) \u2014 low-level design (lld)"
+    },
+    {
+      "label": "1. Document Overview & Scope",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "c2c_lld_1_document_overview_scope",
+      "community": 155,
+      "norm_label": "1. document overview & scope"
+    },
+    {
+      "label": "System Process Catalog",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "c2c_lld_system_process_catalog",
+      "community": 155,
+      "norm_label": "system process catalog"
+    },
+    {
+      "label": "2. Process 1: Candidate Assessment & 5Q Psychometric Scoring Engine",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
+      "community": 155,
+      "norm_label": "2. process 1: candidate assessment & 5q psychometric scoring engine"
+    },
+    {
+      "label": "2.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "c2c_lld_2_1_module_component_map",
+      "community": 155,
+      "norm_label": "2.1. module & component map"
+    },
+    {
+      "label": "2.2. Class & Function Signatures",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "c2c_lld_2_2_class_function_signatures",
+      "community": 155,
+      "norm_label": "2.2. class & function signatures"
+    },
+    {
+      "label": "2.3. Database Schema (PostgreSQL Talia Cluster)",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L66",
+      "_origin": "ast",
+      "id": "c2c_lld_2_3_database_schema_postgresql_talia_cluster",
+      "community": 155,
+      "norm_label": "2.3. database schema (postgresql talia cluster)"
+    },
+    {
+      "label": "2.4. API Request & Response Contracts",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L101",
+      "_origin": "ast",
+      "id": "c2c_lld_2_4_api_request_response_contracts",
+      "community": 155,
+      "norm_label": "2.4. api request & response contracts"
+    },
+    {
+      "label": "2.5. Sequence Diagram: Assessment Submission & Evaluation",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L135",
+      "_origin": "ast",
+      "id": "c2c_lld_2_5_sequence_diagram_assessment_submission_evaluation",
+      "community": 155,
+      "norm_label": "2.5. sequence diagram: assessment submission & evaluation"
+    },
+    {
+      "label": "3. Process 2: Automated Gap Remediation & Zero-Token Moodle Enrolment",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L164",
+      "_origin": "ast",
+      "id": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
+      "community": 155,
+      "norm_label": "3. process 2: automated gap remediation & zero-token moodle enrolment"
+    },
+    {
+      "label": "3.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L166",
+      "_origin": "ast",
+      "id": "c2c_lld_3_1_module_component_map",
+      "community": 155,
+      "norm_label": "3.1. module & component map"
+    },
+    {
+      "label": "3.2. Class & Function Signatures",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L173",
+      "_origin": "ast",
+      "id": "c2c_lld_3_2_class_function_signatures",
+      "community": 155,
+      "norm_label": "3.2. class & function signatures"
+    },
+    {
+      "label": "3.3. Deterministic Gap-to-Curriculum Mapping Table",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L193",
+      "_origin": "ast",
+      "id": "c2c_lld_3_3_deterministic_gap_to_curriculum_mapping_table",
+      "community": 155,
+      "norm_label": "3.3. deterministic gap-to-curriculum mapping table"
+    },
+    {
+      "label": "3.4. Reverse Proxy Ingress Specification",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L202",
+      "_origin": "ast",
+      "id": "c2c_lld_3_4_reverse_proxy_ingress_specification",
+      "community": 155,
+      "norm_label": "3.4. reverse proxy ingress specification"
+    },
+    {
+      "label": "4. Process 3: LTI 1.3 Advantage Gateway & AGS 2.0 Grade Passback",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L229",
+      "_origin": "ast",
+      "id": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
+      "community": 155,
+      "norm_label": "4. process 3: lti 1.3 advantage gateway & ags 2.0 grade passback"
+    },
+    {
+      "label": "4.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L231",
+      "_origin": "ast",
+      "id": "c2c_lld_4_1_module_component_map",
+      "community": 155,
+      "norm_label": "4.1. module & component map"
+    },
+    {
+      "label": "4.2. Endpoints & Protocol Specifications",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L237",
+      "_origin": "ast",
+      "id": "c2c_lld_4_2_endpoints_protocol_specifications",
+      "community": 155,
+      "norm_label": "4.2. endpoints & protocol specifications"
+    },
+    {
+      "label": "4.3. AGS 2.0 Payload Structure",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L246",
+      "_origin": "ast",
+      "id": "c2c_lld_4_3_ags_2_0_payload_structure",
+      "community": 155,
+      "norm_label": "4.3. ags 2.0 payload structure"
+    },
+    {
+      "label": "4.4. Sequence Diagram: LTI 1.3 OIDC Launch & AGS Passback",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L260",
+      "_origin": "ast",
+      "id": "c2c_lld_4_4_sequence_diagram_lti_1_3_oidc_launch_ags_passback",
+      "community": 155,
+      "norm_label": "4.4. sequence diagram: lti 1.3 oidc launch & ags passback"
+    },
+    {
+      "label": "5. Process 4: Employer Job Management, Candidate Matching & Decision Pipeline",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L288",
+      "_origin": "ast",
+      "id": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
+      "community": 155,
+      "norm_label": "5. process 4: employer job management, candidate matching & decision pipeline"
+    },
+    {
+      "label": "5.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L290",
+      "_origin": "ast",
+      "id": "c2c_lld_5_1_module_component_map",
+      "community": 155,
+      "norm_label": "5.1. module & component map"
+    },
+    {
+      "label": "5.2. Role-Weighted 5Q Scoring Formulas",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L298",
+      "_origin": "ast",
+      "id": "c2c_lld_5_2_role_weighted_5q_scoring_formulas",
+      "community": 155,
+      "norm_label": "5.2. role-weighted 5q scoring formulas"
+    },
+    {
+      "label": "5.3. Matching Pipeline Algorithm (Two-Tier Architecture)",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L314",
+      "_origin": "ast",
+      "id": "c2c_lld_5_3_matching_pipeline_algorithm_two_tier_architecture",
+      "community": 155,
+      "norm_label": "5.3. matching pipeline algorithm (two-tier architecture)"
+    },
+    {
+      "label": "5.4. Candidate Status State Machine",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L338",
+      "_origin": "ast",
+      "id": "c2c_lld_5_4_candidate_status_state_machine",
+      "community": 155,
+      "norm_label": "5.4. candidate status state machine"
+    },
+    {
+      "label": "5.5. API Endpoints",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L351",
+      "_origin": "ast",
+      "id": "c2c_lld_5_5_api_endpoints",
+      "community": 155,
+      "norm_label": "5.5. api endpoints"
+    },
+    {
+      "label": "6. Process 5: Deterministic AI Cost Control, Pre-Flight Quota Ledger & Spend Summary",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L358",
+      "_origin": "ast",
+      "id": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
+      "community": 155,
+      "norm_label": "6. process 5: deterministic ai cost control, pre-flight quota ledger & spend summary"
+    },
+    {
+      "label": "6.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L360",
+      "_origin": "ast",
+      "id": "c2c_lld_6_1_module_component_map",
+      "community": 155,
+      "norm_label": "6.1. module & component map"
+    },
+    {
+      "label": "6.2. PostgreSQL Atomic Quota Function DDL",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L367",
+      "_origin": "ast",
+      "id": "c2c_lld_6_2_postgresql_atomic_quota_function_ddl",
+      "community": 155,
+      "norm_label": "6.2. postgresql atomic quota function ddl"
+    },
+    {
+      "label": "6.3. Pre-Flight Reservation Logic (`ai_budget.py`)",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L413",
+      "_origin": "ast",
+      "id": "c2c_lld_6_3_pre_flight_reservation_logic_ai_budget_py",
+      "community": 155,
+      "norm_label": "6.3. pre-flight reservation logic (`ai_budget.py`)"
+    },
+    {
+      "label": "6.4. Cost Advisory Logic (`cost_advice.py`)",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L431",
+      "_origin": "ast",
+      "id": "c2c_lld_6_4_cost_advisory_logic_cost_advice_py",
+      "community": 155,
+      "norm_label": "6.4. cost advisory logic (`cost_advice.py`)"
+    },
+    {
+      "label": "7. Process 6: Market Intelligence Desk & Headless Scraping Pipeline (Market Scout)",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L438",
+      "_origin": "ast",
+      "id": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
+      "community": 155,
+      "norm_label": "7. process 6: market intelligence desk & headless scraping pipeline (market scout)"
+    },
+    {
+      "label": "7.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L440",
+      "_origin": "ast",
+      "id": "c2c_lld_7_1_module_component_map",
+      "community": 155,
+      "norm_label": "7.1. module & component map"
+    },
+    {
+      "label": "7.2. Data Flow & Deduplication Pipeline",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L448",
+      "_origin": "ast",
+      "id": "c2c_lld_7_2_data_flow_deduplication_pipeline",
+      "community": 155,
+      "norm_label": "7.2. data flow & deduplication pipeline"
+    },
+    {
+      "label": "8. Process 7: Assessment Item Generation & Admin Curriculum Authoring",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L481",
+      "_origin": "ast",
+      "id": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
+      "community": 155,
+      "norm_label": "8. process 7: assessment item generation & admin curriculum authoring"
+    },
+    {
+      "label": "8.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L483",
+      "_origin": "ast",
+      "id": "c2c_lld_8_1_module_component_map",
+      "community": 155,
+      "norm_label": "8.1. module & component map"
+    },
+    {
+      "label": "8.2. Item Generation Schema & Fallback Contract",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L490",
+      "_origin": "ast",
+      "id": "c2c_lld_8_2_item_generation_schema_fallback_contract",
+      "community": 155,
+      "norm_label": "8.2. item generation schema & fallback contract"
+    },
+    {
+      "label": "9. Process 8: Student Portfolio, Retro Terminal Emulator & Dossier Generation",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L510",
+      "_origin": "ast",
+      "id": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
+      "community": 155,
+      "norm_label": "9. process 8: student portfolio, retro terminal emulator & dossier generation"
+    },
+    {
+      "label": "9.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L512",
+      "_origin": "ast",
+      "id": "c2c_lld_9_1_module_component_map",
+      "community": 155,
+      "norm_label": "9.1. module & component map"
+    },
+    {
+      "label": "9.2. Retro Terminal Protocol (DOS Emulator)",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L518",
+      "_origin": "ast",
+      "id": "c2c_lld_9_2_retro_terminal_protocol_dos_emulator",
+      "community": 155,
+      "norm_label": "9.2. retro terminal protocol (dos emulator)"
+    },
+    {
+      "label": "10. Process 9: Multi-Tenant Role Ingress, Authentication & Demo Bypass Guard",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L527",
+      "_origin": "ast",
+      "id": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
+      "community": 155,
+      "norm_label": "10. process 9: multi-tenant role ingress, authentication & demo bypass guard"
+    },
+    {
+      "label": "10.1. Module & Component Map",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L529",
+      "_origin": "ast",
+      "id": "c2c_lld_10_1_module_component_map",
+      "community": 155,
+      "norm_label": "10.1. module & component map"
+    },
+    {
+      "label": "10.2. Production Demo Auth Boundary",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L535",
+      "_origin": "ast",
+      "id": "c2c_lld_10_2_production_demo_auth_boundary",
+      "community": 155,
+      "norm_label": "10.2. production demo auth boundary"
+    },
+    {
+      "label": "11. Comprehensive Error Handling & Fault-Tolerance Policy",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L554",
+      "_origin": "ast",
+      "id": "c2c_lld_11_comprehensive_error_handling_fault_tolerance_policy",
+      "community": 155,
+      "norm_label": "11. comprehensive error handling & fault-tolerance policy"
+    },
+    {
+      "label": "12. Verification & Testing Matrix",
+      "file_type": "document",
+      "source_file": "c2c_lld.md",
+      "source_location": "L567",
+      "_origin": "ast",
+      "id": "c2c_lld_12_verification_testing_matrix",
+      "community": 155,
+      "norm_label": "12. verification & testing matrix"
+    },
+    {
+      "label": "user_journeys.md",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "user_journeys",
+      "community": 18,
+      "norm_label": "user_journeys.md"
+    },
+    {
+      "label": "Campus to Corporate (C2C) User Journeys",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "user_journeys_campus_to_corporate_c2c_user_journeys",
+      "community": 18,
+      "norm_label": "campus to corporate (c2c) user journeys"
+    },
+    {
+      "label": "1. Student Journey",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "user_journeys_1_student_journey",
+      "community": 18,
+      "norm_label": "1. student journey"
+    },
+    {
+      "label": "Step 1: Authentication & Onboarding",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "user_journeys_step_1_authentication_onboarding",
+      "community": 18,
+      "norm_label": "step 1: authentication & onboarding"
+    },
+    {
+      "label": "Step 2: The Assessment (The \"Ordeal\")",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "user_journeys_step_2_the_assessment_the_ordeal",
+      "community": 18,
+      "norm_label": "step 2: the assessment (the \"ordeal\")"
+    },
+    {
+      "label": "Step 3: Student Dashboard",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "user_journeys_step_3_student_dashboard",
+      "community": 18,
+      "norm_label": "step 3: student dashboard"
+    },
+    {
+      "label": "Step 4: Retro Portfolio (Shareable Profile)",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "user_journeys_step_4_retro_portfolio_shareable_profile",
+      "community": 18,
+      "norm_label": "step 4: retro portfolio (shareable profile)"
+    },
+    {
+      "label": "2. Employer Journey",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "user_journeys_2_employer_journey",
+      "community": 18,
+      "norm_label": "2. employer journey"
+    },
+    {
+      "label": "Step 1: Authentication & Onboarding",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "user_journeys_step_1_authentication_onboarding_44",
+      "community": 18,
+      "norm_label": "step 1: authentication & onboarding"
+    },
+    {
+      "label": "Step 2: Recruiter Console (Discover Talent)",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "user_journeys_step_2_recruiter_console_discover_talent",
+      "community": 18,
+      "norm_label": "step 2: recruiter console (discover talent)"
+    },
+    {
+      "label": "Step 3: Job Management",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "user_journeys_step_3_job_management",
+      "community": 18,
+      "norm_label": "step 3: job management"
+    },
+    {
+      "label": "3. TPO / Institution Journey",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "user_journeys_3_tpo_institution_journey",
+      "community": 18,
+      "norm_label": "3. tpo / institution journey"
+    },
+    {
+      "label": "Step 1: Authentication & Onboarding",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "user_journeys_step_1_authentication_onboarding_69",
+      "community": 18,
+      "norm_label": "step 1: authentication & onboarding"
+    },
+    {
+      "label": "Step 2: TPO Command Center",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "user_journeys_step_2_tpo_command_center",
+      "community": 18,
+      "norm_label": "step 2: tpo command center"
+    },
+    {
+      "label": "4. Admin Journey",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L87",
+      "_origin": "ast",
+      "id": "user_journeys_4_admin_journey",
+      "community": 18,
+      "norm_label": "4. admin journey"
+    },
+    {
+      "label": "Step 1: Authentication",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L91",
+      "_origin": "ast",
+      "id": "user_journeys_step_1_authentication",
+      "community": 18,
+      "norm_label": "step 1: authentication"
+    },
+    {
+      "label": "Step 2: Global Admin Root",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "user_journeys_step_2_global_admin_root",
+      "community": 18,
+      "norm_label": "step 2: global admin root"
+    },
+    {
+      "label": "5. Architectural References",
+      "file_type": "document",
+      "source_file": "user_journeys.md",
+      "source_location": "L105",
+      "_origin": "ast",
+      "id": "user_journeys_5_architectural_references",
+      "community": 18,
+      "norm_label": "5. architectural references"
     },
     {
       "label": "lti_router.py",
@@ -729,7 +1769,7 @@
       "source_file": "api/main.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 10,
+      "community": 245,
       "norm_label": "api_exception_handler()",
       "id": "api_main_api_exception_handler"
     },
@@ -739,7 +1779,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 10,
+      "community": 245,
       "norm_label": "apiexception",
       "id": "apiexception"
     },
@@ -1109,7 +2149,7 @@
       "source_file": "api/schemas/assessment.py",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 157,
+      "community": 248,
       "norm_label": "approle",
       "id": "schemas_assessment_approle"
     },
@@ -1119,7 +2159,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 157,
+      "community": 248,
       "norm_label": "str",
       "id": "str"
     },
@@ -1129,7 +2169,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 157,
+      "community": 248,
       "norm_label": "enum",
       "id": "enum"
     },
@@ -2009,7 +3049,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 250,
+      "community": 232,
       "norm_label": "projects",
       "id": "portfolio_schema_properties_projects"
     },
@@ -2019,7 +3059,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 250,
+      "community": 232,
       "norm_label": "type",
       "id": "portfolio_schema_projects_type"
     },
@@ -2029,7 +3069,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 250,
+      "community": 232,
       "norm_label": "items",
       "id": "portfolio_schema_projects_items"
     },
@@ -2089,7 +3129,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 0,
+      "community": 248,
       "norm_label": "icon",
       "id": "portfolio_schema_properties_icon"
     },
@@ -2099,7 +3139,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 0,
+      "community": 248,
       "norm_label": "type",
       "id": "portfolio_schema_icon_type"
     },
@@ -2109,7 +3149,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 157,
+      "community": 248,
       "norm_label": "enum",
       "id": "portfolio_schema_icon_enum"
     },
@@ -2119,7 +3159,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 251,
+      "community": 0,
       "norm_label": "tooltip",
       "id": "portfolio_schema_properties_tooltip"
     },
@@ -2129,7 +3169,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 251,
+      "community": 0,
       "norm_label": "type",
       "id": "portfolio_schema_tooltip_type"
     },
@@ -2239,7 +3279,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 250,
+      "community": 232,
       "norm_label": "required",
       "id": "portfolio_schema_items_required"
     },
@@ -2269,7 +3309,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 250,
+      "community": 232,
       "norm_label": "items",
       "id": "portfolio_schema_folders_items"
     },
@@ -2279,7 +3319,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 232,
+      "community": 250,
       "norm_label": "certifications",
       "id": "portfolio_schema_properties_certifications"
     },
@@ -2289,7 +3329,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 232,
+      "community": 250,
       "norm_label": "type",
       "id": "portfolio_schema_certifications_type"
     },
@@ -2299,7 +3339,7 @@
       "source_file": "PORTFOLIO_SCHEMA.json",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 232,
+      "community": 250,
       "norm_label": "items",
       "id": "portfolio_schema_certifications_items"
     },
@@ -2479,7 +3519,7 @@
       "source_file": "api/deps.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 233,
+      "community": 10,
       "norm_label": "require_supabase()",
       "id": "api_deps_require_supabase"
     },
@@ -2529,7 +3569,7 @@
       "source_file": "api/deps.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 233,
+      "community": 67,
       "norm_label": "require_role()",
       "id": "api_deps_require_role"
     },
@@ -2549,7 +3589,7 @@
       "source_file": "api/deps.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 233,
+      "community": 10,
       "norm_label": "fastapi dependency that provides a supabase client or raises 503.",
       "id": "api_deps_rationale_60"
     },
@@ -2589,7 +3629,7 @@
       "source_file": "api/deps.py",
       "source_location": "L156",
       "_origin": "ast",
-      "community": 233,
+      "community": 67,
       "norm_label": "fastapi dependency factory to enforce rbac constraints using app_metadata.",
       "id": "api_deps_rationale_156"
     },
@@ -2609,7 +3649,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 245,
       "norm_label": "apiexception",
       "id": "api_exceptions_apiexception"
     },
@@ -2619,7 +3659,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 67,
+      "community": 245,
       "norm_label": "exception",
       "id": "exception"
     },
@@ -2629,7 +3669,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 1,
+      "community": 245,
       "norm_label": ".__init__()",
       "id": "api_exceptions_apiexception_init"
     },
@@ -2649,7 +3689,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 1,
+      "community": 245,
       "norm_label": ".__init__()",
       "id": "api_exceptions_databaseconnectionerror_init"
     },
@@ -2669,7 +3709,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 1,
+      "community": 245,
       "norm_label": ".__init__()",
       "id": "api_exceptions_notfounderror_init"
     },
@@ -2689,7 +3729,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 1,
+      "community": 245,
       "norm_label": ".__init__()",
       "id": "api_exceptions_permissiondeniederror_init"
     },
@@ -2699,7 +3739,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L2",
       "_origin": "ast",
-      "community": 1,
+      "community": 245,
       "norm_label": "base exception class for custom api errors.",
       "id": "api_exceptions_rationale_2"
     },
@@ -2749,7 +3789,7 @@
       "source_file": "api/item_generator.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 166,
+      "community": 168,
       "norm_label": "generate_llm_item()",
       "id": "api_item_generator_generate_llm_item"
     },
@@ -2789,7 +3829,7 @@
       "source_file": "api/item_generator.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 166,
+      "community": 168,
       "norm_label": "generates a psychometric item using gemini api and validates it against the sche",
       "id": "api_item_generator_rationale_20"
     },
@@ -2859,7 +3899,7 @@
       "source_file": "api/pdf_generator.py",
       "source_location": "L184",
       "_origin": "ast",
-      "community": 67,
+      "community": 234,
       "norm_label": "generate_tailored_resume_pdf()",
       "id": "api_pdf_generator_generate_tailored_resume_pdf"
     },
@@ -3049,7 +4089,7 @@
       "source_file": "api/routers/crm_router.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 67,
+      "community": 245,
       "norm_label": "convert_lead()",
       "id": "routers_crm_router_convert_lead"
     },
@@ -3089,7 +4129,7 @@
       "source_file": "api/routers/crm_router.py",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 67,
+      "community": 245,
       "norm_label": "converts a lead into an account and contact.     optionally creates an opportun",
       "id": "routers_crm_router_rationale_14"
     },
@@ -3149,7 +4189,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 242,
+      "community": 167,
       "norm_label": "onboard_employer()",
       "id": "routers_employer_router_onboard_employer"
     },
@@ -3169,7 +4209,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L128",
       "_origin": "ast",
-      "community": 242,
+      "community": 167,
       "norm_label": "create_job_posting()",
       "id": "routers_employer_router_create_job_posting"
     },
@@ -3369,7 +4409,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 248,
+      "community": 4,
       "norm_label": "skillgapreportrequest",
       "id": "routers_market_router_skillgapreportrequest"
     },
@@ -3379,7 +4419,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 245,
+      "community": 4,
       "norm_label": "reviewedapplicationrequest",
       "id": "routers_market_router_reviewedapplicationrequest"
     },
@@ -3429,7 +4469,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 244,
+      "community": 4,
       "norm_label": "generatecoverletterrequest",
       "id": "routers_market_router_generatecoverletterrequest"
     },
@@ -3439,7 +4479,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L101",
       "_origin": "ast",
-      "community": 4,
+      "community": 251,
       "norm_label": "generateoutreachrequest",
       "id": "routers_market_router_generateoutreachrequest"
     },
@@ -3499,7 +4539,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L179",
       "_origin": "ast",
-      "community": 248,
+      "community": 4,
       "norm_label": "skill_gap_report()",
       "id": "routers_market_router_skill_gap_report"
     },
@@ -3569,7 +4609,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L365",
       "_origin": "ast",
-      "community": 244,
+      "community": 4,
       "norm_label": "generate_cover_letter()",
       "id": "routers_market_router_generate_cover_letter"
     },
@@ -3579,7 +4619,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L376",
       "_origin": "ast",
-      "community": 245,
+      "community": 4,
       "norm_label": "generate_reviewed_application()",
       "id": "routers_market_router_generate_reviewed_application"
     },
@@ -3589,7 +4629,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L391",
       "_origin": "ast",
-      "community": 4,
+      "community": 251,
       "norm_label": "generate_outreach()",
       "id": "routers_market_router_generate_outreach"
     },
@@ -3659,7 +4699,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L180",
       "_origin": "ast",
-      "community": 248,
+      "community": 4,
       "norm_label": "generate prioritized cohort vs market skill gap heatmap (h3 implementation).",
       "id": "routers_market_router_rationale_180"
     },
@@ -3729,7 +4769,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L366",
       "_origin": "ast",
-      "community": 244,
+      "community": 4,
       "norm_label": "generate cover-letter context for a candidate and job posting.",
       "id": "routers_market_router_rationale_366"
     },
@@ -3739,7 +4779,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L377",
       "_origin": "ast",
-      "community": 245,
+      "community": 4,
       "norm_label": "execute two-pass drafter-reviewer pipeline (h4 implementation).     drafts tail",
       "id": "routers_market_router_rationale_377"
     },
@@ -3749,7 +4789,7 @@
       "source_file": "api/routers/market_router.py",
       "source_location": "L392",
       "_origin": "ast",
-      "community": 4,
+      "community": 251,
       "norm_label": "generate a hiring manager outreach draft.     styles: cold_email | linkedin_not",
       "id": "routers_market_router_rationale_392"
     },
@@ -3799,7 +4839,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 8,
+      "community": 1,
       "norm_label": "send_email_notification()",
       "id": "routers_student_router_send_email_notification"
     },
@@ -3809,7 +4849,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 8,
+      "community": 1,
       "norm_label": "run_student_profile_optimization()",
       "id": "routers_student_router_run_student_profile_optimization"
     },
@@ -3969,7 +5009,7 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "typesafe_router.py",
       "id": "routers_typesafe_router"
     },
@@ -3989,7 +5029,7 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "evaluate_candidate()",
       "id": "routers_typesafe_router_evaluate_candidate"
     },
@@ -4029,7 +5069,7 @@
       "source_file": "api/routers/typesafe_router.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "evaluates candidate responses using typesafe ai's system one (choice, score, nou",
       "id": "routers_typesafe_router_rationale_26"
     },
@@ -4049,7 +5089,7 @@
       "source_file": "api/schemas/employer.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 242,
+      "community": 167,
       "norm_label": "employer.py",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_schemas_employer_py"
     },
@@ -4059,7 +5099,7 @@
       "source_file": "api/schemas/employer.py",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 242,
+      "community": 167,
       "norm_label": "employeronboard",
       "id": "schemas_employer_employeronboard"
     },
@@ -4069,7 +5109,7 @@
       "source_file": "api/schemas/employer.py",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 242,
+      "community": 167,
       "norm_label": "jobcreate",
       "id": "schemas_employer_jobcreate"
     },
@@ -4169,7 +5209,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "typesafe.py",
       "id": "schemas_typesafe"
     },
@@ -4179,7 +5219,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 157,
+      "community": 248,
       "norm_label": "founderarchetype",
       "id": "schemas_typesafe_founderarchetype"
     },
@@ -4189,7 +5229,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "typesafeevaluaterequest",
       "id": "schemas_typesafe_typesafeevaluaterequest"
     },
@@ -4199,7 +5239,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "dimensionscore",
       "id": "schemas_typesafe_dimensionscore"
     },
@@ -4209,7 +5249,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "typesafeevaluateresponse",
       "id": "schemas_typesafe_typesafeevaluateresponse"
     },
@@ -4219,7 +5259,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "typesafestatusresponse",
       "id": "schemas_typesafe_typesafestatusresponse"
     },
@@ -4239,7 +5279,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "typesafefeaturecolumn",
       "id": "schemas_typesafe_typesafefeaturecolumn"
     },
@@ -4249,7 +5289,7 @@
       "source_file": "api/schemas/typesafe.py",
       "source_location": "L80",
       "_origin": "ast",
-      "community": 157,
+      "community": 242,
       "norm_label": "typesafefeaturizeresponse",
       "id": "schemas_typesafe_typesafefeaturizeresponse"
     },
@@ -8299,7 +9339,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "test_candidate_features.py",
       "id": "tests_test_candidate_features"
     },
@@ -8309,7 +9349,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "_student()",
       "id": "tests_test_candidate_features_student"
     },
@@ -8319,7 +9359,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "_live()",
       "id": "tests_test_candidate_features_live"
     },
@@ -8329,7 +9369,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "typesafefeaturizeresponse",
       "id": "typesafefeaturizeresponse"
     },
@@ -8339,7 +9379,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "faketable",
       "id": "tests_test_candidate_features_faketable"
     },
@@ -8349,7 +9389,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": ".__init__()",
       "id": "tests_test_candidate_features_faketable_init"
     },
@@ -8359,7 +9399,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": ".table()",
       "id": "tests_test_candidate_features_faketable_table"
     },
@@ -8369,7 +9409,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": ".select()",
       "id": "tests_test_candidate_features_faketable_select"
     },
@@ -8379,7 +9419,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": ".in_()",
       "id": "tests_test_candidate_features_faketable_in"
     },
@@ -8389,7 +9429,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": ".upsert()",
       "id": "tests_test_candidate_features_faketable_upsert"
     },
@@ -8399,7 +9439,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": ".execute()",
       "id": "tests_test_candidate_features_faketable_execute"
     },
@@ -8409,7 +9449,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "featurize_calls()",
       "id": "tests_test_candidate_features_featurize_calls"
     },
@@ -8419,7 +9459,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "test_cached_unchanged_profile_is_not_featurized_again()",
       "id": "tests_test_candidate_features_test_cached_unchanged_profile_is_not_featurized_again"
     },
@@ -8429,7 +9469,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "test_changed_profile_is_featurized_and_cache_updated()",
       "id": "tests_test_candidate_features_test_changed_profile_is_featurized_and_cache_updated"
     },
@@ -8439,7 +9479,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L84",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "test_cold_cache_is_truncated_to_max_live_per_request()",
       "id": "tests_test_candidate_features_test_cold_cache_is_truncated_to_max_live_per_request"
     },
@@ -8449,7 +9489,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L95",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "test_empty_profile_is_not_sent_to_the_model()",
       "id": "tests_test_candidate_features_test_empty_profile_is_not_sent_to_the_model"
     },
@@ -8459,7 +9499,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "test_heuristic_results_are_not_cached()",
       "id": "tests_test_candidate_features_test_heuristic_results_are_not_cached"
     },
@@ -8469,7 +9509,7 @@
       "source_file": "tests/test_candidate_features.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 157,
+      "community": 156,
       "norm_label": "unit tests for api/services/candidate_features.py: the model is not called for",
       "id": "tests_test_candidate_features_rationale_1"
     },
@@ -13484,116 +14524,6 @@
       "id": "original_request_test_automation"
     },
     {
-      "label": "PROJECT.md",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "project.md",
-      "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_project_md"
-    },
-    {
-      "label": "Project: C2C Talent Platform Refactoring",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "project: c2c talent platform refactoring",
-      "id": "project_project_c2c_talent_platform_refactoring"
-    },
-    {
-      "label": "Architecture",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L3",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "architecture",
-      "id": "project_architecture"
-    },
-    {
-      "label": "Backend Structure",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L6",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "backend structure",
-      "id": "project_backend_structure"
-    },
-    {
-      "label": "Frontend Structure",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L27",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "frontend structure",
-      "id": "project_frontend_structure"
-    },
-    {
-      "label": "Milestones",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L44",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "milestones",
-      "id": "project_milestones"
-    },
-    {
-      "label": "Interface Contracts",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L55",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "interface contracts",
-      "id": "project_interface_contracts"
-    },
-    {
-      "label": "API Routers \u2194 FastAPI App",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L56",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "api routers \u2194 fastapi app",
-      "id": "project_api_routers_fastapi_app"
-    },
-    {
-      "label": "Opportunities \u2194 Candidates (Schema Link)",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L62",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "opportunities \u2194 candidates (schema link)",
-      "id": "project_opportunities_candidates_schema_link"
-    },
-    {
-      "label": "CV Tailor \u2194 Backend / PDF",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L66",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "cv tailor \u2194 backend / pdf",
-      "id": "project_cv_tailor_backend_pdf"
-    },
-    {
-      "label": "Code Layout",
-      "file_type": "document",
-      "source_file": "PROJECT.md",
-      "source_location": "L70",
-      "_origin": "ast",
-      "community": 120,
-      "norm_label": "code layout",
-      "id": "project_code_layout"
-    },
-    {
       "label": "TEST_INFRA.md",
       "file_type": "document",
       "source_file": "TEST_INFRA.md",
@@ -13742,126 +14672,6 @@
       "community": 141,
       "norm_label": "tier 4 (real-world scenarios)",
       "id": "test_ready_tier_4_real_world_scenarios"
-    },
-    {
-      "label": "WORKFLOW_INTEGRATION.md",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "workflow_integration.md",
-      "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_workflow_integration_md"
-    },
-    {
-      "label": "WORKFLOW INTEGRATION: campus2corporate (c2c) \ud83d\udc54",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "workflow integration: campus2corporate (c2c) \ud83d\udc54",
-      "id": "workflow_integration_workflow_integration_campus2corporate_c2c"
-    },
-    {
-      "label": "Master Standard Operating Procedure (SOP)",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L2",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "master standard operating procedure (sop)",
-      "id": "workflow_integration_master_standard_operating_procedure_sop"
-    },
-    {
-      "label": "1. Executive Summary",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "1. executive summary",
-      "id": "workflow_integration_1_executive_summary"
-    },
-    {
-      "label": "2. The Integrated Candidate Journey",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L13",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "2. the integrated candidate journey",
-      "id": "workflow_integration_2_the_integrated_candidate_journey"
-    },
-    {
-      "label": "3. Service Integration Matrix",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L25",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "3. service integration matrix",
-      "id": "workflow_integration_3_service_integration_matrix"
-    },
-    {
-      "label": "**A. Phase 1: Signal & Evidence**",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L27",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "**a. phase 1: signal & evidence**",
-      "id": "workflow_integration_a_phase_1_signal_evidence"
-    },
-    {
-      "label": "**B. Phase 2: Behavioral Validation**",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L32",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "**b. phase 2: behavioral validation**",
-      "id": "workflow_integration_b_phase_2_behavioral_validation"
-    },
-    {
-      "label": "**C. Phase 3: The Makeover**",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "**c. phase 3: the makeover**",
-      "id": "workflow_integration_c_phase_3_the_makeover"
-    },
-    {
-      "label": "**D. Phase 4: Market Deployment**",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L42",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "**d. phase 4: market deployment**",
-      "id": "workflow_integration_d_phase_4_market_deployment"
-    },
-    {
-      "label": "4. Academic Alignment (Narrative Arcs)",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L49",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "4. academic alignment (narrative arcs)",
-      "id": "workflow_integration_4_academic_alignment_narrative_arcs"
-    },
-    {
-      "label": "5. Future Execution Units",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L59",
-      "_origin": "ast",
-      "community": 119,
-      "norm_label": "5. future execution units",
-      "id": "workflow_integration_5_future_execution_units"
     },
     {
       "label": "brd and frd.md",
@@ -14472,176 +15282,6 @@
       "community": 121,
       "norm_label": "4. operational playbook for this market",
       "id": "unit_economics_4_operational_playbook_for_this_market"
-    },
-    {
-      "label": "user_journeys.md",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "user_journeys.md",
-      "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_user_journeys_md"
-    },
-    {
-      "label": "Campus to Corporate (C2C) User Journeys",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "campus to corporate (c2c) user journeys",
-      "id": "user_journeys_campus_to_corporate_c2c_user_journeys"
-    },
-    {
-      "label": "1. Student Journey",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "1. student journey",
-      "id": "user_journeys_1_student_journey"
-    },
-    {
-      "label": "Step 1: Authentication & Onboarding",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L11",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 1: authentication & onboarding",
-      "id": "user_journeys_step_1_authentication_onboarding"
-    },
-    {
-      "label": "Step 2: The Assessment (The \"Ordeal\")",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L17",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 2: the assessment (the \"ordeal\")",
-      "id": "user_journeys_step_2_the_assessment_the_ordeal"
-    },
-    {
-      "label": "Step 3: Student Dashboard",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L23",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 3: student dashboard",
-      "id": "user_journeys_step_3_student_dashboard"
-    },
-    {
-      "label": "Step 4: Retro Portfolio (Shareable Profile)",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L33",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 4: retro portfolio (shareable profile)",
-      "id": "user_journeys_step_4_retro_portfolio_shareable_profile"
-    },
-    {
-      "label": "2. Employer Journey",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L40",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "2. employer journey",
-      "id": "user_journeys_2_employer_journey"
-    },
-    {
-      "label": "Step 1: Authentication & Onboarding",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L44",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 1: authentication & onboarding",
-      "id": "user_journeys_step_1_authentication_onboarding_44"
-    },
-    {
-      "label": "Step 2: Recruiter Console (Discover Talent)",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L49",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 2: recruiter console (discover talent)",
-      "id": "user_journeys_step_2_recruiter_console_discover_talent"
-    },
-    {
-      "label": "Step 3: Job Management",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L58",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 3: job management",
-      "id": "user_journeys_step_3_job_management"
-    },
-    {
-      "label": "3. TPO / Institution Journey",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "3. tpo / institution journey",
-      "id": "user_journeys_3_tpo_institution_journey"
-    },
-    {
-      "label": "Step 1: Authentication & Onboarding",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L69",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 1: authentication & onboarding",
-      "id": "user_journeys_step_1_authentication_onboarding_69"
-    },
-    {
-      "label": "Step 2: TPO Command Center",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L74",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 2: tpo command center",
-      "id": "user_journeys_step_2_tpo_command_center"
-    },
-    {
-      "label": "4. Admin Journey",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L87",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "4. admin journey",
-      "id": "user_journeys_4_admin_journey"
-    },
-    {
-      "label": "Step 1: Authentication",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L91",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 1: authentication",
-      "id": "user_journeys_step_1_authentication"
-    },
-    {
-      "label": "Step 2: Global Admin Root",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": "L95",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "step 2: global admin root",
-      "id": "user_journeys_step_2_global_admin_root"
     },
     {
       "label": "763Ffb54 37E0 478C A6F7 8737Fd45De6D / Briefing.Md",
@@ -15593,19 +16233,6 @@
       "id": "test_ready_test_ready"
     },
     {
-      "label": "Workflow Integration",
-      "file_type": "document",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 156,
-      "norm_label": "workflow integration",
-      "id": "workflow_integration_workflow_integration"
-    },
-    {
       "label": "Docs / Brd And Frd.Md",
       "file_type": "document",
       "source_file": "docs/brd and frd.md",
@@ -15695,19 +16322,6 @@
       "community": 154,
       "norm_label": "unit economics",
       "id": "unit_economics_unit_economics"
-    },
-    {
-      "label": "User Journeys",
-      "file_type": "document",
-      "source_file": "user_journeys.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 155,
-      "norm_label": "user journeys",
-      "id": "user_journeys_user_journeys"
     },
     {
       "label": "Qa Screenshots / Admin Panel.Png",
@@ -15818,32 +16432,122 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "project",
+      "target": "project_project_c2c_talent_platform_refactoring",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_project_c2c_talent_platform_refactoring",
+      "target": "project_architecture"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "project_project_c2c_talent_platform_refactoring",
+      "target": "project_architecture_design_references",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_project_c2c_talent_platform_refactoring",
+      "target": "project_code_layout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_project_c2c_talent_platform_refactoring",
+      "target": "project_interface_contracts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_project_c2c_talent_platform_refactoring",
+      "target": "project_milestones"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_architecture",
+      "target": "project_backend_structure"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_architecture",
+      "target": "project_frontend_structure"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_interface_contracts",
+      "target": "project_api_routers_fastapi_app"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_interface_contracts",
+      "target": "project_cv_tailor_backend_pdf"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PROJECT.md",
+      "source_location": "L62",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "project_interface_contracts",
+      "target": "project_opportunities_candidates_schema_link"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_campus_to_corporate_c2c",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "readme_campus_to_corporate_c2c",
-      "target": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L43",
-      "weight": 1.0,
-      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
-      "target": "readme_5q_developmental_matching_model",
-      "confidence_score": 1.0
+      "target": "readme_campus_to_corporate_c2c"
     },
     {
       "relation": "contains",
@@ -15851,58 +16555,38 @@
       "source_file": "README.md",
       "source_location": "L8",
       "weight": 1.0,
-      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
-      "target": "readme_architecture_service_directory",
+      "source": "readme_campus_to_corporate_c2c",
+      "target": "readme_architecture_process_navigation",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L61",
+      "source_location": "L101",
       "weight": 1.0,
-      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
-      "target": "readme_deterministic_ai_cost_controls",
+      "source": "readme_campus_to_corporate_c2c",
+      "target": "readme_core_system_workflows",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L71",
+      "source_location": "L18",
       "weight": 1.0,
-      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
-      "target": "readme_lms_remediation_academy_lms_learn",
+      "source": "readme_campus_to_corporate_c2c",
+      "target": "readme_high_level_design_hld_overview",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L81",
+      "source_location": "L192",
       "weight": 1.0,
-      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
+      "source": "readme_campus_to_corporate_c2c",
       "target": "readme_local_development_setup",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
-      "target": "readme_monorepo_structure",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L110",
-      "weight": 1.0,
-      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
-      "target": "readme_production_deployment_vercel_supabase",
       "confidence_score": 1.0
     },
     {
@@ -15911,18 +16595,108 @@
       "source_file": "README.md",
       "source_location": "L83",
       "weight": 1.0,
-      "source": "readme_local_development_setup",
-      "target": "readme_1_prerequisites",
+      "source": "readme_campus_to_corporate_c2c",
+      "target": "readme_low_level_design_lld_process_workflow_catalog",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L89",
+      "source_location": "L238",
+      "weight": 1.0,
+      "source": "readme_campus_to_corporate_c2c",
+      "target": "readme_production_deployment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_campus_to_corporate_c2c",
+      "target": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "readme_campus_to_corporate_c2c",
+      "target": "readme_verification_commands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_unified_ai_first_talent_evaluation_remediation_placement_suite",
+      "target": "readme_local_development_setup"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "readme_core_system_workflows",
+      "target": "readme_workflow_1_assessment_submission_5q_scoring_remediation_sync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "readme_core_system_workflows",
+      "target": "readme_workflow_2_lti_1_3_advantage_launch_ags_2_0_grade_passback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "readme_core_system_workflows",
+      "target": "readme_workflow_3_employer_candidate_ranking_cost_guarded_evaluation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "readme_core_system_workflows",
+      "target": "readme_workflow_4_market_scout_opportunity_ingestion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L83",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_local_development_setup",
+      "target": "readme_1_prerequisites"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L200",
       "weight": 1.0,
       "source": "readme_local_development_setup",
-      "target": "readme_2_start_lms_infrastructure",
+      "target": "readme_2_start_lms_subsystem",
       "confidence_score": 1.0
     },
     {
@@ -15931,8 +16705,228 @@
       "source_file": "README.md",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_local_development_setup",
-      "target": "readme_3_start_c2c_web_api_services",
+      "target": "readme_3_start_c2c_web_api_services"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "wiki_architecture",
+      "target": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "target": "wiki_architecture_1_executive_summary_information_architecture_vision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "target": "wiki_architecture_2_confluence_space_hierarchy_page_tree",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "target": "wiki_architecture_3_master_wiki_portal_home_page_layout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "target": "wiki_architecture_4_cross_linking_matrix_personas_lifecycle_9_processes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "target": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "wiki_architecture_campus_to_corporate_c2c_enterprise_wiki_confluence_architecture",
+      "target": "wiki_architecture_6_docs_as_code_synchronization_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
+      "target": "wiki_architecture_5_1_three_tier_progressive_disclosure_model",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
+      "target": "wiki_architecture_5_2_standard_breadcrumbs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "wiki_architecture_5_navigation_affordances_progressive_disclosure",
+      "target": "wiki_architecture_5_3_clickable_mermaid_diagram_hotspots",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WIKI_ARCHITECTURE.md",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "wiki_architecture_6_docs_as_code_synchronization_pipeline",
+      "target": "wiki_architecture_pull_request_definition_of_done_dod_gate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "workflow_integration",
+      "target": "workflow_integration_workflow_integration_campus2corporate_c2c",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "workflow_integration_workflow_integration_campus2corporate_c2c",
+      "target": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
+      "target": "workflow_integration_1_architectural_foundation_references",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
+      "target": "workflow_integration_2_the_integrated_5_phase_candidate_lifecycle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
+      "target": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
+      "target": "workflow_integration_4_deterministic_cost_governance_standard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "workflow_integration_master_standard_operating_procedure_sop_process_workflows",
+      "target": "workflow_integration_5_verification_service_health_checks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
+      "target": "workflow_integration_sop_1_sourcing_to_assessment_trigger_signal_ingress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
+      "target": "workflow_integration_sop_2_assessment_to_automated_remediation_audit_ordeal_fix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
+      "target": "workflow_integration_sop_3_moodle_completion_to_developmental_record_sync_fix_verification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "WORKFLOW_INTEGRATION.md",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "workflow_integration_3_detailed_process_sops_inter_service_handshakes",
+      "target": "workflow_integration_sop_4_employer_job_posting_to_candidate_match_hiring_deployment_win",
       "confidence_score": 1.0
     },
     {
@@ -15941,9 +16935,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld",
-      "target": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "confidence_score": 1.0
+      "target": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld"
     },
     {
       "relation": "contains",
@@ -15951,9 +16945,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_1_executive_summary_design_principles",
-      "confidence_score": 1.0
+      "target": "c2c_hld_1_executive_summary_design_principles"
     },
     {
       "relation": "contains",
@@ -15961,9 +16955,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_2_end_to_end_system_block_diagram",
-      "confidence_score": 1.0
+      "target": "c2c_hld_2_end_to_end_system_block_diagram"
     },
     {
       "relation": "contains",
@@ -15971,18 +16965,18 @@
       "source_file": "c2c_hld.md",
       "source_location": "L127",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_3_tiered_system_architecture",
-      "confidence_score": 1.0
+      "target": "c2c_hld_3_tiered_system_architecture"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "c2c_hld.md",
-      "source_location": "L166",
+      "source_location": "L186",
       "weight": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_4_key_end_to_end_user_journeys",
+      "target": "c2c_hld_4_comprehensive_process_workflow_architecture",
       "confidence_score": 1.0
     },
     {
@@ -15991,9 +16985,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L256",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_5_security_architecture_access_control",
-      "confidence_score": 1.0
+      "target": "c2c_hld_5_security_architecture_access_control"
     },
     {
       "relation": "contains",
@@ -16001,9 +16995,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L269",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review",
-      "confidence_score": 1.0
+      "target": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review"
     },
     {
       "relation": "contains",
@@ -16011,9 +17005,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L295",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_campus_to_corporate_c2c_high_level_design_hld",
-      "target": "c2c_hld_7_implementation_tracker_roadmap",
-      "confidence_score": 1.0
+      "target": "c2c_hld_7_implementation_tracker_roadmap"
     },
     {
       "relation": "contains",
@@ -16021,9 +17015,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_1_executive_summary_design_principles",
-      "target": "c2c_hld_core_architectural_axioms",
-      "confidence_score": 1.0
+      "target": "c2c_hld_core_architectural_axioms"
     },
     {
       "relation": "contains",
@@ -16031,9 +17025,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_3_tiered_system_architecture",
-      "target": "c2c_hld_3_1_presentation_tier_next_js_14",
-      "confidence_score": 1.0
+      "target": "c2c_hld_3_1_presentation_tier_next_js_14"
     },
     {
       "relation": "contains",
@@ -16041,9 +17035,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L134",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_3_tiered_system_architecture",
-      "target": "c2c_hld_3_2_edge_routing_ingress",
-      "confidence_score": 1.0
+      "target": "c2c_hld_3_2_edge_routing_ingress"
     },
     {
       "relation": "contains",
@@ -16051,9 +17045,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_3_tiered_system_architecture",
-      "target": "c2c_hld_3_3_application_core_fastapi",
-      "confidence_score": 1.0
+      "target": "c2c_hld_3_3_application_core_fastapi"
     },
     {
       "relation": "contains",
@@ -16061,9 +17055,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L150",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_3_tiered_system_architecture",
-      "target": "c2c_hld_3_4_learning_subsystem_moodle_lms",
-      "confidence_score": 1.0
+      "target": "c2c_hld_3_4_learning_subsystem_moodle_lms"
     },
     {
       "relation": "contains",
@@ -16071,38 +17065,48 @@
       "source_file": "c2c_hld.md",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_3_tiered_system_architecture",
-      "target": "c2c_hld_3_5_ai_cost_control_subsystem",
+      "target": "c2c_hld_3_5_ai_cost_control_subsystem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_hld.md",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
+      "target": "c2c_hld_4_1_process_1_candidate_assessment_5q_psychometric_scoring_flow",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "c2c_hld.md",
-      "source_location": "L168",
+      "source_location": "L228",
       "weight": 1.0,
-      "source": "c2c_hld_4_key_end_to_end_user_journeys",
-      "target": "c2c_hld_4_1_candidate_assessment_automated_remediation_flow",
+      "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
+      "target": "c2c_hld_4_2_process_2_3_lti_1_3_advantage_launch_ags_grade_passback",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "c2c_hld.md",
-      "source_location": "L197",
+      "source_location": "L253",
       "weight": 1.0,
-      "source": "c2c_hld_4_key_end_to_end_user_journeys",
-      "target": "c2c_hld_4_2_lti_1_3_advantage_launch_ags_grade_passback",
+      "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
+      "target": "c2c_hld_4_3_process_4_5_employer_candidate_matching_cost_enforcement",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "c2c_hld.md",
-      "source_location": "L222",
+      "source_location": "L285",
       "weight": 1.0,
-      "source": "c2c_hld_4_key_end_to_end_user_journeys",
-      "target": "c2c_hld_4_3_employer_candidate_matching_cost_enforcement",
+      "source": "c2c_hld_4_comprehensive_process_workflow_architecture",
+      "target": "c2c_hld_4_4_process_6_market_intelligence_desk_opportunity_sourcing",
       "confidence_score": 1.0
     },
     {
@@ -16111,9 +17115,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L273",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review",
-      "target": "c2c_hld_1_systems_architect_review",
-      "confidence_score": 1.0
+      "target": "c2c_hld_1_systems_architect_review"
     },
     {
       "relation": "contains",
@@ -16121,9 +17125,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L278",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review",
-      "target": "c2c_hld_2_cost_engineer_review",
-      "confidence_score": 1.0
+      "target": "c2c_hld_2_cost_engineer_review"
     },
     {
       "relation": "contains",
@@ -16131,9 +17135,9 @@
       "source_file": "c2c_hld.md",
       "source_location": "L283",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review",
-      "target": "c2c_hld_3_security_reviewer_review",
-      "confidence_score": 1.0
+      "target": "c2c_hld_3_security_reviewer_review"
     },
     {
       "relation": "contains",
@@ -16141,9 +17145,619 @@
       "source_file": "c2c_hld.md",
       "source_location": "L288",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "c2c_hld_6_mandatory_4_reviewer_architecture_board_review",
-      "target": "c2c_hld_4_product_engineer_review",
+      "target": "c2c_hld_4_product_engineer_review"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "c2c_lld",
+      "target": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L527",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L554",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_11_comprehensive_error_handling_fault_tolerance_policy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L567",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_12_verification_testing_matrix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_1_document_overview_scope",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L288",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L358",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L438",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L481",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L510",
+      "weight": 1.0,
+      "source": "c2c_lld_campus_to_corporate_c2c_low_level_design_lld",
+      "target": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "c2c_lld_1_document_overview_scope",
+      "target": "c2c_lld_system_process_catalog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
+      "target": "c2c_lld_2_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
+      "target": "c2c_lld_2_2_class_function_signatures",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
+      "target": "c2c_lld_2_3_database_schema_postgresql_talia_cluster",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
+      "target": "c2c_lld_2_4_api_request_response_contracts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "c2c_lld_2_process_1_candidate_assessment_5q_psychometric_scoring_engine",
+      "target": "c2c_lld_2_5_sequence_diagram_assessment_submission_evaluation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
+      "target": "c2c_lld_3_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
+      "target": "c2c_lld_3_2_class_function_signatures",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
+      "target": "c2c_lld_3_3_deterministic_gap_to_curriculum_mapping_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "c2c_lld_3_process_2_automated_gap_remediation_zero_token_moodle_enrolment",
+      "target": "c2c_lld_3_4_reverse_proxy_ingress_specification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L231",
+      "weight": 1.0,
+      "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
+      "target": "c2c_lld_4_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L237",
+      "weight": 1.0,
+      "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
+      "target": "c2c_lld_4_2_endpoints_protocol_specifications",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
+      "target": "c2c_lld_4_3_ags_2_0_payload_structure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L260",
+      "weight": 1.0,
+      "source": "c2c_lld_4_process_3_lti_1_3_advantage_gateway_ags_2_0_grade_passback",
+      "target": "c2c_lld_4_4_sequence_diagram_lti_1_3_oidc_launch_ags_passback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L290",
+      "weight": 1.0,
+      "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
+      "target": "c2c_lld_5_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
+      "target": "c2c_lld_5_2_role_weighted_5q_scoring_formulas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L314",
+      "weight": 1.0,
+      "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
+      "target": "c2c_lld_5_3_matching_pipeline_algorithm_two_tier_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L338",
+      "weight": 1.0,
+      "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
+      "target": "c2c_lld_5_4_candidate_status_state_machine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L351",
+      "weight": 1.0,
+      "source": "c2c_lld_5_process_4_employer_job_management_candidate_matching_decision_pipeline",
+      "target": "c2c_lld_5_5_api_endpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L360",
+      "weight": 1.0,
+      "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
+      "target": "c2c_lld_6_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L367",
+      "weight": 1.0,
+      "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
+      "target": "c2c_lld_6_2_postgresql_atomic_quota_function_ddl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L413",
+      "weight": 1.0,
+      "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
+      "target": "c2c_lld_6_3_pre_flight_reservation_logic_ai_budget_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L431",
+      "weight": 1.0,
+      "source": "c2c_lld_6_process_5_deterministic_ai_cost_control_pre_flight_quota_ledger_spend_summary",
+      "target": "c2c_lld_6_4_cost_advisory_logic_cost_advice_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L440",
+      "weight": 1.0,
+      "source": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
+      "target": "c2c_lld_7_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L448",
+      "weight": 1.0,
+      "source": "c2c_lld_7_process_6_market_intelligence_desk_headless_scraping_pipeline_market_scout",
+      "target": "c2c_lld_7_2_data_flow_deduplication_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L483",
+      "weight": 1.0,
+      "source": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
+      "target": "c2c_lld_8_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L490",
+      "weight": 1.0,
+      "source": "c2c_lld_8_process_7_assessment_item_generation_admin_curriculum_authoring",
+      "target": "c2c_lld_8_2_item_generation_schema_fallback_contract",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L512",
+      "weight": 1.0,
+      "source": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
+      "target": "c2c_lld_9_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L518",
+      "weight": 1.0,
+      "source": "c2c_lld_9_process_8_student_portfolio_retro_terminal_emulator_dossier_generation",
+      "target": "c2c_lld_9_2_retro_terminal_protocol_dos_emulator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L529",
+      "weight": 1.0,
+      "source": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
+      "target": "c2c_lld_10_1_module_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "c2c_lld.md",
+      "source_location": "L535",
+      "weight": 1.0,
+      "source": "c2c_lld_10_process_9_multi_tenant_role_ingress_authentication_demo_bypass_guard",
+      "target": "c2c_lld_10_2_production_demo_auth_boundary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "user_journeys",
+      "target": "user_journeys_campus_to_corporate_c2c_user_journeys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
+      "target": "user_journeys_1_student_journey"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
+      "target": "user_journeys_2_employer_journey"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
+      "target": "user_journeys_3_tpo_institution_journey"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
+      "target": "user_journeys_4_admin_journey"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
+      "target": "user_journeys_5_architectural_references",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_1_student_journey",
+      "target": "user_journeys_step_1_authentication_onboarding"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_1_student_journey",
+      "target": "user_journeys_step_2_the_assessment_the_ordeal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_1_student_journey",
+      "target": "user_journeys_step_3_student_dashboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_1_student_journey",
+      "target": "user_journeys_step_4_retro_portfolio_shareable_profile"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_2_employer_journey",
+      "target": "user_journeys_step_1_authentication_onboarding_44"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L49",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_2_employer_journey",
+      "target": "user_journeys_step_2_recruiter_console_discover_talent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_2_employer_journey",
+      "target": "user_journeys_step_3_job_management"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_3_tpo_institution_journey",
+      "target": "user_journeys_step_1_authentication_onboarding_69"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_3_tpo_institution_journey",
+      "target": "user_journeys_step_2_tpo_command_center"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L91",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_4_admin_journey",
+      "target": "user_journeys_step_1_authentication"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "user_journeys.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "user_journeys_4_admin_journey",
+      "target": "user_journeys_step_2_global_admin_root"
     },
     {
       "relation": "contains",
@@ -36375,106 +37989,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_project_md",
-      "target": "project_project_c2c_talent_platform_refactoring"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_project_c2c_talent_platform_refactoring",
-      "target": "project_architecture"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L70",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_project_c2c_talent_platform_refactoring",
-      "target": "project_code_layout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L55",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_project_c2c_talent_platform_refactoring",
-      "target": "project_interface_contracts"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L44",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_project_c2c_talent_platform_refactoring",
-      "target": "project_milestones"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_architecture",
-      "target": "project_backend_structure"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_architecture",
-      "target": "project_frontend_structure"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L56",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_interface_contracts",
-      "target": "project_api_routers_fastapi_app"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L66",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_interface_contracts",
-      "target": "project_cv_tailor_backend_pdf"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "PROJECT.md",
-      "source_location": "L62",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "project_interface_contracts",
-      "target": "project_opportunities_candidates_schema_link"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "TEST_INFRA.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -36601,116 +38115,6 @@
       "confidence_score": 1.0,
       "source": "test_ready_feature_checklist",
       "target": "test_ready_tier_4_real_world_scenarios"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_workflow_integration_md",
-      "target": "workflow_integration_workflow_integration_campus2corporate_c2c"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_workflow_integration_campus2corporate_c2c",
-      "target": "workflow_integration_master_standard_operating_procedure_sop"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_master_standard_operating_procedure_sop",
-      "target": "workflow_integration_1_executive_summary"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_master_standard_operating_procedure_sop",
-      "target": "workflow_integration_2_the_integrated_candidate_journey"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_master_standard_operating_procedure_sop",
-      "target": "workflow_integration_3_service_integration_matrix"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L49",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_master_standard_operating_procedure_sop",
-      "target": "workflow_integration_4_academic_alignment_narrative_arcs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L59",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_master_standard_operating_procedure_sop",
-      "target": "workflow_integration_5_future_execution_units"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_3_service_integration_matrix",
-      "target": "workflow_integration_a_phase_1_signal_evidence"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_3_service_integration_matrix",
-      "target": "workflow_integration_b_phase_2_behavioral_validation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L37",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_3_service_integration_matrix",
-      "target": "workflow_integration_c_phase_3_the_makeover"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "WORKFLOW_INTEGRATION.md",
-      "source_location": "L42",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "workflow_integration_3_service_integration_matrix",
-      "target": "workflow_integration_d_phase_4_market_deployment"
     },
     {
       "relation": "contains",
@@ -37273,166 +38677,6 @@
       "target": "unit_economics_revenue_projections"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "c_tt_ai_stack_01_projects_makeover_talent_agency_user_journeys_md",
-      "target": "user_journeys_campus_to_corporate_c2c_user_journeys"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
-      "target": "user_journeys_1_student_journey"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L40",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
-      "target": "user_journeys_2_employer_journey"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
-      "target": "user_journeys_3_tpo_institution_journey"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L87",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_campus_to_corporate_c2c_user_journeys",
-      "target": "user_journeys_4_admin_journey"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_1_student_journey",
-      "target": "user_journeys_step_1_authentication_onboarding"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_1_student_journey",
-      "target": "user_journeys_step_2_the_assessment_the_ordeal"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_1_student_journey",
-      "target": "user_journeys_step_3_student_dashboard"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_1_student_journey",
-      "target": "user_journeys_step_4_retro_portfolio_shareable_profile"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L44",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_2_employer_journey",
-      "target": "user_journeys_step_1_authentication_onboarding_44"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L49",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_2_employer_journey",
-      "target": "user_journeys_step_2_recruiter_console_discover_talent"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L58",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_2_employer_journey",
-      "target": "user_journeys_step_3_job_management"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L69",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_3_tpo_institution_journey",
-      "target": "user_journeys_step_1_authentication_onboarding_69"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L74",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_3_tpo_institution_journey",
-      "target": "user_journeys_step_2_tpo_command_center"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L91",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_4_admin_journey",
-      "target": "user_journeys_step_1_authentication"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "user_journeys.md",
-      "source_location": "L95",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "user_journeys_4_admin_journey",
-      "target": "user_journeys_step_2_global_admin_root"
-    },
-    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -37444,5 +38688,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fddd9233eae5962a44530ce8c524bb7d9732c0ce"
+  "built_at_commit": "d520f5404d0992fa01d94647a4af3c4009a8f10f"
 }
