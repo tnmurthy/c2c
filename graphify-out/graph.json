@@ -6,12 +6,42 @@
     {
       "label": "page.tsx",
       "file_type": "code",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "jobs_page",
+      "community": 48,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "JobItem",
+      "file_type": "code",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "jobs_page_jobitem",
+      "community": 48,
+      "norm_label": "jobitem"
+    },
+    {
+      "label": "EmployerJobsListPage()",
+      "file_type": "code",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "jobs_page_employerjobslistpage",
+      "community": 48,
+      "norm_label": "employerjobslistpage()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
       "source_file": "src/app/docs/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_page",
       "community": 257,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "docs_page"
     },
     {
       "label": "DocsPage()",
@@ -19,9 +49,9 @@
       "source_file": "src/app/docs/page.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "docs_page_docspage",
       "community": 257,
-      "norm_label": "docspage()"
+      "norm_label": "docspage()",
+      "id": "docs_page_docspage"
     },
     {
       "label": "page.tsx",
@@ -29,9 +59,9 @@
       "source_file": "src/app/wiki/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "wiki_page",
       "community": 256,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "wiki_page"
     },
     {
       "label": "ProcessItem",
@@ -39,9 +69,9 @@
       "source_file": "src/app/wiki/page.tsx",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "wiki_page_processitem",
       "community": 256,
-      "norm_label": "processitem"
+      "norm_label": "processitem",
+      "id": "wiki_page_processitem"
     },
     {
       "label": "PROCESSES",
@@ -49,9 +79,9 @@
       "source_file": "src/app/wiki/page.tsx",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "wiki_page_processes",
       "community": 256,
-      "norm_label": "processes"
+      "norm_label": "processes",
+      "id": "wiki_page_processes"
     },
     {
       "label": "WikiPortal()",
@@ -59,9 +89,9 @@
       "source_file": "src/app/wiki/page.tsx",
       "source_location": "L490",
       "_origin": "ast",
-      "id": "wiki_page_wikiportal",
       "community": 256,
-      "norm_label": "wikiportal()"
+      "norm_label": "wikiportal()",
+      "id": "wiki_page_wikiportal"
     },
     {
       "label": "PROJECT.md",
@@ -1949,7 +1979,7 @@
       "source_file": "api/main.py",
       "source_location": "L128",
       "_origin": "ast",
-      "community": 233,
+      "community": 10,
       "norm_label": "health()",
       "id": "api_main_health"
     },
@@ -2239,7 +2269,7 @@
       "source_file": "api/schemas/assessment.py",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "tokenclaims",
       "id": "schemas_assessment_tokenclaims"
     },
@@ -2249,7 +2279,7 @@
       "source_file": "api/schemas/assessment.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "assessmentattemptread",
       "id": "schemas_assessment_assessmentattemptread"
     },
@@ -2339,7 +2369,7 @@
       "source_file": "src/app/(main)/dashboard/[id]/page.tsx",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "historypoint",
       "id": "id_page_historypoint"
     },
@@ -2359,7 +2389,7 @@
       "source_file": "src/app/(main)/dashboard/[id]/page.tsx",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "dashboarddata",
       "id": "id_page_dashboarddata"
     },
@@ -3489,7 +3519,7 @@
       "source_file": "api/db.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "db.py",
       "id": "api_db"
     },
@@ -3499,7 +3529,7 @@
       "source_file": "api/db.py",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "get_anon_client()",
       "id": "api_db_get_anon_client"
     },
@@ -3519,7 +3549,7 @@
       "source_file": "api/db.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 233,
+      "community": 167,
       "norm_label": "get_service_client()",
       "id": "api_db_get_service_client"
     },
@@ -3529,7 +3559,7 @@
       "source_file": "api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "deps.py",
       "id": "api_deps"
     },
@@ -3539,7 +3569,7 @@
       "source_file": "api/deps.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "_jwt_secret()",
       "id": "api_deps_jwt_secret"
     },
@@ -3549,7 +3579,7 @@
       "source_file": "api/deps.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "get_current_claims()",
       "id": "api_deps_get_current_claims"
     },
@@ -3559,7 +3589,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "httpauthorizationcredentials",
       "id": "httpauthorizationcredentials"
     },
@@ -3569,7 +3599,7 @@
       "source_file": "api/deps.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 233,
+      "community": 167,
       "norm_label": "get_supabase_client()",
       "id": "api_deps_get_supabase_client"
     },
@@ -3579,7 +3609,7 @@
       "source_file": "api/deps.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "require_supabase()",
       "id": "api_deps_require_supabase"
     },
@@ -3599,7 +3629,7 @@
       "source_file": "api/deps.py",
       "source_location": "L83",
       "_origin": "ast",
-      "community": 233,
+      "community": 167,
       "norm_label": "require_webhook_secret()",
       "id": "api_deps_require_webhook_secret"
     },
@@ -3609,7 +3639,7 @@
       "source_file": "api/deps.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "demo_auth_allowed()",
       "id": "api_deps_demo_auth_allowed"
     },
@@ -3629,7 +3659,7 @@
       "source_file": "api/deps.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 238,
+      "community": 1,
       "norm_label": "require_role()",
       "id": "api_deps_require_role"
     },
@@ -3639,7 +3669,7 @@
       "source_file": "api/deps.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 233,
+      "community": 167,
       "norm_label": "create and return a supabase client. returns none if env vars are missing.",
       "id": "api_deps_rationale_46"
     },
@@ -3649,7 +3679,7 @@
       "source_file": "api/deps.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "fastapi dependency that provides a supabase client or raises 503.",
       "id": "api_deps_rationale_60"
     },
@@ -3659,7 +3689,7 @@
       "source_file": "api/deps.py",
       "source_location": "L84",
       "_origin": "ast",
-      "community": 233,
+      "community": 167,
       "norm_label": "guards /webhook/* endpoints: they start background work (some of it paid ai",
       "id": "api_deps_rationale_84"
     },
@@ -3669,7 +3699,7 @@
       "source_file": "api/deps.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "demo/dev identities are accepted only when explicitly enabled (never set in prod",
       "id": "api_deps_rationale_97"
     },
@@ -3689,7 +3719,7 @@
       "source_file": "api/deps.py",
       "source_location": "L156",
       "_origin": "ast",
-      "community": 238,
+      "community": 1,
       "norm_label": "fastapi dependency factory to enforce rbac constraints using app_metadata.",
       "id": "api_deps_rationale_156"
     },
@@ -3699,7 +3729,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "exceptions.py",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_exceptions_py"
     },
@@ -3759,7 +3789,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "notfounderror",
       "id": "api_exceptions_notfounderror"
     },
@@ -3819,7 +3849,7 @@
       "source_file": "api/exceptions.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "raised when a requested resource is not found.",
       "id": "api_exceptions_rationale_17"
     },
@@ -3929,7 +3959,7 @@
       "source_file": "api/pdf_generator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 67,
+      "community": 1,
       "norm_label": "pdf_generator.py",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_pdf_generator_py"
     },
@@ -3939,7 +3969,7 @@
       "source_file": "api/pdf_generator.py",
       "source_location": "L2",
       "_origin": "ast",
-      "community": 67,
+      "community": 1,
       "norm_label": "generate_student_pdf()",
       "id": "api_pdf_generator_generate_student_pdf"
     },
@@ -3949,7 +3979,7 @@
       "source_file": "api/pdf_generator.py",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 67,
+      "community": 1,
       "norm_label": "generate_interview_guide_pdf()",
       "id": "api_pdf_generator_generate_interview_guide_pdf"
     },
@@ -4039,7 +4069,7 @@
       "source_file": "api/routers/assessments.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "assessments.py",
       "id": "routers_assessments"
     },
@@ -4049,7 +4079,7 @@
       "source_file": "api/routers/assessments.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "get_assessment_history()",
       "id": "routers_assessments_get_assessment_history"
     },
@@ -4139,7 +4169,7 @@
       "source_file": "api/routers/crm_router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 67,
+      "community": 1,
       "norm_label": "crm_router.py",
       "id": "routers_crm_router"
     },
@@ -4169,7 +4199,7 @@
       "source_file": "api/routers/crm_router.py",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 67,
+      "community": 1,
       "norm_label": "get_candidate_profile_pdf()",
       "id": "routers_crm_router_get_candidate_profile_pdf"
     },
@@ -4179,7 +4209,7 @@
       "source_file": "api/routers/crm_router.py",
       "source_location": "L156",
       "_origin": "ast",
-      "community": 67,
+      "community": 1,
       "norm_label": "get_candidate_interview_guide_pdf()",
       "id": "routers_crm_router_get_candidate_interview_guide_pdf"
     },
@@ -4219,7 +4249,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 233,
+      "community": 167,
       "norm_label": "run_scoring_engine()",
       "id": "routers_employer_router_run_scoring_engine"
     },
@@ -4289,7 +4319,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L164",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "_job_for_user()",
       "id": "routers_employer_router_job_for_user"
     },
@@ -4299,7 +4329,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L178",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "run_job_matching()",
       "id": "routers_employer_router_run_job_matching"
     },
@@ -4319,7 +4349,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L234",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "get_job_matches()",
       "id": "routers_employer_router_get_job_matches"
     },
@@ -4379,7 +4409,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 233,
+      "community": 167,
       "norm_label": "background task: rank candidates for a job (p3-b). sync, so fastapi runs it in a",
       "id": "routers_employer_router_rationale_29"
     },
@@ -4389,7 +4419,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L165",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "the job, if this user may see its candidates: admins any job, employers only the",
       "id": "routers_employer_router_rationale_165"
     },
@@ -4399,7 +4429,7 @@
       "source_file": "api/routers/employer_router.py",
       "source_location": "L183",
       "_origin": "ast",
-      "community": 167,
+      "community": 245,
       "norm_label": "re-scores candidates now. unchanged profiles reuse their stored judgments.",
       "id": "routers_employer_router_rationale_183"
     },
@@ -4859,7 +4889,7 @@
       "source_file": "api/routers/portfolio_router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "portfolio_router.py",
       "id": "c_tt_ai_stack_01_projects_makeover_talent_agency_api_routers_portfolio_router_py"
     },
@@ -4869,7 +4899,7 @@
       "source_file": "api/routers/portfolio_router.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "get_portfolio_placeholder()",
       "id": "routers_portfolio_router_get_portfolio_placeholder"
     },
@@ -4879,7 +4909,7 @@
       "source_file": "api/routers/portfolio_router.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 233,
+      "community": 238,
       "norm_label": "placeholder endpoint for portfolio routers.",
       "id": "routers_portfolio_router_rationale_11"
     },
@@ -4959,7 +4989,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L312",
       "_origin": "ast",
-      "community": 167,
+      "community": 1,
       "norm_label": "get_student()",
       "id": "routers_student_router_get_student"
     },
@@ -4969,7 +4999,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L407",
       "_origin": "ast",
-      "community": 167,
+      "community": 1,
       "norm_label": "get_assessment_history()",
       "id": "routers_student_router_get_assessment_history"
     },
@@ -4999,7 +5029,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L488",
       "_origin": "ast",
-      "community": 67,
+      "community": 1,
       "norm_label": "export_student_pdf()",
       "id": "routers_student_router_export_student_pdf"
     },
@@ -5009,7 +5039,7 @@
       "source_file": "api/routers/student_router.py",
       "source_location": "L521",
       "_origin": "ast",
-      "community": 167,
+      "community": 1,
       "norm_label": "export_interview_guide()",
       "id": "routers_student_router_export_interview_guide"
     },
@@ -6369,7 +6399,7 @@
       "source_file": "src/app/(main)/assessment/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 21,
       "norm_label": "page.tsx",
       "id": "assessment_page"
     },
@@ -6379,7 +6409,7 @@
       "source_file": "src/app/(main)/assessment/page.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 48,
+      "community": 21,
       "norm_label": "assessment()",
       "id": "assessment_page_assessment"
     },
@@ -6409,7 +6439,7 @@
       "source_file": "src/app/(main)/layout.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 219,
+      "community": 47,
       "norm_label": "layout.tsx",
       "id": "main_layout"
     },
@@ -6419,7 +6449,7 @@
       "source_file": "src/app/(main)/layout.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 219,
+      "community": 47,
       "norm_label": "mainlayout()",
       "id": "main_layout_mainlayout"
     },
@@ -6619,7 +6649,7 @@
       "source_file": "src/app/crm/costs/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "page.tsx",
       "id": "costs_page"
     },
@@ -6629,7 +6659,7 @@
       "source_file": "src/app/crm/costs/page.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "cost_roles",
       "id": "costs_page_cost_roles"
     },
@@ -6639,7 +6669,7 @@
       "source_file": "src/app/crm/costs/page.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "savings_built_in",
       "id": "costs_page_savings_built_in"
     },
@@ -6649,7 +6679,7 @@
       "source_file": "src/app/crm/costs/page.tsx",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "vendor_caps",
       "id": "costs_page_vendor_caps"
     },
@@ -6659,7 +6689,7 @@
       "source_file": "src/app/crm/costs/page.tsx",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "costspage()",
       "id": "costs_page_costspage"
     },
@@ -6669,7 +6699,7 @@
       "source_file": "src/app/crm/layout.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 253,
+      "community": 47,
       "norm_label": "layout.tsx",
       "id": "crm_layout"
     },
@@ -6679,7 +6709,7 @@
       "source_file": "src/app/crm/layout.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 253,
+      "community": 47,
       "norm_label": "crmlayout()",
       "id": "crm_layout_crmlayout"
     },
@@ -6719,7 +6749,7 @@
       "source_file": "src/app/crm/opportunities/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "page.tsx",
       "id": "opportunities_page"
     },
@@ -6729,7 +6759,7 @@
       "source_file": "src/app/crm/opportunities/page.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "stage_colors",
       "id": "opportunities_page_stage_colors"
     },
@@ -6779,7 +6809,7 @@
       "source_file": "src/app/crm/page.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 41,
+      "community": 83,
       "norm_label": "crmdashboard()",
       "id": "crm_page_crmdashboard"
     },
@@ -6859,7 +6889,7 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 236,
+      "community": 150,
       "norm_label": "layout.tsx",
       "id": "app_layout"
     },
@@ -6869,7 +6899,7 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 236,
+      "community": 150,
       "norm_label": "hanken",
       "id": "app_layout_hanken"
     },
@@ -6879,7 +6909,7 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 236,
+      "community": 150,
       "norm_label": "jetbrains",
       "id": "app_layout_jetbrains"
     },
@@ -6889,7 +6919,7 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 236,
+      "community": 150,
       "norm_label": "metadata",
       "id": "app_layout_metadata"
     },
@@ -6899,7 +6929,7 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 236,
+      "community": 150,
       "norm_label": "rootlayout()",
       "id": "app_layout_rootlayout"
     },
@@ -7059,7 +7089,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 255,
+      "community": 48,
       "norm_label": "page.tsx",
       "id": "students_page"
     },
@@ -7069,7 +7099,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 255,
+      "community": 48,
       "norm_label": "student",
       "id": "students_page_student"
     },
@@ -7079,7 +7109,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 255,
+      "community": 48,
       "norm_label": "dept_colors",
       "id": "students_page_dept_colors"
     },
@@ -7089,7 +7119,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 255,
+      "community": 48,
       "norm_label": "deptcolor()",
       "id": "students_page_deptcolor"
     },
@@ -7099,7 +7129,7 @@
       "source_file": "src/app/tpo-dashboard/[id]/students/page.tsx",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 255,
+      "community": 48,
       "norm_label": "studenttracking()",
       "id": "students_page_studenttracking"
     },
@@ -7149,7 +7179,7 @@
       "source_file": "src/components/Footer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 219,
+      "community": 47,
       "norm_label": "footer.tsx",
       "id": "components_footer"
     },
@@ -7159,7 +7189,7 @@
       "source_file": "src/components/Footer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 219,
+      "community": 47,
       "norm_label": "footer()",
       "id": "components_footer_footer"
     },
@@ -7379,7 +7409,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "trendlinechart.tsx",
       "id": "charts_trendlinechart"
     },
@@ -7389,7 +7419,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "historypoint",
       "id": "charts_trendlinechart_historypoint"
     },
@@ -7399,7 +7429,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "trendlinechartprops",
       "id": "charts_trendlinechart_trendlinechartprops"
     },
@@ -7409,7 +7439,7 @@
       "source_file": "src/components/charts/TrendLineChart.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "trendlinechart()",
       "id": "charts_trendlinechart_trendlinechart"
     },
@@ -7419,7 +7449,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "costlimitsform.tsx",
       "id": "costs_costlimitsform"
     },
@@ -7429,7 +7459,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "field",
       "id": "costs_costlimitsform_field"
     },
@@ -7439,7 +7469,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "fields",
       "id": "costs_costlimitsform_fields"
     },
@@ -7449,7 +7479,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "totext()",
       "id": "costs_costlimitsform_totext"
     },
@@ -7459,7 +7489,7 @@
       "source_file": "src/components/costs/CostLimitsForm.tsx",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "costlimitsform()",
       "id": "costs_costlimitsform_costlimitsform"
     },
@@ -7469,7 +7499,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "spendsummary.tsx",
       "id": "costs_spendsummary"
     },
@@ -7479,7 +7509,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "inr()",
       "id": "costs_spendsummary_inr"
     },
@@ -7489,7 +7519,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "tile()",
       "id": "costs_spendsummary_tile"
     },
@@ -7499,7 +7529,7 @@
       "source_file": "src/components/costs/SpendSummary.tsx",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "spendsummary()",
       "id": "costs_spendsummary_spendsummary"
     },
@@ -7509,7 +7539,7 @@
       "source_file": "src/components/crm/NavItem.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 253,
+      "community": 47,
       "norm_label": "navitem.tsx",
       "id": "crm_navitem"
     },
@@ -7519,7 +7549,7 @@
       "source_file": "src/components/crm/NavItem.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 253,
+      "community": 47,
       "norm_label": "navitemprops",
       "id": "crm_navitem_navitemprops"
     },
@@ -7529,7 +7559,7 @@
       "source_file": "src/components/crm/NavItem.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 253,
+      "community": 47,
       "norm_label": "navitem()",
       "id": "crm_navitem_navitem"
     },
@@ -7579,7 +7609,7 @@
       "source_file": "src/components/dashboard/CohortSkillGapHeatmap.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 109,
+      "community": 48,
       "norm_label": "cohortskillgapheatmap.tsx",
       "id": "dashboard_cohortskillgapheatmap"
     },
@@ -7589,7 +7619,7 @@
       "source_file": "src/components/dashboard/CohortSkillGapHeatmap.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 109,
+      "community": 48,
       "norm_label": "skillgapitem",
       "id": "dashboard_cohortskillgapheatmap_skillgapitem"
     },
@@ -7599,7 +7629,7 @@
       "source_file": "src/components/dashboard/CohortSkillGapHeatmap.tsx",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 109,
+      "community": 48,
       "norm_label": "skillgapreportdata",
       "id": "dashboard_cohortskillgapheatmap_skillgapreportdata"
     },
@@ -7609,7 +7639,7 @@
       "source_file": "src/components/dashboard/CohortSkillGapHeatmap.tsx",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 109,
+      "community": 48,
       "norm_label": "cohortskillgapheatmapprops",
       "id": "dashboard_cohortskillgapheatmap_cohortskillgapheatmapprops"
     },
@@ -7619,7 +7649,7 @@
       "source_file": "src/components/dashboard/CohortSkillGapHeatmap.tsx",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 109,
+      "community": 48,
       "norm_label": "cohortskillgapheatmap()",
       "id": "dashboard_cohortskillgapheatmap_cohortskillgapheatmap"
     },
@@ -7659,7 +7689,7 @@
       "source_file": "src/components/profile/ProfileCompletionWidget.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "profilecompletionwidget.tsx",
       "id": "profile_profilecompletionwidget"
     },
@@ -7669,7 +7699,7 @@
       "source_file": "src/components/profile/ProfileCompletionWidget.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "profilecompletionwidgetprops",
       "id": "profile_profilecompletionwidget_profilecompletionwidgetprops"
     },
@@ -7679,7 +7709,7 @@
       "source_file": "src/components/profile/ProfileCompletionWidget.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "profilecompletionwidget()",
       "id": "profile_profilecompletionwidget_profilecompletionwidget"
     },
@@ -7689,7 +7719,7 @@
       "source_file": "src/components/profile/ProfileExpansionModal.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "profileexpansionmodal.tsx",
       "id": "profile_profileexpansionmodal"
     },
@@ -7699,7 +7729,7 @@
       "source_file": "src/components/profile/ProfileExpansionModal.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "profileexpansionmodalprops",
       "id": "profile_profileexpansionmodal_profileexpansionmodalprops"
     },
@@ -7709,7 +7739,7 @@
       "source_file": "src/components/profile/ProfileExpansionModal.tsx",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "profileexpansionmodal()",
       "id": "profile_profileexpansionmodal_profileexpansionmodal"
     },
@@ -7719,7 +7749,7 @@
       "source_file": "src/components/profile/ResumeUploadModal.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "resumeuploadmodal.tsx",
       "id": "profile_resumeuploadmodal"
     },
@@ -7729,7 +7759,7 @@
       "source_file": "src/components/profile/ResumeUploadModal.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "resumeuploadmodalprops",
       "id": "profile_resumeuploadmodal_resumeuploadmodalprops"
     },
@@ -7739,7 +7769,7 @@
       "source_file": "src/components/profile/ResumeUploadModal.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 137,
+      "community": 5,
       "norm_label": "resumeuploadmodal()",
       "id": "profile_resumeuploadmodal_resumeuploadmodal"
     },
@@ -7779,7 +7809,7 @@
       "source_file": "src/hooks/useApiQuery.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 83,
+      "community": 5,
       "norm_label": "useapiquery.ts",
       "id": "hooks_useapiquery"
     },
@@ -7789,7 +7819,7 @@
       "source_file": "src/hooks/useApiQuery.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 83,
+      "community": 5,
       "norm_label": "useapiqueryreturn",
       "id": "hooks_useapiquery_useapiqueryreturn"
     },
@@ -7869,7 +7899,7 @@
       "source_file": "src/hooks/useAuthSession.ts",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 47,
+      "community": 41,
       "norm_label": "getdemosession()",
       "id": "hooks_useauthsession_getdemosession"
     },
@@ -8119,7 +8149,7 @@
       "source_file": "src/lib/demoSession.ts",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 47,
+      "community": 41,
       "norm_label": "readcookie()",
       "id": "lib_demosession_readcookie"
     },
@@ -8129,7 +8159,7 @@
       "source_file": "src/lib/demoSession.ts",
       "source_location": "L160",
       "_origin": "ast",
-      "community": 47,
+      "community": 41,
       "norm_label": "parsedemouser()",
       "id": "lib_demosession_parsedemouser"
     },
@@ -8139,7 +8169,7 @@
       "source_file": "src/lib/demoSession.ts",
       "source_location": "L170",
       "_origin": "ast",
-      "community": 47,
+      "community": 41,
       "norm_label": "getdemouser()",
       "id": "lib_demosession_getdemouser"
     },
@@ -8319,7 +8349,7 @@
       "source_file": "src/types.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "types.ts",
       "id": "src_types"
     },
@@ -8329,7 +8359,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "assessment.ts",
       "id": "types_assessment"
     },
@@ -8339,7 +8369,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "student",
       "id": "types_assessment_student"
     },
@@ -8349,7 +8379,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "assessmentquestion",
       "id": "types_assessment_assessmentquestion"
     },
@@ -8359,7 +8389,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "assessmentoption",
       "id": "types_assessment_assessmentoption"
     },
@@ -8369,7 +8399,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "assessmentresponse",
       "id": "types_assessment_assessmentresponse"
     },
@@ -8379,7 +8409,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "dimensionscores",
       "id": "types_assessment_dimensionscores"
     },
@@ -8389,7 +8419,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "developmentreport",
       "id": "types_assessment_developmentreport"
     },
@@ -8399,7 +8429,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "actionablefeedback",
       "id": "types_assessment_actionablefeedback"
     },
@@ -8409,7 +8439,7 @@
       "source_file": "src/types/assessment.ts",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "assessmentresult",
       "id": "types_assessment_assessmentresult"
     },
@@ -8459,7 +8489,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "costs.ts",
       "id": "types_costs"
     },
@@ -8469,7 +8499,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "aispendday",
       "id": "types_costs_aispendday"
     },
@@ -8479,7 +8509,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "costadvice",
       "id": "types_costs_costadvice"
     },
@@ -8489,7 +8519,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "aicostlimits",
       "id": "types_costs_aicostlimits"
     },
@@ -8499,7 +8529,7 @@
       "source_file": "src/types/costs.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 41,
+      "community": 67,
       "norm_label": "aispendsummary",
       "id": "types_costs_aispendsummary"
     },
@@ -8509,7 +8539,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "crm.ts",
       "id": "types_crm"
     },
@@ -8529,7 +8559,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 41,
+      "community": 83,
       "norm_label": "lead",
       "id": "types_crm_lead"
     },
@@ -8539,7 +8569,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "cohortdata",
       "id": "types_crm_cohortdata"
     },
@@ -8549,7 +8579,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "alert",
       "id": "types_crm_alert"
     },
@@ -8559,7 +8589,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "crmcandidatescore",
       "id": "types_crm_crmcandidatescore"
     },
@@ -8569,7 +8599,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L83",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "crmcandidate",
       "id": "types_crm_crmcandidate"
     },
@@ -8579,7 +8609,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L109",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "crmlead",
       "id": "types_crm_crmlead"
     },
@@ -8599,7 +8629,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L134",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "pipelinestage",
       "id": "types_crm_pipelinestage"
     },
@@ -8609,7 +8639,7 @@
       "source_file": "src/types/crm.ts",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 41,
+      "community": 21,
       "norm_label": "crmopportunity",
       "id": "types_crm_crmopportunity"
     },
@@ -8849,7 +8879,7 @@
       "source_file": "src/utils/supabase/server.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 253,
+      "community": 47,
       "norm_label": "server.ts",
       "id": "supabase_server"
     },
@@ -8859,7 +8889,7 @@
       "source_file": "src/utils/supabase/server.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 253,
+      "community": 47,
       "norm_label": "createclient()",
       "id": "supabase_server_createclient"
     },
@@ -8969,7 +8999,7 @@
       "source_file": "tests/db_gate.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": "db_gate.py",
       "id": "tests_db_gate"
     },
@@ -8979,7 +9009,7 @@
       "source_file": "tests/db_gate.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": "opt-in gate for tests that write to a real supabase database.  these tests see",
       "id": "tests_db_gate_rationale_1"
     },
@@ -9209,7 +9239,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": "test_assessment_attempts.py",
       "id": "tests_test_assessment_attempts"
     },
@@ -9219,7 +9249,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": "testassessmentattempts",
       "id": "tests_test_assessment_attempts_testassessmentattempts"
     },
@@ -9229,7 +9259,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".setup()",
       "id": "tests_test_assessment_attempts_testassessmentattempts_setup"
     },
@@ -9239,7 +9269,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".teardown()",
       "id": "tests_test_assessment_attempts_testassessmentattempts_teardown"
     },
@@ -9249,7 +9279,7 @@
       "source_file": "tests/test_assessment_attempts.py",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".test_attempts_increment_and_sync_trigger()",
       "id": "tests_test_assessment_attempts_testassessmentattempts_test_attempts_increment_and_sync_trigger"
     },
@@ -9919,7 +9949,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "test_demo_auth.py",
       "id": "tests_test_demo_auth"
     },
@@ -9929,7 +9959,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "_call()",
       "id": "tests_test_demo_auth_call"
     },
@@ -9939,7 +9969,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "test_demo_tokens_refused_by_default()",
       "id": "tests_test_demo_auth_test_demo_tokens_refused_by_default"
     },
@@ -9949,7 +9979,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "test_missing_auth_client_does_not_grant_admin()",
       "id": "tests_test_demo_auth_test_missing_auth_client_does_not_grant_admin"
     },
@@ -9959,7 +9989,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "test_demo_tokens_accepted_when_enabled()",
       "id": "tests_test_demo_auth_test_demo_tokens_accepted_when_enabled"
     },
@@ -9969,7 +9999,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "test_flag_parsing()",
       "id": "tests_test_demo_auth_test_flag_parsing"
     },
@@ -9979,7 +10009,7 @@
       "source_file": "tests/test_demo_auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 68,
+      "community": 238,
       "norm_label": "demo/dev identities must be refused unless allow_demo_auth=true.",
       "id": "tests_test_demo_auth_rationale_1"
     },
@@ -11199,7 +11229,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": "test_rls_policies.py",
       "id": "tests_test_rls_policies"
     },
@@ -11209,7 +11239,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": "testrlspolicies",
       "id": "tests_test_rls_policies_testrlspolicies"
     },
@@ -11219,7 +11249,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".setup()",
       "id": "tests_test_rls_policies_testrlspolicies_setup"
     },
@@ -11229,7 +11259,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".teardown()",
       "id": "tests_test_rls_policies_testrlspolicies_teardown"
     },
@@ -11239,7 +11269,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".test_students_policies_exist()",
       "id": "tests_test_rls_policies_testrlspolicies_test_students_policies_exist"
     },
@@ -11249,7 +11279,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".test_assessments_policies_exist()",
       "id": "tests_test_rls_policies_testrlspolicies_test_assessments_policies_exist"
     },
@@ -11259,7 +11289,7 @@
       "source_file": "tests/test_rls_policies.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 21,
+      "community": 238,
       "norm_label": ".test_market_leads_policies_exist()",
       "id": "tests_test_rls_policies_testrlspolicies_test_market_leads_policies_exist"
     },
@@ -16490,14 +16520,78 @@
   ],
   "links": [
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "jobs_page",
+      "target": "components_loadingscreen_loadingscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "jobs_page",
+      "target": "hooks_useauth_userequireauth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "jobs_page",
+      "target": "jobs_page_employerjobslistpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "jobs_page",
+      "target": "jobs_page_jobitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "jobs_page",
+      "target": "lib_authfetch_authfetch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/employer/jobs/page.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "jobs_page",
+      "target": "lib_signout_signouteverywhere",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/docs/page.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_page",
-      "target": "docs_page_docspage",
-      "confidence_score": 1.0
+      "target": "docs_page_docspage"
     },
     {
       "relation": "contains",
@@ -16505,9 +16599,9 @@
       "source_file": "src/app/wiki/page.tsx",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_page",
-      "target": "wiki_page_processes",
-      "confidence_score": 1.0
+      "target": "wiki_page_processes"
     },
     {
       "relation": "contains",
@@ -16515,9 +16609,9 @@
       "source_file": "src/app/wiki/page.tsx",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_page",
-      "target": "wiki_page_processitem",
-      "confidence_score": 1.0
+      "target": "wiki_page_processitem"
     },
     {
       "relation": "contains",
@@ -16525,9 +16619,9 @@
       "source_file": "src/app/wiki/page.tsx",
       "source_location": "L490",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "wiki_page",
-      "target": "wiki_page_wikiportal",
-      "confidence_score": 1.0
+      "target": "wiki_page_wikiportal"
     },
     {
       "relation": "contains",
@@ -38788,5 +38882,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6c111dce94f79f71bbcc96e4cf375fb05e9f83dc"
+  "built_at_commit": "ee1ea8575c22aac250f5d38b4291531e7b25e42b"
 }
