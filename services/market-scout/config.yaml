@@ -20,7 +20,7 @@ storage:
 # AI settings
 ai:
   enabled: true
-  model: "gemini-2.0-flash"
+  model: "gemini-3.5-flash-lite"  # 2.0 models shut down 2026-06-01
   min_score: 50               # Filter out items below this score
   rate_limit_seconds: 7      # Seconds between API calls (Gemini Free Tier)
   batch_size: 5              # Items per API call

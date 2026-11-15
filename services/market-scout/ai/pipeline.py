@@ -6,7 +6,7 @@ from ai.client import generate
 def analyse_batch(items: list[dict], context: str = "") -> list[dict]:
     """Analyse items in batches. Returns items enriched with AI fields."""
     config = yaml.safe_load((Path(__file__).parent.parent / "config.yaml").read_text())
-    model = config.get("ai", {}).get("model", "gemini-2.0-flash")
+    model = config.get("ai", {}).get("model") or ""  # "" -> client DEFAULT_MODEL
     rate_limit = config.get("ai", {}).get("rate_limit_seconds", 7.0)
     min_score = config.get("ai", {}).get("min_score", 0)
     batch_size = config.get("ai", {}).get("batch_size", 5)

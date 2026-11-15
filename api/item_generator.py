@@ -66,7 +66,7 @@ def generate_llm_item(dimension: str, item_type: str, context: str, recent_stems
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                res = gemini_generate(prompt, model="gemini-2.0-flash-lite")
+                res = gemini_generate(prompt)  # client DEFAULT_MODEL (2.0 models shut down 2026-06-01)
                 raw_data = None
                 if isinstance(res, str):
                     cleaned = res.strip()
@@ -139,7 +139,7 @@ def generate_llm_items_batch(dimension: str, item_type: str, context: str, count
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                res = gemini_generate(prompt, model="gemini-2.0-flash-lite")
+                res = gemini_generate(prompt)  # client DEFAULT_MODEL (2.0 models shut down 2026-06-01)
                 raw_data = None
                 if isinstance(res, str):
                     cleaned = res.strip()
