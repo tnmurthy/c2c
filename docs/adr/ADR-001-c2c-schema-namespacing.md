@@ -1,6 +1,6 @@
 # ADR-001 — c2c gets its own Postgres schemas in the shared Talia database
 
-- Status: accepted (2026-11-15). N1–N4 done (production runs on `c2c`); compatibility cleanup pending.
+- Status: accepted and complete (2026-11-15). Production runs on `c2c`, staging on `c2c_stg`; `public` holds no c2c objects.
 - Context owner: Narayanamurthy
 
 ## Context
@@ -40,7 +40,7 @@ and staging would need a second prefix. A schema change touches ~10 client const
 | N2 | Configurable schema + guard in every client | ✅ PR #46 |
 | N3 | Build `c2c_stg` as a structural clone of production + seed | ✅ migrations `20261115000200` (clone) and `20261115000300` (seed), applied 2026-11-15. Verified: 42 tables, 386 columns, 68 indexes, 66 FKs, 18 checks, 68 policies, 38 triggers — identical to `public`; 4 webhook triggers deliberately excluded; 0 references back to `public`. Vercel Preview env not switched yet (see below) |
 | N4 | Production move | ✅ 2026-11-15 (PR #51, migration `20261115000700`): 50 tables + review view + 17 c2c functions moved to `c2c` in one transaction after a production dry run; `public` compatibility views (51) + RPC wrappers (7) kept for old clients. Vercel Production `C2C_DB_SCHEMA`/`NEXT_PUBLIC_C2C_DB_SCHEMA` = `c2c`, Preview = `c2c_stg`; GitHub variable `C2C_DB_SCHEMA=c2c`. See incident below. |
-| N5 | Startup guard + post-move checks; drop compatibility objects | ✅ guard and checks done (no c2c function references `public` c2c objects). **Pending:** apply `20261115000800` to drop the `public` compatibility views/wrappers once local dev (`.env.local`) sets `C2C_DB_SCHEMA=c2c` |
+| N5 | Startup guard + post-move checks; drop compatibility objects | ✅ 2026-11-15: `20261115000800` applied — 51 compatibility views and 7 RPC wrappers dropped from `public`. Verified: site healthy; REST `c2c` serves, `public` returns 404 for c2c tables. Local dev is unaffected: `.env.local` points at a local Supabase (default schema `public`), not Talia. |
 
 ## Consequences / accepted limits
 
