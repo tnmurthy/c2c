@@ -21,7 +21,7 @@ class BudgetRefused(Exception):
 
 
 def _schema() -> str:
-    schema = os.environ.get("C2C_DB_SCHEMA") or "public"
+    schema = (os.environ.get("C2C_DB_SCHEMA") or "public").strip().lstrip("\ufeff").strip() or "public"
     if schema not in ("public", "c2c", "c2c_stg"):
         raise BudgetRefused("invalid_db_schema")
     return schema

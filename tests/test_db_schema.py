@@ -40,3 +40,9 @@ def test_make_client_binds_schema(monkeypatch):
     monkeypatch.delenv("VERCEL_ENV", raising=False)
     make_client("https://x.supabase.co", "k")
     assert seen["schema"] == "c2c_stg"
+
+
+@pytest.mark.parametrize("raw", ["\ufeffc2c", " c2c\r\n", "\ufeff c2c \n"])
+def test_bom_and_whitespace_are_ignored(raw):
+    """N4 incident: a BOM-prefixed env value broke every DB call in production."""
+    assert db_schema({"C2C_DB_SCHEMA": raw, "VERCEL_ENV": "production"}) == "c2c"

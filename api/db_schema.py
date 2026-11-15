@@ -24,7 +24,9 @@ class SchemaConfigError(RuntimeError):
 
 def db_schema(env: Optional[dict] = None) -> str:
     env = os.environ if env is None else env
-    schema = (env.get("C2C_DB_SCHEMA") or DEFAULT_SCHEMA).strip()
+    # strip() alone keeps a UTF-8 BOM (\ufeff): a BOM-prefixed value from a Windows
+    # pipe took production down during the N4 cutover (2026-11-15).
+    schema = (env.get("C2C_DB_SCHEMA") or DEFAULT_SCHEMA).strip().lstrip("\ufeff").strip() or DEFAULT_SCHEMA
     if schema not in ALLOWED_SCHEMAS:
         raise SchemaConfigError(f"C2C_DB_SCHEMA={schema!r} is not one of {ALLOWED_SCHEMAS}")
     deploy_env = (env.get("VERCEL_ENV") or "").strip().lower()

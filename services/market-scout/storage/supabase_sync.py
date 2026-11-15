@@ -11,7 +11,7 @@ def get_client():
         if not url or not key:
             raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set")
         # Same schema switch as api/db_schema.py (this service runs standalone).
-        schema = os.environ.get("C2C_DB_SCHEMA") or "public"
+        schema = (os.environ.get("C2C_DB_SCHEMA") or "public").strip().lstrip("\ufeff").strip() or "public"
         if schema not in ("public", "c2c", "c2c_stg"):
             raise ValueError(f"C2C_DB_SCHEMA={schema!r} is not allowed")
         _client = create_client(url, key, options=ClientOptions(schema=schema))
