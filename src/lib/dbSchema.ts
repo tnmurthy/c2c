@@ -14,7 +14,8 @@ export function resolveDbSchema(
   schemaEnv: string | undefined = process.env.NEXT_PUBLIC_C2C_DB_SCHEMA,
   deployEnv: string | undefined = process.env.NEXT_PUBLIC_VERCEL_ENV,
 ): C2CSchema {
-  const schema = (schemaEnv || 'public').trim();
+  // Strip a UTF-8 BOM explicitly (see api/db_schema.py, N4 incident 2026-11-15).
+  const schema = (schemaEnv || 'public').replace(/^\uFEFF/, '').trim() || 'public';
   if (!(ALLOWED_SCHEMAS as readonly string[]).includes(schema)) {
     throw new Error(`NEXT_PUBLIC_C2C_DB_SCHEMA=${schema} is not one of ${ALLOWED_SCHEMAS.join(', ')}`);
   }

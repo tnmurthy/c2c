@@ -1,6 +1,6 @@
 # ADR-001 — c2c gets its own Postgres schemas in the shared Talia database
 
-- Status: accepted (2026-11-15). N1, N2 done; N3–N5 pending.
+- Status: accepted (2026-11-15). N1–N4 done (production runs on `c2c`); compatibility cleanup pending.
 - Context owner: Narayanamurthy
 
 ## Context
@@ -39,8 +39,8 @@ and staging would need a second prefix. A schema change touches ~10 client const
 | N1 | Create `c2c`, `c2c_stg`; grants; expose both in Dashboard → Data API | ✅ migration `20261115000100`; both exposed 2026-11-15 (verified via REST: unknown schema error lists `c2c`, `c2c_stg`) |
 | N2 | Configurable schema + guard in every client | ✅ PR #46 |
 | N3 | Build `c2c_stg` as a structural clone of production + seed | ✅ migrations `20261115000200` (clone) and `20261115000300` (seed), applied 2026-11-15. Verified: 42 tables, 386 columns, 68 indexes, 66 FKs, 18 checks, 68 policies, 38 triggers — identical to `public`; 4 webhook triggers deliberately excluded; 0 references back to `public`. Vercel Preview env not switched yet (see below) |
-| N4 | Production move: one transaction `SET SCHEMA c2c` for the 42 tables + views; rewrite functions that reference `public.*`; move webhook triggers; switch prod env to `c2c`. Low-traffic window, backup first | pending |
-| N5 | Startup guard (done in N2) + post-move check that no c2c function references `public.<c2c table>` | partly done |
+| N4 | Production move | ✅ 2026-11-15 (PR #51, migration `20261115000700`): 50 tables + review view + 17 c2c functions moved to `c2c` in one transaction after a production dry run; `public` compatibility views (51) + RPC wrappers (7) kept for old clients. Vercel Production `C2C_DB_SCHEMA`/`NEXT_PUBLIC_C2C_DB_SCHEMA` = `c2c`, Preview = `c2c_stg`; GitHub variable `C2C_DB_SCHEMA=c2c`. See incident below. |
+| N5 | Startup guard + post-move checks; drop compatibility objects | ✅ guard and checks done (no c2c function references `public` c2c objects). **Pending:** apply `20261115000800` to drop the `public` compatibility views/wrappers once local dev (`.env.local`) sets `C2C_DB_SCHEMA=c2c` |
 
 ## Consequences / accepted limits
 
@@ -66,3 +66,10 @@ and staging would need a second prefix. A schema change touches ~10 client const
 - **Seed:** one tenant (`c2c-stg`), one institution (`stg.c2c.test`), 20 synthetic students, AI settings. The production item bank (`psychometric_items`) is empty — assessments run from `api/fallback_bank.json` in both environments.
 - **Using it:** set `C2C_DB_SCHEMA=c2c_stg` and `NEXT_PUBLIC_C2C_DB_SCHEMA=c2c_stg` for the Vercel **Preview** environment once PR #46 is merged. Until then previews keep using `public` so PR reviews still see demo data.
 - **Logins:** auth is shared. Staging users need `@stg.c2c.test` emails and a profile row in `c2c_stg` (students / institutions / employers / admins); none exist yet.
+
+## Incident — N4 cutover (2026-11-15, ~3 min)
+
+- **What:** after switching Vercel Production to `c2c`, every backend database call returned 500 (`/api/health` 500).
+- **Cause:** the env values were piped into `vercel env add` from Windows PowerShell, which prefixed a UTF-8 BOM (`\ufeffc2c`). The browser side tolerated it (JS `trim()` strips U+FEFF); Python `str.strip()` does not, so `db_schema()` rejected the value.
+- **Recovery:** `vercel rollback` to the previous production deployment (still on `public` via the compatibility layer) — health 200 within seconds; values re-added BOM-free and verified byte-by-byte; new build tested on its deployment URL before `vercel promote`.
+- **Prevention:** all schema readers strip a BOM explicitly (`api/db_schema.py`, `src/lib/dbSchema.ts`, market-scout); regression tests in `tests/test_db_schema.py`. When setting env values from PowerShell, set `$OutputEncoding` to UTF-8 without BOM, or use the dashboard.
