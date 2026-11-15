@@ -18,10 +18,7 @@ KID = "c2c-lti-v1"
 _RSA_KEY: Optional[rsa.RSAPrivateKey] = None
 
 
-def _int_to_base64url(val: int) -> str:
-    """Encodes a positive integer into base64url string without padding."""
-    val_bytes = val.to_bytes((val.bit_length() + 7) // 8, byteorder="big")
-    return base64.urlsafe_b64encode(val_bytes).decode("utf-8").rstrip("=")
+from api.core.signing import int_to_base64url as _int_to_base64url  # shared with partner SSO
 
 
 def get_or_generate_key() -> rsa.RSAPrivateKey:
