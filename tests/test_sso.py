@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 from api.core import sso
 from api.core.signing import generate_dev_key
 from api.deps import get_current_user, require_admin_supabase
+from api.domain.consent import NOTICES
 from api.routers.sso_router import router
 
 LAUNCH_URL = "https://eklav.example/integrations/c2c/launch"
@@ -21,11 +22,13 @@ class _Q:
     def __init__(self, rows): self.rows, self.f = rows, {}
     def select(self, *a, **k): return self
     def eq(self, c, v): self.f[c] = v; return self
+    def order(self, *a, **k): return self
+    def limit(self, *a): return self
     def execute(self):
         return SimpleNamespace(data=[r for r in self.rows if all(str(r.get(c)) == str(v) for c, v in self.f.items())])
 
 
-def fake_db(enabled=True, tenant=T1):
+def fake_db(enabled=True, tenant=T1, consent=True):
     tables = {
         "students": [{"id": "stu-1", "auth_id": "auth-1", "tenant_id": tenant, "institution_id": 7, "department_id": "dep-1"}],
         "departments": [{"id": "dep-1", "discipline_code": "CSE"}],
@@ -35,6 +38,8 @@ def fake_db(enabled=True, tenant=T1):
             {"user_id": "hod-1", "status": "active", "role": "dept_coordinator", "tenant_id": tenant, "institution_id": 7, "department_id": "dep-1"},
         ],
         "tenant_partner_links": [{"tenant_id": T1, "partner_id": "eklav", "enabled": enabled}],
+        "consent_records": [{"student_id": "stu-1", "partner_id": "eklav", "granted": consent,
+                             "age_confirmed": True, "notice_version": NOTICES["eklav"]["version"]}],
     }
     return SimpleNamespace(table=lambda n: _Q(tables.get(n, [])))
 
@@ -105,6 +110,15 @@ def test_staff_scope_from_most_specific_membership(env):
 def test_blocked_when_tenant_has_not_opted_in(env):
     assert _client(db=fake_db(enabled=False)).post("/api/sso/eklav/launch").status_code == 403
     assert _client(db=fake_db(tenant=T2)).post("/api/sso/eklav/launch").status_code == 403  # no link row
+
+
+def test_student_needs_own_consent(env):
+    """R5 / ADR-004: tenant opt-in is not enough; the student must have turned sharing on."""
+    r = _client(db=fake_db(consent=False)).post("/api/sso/eklav/launch")
+    assert r.status_code == 403 and "Data sharing" in r.json()["detail"]
+    # staff launches are not consent-gated (no student data in their token)
+    assert _client(role="institution", uid="tpo-1", profile_id="7", db=fake_db(consent=False)).post(
+        "/api/sso/eklav/launch").status_code == 200
 
 
 def test_blocked_when_user_has_no_tenant(env):

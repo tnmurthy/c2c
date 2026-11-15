@@ -285,6 +285,12 @@ export default function Dashboard() {
                   >
                     <Cpu className="w-4 h-4" /> Boot_Retro_Portfolio
                   </Link>
+                  <Link
+                    href={`/dashboard/${id}/privacy`}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-slate-500/10 hover:bg-slate-500/20 border border-slate-400/30 rounded-sm font-mono text-xs font-black text-slate-300 uppercase tracking-wider transition-all"
+                  >
+                    <Shield className="w-4 h-4" /> Data_Sharing
+                  </Link>
                   <a 
                     href={`/api/export/student/${id}`}
                     target="_blank"
