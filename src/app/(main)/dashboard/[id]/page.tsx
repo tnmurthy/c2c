@@ -36,6 +36,7 @@ import ProfileCompletionWidget from "@/components/profile/ProfileCompletionWidge
 import UserJourneyWidget from "@/components/dashboard/UserJourneyWidget";
 import { JobMatchCard } from "@/components/JobMatchCard";
 import { supabase } from "@/lib/supabase";
+import { DB_SCHEMA } from '@/lib/dbSchema';
 
 interface HistoryPoint {
   attempt_number: number;
@@ -146,7 +147,7 @@ export default function Dashboard() {
     const channel = supabase.channel('student-dashboard-changes')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'applications' },
+        { event: '*', schema: DB_SCHEMA, table: 'applications' },
         (payload) => {
           console.log('Realtime update: applications', payload);
           fetchData(); // Refetch to keep data consistent
@@ -154,7 +155,7 @@ export default function Dashboard() {
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'leads' },
+        { event: '*', schema: DB_SCHEMA, table: 'leads' },
         (payload) => {
           console.log('Realtime update: leads', payload);
           fetchData();
@@ -162,7 +163,7 @@ export default function Dashboard() {
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'development_reports' },
+        { event: '*', schema: DB_SCHEMA, table: 'development_reports' },
         (payload) => {
           console.log('Realtime update: development_reports', payload);
           fetchData();

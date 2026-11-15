@@ -20,6 +20,13 @@ class BudgetRefused(Exception):
         self.reason = reason
 
 
+def _schema() -> str:
+    schema = os.environ.get("C2C_DB_SCHEMA") or "public"
+    if schema not in ("public", "c2c", "c2c_stg"):
+        raise BudgetRefused("invalid_db_schema")
+    return schema
+
+
 def _rpc(name: str, params: dict):
     url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
     key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
@@ -28,7 +35,9 @@ def _rpc(name: str, params: dict):
     resp = requests.post(
         f"{url.rstrip('/')}/rest/v1/rpc/{name}",
         json=params,
-        headers={"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+        headers={"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                 # PostgREST schema (ADR-001): RPCs live in the configured c2c schema
+                 "Content-Profile": _schema()},
         timeout=TIMEOUT_SECONDS,
     )
     resp.raise_for_status()

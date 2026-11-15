@@ -27,6 +27,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { supabase } from "@/lib/supabase";
 import { authFetch } from '@/lib/authFetch';
 import { CohortSkillGapHeatmap } from "@/components/dashboard/CohortSkillGapHeatmap";
+import { DB_SCHEMA } from '@/lib/dbSchema';
 
 interface TPOCohortData {
   averages: {
@@ -85,7 +86,7 @@ export default function TPODashboard() {
     const channel = supabase.channel('tpo-dashboard-changes')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'students' },
+        { event: '*', schema: DB_SCHEMA, table: 'students' },
         (payload) => {
           console.log('Realtime update: students', payload);
           fetchData(); // Refetch cohort averages and distributions
@@ -93,7 +94,7 @@ export default function TPODashboard() {
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'assessments' },
+        { event: '*', schema: DB_SCHEMA, table: 'assessments' },
         (payload) => {
           console.log('Realtime update: assessments', payload);
           fetchData(); 
@@ -101,7 +102,7 @@ export default function TPODashboard() {
       )
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'applications' },
+        { event: '*', schema: DB_SCHEMA, table: 'applications' },
         (payload) => {
           console.log('Realtime update: applications', payload);
           fetchData(); // Refetch placement funnel metrics
