@@ -26,6 +26,15 @@ jobs:
         run: |
           pip install -r services/market-scout/requirements.txt
 
+      - name: Check configuration (prints no secret values)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          C2C_DB_SCHEMA: ${{ vars.C2C_DB_SCHEMA || 'public' }}
+        run: python services/market-scout/check_config.py
+
       - name: Run Market Scout
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

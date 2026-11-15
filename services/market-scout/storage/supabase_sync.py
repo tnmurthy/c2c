@@ -6,8 +6,10 @@ _client: Client = None
 def get_client():
     global _client
     if _client is None:
-        url = os.environ.get("SUPABASE_URL")
-        key = os.environ.get("SUPABASE_KEY")
+        # Strip BOM / quotes / newlines that pasted secrets can carry (see config_env.py).
+        _clean = lambda v: (v or "").strip(" \t\r\n\ufeff\"'") or None
+        url = _clean(os.environ.get("SUPABASE_URL"))
+        key = _clean(os.environ.get("SUPABASE_KEY"))
         if not url or not key:
             raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set")
         # Same schema switch as api/db_schema.py (this service runs standalone).

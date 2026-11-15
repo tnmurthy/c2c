@@ -28,8 +28,10 @@ def _schema() -> str:
 
 
 def _rpc(name: str, params: dict):
-    url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    # Strip BOM / quotes / newlines that pasted secrets can carry (see config_env.py).
+    _clean = lambda v: (v or "").strip(" \t\r\n\ufeff\"'") or None
+    url = _clean(os.environ.get("SUPABASE_URL")) or _clean(os.environ.get("NEXT_PUBLIC_SUPABASE_URL"))
+    key = _clean(os.environ.get("SUPABASE_SERVICE_ROLE_KEY"))
     if not url or not key:
         raise BudgetRefused("budget_not_configured")
     resp = requests.post(
