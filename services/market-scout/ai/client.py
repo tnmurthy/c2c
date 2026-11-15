@@ -23,17 +23,23 @@ MODEL_FALLBACK = [DEFAULT_MODEL] + [m for m in ("gemini-3.5-flash-lite", "gemini
 # dead model cannot burn the daily call cap on every batch.
 _dead_models = set()
 
+# Set when Google rejects the key itself (invalid / revoked / no permission): no
+# further calls this run - each would fail and still count against the daily cap.
+_key_rejected = False
+
 def generate(prompt: str, model: str = "", rate_limit: float = 7.0, source: str = "gemini_scout") -> dict:
     """
     Call Gemini with auto-fallback on 429. Returns parsed JSON or {}.
     Every HTTP attempt (including fallback models) is billable, so each one is
     claimed against the daily cap for `source` first; a refusal returns {}.
     """
-    global _last_call
+    global _last_call, _key_rejected
 
-    api_key = os.environ.get("GEMINI_API_KEY", "")
+    api_key = (os.environ.get("GEMINI_API_KEY") or "").strip(" \t\r\n\ufeff\"'")
     if not api_key:
         print("[AI] GEMINI_API_KEY not set.")
+        return {}
+    if _key_rejected:
         return {}
 
     elapsed = time.time() - _last_call
@@ -67,6 +73,11 @@ def generate(prompt: str, model: str = "", rate_limit: float = 7.0, source: str 
             budget.finish(ledger_id, ok=resp.status_code == 200)
             if resp.status_code == 200:
                 return _parse(resp)
+            if resp.status_code in (401, 403) or (resp.status_code == 400 and "API_KEY_INVALID" in resp.text):
+                _key_rejected = True
+                print(f"[AI] Gemini rejected the API key ({resp.status_code}) - no more Gemini calls this run. "
+                      "Re-set the GEMINI_API_KEY secret.")
+                return {}
             if resp.status_code == 404:
                 _dead_models.add(m)
                 print(f"[AI] Model {m} not found (retired or unknown) - skipping it for this run.")
