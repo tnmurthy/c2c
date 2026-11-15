@@ -4,6 +4,7 @@
 The routes use a service-role client that bypasses RLS, so this check is the
 only authorisation. Keep it the single place it is defined.
 """
+from api.domain.identity import email_domain, is_public_email_domain
 from api.exceptions import NotFoundError, PermissionDeniedError
 
 
@@ -11,7 +12,7 @@ def authorize_student_read(client, current_user, student_id: str, *, allow_emplo
     """Raise PermissionDeniedError/NotFoundError unless current_user may read student_id.
 
     admin: always. student (or no role): only their own record.
-    institution: students of their institution (profile_id) or same email domain.
+    institution: students of their institution (profile_id) or same non-webmail email domain.
     employer: only when allow_employer.
     """
     app_metadata = getattr(current_user, "app_metadata", {}) or {}
@@ -31,12 +32,12 @@ def authorize_student_read(client, current_user, student_id: str, *, allow_emplo
         student_check = client.table("students").select("institution_id, email").eq("id", student_id).execute()
         if not student_check.data:
             raise NotFoundError("Student not found")
-        s_email = student_check.data[0].get("email") or ""
-        s_domain = s_email.split("@")[-1] if s_email else ""
-        tpo_domain = email.split("@")[-1] if email else ""
+        s_domain = email_domain(student_check.data[0].get("email"))
+        tpo_domain = email_domain(email)
         inst_id = app_metadata.get("profile_id")
         is_owner = inst_id and str(student_check.data[0].get("institution_id")) == str(inst_id)
-        is_domain_match = tpo_domain and s_domain == tpo_domain
+        # Same institutional domain counts; a shared webmail domain (gmail.com) never does (B9).
+        is_domain_match = (not is_public_email_domain(tpo_domain)) and tpo_domain == s_domain
         if not (is_owner or is_domain_match):
             raise PermissionDeniedError("Access denied: student does not belong to your institution")
         return

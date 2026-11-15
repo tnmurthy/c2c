@@ -10,6 +10,9 @@ from api.schemas.assessment import InstitutionOnboard
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 from api.domain.students.access import authorize_student_read
+from api.domain.identity import (
+    NON_ACADEMIC_DOMAIN_MESSAGE, domain_matches, email_domain, is_public_email_domain, normalize_domain,
+)
 
 router = APIRouter(tags=["Student"])
 logger = logging.getLogger("c2c_api.student")
@@ -155,18 +158,55 @@ async def run_optimizers(student_id: str):
 
 @router.post("/onboard/institution")
 async def onboard_institution(inst: InstitutionOnboard, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
+    """Register a new institution, or update one you already own (GO_LIVE B9).
+
+    Non-admins: no webmail domains; the caller's email must be on the claimed
+    domain; students cannot register; an institution that already exists can
+    only be updated by its owner — claiming an existing one goes through a c2c
+    admin, because students share the institution's email domain.
+    """
+    auth_id = current_user.user.id if hasattr(current_user, "user") else current_user.id
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    is_admin = role == "admin"
+    data = inst.dict()
+    data["domain"] = normalize_domain(data.get("domain"))
+
+    if not is_admin:
+        if role == "student":
+            raise HTTPException(status_code=403, detail="Student accounts cannot register an institution.")
+        if is_public_email_domain(data["domain"]):
+            raise HTTPException(status_code=400, detail=NON_ACADEMIC_DOMAIN_MESSAGE)
+        if not domain_matches(email_domain(getattr(current_user, "email", "")), data["domain"]):
+            raise HTTPException(status_code=403, detail="Sign in with an email address on the institution's domain to register it.")
+
     try:
-        auth_id = current_user.user.id if hasattr(current_user, "user") else current_user.id
-        data = inst.dict()
+        existing = client.table("institutions").select("id, auth_id").eq("domain", data["domain"]).execute()
+    except Exception as e:
+        logger.error(f"ERROR onboard_institution lookup: {e}", exc_info=True)
+        raise DatabaseConnectionError(str(e))
+
+    if existing.data:
+        owner = existing.data[0].get("auth_id")
+        if not is_admin and str(owner or "") != str(auth_id):
+            raise HTTPException(
+                status_code=409,
+                detail="This institution is already registered. Contact c2c support to be verified as its TPO.",
+            )
+    # Admins edit details only: never become the owner (that would also replace
+    # their admin role). Assigning a TPO to a seeded institution is an explicit
+    # admin action (memberships, tenancy M3), not a side effect of this endpoint.
+    if not is_admin:
         data["auth_id"] = auth_id
-        existing = client.table("institutions").select("id").eq("domain", data["domain"]).execute()
+
+    try:
         if existing.data:
             res = client.table("institutions").update(data).eq("domain", data["domain"]).execute()
         else:
             res = client.table("institutions").insert(data).execute()
-        
+
         inserted = res.data
-        if inserted:
+        if inserted and data.get("auth_id") == auth_id:
             inst_id = inserted[0]["id"]
             try:
                 client.auth.admin.update_user_by_id(
@@ -259,16 +299,12 @@ async def get_cohort_report(institution_id: str, client = Depends(require_admin_
     email = getattr(current_user, "email", "") or ""
     
     try:
-        inst_check = client.table("institutions").select("domain").eq("id", institution_id).execute()
-        inst_domain = inst_check.data[0]["domain"] if inst_check.data else None
-        email_domain = email.split("@")[-1] if email else ""
-        
+        # Cohort telemetry: admin, or the institution's own TPO. Sharing the
+        # institution's email domain is not enough — students share it (B9).
         is_authorized = False
         if role == "admin":
             is_authorized = True
         elif role == "institution" and str(app_metadata.get("profile_id")) == str(institution_id):
-            is_authorized = True
-        elif inst_domain and email_domain == inst_domain:
             is_authorized = True
             
         if not is_authorized:
