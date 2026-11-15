@@ -138,6 +138,11 @@ class _Query:
         self.filters.append(lambda r: r.get(col) in vals)
         return self
 
+    def filter(self, col, op, val):
+        assert (op, val) == ("not.is", "null")
+        self.filters.append(lambda r: r.get(col) is not None)
+        return self
+
     def order(self, *_a, **_k):
         return self
 
@@ -174,7 +179,7 @@ class _Query:
 
 def _db(n_students=3, existing=None):
     # is_synthetic mirrors the DB column default (NOT NULL DEFAULT false, ADR-002)
-    students = [dict(_student(str(i)), is_synthetic=False) for i in range(n_students)]
+    students = [dict(_student(str(i)), is_synthetic=False, auth_id=f"auth-{i}") for i in range(n_students)]
     return FakeDB({
         "job_postings": [{"id": "job1", "title": "SDE", "description": "Backend", "requirements": ["Python", "Testing"],
                           "role_type": "tech", "employer_id": "emp1"}],

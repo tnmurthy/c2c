@@ -19,7 +19,7 @@ A tenant is a **university or college group**; each campus is an institution und
 | T3 | Each prospect college added to the CRM pipeline (`leads`) | pending |
 | T4 | On a signed LoI/MSA: admin creates the tenant (university), activates its institutions, and **invites** the TPO — single-use invite, 72 h expiry, official-domain address only. Acceptance creates a `tpo` membership with `verified_by` / `verified_at` | ✅ M4-1: `/admin/tenancy` (activate with agreement ref → invite TPO), `/invite/[token]`; table `invites` stores only sha256(token); migration `20261116000100` |
 | T5 | Admin verification SOP (below), logged in `audit_logs` | adopt now |
-| T6 | When the real roster arrives (CSV import), delete that college's synthetic students | first real college |
+| T6 | When the real roster arrives (CSV import), delete that college's synthetic students | first real college (import is live, M4-3; deletion stays a manual, reviewed step: synthetic rows are already hidden from employers) |
 
 Synthetic students (`is_synthetic = true`) must be excluded from employer search, matching,
 exports and any partner (eklav) sync.

@@ -29,6 +29,7 @@ class _Q:
     def neq(self, c, v): self.filters.append(lambda r, c=c, v=v: str(r.get(c)) != str(v)); return self
     def is_(self, c, v): self.filters.append(lambda r, c=c: r.get(c) is None); return self
     def in_(self, c, vs): self.filters.append(lambda r, c=c, vs=vs: str(r.get(c)) in {str(x) for x in vs}); return self
+    def lt(self, c, v): self.filters.append(lambda r, c=c, v=v: r.get(c) is not None and str(r.get(c)) < str(v)); return self
     def order(self, *a, **k): return self
     def limit(self, n): self._limit = n; return self
 

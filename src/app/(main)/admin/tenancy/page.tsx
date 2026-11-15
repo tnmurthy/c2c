@@ -16,6 +16,8 @@ interface Institution {
   affiliating_university: string | null;
   agreement_ref: string | null;
   activated_at: string | null;
+  roster_import_enabled: boolean;
+  roster_dpa_ref: string | null;
 }
 interface Tenant { tenant_id: string; name: string; kind: string; status: string; institutions: Institution[] }
 interface Staff {
@@ -119,6 +121,23 @@ export default function TenancyAdminPage() {
     }
   };
 
+  const toggleRoster = async (inst: Institution) => {
+    if (inst.roster_import_enabled) {
+      if (!window.confirm(`Switch off roster import for ${inst.name}?`)) return;
+      if (await post(`ros-${inst.id}`, `/api/tenancy/institutions/${inst.id}/roster-access`, { enabled: false })) {
+        setMessage({ kind: 'ok', text: `Roster import switched off for ${inst.name}.` });
+        overview.refetch();
+      }
+      return;
+    }
+    const ref = window.prompt(`Agreement clause that covers student data for ${inst.name} (e.g. "MSA-2026-07 cl. 9"):`, inst.roster_dpa_ref ?? '');
+    if (!ref || ref.trim().length < 3) return;
+    if (await post(`ros-${inst.id}`, `/api/tenancy/institutions/${inst.id}/roster-access`, { enabled: true, dpa_ref: ref.trim() })) {
+      setMessage({ kind: 'ok', text: `Roster import switched on for ${inst.name} (${ref.trim()}).` });
+      overview.refetch();
+    }
+  };
+
   const tenants = overview.data?.tenants ?? [];
   const unverified = (overview.data?.staff ?? []).filter((s) => !s.verified_at);
   const openInvites = (invites.data ?? []).filter((i) => i.state === 'open');
@@ -183,7 +202,7 @@ export default function TenancyAdminPage() {
                 {t.name} <span className="text-white/30">· {t.kind.replace('_', ' ')}</span>
               </div>
               {list.map((i) => (
-                <CollegeRow key={i.id} inst={i} busy={busy} onActivate={activate} onInvite={inviteTpo} />
+                <CollegeRow key={i.id} inst={i} busy={busy} onActivate={activate} onInvite={inviteTpo} onRoster={toggleRoster} />
               ))}
             </div>
           );
@@ -209,11 +228,12 @@ export default function TenancyAdminPage() {
   );
 }
 
-function CollegeRow({ inst, busy, onActivate, onInvite }: {
+function CollegeRow({ inst, busy, onActivate, onInvite, onRoster }: {
   inst: Institution;
   busy: string | null;
   onActivate: (i: Institution) => void;
   onInvite: (i: Institution, email: string) => void;
+  onRoster: (i: Institution) => void;
 }) {
   const [email, setEmail] = useState('');
   const active = inst.status === 'active';
@@ -231,6 +251,12 @@ function CollegeRow({ inst, busy, onActivate, onInvite }: {
         <span className={`text-[10px] uppercase tracking-widest px-2 py-1 rounded ${active ? 'bg-emerald-950/50 text-emerald-300' : inst.status === 'prospect' ? 'bg-slate-800 text-white/60' : 'bg-rose-950/40 text-rose-300'}`}>
           {active && <CheckCircle2 className="w-3 h-3 inline mr-1" />}{inst.status}
         </span>
+        {active && (
+          <button className={ghost} disabled={busy === `ros-${inst.id}`} onClick={() => onRoster(inst)}
+            title={inst.roster_dpa_ref ? `Agreement: ${inst.roster_dpa_ref}` : 'Switch on once the agreement covers student data'}>
+            Roster {inst.roster_import_enabled ? 'on' : 'off'}
+          </button>
+        )}
         {!active && (
           <button className={btn} disabled={busy === `act-${inst.id}`} onClick={() => onActivate(inst)}>Activate</button>
         )}

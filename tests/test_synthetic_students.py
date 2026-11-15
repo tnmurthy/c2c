@@ -7,12 +7,13 @@ from api.synthetic import include_synthetic, real_students_only
 class Q:
     def __init__(self): self.filters = []
     def eq(self, col, val): self.filters.append((col, val)); return self
+    def filter(self, col, op, val): self.filters.append((col, op, val)); return self
 
 
 def test_excluded_by_default(monkeypatch):
     monkeypatch.delenv("SHOW_SYNTHETIC_STUDENTS", raising=False)
     assert not include_synthetic()
-    assert real_students_only(Q()).filters == [("is_synthetic", False)]
+    assert real_students_only(Q()).filters == [("is_synthetic", False), ("auth_id", "not.is", "null")]
 
 
 def test_demo_environment_can_opt_in(monkeypatch):
@@ -35,6 +36,7 @@ def test_employer_candidates_filters_synthetic(monkeypatch):
         def select(self, *a, **k): return self
         def eq(self, c, v): self.f[c] = v; return self
         def in_(self, c, v): self.f[c] = v; return self
+        def filter(self, c, op, v): seen.setdefault('not_null', []).append(c); return self
         def order(self, *a, **k): return self
         def execute(self):
             if self.name == "students":
@@ -49,3 +51,4 @@ def test_employer_candidates_filters_synthetic(monkeypatch):
     app.dependency_overrides[get_current_user] = lambda: SimpleNamespace(id="e", email="hr@x.com", app_metadata={"role": "employer"})
     TestClient(app).get("/api/employer/candidates")
     assert seen["filters"].get("is_synthetic") is False
+    assert seen.get("not_null") == ["auth_id"]  # M4-3: imported, not-signed-up students hidden
