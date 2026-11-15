@@ -32,7 +32,7 @@ production database); do not try to work around them.
   is produced; import success → ok. Acceptance as in CLAUDE.md P1-B.
 - [x] **T2 — human: apply migration `20261026000000_webhook_triggers_vault.sql` to Talia**
   (GO_LIVE B5/B6). Done 2026-10-26; security advisor confirmed.
-- [ ] **T3 — human: Vercel production env** — `SUPABASE_SERVICE_ROLE_KEY` (B2;
+- [x] **T3 — human: Vercel production env** (done 2026-11-15) — `SUPABASE_SERVICE_ROLE_KEY` (B2;
   CRM/employer/matching/Costs return 503 without it) and `TYPESAFE_API_KEY` (B3).
   Verify: `GET /api/typesafe/status` → `api_key_configured: true`.
 - [x] **T4 — real Supabase demo accounts** for sales demos (B8). Done 2026-11-04:
