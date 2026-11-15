@@ -102,6 +102,7 @@ from api.routers.typesafe_router import router as typesafe_router
 from api.routers.costs_router import router as costs_router
 from api.routers.lti_router import router as lti_router
 from api.routers.sso_router import router as sso_router
+from api.routers.tenancy_router import router as tenancy_router
 
 app.include_router(student_router, prefix="/api")
 app.include_router(employer_router, prefix="/api")
@@ -114,6 +115,7 @@ app.include_router(typesafe_router, prefix="/api")
 app.include_router(costs_router, prefix="/api")
 app.include_router(lti_router, prefix="/api")
 app.include_router(sso_router, prefix="/api")
+app.include_router(tenancy_router, prefix="/api")
 
 # --- ROOT & HEALTH ENDPOINTS ---
 

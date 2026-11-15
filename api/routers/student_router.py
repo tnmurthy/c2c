@@ -10,6 +10,7 @@ from api.schemas.assessment import InstitutionOnboard
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 from api.domain.students.access import authorize_student_read
+from api.domain.tenancy import institution_access
 from api.domain.identity import (
     NON_ACADEMIC_DOMAIN_MESSAGE, domain_matches, email_domain, is_public_email_domain, normalize_domain,
 )
@@ -298,25 +299,17 @@ async def get_cohort_report(institution_id: str, client = Depends(require_admin_
     role = app_metadata.get("role")
     email = getattr(current_user, "email", "") or ""
     
+    # Cohort telemetry: admin, or the college's staff (memberships, M4-1). Sharing the
+    # institution's email domain is not enough - students share it (B9).
+    access = institution_access(client, current_user, institution_id)
+    if not access:
+        raise PermissionDeniedError("Access denied: unauthorized institution telemetry access")
+
     try:
-        # Cohort telemetry: admin, or the institution's own TPO. Sharing the
-        # institution's email domain is not enough — students share it (B9).
-        is_authorized = False
-        if role == "admin":
-            is_authorized = True
-        elif role == "institution" and str(app_metadata.get("profile_id")) == str(institution_id):
-            is_authorized = True
-            
-        if not is_authorized:
-            raise PermissionDeniedError("Access denied: unauthorized institution telemetry access")
-    except PermissionDeniedError:
-        raise
-    except Exception as e:
-        logger.error(f"Authorization check failed: {e}")
-        raise PermissionDeniedError("Access denied")
-            
-    try:
-        students_res = client.table("students").select("id").eq("institution_id", institution_id).execute()
+        sq = client.table("students").select("id").eq("institution_id", institution_id)
+        if access["department_ids"] is not None:
+            sq = sq.in_("department_id", access["department_ids"])
+        students_res = sq.execute()
         if not students_res.data: 
             return {"averages": {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}, "founder_distribution": {"Builder": 0, "Leader": 0, "Rainmaker": 0, "Anchor": 0}, "support_needs": []}
         ids = [s["id"] for s in students_res.data]
@@ -626,8 +619,14 @@ async def get_student_applications(
 
 @router.get("/institution/{institution_id}/cohort")
 async def get_institution_cohort(institution_id: str, client = Depends(require_admin_supabase), current_user = Depends(require_role(["institution", "admin"]))):
+    access = institution_access(client, current_user, institution_id)
+    if not access:
+        raise PermissionDeniedError("Access denied: not your college")
     try:
-        students_res = client.table("students").select("id, full_name, email, department, graduation_year, resume_url, skills, is_verified, created_at").eq("institution_id", institution_id).execute()
+        sq = client.table("students").select("id, full_name, email, department, graduation_year, resume_url, skills, is_verified, created_at").eq("institution_id", institution_id)
+        if access["department_ids"] is not None:
+            sq = sq.in_("department_id", access["department_ids"])
+        students_res = sq.execute()
         students = students_res.data or []
         if not students:
             return []
@@ -660,8 +659,14 @@ async def verify_student(institution_id: str, payload: dict, client = Depends(re
     student_id = payload.get("student_id")
     if not student_id:
         raise HTTPException(status_code=400, detail="student_id required")
+    access = institution_access(client, current_user, institution_id)
+    if not access:
+        raise PermissionDeniedError("Access denied: not your college")
     try:
-        res = client.table("students").update({"is_verified": True}).eq("id", student_id).eq("institution_id", institution_id).execute()
+        uq = client.table("students").update({"is_verified": True}).eq("id", student_id).eq("institution_id", institution_id)
+        if access["department_ids"] is not None:
+            uq = uq.in_("department_id", access["department_ids"])
+        res = uq.execute()
         return res.data
     except Exception as e:
         logger.error(f"ERROR verify_student: {e}", exc_info=True)

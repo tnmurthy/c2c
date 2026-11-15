@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { pendingInvitePath } from '@/lib/pendingInvite';
 import { Loader2 } from 'lucide-react';
 
 export default function AuthCallbackPage() {
@@ -18,6 +19,12 @@ export default function AuthCallbackPage() {
         if (error) throw error;
         if (!session) {
           router.push('/login');
+          return;
+        }
+
+        const invite = pendingInvitePath();
+        if (invite) {
+          router.push(invite);
           return;
         }
 

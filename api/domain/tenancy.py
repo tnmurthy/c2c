@@ -128,3 +128,38 @@ def user_scope(client, current_user) -> Dict[str, Any]:
         except Exception as e:
             logger.warning(f"department lookup failed: {e}")
     return scope
+
+
+def institution_access(client, current_user, institution_id) -> Optional[Dict[str, Any]]:
+    """What part of an institution the caller may see, or None for no access.
+
+    {"department_ids": None}      -> the whole institution
+    {"department_ids": [ids...]}  -> only these departments (coordinators / mentors)
+
+    Platform admin, a tenant_admin of the institution's tenant, or its TPO see it all.
+    The legacy TPO rule (app role institution + profile_id == institution) still applies
+    during the transition, as in authorize_student_read.
+    """
+    if institution_id is None:
+        return None
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    role = app_metadata.get("role")
+    if role == "admin":
+        return {"department_ids": None}
+    if role == "institution" and str(app_metadata.get("profile_id")) == str(institution_id):
+        return {"department_ids": None}
+    ms = active_memberships(client, getattr(current_user, "id", None))
+    tenant = None
+    depts: List[str] = []
+    for m in ms:
+        r = m.get("role")
+        if r == "tpo" and _same(m.get("institution_id"), institution_id):
+            return {"department_ids": None}
+        if r == "tenant_admin":
+            tenant = tenant or institution_tenant(client, institution_id)
+            if _same(m.get("tenant_id"), tenant):
+                return {"department_ids": None}
+        if r in ("dept_coordinator", "faculty_mentor") and _same(m.get("institution_id"), institution_id) \
+                and m.get("department_id"):
+            depts.append(str(m["department_id"]))
+    return {"department_ids": depts} if depts else None
