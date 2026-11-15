@@ -346,3 +346,195 @@ def verify_membership(membership_id: str, client=Depends(require_admin_supabase)
     audit.record(client, "membership.verify", actor_id=_uid(user), entity_type="membership", entity_id=membership_id,
                  tenant_id=m["tenant_id"], details={"role": m["role"], "institution_id": m.get("institution_id")})
     return {"id": membership_id, "verified_at": now}
+
+
+# ------------------------------------------------------------------ M4-2: departments & review queue
+from api.domain.departments import (  # noqa: E402
+    DepartmentError, clean_name, clean_short_code, department_rows, norm_alias, review_queue,
+)
+from api.domain.tenancy import can_manage_college  # noqa: E402
+
+
+def _require_manager(client, user, institution_id):
+    if not can_manage_college(client, user, institution_id):
+        raise HTTPException(status_code=403, detail="Only the college's verified TPO (or c2c admin) can change this.")
+
+
+def _dept_or_404(client, dept_id: str):
+    d = _one(client, "departments", "id", dept_id, "id, institution_id, name, short_code, discipline_code")
+    if not d:
+        raise HTTPException(status_code=404, detail="Department not found")
+    return d
+
+
+def _disciplines(client) -> dict:
+    return {r["code"]: r["name"] for r in (client.table("disciplines").select("code, name").execute().data or [])}
+
+
+def _check_discipline(client, code: Optional[str]) -> Optional[str]:
+    if not code:
+        return None
+    if code not in _disciplines(client):
+        raise HTTPException(status_code=400, detail=f"Unknown discipline {code}")
+    return code
+
+
+def _rpc_error(e: Exception) -> HTTPException:
+    msg = str(getattr(e, "message", "") or e)
+    for known in ("different colleges", "two different departments", "not found", "is not in college", "normalised"):
+        if known in msg:
+            return HTTPException(status_code=400, detail=msg.split("merge: ")[-1][:200])
+    logger.error("department rpc failed: %s", e)
+    return HTTPException(status_code=500, detail="The change could not be applied. Nothing was changed.")
+
+
+@router.get("/disciplines")
+def list_disciplines(client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    return client.table("disciplines").select("code, name, parent_code, level, default_program").order("code").execute().data or []
+
+
+@router.get("/institutions/{institution_id}/me")
+def my_college_access(institution_id: int, client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    acc = institution_access(client, user, institution_id)
+    if not acc:
+        raise HTTPException(status_code=403, detail="You don't have access to this college.")
+    inst = _one(client, "institutions", "id", institution_id, "id, name, status, domain, agreement_ref")
+    manage = can_manage_college(client, user, institution_id)
+    return {"institution": inst, "scope": "college" if acc["department_ids"] is None else "departments",
+            "department_ids": acc["department_ids"], "can_manage": manage,
+            "can_invite": manage and bool(inst) and inst.get("status") == "active" and bool(inst.get("agreement_ref"))}
+
+
+@router.get("/institutions/{institution_id}/departments/summary")
+def department_summary(institution_id: int, client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    acc = institution_access(client, user, institution_id)
+    if not acc:
+        raise HTTPException(status_code=403, detail="You don't have access to this college.")
+    depts = (client.table("departments").select("id, name, short_code, discipline_code")
+             .eq("institution_id", institution_id).order("name").execute().data or [])
+    if acc["department_ids"] is not None:
+        depts = [d for d in depts if str(d["id"]) in acc["department_ids"]]
+    students = client.table("students").select("department_id").eq("institution_id", institution_id).execute().data or []
+    return department_rows(depts, students, _disciplines(client))
+
+
+class DepartmentBody(BaseModel):
+    name: str = Field(..., max_length=200)
+    short_code: Optional[str] = Field(None, max_length=20)
+    discipline_code: Optional[str] = Field(None, max_length=20)
+
+
+class DepartmentPatch(BaseModel):
+    name: Optional[str] = Field(None, max_length=200)
+    short_code: Optional[str] = Field(None, max_length=20)
+    discipline_code: Optional[str] = Field(None, max_length=20)
+
+
+def _unique_name_or_409(client, institution_id, name: str, exclude_id: Optional[str] = None):
+    rows = client.table("departments").select("id, name").eq("institution_id", institution_id).execute().data or []
+    if any(r["name"].lower() == name.lower() and str(r["id"]) != str(exclude_id) for r in rows):
+        raise HTTPException(status_code=409, detail=f"A department named {name} already exists. Merge them instead.")
+
+
+@router.post("/institutions/{institution_id}/departments", status_code=201)
+def create_department(institution_id: int, body: DepartmentBody,
+                      client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    _require_manager(client, user, institution_id)
+    try:
+        name, code = clean_name(body.name), clean_short_code(body.short_code)
+    except DepartmentError as e:
+        raise HTTPException(status_code=e.status, detail=str(e))
+    _unique_name_or_409(client, institution_id, name)
+    row = {"institution_id": institution_id, "name": name, "short_code": code,
+           "discipline_code": _check_discipline(client, body.discipline_code)}
+    created = client.table("departments").insert(row).execute().data[0]
+    audit.record(client, "department.create", actor_id=_uid(user), entity_type="department", entity_id=created["id"],
+                 details={"institution_id": institution_id, "name": name, "discipline_code": row["discipline_code"]})
+    return created
+
+
+@router.patch("/departments/{dept_id}")
+def update_department(dept_id: str, body: DepartmentPatch,
+                      client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    d = dict(_dept_or_404(client, dept_id))  # copy: the audit keeps the before-values
+    _require_manager(client, user, d["institution_id"])
+    changes = {}
+    try:
+        if body.name is not None:
+            changes["name"] = clean_name(body.name)
+            _unique_name_or_409(client, d["institution_id"], changes["name"], exclude_id=dept_id)
+        if body.short_code is not None:
+            changes["short_code"] = clean_short_code(body.short_code)
+    except DepartmentError as e:
+        raise HTTPException(status_code=e.status, detail=str(e))
+    if body.discipline_code is not None:
+        changes["discipline_code"] = _check_discipline(client, body.discipline_code or None)
+    if not changes:
+        return d
+    changes["updated_at"] = datetime.now(timezone.utc).isoformat()
+    client.table("departments").update(changes).eq("id", dept_id).execute()
+    audit.record(client, "department.update", actor_id=_uid(user), entity_type="department", entity_id=dept_id,
+                 details={"institution_id": d["institution_id"],
+                          "before": {k: d.get(k) for k in changes if k != "updated_at"},
+                          "after": {k: v for k, v in changes.items() if k != "updated_at"}})
+    return dict(d, **changes)
+
+
+class MergeBody(BaseModel):
+    into_department_id: str
+
+
+@router.post("/departments/{dept_id}/merge")
+def merge_department(dept_id: str, body: MergeBody,
+                     client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    src = _dept_or_404(client, dept_id)
+    dst = _dept_or_404(client, body.into_department_id)
+    if str(src["institution_id"]) != str(dst["institution_id"]):
+        raise HTTPException(status_code=400, detail="Departments are in different colleges.")
+    _require_manager(client, user, src["institution_id"])
+    try:
+        out = client.rpc("merge_departments", {"p_src": dept_id, "p_dst": body.into_department_id}).execute().data
+    except Exception as e:
+        raise _rpc_error(e)
+    audit.record(client, "department.merge", actor_id=_uid(user), entity_type="department",
+                 entity_id=body.into_department_id,
+                 details={"institution_id": src["institution_id"], "merged_id": dept_id, "result": out})
+    return out
+
+
+@router.get("/institutions/{institution_id}/review-queue")
+def get_review_queue(institution_id: int, client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    acc = institution_access(client, user, institution_id)
+    if not acc or acc["department_ids"] is not None:
+        raise HTTPException(status_code=403, detail="You don't have access to this college.")
+    waiting = (client.table("students").select("department").eq("institution_id", institution_id)
+               .is_("department_id", "null").execute().data or [])
+    unmapped = (client.table("departments").select("id, name").eq("institution_id", institution_id)
+                .is_("discipline_code", "null").execute().data or [])
+    return dict(review_queue(waiting), unmapped_departments=unmapped)
+
+
+class AssignBody(BaseModel):
+    alias_norm: str = Field(..., max_length=200)
+    department_id: str
+
+
+@router.post("/institutions/{institution_id}/review-queue/assign")
+def assign_review_group(institution_id: int, body: AssignBody,
+                        client=Depends(require_admin_supabase), user=Depends(get_current_user)):
+    _require_manager(client, user, institution_id)
+    alias = norm_alias(body.alias_norm)
+    if not alias or alias != body.alias_norm:
+        raise HTTPException(status_code=400, detail="Unknown spelling group; reload the page.")
+    d = _dept_or_404(client, body.department_id)
+    if str(d["institution_id"]) != str(institution_id):
+        raise HTTPException(status_code=400, detail="Department is not in this college.")
+    try:
+        out = client.rpc("assign_department_alias",
+                         {"p_institution": institution_id, "p_alias": alias, "p_dept": body.department_id}).execute().data
+    except Exception as e:
+        raise _rpc_error(e)
+    audit.record(client, "department.alias_assign", actor_id=_uid(user), entity_type="department",
+                 entity_id=body.department_id,
+                 details={"institution_id": institution_id, "alias_norm": alias, "result": out})
+    return out

@@ -163,3 +163,23 @@ def institution_access(client, current_user, institution_id) -> Optional[Dict[st
                 and m.get("department_id"):
             depts.append(str(m["department_id"]))
     return {"department_ids": depts} if depts else None
+
+
+def can_manage_college(client, current_user, institution_id) -> bool:
+    """May change the college's departments and staff: platform admin, or a VERIFIED
+    TPO of the college / tenant_admin of its tenant. Read access (institution_access)
+    is wider on purpose: legacy unverified TPOs can look, not change."""
+    app_metadata = getattr(current_user, "app_metadata", {}) or {}
+    if app_metadata.get("role") == "admin":
+        return True
+    tenant = None
+    for m in active_memberships(client, getattr(current_user, "id", None)):
+        if not m.get("verified_at"):
+            continue
+        if m.get("role") == "tpo" and _same(m.get("institution_id"), institution_id):
+            return True
+        if m.get("role") == "tenant_admin":
+            tenant = tenant or institution_tenant(client, institution_id)
+            if _same(m.get("tenant_id"), tenant):
+                return True
+    return False
