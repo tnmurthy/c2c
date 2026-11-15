@@ -74,9 +74,9 @@ sat on a test tenant, and a prospect college.
 
 | Step | What |
 |---|---|
-| M3 | Domain layer: `authorize_student_read` and tenant resolution use memberships; remove email-domain rule and first-tenant fallback; SSO claims gain `c2c_tenant_id`, `c2c_department_id`, `discipline_code`; partner sync gated on `tenant_partner_links.enabled` |
+| M3 | ✅ code (PR): `api/domain/tenancy.py`; `authorize_student_read` uses memberships, email-domain rule removed, unknown students denied (not revealed); `resolve_tenant_id` uses student → institution tenant, no first-tenant fallback; SSO claims carry tenant/institution/department/discipline; eklav launch requires `tenant_partner_links.enabled`. **Deploy only after M1–M2 are applied to the production schema** — before that, students without a tenant cannot start assessments and staff fall back to the legacy TPO rule. |
 | M4 | Admin/TPO UI: departments + review queue, TPO invites (ADR-002 T4), CSV roster import (G7) |
-| Prod | Apply M1/M2 with `search_path` set to the production schema, after owner approval |
+| Prod | ✅ Applied to `public` 2026-11-15 (owner-approved) after a snapshot to `c2c_backup_20261115`; see `20261115000600_m_prod_apply_record.sql`. 17 college tenants + 1 test; 15 prospects, 2 active; 75 departments all mapped; 200 cohorts; demo student linked to Demo Institute |
 
 ## Board review (2026-11-15)
 
