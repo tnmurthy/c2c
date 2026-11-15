@@ -32,92 +32,18 @@ except ImportError as e:
     )
 
 # --- HELPERS ---
-
-def parse_scoring_logic(logic_str: str, item_type: str) -> Dict[str, Any]:
-    if not logic_str or not isinstance(logic_str, str):
-        return {}
-    
-    logic = {}
-    item_type_lower = item_type.lower()
-    if "sjt" in item_type_lower:
-        matches = re.findall(r'([A-E]):\s*(\d+)', logic_str)
-        if matches:
-            logic["mapping"] = {k: int(v) for k, v in matches}
-    elif "likert" in item_type_lower:
-        if "high score = high" in logic_str.lower():
-            logic["direction"] = "forward"
-        elif "low score = high" in logic_str.lower() or "reverse" in logic_str.lower():
-            logic["direction"] = "reverse"
-        else:
-            logic["direction"] = "forward"
-    elif "cognitive" in item_type_lower:
-        match = re.search(r'Correct:\s*([A-E]|\d+)', logic_str, re.I)
-        if match:
-            logic["correct_answer"] = match.group(1)
-            
-    return logic
-
-def generate_development_report(scores: Dict[str, int], founder_profile: str) -> Dict[str, Any]:
-    report = {
-        "profile_summary": "",
-        "actionable_feedback": []
-    }
-    
-    if founder_profile == "Builder":
-        report["profile_summary"] = "Builders thrive on creating and optimizing systems. They combine high cognitive and adversity quotients to solve complex problems."
-    elif founder_profile == "Leader":
-        report["profile_summary"] = "Leaders excel at rallying teams and building culture. They leverage high emotional and social intelligence."
-    elif founder_profile == "Rainmaker":
-        report["profile_summary"] = "Rainmakers are natural advocates and relationship builders. They use social and adversity quotients to drive growth."
-    elif founder_profile == "Anchor":
-        report["profile_summary"] = "Anchors provide stability and process. They combine cognitive and emotional intelligence to manage operations effectively."
-        
-    if scores.get("AQ", 0) < 50:
-        report["actionable_feedback"].append("Your AQ is below 50. Consider engaging in resilience-building exercises and taking on challenging projects with mentorship.")
-    if scores.get("SQ", 0) > 80:
-        report["actionable_feedback"].append("Your SQ is high (> 80). Suggest pursuing leadership roles in student clubs or organizing community events.")
-    if scores.get("IQ", 0) < 50:
-        report["actionable_feedback"].append("Consider supplemental courses or study groups to strengthen core problem-solving (IQ) skills.")
-    if scores.get("EQ", 0) > 80:
-        report["actionable_feedback"].append("Your EQ is excellent. You might make a great peer mentor or team mediator.")
-        
-    # Archetype Engine v2 — SpQ Integration
-    if scores.get("SpQ", 0) > 75:
-        report["actionable_feedback"].append("Your SpQ is high (> 75). Purpose-driven leadership is a strong growth vector for you. Consider leading cross-functional initiative projects.")
-    if scores.get("SpQ", 0) < 40:
-        report["actionable_feedback"].append("Your SpQ score is below 40. Engaging in value-alignment reflection and mission-driven projects can help expand your perspective.")
-        
-    return report
-
-def normalize_bank_item(item: Dict[str, Any]) -> Dict[str, Any]:
-    normalized = dict(item)
-    if "ID" in normalized and "id" not in normalized:
-        normalized["id"] = normalized["ID"]
-    if "type" in normalized and "item_type" not in normalized:
-        normalized["item_type"] = normalized["type"]
-    sl = normalized.get("scoring_logic")
-    if isinstance(sl, str):
-        normalized["scoring_logic"] = {"raw": sl}
-    return normalized
-
-def select_distinct_items(items: List[Dict[str, Any]], count: int, seen_fingerprints: set) -> List[Dict[str, Any]]:
-    """
-    Randomly selects `count` items from `items` ensuring that no two items share
-    identical or near-identical stems across the assessment session.
-    """
-    shuffled = list(items)
-    random.shuffle(shuffled)
-    chosen = []
-    for item in shuffled:
-        stem = item.get("stem") or item.get("text") or ""
-        fp = re.sub(r'[^a-zA-Z0-9]', '', stem).lower()[:50]
-        if not fp or fp in seen_fingerprints:
-            continue
-        seen_fingerprints.add(fp)
-        chosen.append(item)
-        if len(chosen) >= count:
-            break
-    return chosen
+# Scoring, bank and policy rules live in api/domain (R1). Re-exported here so
+# existing imports (tests, scripts) keep working.
+from api.domain.assessments.scoring import (  # noqa: F401
+    DIMENSIONS, parse_scoring_logic, generate_development_report, evaluate,
+)
+from api.domain.assessments.bank import (  # noqa: F401
+    normalize_bank_item, select_distinct_items, load_fallback_bank,
+    build_question_set, items_for_submission,
+)
+from api.domain.assessments.policy import (
+    resolve_tenant_id, retake_cooldown_until, cooldown_response_body,
+)
 
 # --- BACKGROUND TASKS ---
 
@@ -183,10 +109,7 @@ async def get_assessment_bank(
             
         if not items:
             try:
-                fallback_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "fallback_bank.json")
-                with open(fallback_path, "r", encoding="utf-8") as f:
-                    raw_bank = json.load(f)
-                    items = [normalize_bank_item(item) for item in raw_bank]
+                items = load_fallback_bank()
                 if dimension:
                     items = [item for item in items if item.get("primary_dimension") == dimension]
             except Exception as e:
@@ -215,20 +138,8 @@ async def start_session(
 ):
     student_id = req.student_id
     try:
-        # Extract student's tenant_id from their profile/record
-        student_res = client.table("students").select("tenant_id").eq("id", str(student_id)).execute()
-        if not student_res.data:
-            raise NotFoundError("Student not found")
-        tenant_id = student_res.data[0].get("tenant_id")
-        
-        if not tenant_id:
-            # Fallback: get first tenant or default tenant
-            tenants_res = client.table("tenants").select("tenant_id").limit(1).execute()
-            if tenants_res.data:
-                tenant_id = tenants_res.data[0]["tenant_id"]
-            else:
-                raise NotFoundError("No tenants available in the system")
-                
+        tenant_id = resolve_tenant_id(client, student_id)
+
         # Check if there's an active session (status = 'in_progress')
         session_res = client.table("assessment_sessions").select("*").eq("student_id", str(student_id)).eq("status", "in_progress").execute()
         if session_res.data:
@@ -244,59 +155,12 @@ async def start_session(
             }
             
         # Verify retake policy
-        last_assess_res = client.table("assessments").select("created_at").eq("student_id", str(student_id)).order("created_at", desc=True).limit(1).execute()
-        if last_assess_res.data:
-            tenant_res = client.table("tenants").select("retake_cooldown_days").eq("tenant_id", str(tenant_id)).execute()
-            cooldown_days = 90
-            if tenant_res.data:
-                cooldown_days = tenant_res.data[0].get("retake_cooldown_days", 90)
-                
-            last_date_str = last_assess_res.data[0]["created_at"]
-            if last_date_str.endswith('Z'):
-                last_date_str = last_date_str[:-1] + '+00:00'
-            last_date = datetime.fromisoformat(last_date_str)
-            current_date = datetime.now(timezone.utc)
-            cooldown_until = last_date + timedelta(days=cooldown_days)
-            if current_date < cooldown_until:
-                cooldown_until_str = cooldown_until.date().isoformat()
-                return JSONResponse(
-                    status_code=429,
-                    content={
-                        "detail": f"Assessment cooldown active. Retake available on {cooldown_until_str}",
-                        "cooldown_until": cooldown_until_str
-                    }
-                )
-                
+        cooldown_until = retake_cooldown_until(client, student_id, tenant_id)
+        if cooldown_until:
+            return JSONResponse(status_code=429, content=cooldown_response_body(cooldown_until))
+
         # Create a new session with randomized question sequence
-        dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
-        selected_questions = []
-        seen_fingerprints = set()
-        
-        bank_data = []
-        try:
-            fallback_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "fallback_bank.json")
-            with open(fallback_path, "r", encoding="utf-8") as f:
-                raw_bank = json.load(f)
-                bank_data = [normalize_bank_item(item) for item in raw_bank]
-        except Exception as e:
-            logger.warning(f"Failed to load fallback bank: {e}")
-            
-        for dim in dimensions:
-            items = []
-            try:
-                res = client.table("psychometric_items").select("*").eq("primary_dimension", dim).execute()
-                items = res.data or []
-            except Exception as e:
-                logger.warning(f"Failed to fetch psychometric_items for {dim}: {e}")
-                
-            if not items and bank_data:
-                items = [item for item in bank_data if item.get("primary_dimension") == dim]
-                
-            if items:
-                picked = select_distinct_items(items, 5, seen_fingerprints)
-                selected_questions.extend(picked)
-                
-        random.shuffle(selected_questions)
+        selected_questions = build_question_set(client, lambda items: 5)
         session_payload = {
             "student_id": str(student_id),
             "tenant_id": str(tenant_id),
@@ -383,40 +247,12 @@ async def submit_answer(
 
 @router.get("/assessment/generate")
 async def generate_assessment(num_per_section: int = 5, client = Depends(require_admin_supabase), current_user = Depends(get_current_user)):
-    dimensions = ["IQ", "EQ", "SQ", "AQ", "SpQ"]
-    final_items = []
-    seen_fingerprints = set()
+    per_section = num_per_section if num_per_section > 0 else 5
     try:
-        bank_data = []
-        try:
-            fallback_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "fallback_bank.json")
-            with open(fallback_path, "r", encoding="utf-8") as f:
-                raw_bank = json.load(f)
-                bank_data = [normalize_bank_item(item) for item in raw_bank]
-        except Exception as e:
-            logger.warning(f"Failed to load fallback bank: {e}")
-
-        for dim in dimensions:
-            items = []
-            try:
-                res = client.table("psychometric_items").select("*").eq("primary_dimension", dim).execute()
-                items = res.data
-            except Exception as e:
-                logger.warning(f"Failed to fetch psychometric_items for {dim}: {e}")
-            
-            if not items and bank_data:
-                items = [item for item in bank_data if item.get("primary_dimension") == dim]
-
-            if items:
-                target_count = min(len(items), num_per_section if num_per_section > 0 else 5)
-                picked = select_distinct_items(items, target_count, seen_fingerprints)
-                final_items.extend(picked)
-                
+        final_items = build_question_set(client, lambda items: min(len(items), per_section))
         if not final_items:
             raise NotFoundError("Database empty and fallback JSON missing")
             
-        # Shuffle final questions so questions from different dimensions alternate smoothly
-        random.shuffle(final_items)
         return final_items
     except APIException:
         raise
@@ -431,145 +267,24 @@ async def submit_assessment(
     client = Depends(require_admin_supabase), 
     current_user = Depends(require_role(["student", "admin"]))
 ):
-    scores = {"IQ": 0, "EQ": 0, "SQ": 0, "AQ": 0, "SpQ": 0}
     try:
-        # Extract student's tenant_id from their profile/record
-        student_res = client.table("students").select("tenant_id").eq("id", submit.student_id).execute()
-        if not student_res.data:
-            raise NotFoundError("Student not found")
-        tenant_id = student_res.data[0].get("tenant_id")
-        
-        if not tenant_id:
-            # Fallback: get first tenant or default tenant
-            tenants_res = client.table("tenants").select("tenant_id").limit(1).execute()
-            if tenants_res.data:
-                tenant_id = tenants_res.data[0]["tenant_id"]
-            else:
-                raise NotFoundError("No tenants available in the system")
-                
+        tenant_id = resolve_tenant_id(client, submit.student_id)
+
         # Check retake cooldown policy
-        last_assess_res = client.table("assessments").select("created_at").eq("student_id", submit.student_id).order("created_at", desc=True).limit(1).execute()
-        if last_assess_res.data:
-            tenant_res = client.table("tenants").select("retake_cooldown_days").eq("tenant_id", str(tenant_id)).execute()
-            cooldown_days = 90
-            if tenant_res.data:
-                cooldown_days = tenant_res.data[0].get("retake_cooldown_days", 90)
-                
-            last_date_str = last_assess_res.data[0]["created_at"]
-            if last_date_str.endswith('Z'):
-                last_date_str = last_date_str[:-1] + '+00:00'
-            last_date = datetime.fromisoformat(last_date_str)
-            current_date = datetime.now(timezone.utc)
-            cooldown_until = last_date + timedelta(days=cooldown_days)
-            if current_date < cooldown_until:
-                cooldown_until_str = cooldown_until.date().isoformat()
-                return JSONResponse(
-                    status_code=429,
-                    content={
-                        "detail": f"Assessment cooldown active. Retake available on {cooldown_until_str}",
-                        "cooldown_until": cooldown_until_str
-                    }
-                )
+        cooldown_until = retake_cooldown_until(client, submit.student_id, tenant_id)
+        if cooldown_until:
+            return JSONResponse(status_code=429, content=cooldown_response_body(cooldown_until))
 
         item_ids = [r["item_id"] for r in submit.responses]
-        items_map = {}
-        try:
-            items_res = client.table("psychometric_items").select("*").in_("id", item_ids).execute()
-            items_map = {item["id"]: item for item in items_res.data}
-        except Exception as e:
-            logger.warning(f"Failed to query psychometric_items: {e}")
-        
-        if not items_map:
-            try:
-                fallback_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "fallback_bank.json")
-                with open(fallback_path, "r", encoding="utf-8") as f:
-                    raw_bank = json.load(f)
-                    normalized_bank = [normalize_bank_item(item) for item in raw_bank]
-                    items_map = {item["id"]: item for item in normalized_bank if item.get("id") in item_ids}
-            except Exception as e:
-                logger.warning(f"Failed to load fallback bank: {e}")
-        
-        for resp in submit.responses:
-            item = items_map.get(resp["item_id"])
-            if not item: continue
-            val, dim = resp["response"], item["primary_dimension"]
-            logic_raw = item.get("scoring_logic")
-            logic_str = logic_raw.get("raw", "") if isinstance(logic_raw, dict) else str(logic_raw or "")
-            
-            try:
-                logic = parse_scoring_logic(logic_str, item["item_type"])
-                if item["item_type"].lower() == "likert":
-                    s = int(val)
-                    if logic.get("direction") == "reverse": s = 6 - s
-                    scores[dim] += s
-                elif item["item_type"].lower() == "cognitive":
-                    if str(val) == str(logic.get("correct_answer")): scores[dim] += 1
-                elif "sjt" in item["item_type"].lower():
-                    m = logic.get("mapping") or {}
-                    if val in m: scores[dim] += m[val]
-            except Exception as e:
-                logger.warning(f"Failed parsing scoring logic for item {resp['item_id']}: {e}")
-        
-        # Calculate max possible scores per dimension in this submission for normalization
-        max_possible = {dim: 0 for dim in ["IQ", "EQ", "SQ", "AQ", "SpQ"]}
-        for item in items_map.values():
-            dim = item.get("primary_dimension")
-            if dim not in max_possible: continue
-            item_type_lower = item.get("item_type", "").lower()
-            logic_raw = item.get("scoring_logic")
-            logic_str = logic_raw.get("raw", "") if isinstance(logic_raw, dict) else str(logic_raw or "")
-            try:
-                logic = parse_scoring_logic(logic_str, item.get("item_type", ""))
-                if item_type_lower == "likert":
-                    max_possible[dim] += 5
-                elif item_type_lower == "cognitive":
-                    max_possible[dim] += 1
-                elif "sjt" in item_type_lower:
-                    m = logic.get("mapping") or {}
-                    max_val = max(m.values()) if m else 5
-                    max_possible[dim] += max_val
-            except Exception as e:
-                logger.warning(f"Error calculating max possible for item {item.get('id')}: {e}")
+        items_map = items_for_submission(client, item_ids)
 
-        # Compute normalized scores on a 100-point scale
-        normalized_scores = {}
-        for dim in ["IQ", "EQ", "SQ", "AQ", "SpQ"]:
-            raw_s = scores.get(dim, 0)
-            max_s = max_possible.get(dim, 0)
-            if max_s > 0:
-                normalized_scores[dim] = round((raw_s / max_s) * 100)
-            else:
-                # Keep raw score if no items matched (for custom mocks/manual tests)
-                normalized_scores[dim] = raw_s
+        result = evaluate(submit.responses, items_map)
+        normalized_scores = result["dimension_scores"]
+        percentile_bands = result["percentile_bands"]
+        founder_fit = result["founder_fit"]
+        primary_profile = result["primary_profile"]
+        dev_report = result["development_report"]
 
-        # Score normalization percentile bands
-        percentile_bands = {}
-        for dim, score in normalized_scores.items():
-            if dim == "IQ":
-                if score >= 90: percentile_bands[dim] = "Top 10%"
-                elif score >= 80: percentile_bands[dim] = "Top 25%"
-                elif score >= 60: percentile_bands[dim] = "Top 50%"
-                else: percentile_bands[dim] = "Average"
-            elif dim in ["EQ", "SQ", "AQ", "SpQ"]:
-                if score >= 85: percentile_bands[dim] = "Top 10%"
-                elif score >= 75: percentile_bands[dim] = "Top 25%"
-                elif score >= 55: percentile_bands[dim] = "Top 50%"
-                else: percentile_bands[dim] = "Average"
-            else:
-                percentile_bands[dim] = "Average"
-
-        founder_fit = {
-            "Builder": normalized_scores.get("IQ", 0) + normalized_scores.get("AQ", 0),
-            "Leader": normalized_scores.get("EQ", 0) + normalized_scores.get("SQ", 0),
-            "Rainmaker": normalized_scores.get("SQ", 0) + normalized_scores.get("AQ", 0),
-            "Anchor": normalized_scores.get("IQ", 0) + normalized_scores.get("EQ", 0)
-        }
-        primary_profile = max(founder_fit, key=founder_fit.get)
-        
-        # Generate development report with SpQ integration
-        dev_report = generate_development_report(normalized_scores, primary_profile)
-        dev_report["percentile_bands"] = percentile_bands
-        
         from api.routers.employer_router import calculate_match_score
         tech_fit_index = calculate_match_score(normalized_scores, "tech")
         sales_fit_index = calculate_match_score(normalized_scores, "sales")
