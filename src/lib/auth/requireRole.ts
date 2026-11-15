@@ -1,5 +1,6 @@
 ﻿import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { dbOptions } from '@/lib/dbSchema';
 import { extractRole } from '@/types/auth';
 import type { AppRole } from '@/types/auth';
 
@@ -15,7 +16,7 @@ export async function requireRole(allowed: AppRole[]): Promise<string> {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies: { get: (n) => cookieStore.get(n)?.value } }
+    { ...dbOptions, cookies: { get: (n) => cookieStore.get(n)?.value } }
   );
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user) throw new ApiError('UNAUTHENTICATED', 'Not authenticated');

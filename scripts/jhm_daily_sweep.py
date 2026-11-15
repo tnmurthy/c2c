@@ -36,7 +36,9 @@ if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
 from dotenv import load_dotenv
-from supabase import Client, create_client
+from supabase import Client
+
+from api.db_schema import make_client
 
 from services.market_intelligence.fit_scorer import score_job_fit
 
@@ -188,7 +190,7 @@ def main():
 
     t_start = time.monotonic()
 
-    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    supabase: Client = make_client(SUPABASE_URL, SUPABASE_KEY)
     stats = run_sweep(supabase)
 
     elapsed = time.monotonic() - t_start
