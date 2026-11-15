@@ -9,6 +9,7 @@
  * middleware cannot read, causing post-login redirect loops.
  */
 import { createBrowserClient } from '@supabase/ssr';
+import { dbOptions } from '@/lib/dbSchema';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -21,5 +22,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createBrowserClient(
   supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder_key'
+  supabaseAnonKey || 'placeholder_key',
+  dbOptions
 );

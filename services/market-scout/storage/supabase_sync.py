@@ -1,5 +1,5 @@
 import os
-from supabase import create_client, Client
+from supabase import ClientOptions, create_client, Client
 
 _client: Client = None
 
@@ -10,7 +10,11 @@ def get_client():
         key = os.environ.get("SUPABASE_KEY")
         if not url or not key:
             raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set")
-        _client = create_client(url, key)
+        # Same schema switch as api/db_schema.py (this service runs standalone).
+        schema = os.environ.get("C2C_DB_SCHEMA") or "public"
+        if schema not in ("public", "c2c", "c2c_stg"):
+            raise ValueError(f"C2C_DB_SCHEMA={schema!r} is not allowed")
+        _client = create_client(url, key, options=ClientOptions(schema=schema))
     return _client
 
 def get_existing_urls(table: str) -> set[str]:

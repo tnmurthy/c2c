@@ -91,3 +91,9 @@ production database); do not try to work around them.
 - E2E: `npm run test:e2e` — 27/27 pass on `master` (2026-10-23); compare
   against a `master` baseline before blaming your change.
 - CI does not run Playwright; a green CI does not mean the journeys work.
+
+## Database schema (ADR-001, 2026-11-15)
+
+- c2c is moving from `public` to its own schemas in the shared Talia database: `c2c` (production) and `c2c_stg` (staging). Both exist and are empty; tables move in N4.
+- Never call `create_client` / `createBrowserClient` / `createServerClient` directly: use `api.db_schema.make_client` (Python) or spread `dbOptions` from `@/lib/dbSchema` (Next.js). The schema comes from `C2C_DB_SCHEMA` / `NEXT_PUBLIC_C2C_DB_SCHEMA` (default `public`).
+- Seeded students (`is_synthetic = true`, ADR-002) must be excluded from employer search, matching, exports and partner sync.

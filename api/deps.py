@@ -45,12 +45,12 @@ def get_current_claims(
 def get_supabase_client():
     """Create and return a Supabase client. Returns None if env vars are missing."""
     try:
-        from supabase import create_client
+        from api.db_schema import make_client
         url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY") or os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY")
         if not url or not key:
             return None
-        return create_client(url, key)
+        return make_client(url, key)
     except Exception as e:
         logger.error("Failed to create Supabase client: %s", e)
         return None
@@ -69,12 +69,12 @@ def require_supabase():
 
 def require_admin_supabase():
     try:
-        from supabase import create_client
+        from api.db_schema import make_client
         url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
         key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
         if not url or not key:
             raise HTTPException(status_code=503, detail="SUPABASE_SERVICE_ROLE_KEY environment variable is not configured.")
-        return create_client(url, key)
+        return make_client(url, key)
     except Exception as e:
         logger.error("Failed to create admin client: %s", e)
         raise HTTPException(status_code=503, detail=f"Failed to initialize admin database client: {str(e)}")

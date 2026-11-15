@@ -25,7 +25,8 @@ if not url or not key:
     print("Error: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in .env.local")
     sys.exit(1)
 
-supabase: Client = create_client(url, key)
+from supabase import ClientOptions  # seed into the configured c2c schema (ADR-001)
+supabase: Client = create_client(url, key, options=ClientOptions(schema=os.environ.get("C2C_DB_SCHEMA") or "public"))
 
 def seed_data():
     print("Starting CRM data seed...")
