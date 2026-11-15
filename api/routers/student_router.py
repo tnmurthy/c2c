@@ -4,13 +4,14 @@ import logging
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request, Response
 
-from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client, require_webhook_secret
+from api.deps import require_admin_supabase, require_role, get_current_user, get_supabase_client, require_webhook_secret, demo_auth_allowed
 from api.schemas.student import StudentOnboard, StudentProfileUpdate, ApplicationCreate
 from api.schemas.assessment import InstitutionOnboard
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
 from api.domain.students.access import authorize_student_read
 from api.domain.tenancy import institution_access
+from api.domain.students.claim import ClaimError, claim_roster_record
 from api.domain.identity import (
     NON_ACADEMIC_DOMAIN_MESSAGE, domain_matches, email_domain, is_public_email_domain, normalize_domain,
 )
@@ -232,6 +233,23 @@ async def onboard_student(
         data = student.dict(exclude_unset=True)
         auth_id = current_user.user.id if hasattr(current_user, "user") else current_user.id
         data["auth_id"] = auth_id
+
+        # M4-3: a college may have imported this student already -> link that record instead.
+        try:
+            claimed = claim_roster_record(client, current_user, auth_id, data)
+        except ClaimError as ce:
+            raise HTTPException(status_code=ce.status, detail=str(ce))
+        if claimed:
+            try:
+                client.auth.admin.update_user_by_id(
+                    auth_id, attributes={"app_metadata": {"role": "student", "profile_id": claimed[0]["id"]}})
+            except Exception as e:
+                logger.error(f"Failed to update app_metadata for claimed student {auth_id}: {e}")
+            return claimed
+        # A student registers their own address only (prevents squatting a classmate's email).
+        own_email = (getattr(current_user, "email", "") or "").strip().lower()
+        if own_email and not demo_auth_allowed():
+            data["email"] = own_email
         is_verified = False
         inst_id = student.institution_id
 
@@ -289,6 +307,8 @@ async def onboard_student(
                 logger.error(f"Failed to update app_metadata for student {auth_id}: {e}")
 
         return inserted
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"ERROR onboard_student: {e}", exc_info=True)
         raise DatabaseConnectionError(str(e))

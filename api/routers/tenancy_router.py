@@ -84,7 +84,8 @@ def _require_whole_college(client, user, institution_id):
 def overview(client=Depends(require_admin_supabase), user=Depends(require_role(["admin"]))):
     tenants = client.table("tenants").select("tenant_id, name, kind, status").order("name").execute().data or []
     insts = (client.table("institutions")
-             .select("id, name, domain, status, tenant_id, affiliating_university, agreement_ref, activated_at")
+             .select("id, name, domain, status, tenant_id, affiliating_university, agreement_ref, activated_at, "
+                     "roster_import_enabled, roster_dpa_ref")
              .order("name").execute().data or [])
     staff = (client.table("memberships")
              .select("id, user_id, tenant_id, institution_id, department_id, role, status, source, invited_email, verified_at")
@@ -398,10 +399,12 @@ def my_college_access(institution_id: int, client=Depends(require_admin_supabase
     acc = institution_access(client, user, institution_id)
     if not acc:
         raise HTTPException(status_code=403, detail="You don't have access to this college.")
-    inst = _one(client, "institutions", "id", institution_id, "id, name, status, domain, agreement_ref")
+    inst = _one(client, "institutions", "id", institution_id,
+                "id, name, status, domain, agreement_ref, roster_import_enabled")
     manage = can_manage_college(client, user, institution_id)
     return {"institution": inst, "scope": "college" if acc["department_ids"] is None else "departments",
             "department_ids": acc["department_ids"], "can_manage": manage,
+            "roster_enabled": bool((inst or {}).get("roster_import_enabled")),
             "can_invite": manage and bool(inst) and inst.get("status") == "active" and bool(inst.get("agreement_ref"))}
 
 
@@ -538,3 +541,33 @@ def assign_review_group(institution_id: int, body: AssignBody,
                  entity_id=body.department_id,
                  details={"institution_id": institution_id, "alias_norm": alias, "result": out})
     return out
+
+
+# ------------------------------------------------------------------ M4-3: roster import switch (admin)
+class RosterAccessBody(BaseModel):
+    enabled: bool
+    dpa_ref: Optional[str] = Field(None, max_length=200)
+
+
+@router.post("/institutions/{institution_id}/roster-access")
+def set_roster_access(institution_id: int, body: RosterAccessBody,
+                      client=Depends(require_admin_supabase), user=Depends(require_role(["admin"]))):
+    inst = _one(client, "institutions", "id", institution_id, "id, status, tenant_id, roster_import_enabled, roster_dpa_ref")
+    if not inst:
+        raise HTTPException(status_code=404, detail="College not found")
+    if body.enabled:
+        ref = (body.dpa_ref or "").strip()
+        if inst.get("status") != "active":
+            raise HTTPException(status_code=409, detail="Activate the college first.")
+        if len(ref) < 3:
+            raise HTTPException(status_code=400, detail="Record the agreement clause that covers student data.")
+        changes = {"roster_import_enabled": True, "roster_dpa_ref": ref,
+                   "roster_enabled_at": datetime.now(timezone.utc).isoformat(), "roster_enabled_by": _uid(user)}
+    else:
+        changes = {"roster_import_enabled": False}
+    client.table("institutions").update(changes).eq("id", institution_id).execute()
+    audit.record(client, "institution.roster_access", actor_id=_uid(user), entity_type="institution",
+                 tenant_id=inst.get("tenant_id"),
+                 details={"institution_id": institution_id, "enabled": body.enabled,
+                          "dpa_ref": changes.get("roster_dpa_ref", inst.get("roster_dpa_ref"))})
+    return {"id": institution_id, "roster_import_enabled": body.enabled}

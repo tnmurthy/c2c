@@ -12,7 +12,8 @@ import {
   LogOut,
   Home,
   LayoutDashboard,
-  Layers
+  Layers,
+  FileUp
 } from "lucide-react";
 import { useRequireAuth } from "@/hooks/useAuth";
 import { LoadingScreen } from "@/components/LoadingScreen";
@@ -42,6 +43,7 @@ export default function TPODashboardLayout({
   const isHome = pathname === `/tpo-dashboard/${id}`;
   const isStudents = pathname === `/tpo-dashboard/${id}/students`;
   const isDepartments = pathname === `/tpo-dashboard/${id}/departments`;
+  const isRoster = pathname === `/tpo-dashboard/${id}/roster`;
 
   return (
     <div className="bg-[#0e1416] text-[#dde4e5] font-sans min-h-screen flex">
@@ -70,6 +72,10 @@ export default function TPODashboardLayout({
             <Link href={`/tpo-dashboard/${id}/departments`} className={`flex items-center gap-3 px-3 py-2 rounded-md group transition-all ${isDepartments ? 'bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff]' : 'text-[#bbc9cd] hover:text-white'}`}>
               <Layers className={`w-4 h-4 ${isDepartments ? 'text-[#8aebff]' : 'group-hover:translate-x-1 transition-transform'}`} />
               <span className="text-[12px] font-bold tracking-[0.1em] font-mono">Departments &amp; Staff</span>
+            </Link>
+            <Link href={`/tpo-dashboard/${id}/roster`} className={`flex items-center gap-3 px-3 py-2 rounded-md group transition-all ${isRoster ? 'bg-[#22d3ee]/20 text-[#8aebff] border-l-4 border-[#8aebff]' : 'text-[#bbc9cd] hover:text-white'}`}>
+              <FileUp className={`w-4 h-4 ${isRoster ? 'text-[#8aebff]' : 'group-hover:translate-x-1 transition-transform'}`} />
+              <span className="text-[12px] font-bold tracking-[0.1em] font-mono">Roster Import</span>
             </Link>
             <Link href={`/tpo-dashboard/${id}/students`} className="flex items-center gap-3 text-[#bbc9cd] hover:text-white px-3 py-2 rounded-md group transition-colors">
               <Users className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

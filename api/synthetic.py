@@ -1,7 +1,11 @@
-"""Seeded/demo students (students.is_synthetic, ADR-002) stay out of anything an
-employer, matcher, CRM user or partner sees — unless a demo environment opts in.
+"""Who employers, matching, CRM users and partners may see (ADR-002, M4-3).
 
-  SHOW_SYNTHETIC_STUDENTS=true   include them (sales demos, staging). Default: excluded.
+Excluded unless a demo environment opts in:
+  - seeded/demo students (students.is_synthetic)
+  - students a college imported who have not signed up yet (no auth_id): they have
+    not agreed to anything themselves, so they stay visible only to their college.
+
+  SHOW_SYNTHETIC_STUDENTS=true   include both (sales demos, staging). Default: excluded.
 """
 import os
 
@@ -11,5 +15,7 @@ def include_synthetic() -> bool:
 
 
 def real_students_only(query):
-    """Apply to a supabase `students` select query."""
-    return query if include_synthetic() else query.eq("is_synthetic", False)
+    """Apply to a supabase `students` select query used for anything employer-facing."""
+    if include_synthetic():
+        return query
+    return query.eq("is_synthetic", False).filter("auth_id", "not.is", "null")
