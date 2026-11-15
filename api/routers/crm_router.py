@@ -5,6 +5,7 @@ import logging
 from api.deps import get_supabase_client, require_role, get_current_user, require_admin_supabase
 from api.services.candidate_features import features_for_students
 from api.pdf_generator import generate_student_pdf, generate_interview_guide_pdf
+from api.synthetic import real_students_only
 
 router = APIRouter(prefix="/crm", tags=["CRM"])
 logger = logging.getLogger("c2c_api.crm")
@@ -82,7 +83,7 @@ def get_candidates(user = Depends(require_role(["tenant_admin", "sales_exec"])),
         # Note: Depending on the tenant structure for B2C, we might just return all students 
         # or filter by a specific criteria if the CRM is isolated per agency.
         # Here we just fetch all students and their latest assessments.
-        students_res = supabase.table("students").select("*").execute()
+        students_res = real_students_only(supabase.table("students").select("*")).execute()
         if not students_res.data:
             return []
             

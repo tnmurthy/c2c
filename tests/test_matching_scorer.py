@@ -173,7 +173,8 @@ class _Query:
 
 
 def _db(n_students=3, existing=None):
-    students = [_student(str(i)) for i in range(n_students)]
+    # is_synthetic mirrors the DB column default (NOT NULL DEFAULT false, ADR-002)
+    students = [dict(_student(str(i)), is_synthetic=False) for i in range(n_students)]
     return FakeDB({
         "job_postings": [{"id": "job1", "title": "SDE", "description": "Backend", "requirements": ["Python", "Testing"],
                           "role_type": "tech", "employer_id": "emp1"}],

@@ -77,3 +77,14 @@ graphify-out/20*/
 graphify/
 
 
+
+# test & report artifacts
+/playwright-report/
+/test-results/
+
+# nested stray checkout
+/makeover-talent-agency/
+
+# local agent/editor settings
+**/.claude/settings.local.json
+

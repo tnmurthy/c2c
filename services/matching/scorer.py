@@ -17,6 +17,7 @@ from typing import Any, Dict, List, Optional
 
 from api.services.candidate_features import profile_text
 from api.services.typesafe_service import REQUIREMENT_LEVELS, typesafe_service
+from api.synthetic import real_students_only
 
 logger = logging.getLogger("c2c_api.matching")
 
@@ -167,7 +168,7 @@ def score_candidates_for_job(client, job_id: str) -> Dict[str, Any]:
     requirements = clean_requirements(job.get("requirements"))
     job_text = {"title": job.get("title") or "", "description": job.get("description") or ""}
 
-    students = client.table("students").select("id, full_name, bio, skills, department").execute().data or []
+    students = real_students_only(client.table("students").select("id, full_name, bio, skills, department")).execute().data or []
     latest = _latest_assessments(client, [s["id"] for s in students]) if students else {}
     candidates = build_candidates(job, students, latest)
     existing = _existing_matches(client, job_id)
