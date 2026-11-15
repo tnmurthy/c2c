@@ -335,3 +335,11 @@ def test_coordinator_sees_only_own_departments():
                                  "department_id": "dep-cse", "role": "dept_coordinator", "status": "active"}]
     rows = client_for(db, user("hod-1", "institution")).get("/api/tenancy/institutions/7/departments").json()
     assert [r["id"] for r in rows] == ["dep-cse"]
+
+
+def test_coordinator_with_profile_id_stays_department_scoped():
+    """B12: accept gives coordinators role=institution + profile_id; that must not grant the whole college."""
+    db = FakeDB(base_tables())
+    db.tables["memberships"] = [{"user_id": "hod-1", "tenant_id": T1, "institution_id": 7, "department_id": "dep-cse",
+                                 "role": "dept_coordinator", "status": "active"}]
+    assert institution_access(db, user("hod-1", "institution", profile_id=7), 7) == {"department_ids": ["dep-cse"]}

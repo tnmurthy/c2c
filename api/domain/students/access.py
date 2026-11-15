@@ -44,12 +44,16 @@ def authorize_student_read(client, current_user, student_id: str, *, allow_emplo
             return
         raise PermissionDeniedError("Access denied: employers are not permitted to view historical score trends")
 
-    if staff_can_read(active_memberships(client, current_user.id), student):
+    memberships = active_memberships(client, current_user.id)
+    if staff_can_read(memberships, student):
         return
 
     if role == "institution":
+        # Legacy rule only for accounts with no memberships: an invited coordinator also has
+        # role=institution + profile_id and must stay limited to their department (B12).
         inst_id = app_metadata.get("profile_id")
-        if inst_id and student.get("institution_id") is not None and str(student["institution_id"]) == str(inst_id):
+        if not memberships and inst_id and student.get("institution_id") is not None \
+                and str(student["institution_id"]) == str(inst_id):
             return
         raise PermissionDeniedError("Access denied: student does not belong to your institution")
 

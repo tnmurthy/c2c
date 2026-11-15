@@ -146,9 +146,11 @@ def institution_access(client, current_user, institution_id) -> Optional[Dict[st
     role = app_metadata.get("role")
     if role == "admin":
         return {"department_ids": None}
-    if role == "institution" and str(app_metadata.get("profile_id")) == str(institution_id):
-        return {"department_ids": None}
     ms = active_memberships(client, getattr(current_user, "id", None))
+    # Legacy rule only for accounts with no memberships at all: an invited coordinator also
+    # gets role=institution + profile_id, and must not be widened to the whole college (B12).
+    if role == "institution" and not ms and str(app_metadata.get("profile_id")) == str(institution_id):
+        return {"department_ids": None}
     tenant = None
     depts: List[str] = []
     for m in ms:
