@@ -149,6 +149,7 @@ export default function TenancyAdminPage() {
           <Building2 className="w-7 h-7 text-cyan-400" /> Colleges &amp; staff
         </h1>
         <p className="text-xs text-white/50">
+          <a href="/admin/partners" className="text-cyan-400 hover:text-cyan-300 mr-2">Partners (eklav) &rarr;</a>
           Activate a college once its LoI / MSA is signed, then invite its TPO. Invites go to an official college address, work once and expire in 72 hours.
         </p>
       </header>

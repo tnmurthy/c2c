@@ -1,7 +1,7 @@
 # c2c → eklav: event feed contract (R3, draft v1)
 
-Status: **draft for review with eklav**. Events are recorded in c2c from R3 onward; **nothing is delivered**
-until the partner API (R4) ships and a tenant has opted in (`tenant_partner_links.enabled`). Student
+Status: **v1, live**. Events are recorded from R3 onward and read through the partner API (R4, `API.md`)
+for tenants that opted in (`tenant_partner_links.enabled`). Student
 details are only released for students who have consented (R5).
 
 ## Principles
@@ -47,7 +47,7 @@ details are only released for students who have consented (R5).
 
 Profile-only edits (bio, links, skills) do **not** emit events.
 
-## How eklav will read it (R4, planned)
+## How eklav reads it (R4)
 
 ```
 GET /api/partners/eklav/events?after=<id>&limit=500      → { "events": [...], "next_cursor": <id> }
