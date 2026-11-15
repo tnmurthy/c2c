@@ -12,6 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from api.core import sso
 from api.deps import get_current_user, require_admin_supabase
+from api.domain.consent import has_consent
 from api.domain.tenancy import partner_enabled, user_scope
 from api.integrations.partners import get_partner
 
@@ -45,7 +46,11 @@ def launch_partner(partner_id: str, current_user=Depends(get_current_user), clie
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"{partner.name} is not enabled for your institution")
 
-    # TODO(R5): also require the student's own data-sharing consent.
+    if role == "student":  # R5 / ADR-004: the student's own consent, checked now
+        me = client.table("students").select("id").eq("auth_id", str(current_user.id)).execute().data or []
+        if not me or not has_consent(client, me[0]["id"], partner.id):
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                                detail=f"Turn on data sharing with {partner.name} first (Dashboard → Data sharing).")
     claims = {
         "sub": str(current_user.id),                 # stable c2c auth user id
         "c2c_role": role,
