@@ -36,9 +36,9 @@ and staging would need a second prefix. A schema change touches ~10 client const
 
 | Step | What | Status |
 |---|---|---|
-| N1 | Create `c2c`, `c2c_stg`; grants; owner adds both to Dashboard → Data API → Exposed schemas | ✅ schemas created (migration `20261115000100`); **exposed-schemas setting pending (owner)** |
-| N2 | Configurable schema + guard in every client | ✅ this PR |
-| N3 | Build `c2c_stg` from migrations + seed; Vercel Preview env `C2C_DB_SCHEMA=c2c_stg` | pending |
+| N1 | Create `c2c`, `c2c_stg`; grants; expose both in Dashboard → Data API | ✅ migration `20261115000100`; both exposed 2026-11-15 (verified via REST: unknown schema error lists `c2c`, `c2c_stg`) |
+| N2 | Configurable schema + guard in every client | ✅ PR #46 |
+| N3 | Build `c2c_stg` as a structural clone of production + seed | ✅ migrations `20261115000200` (clone) and `20261115000300` (seed), applied 2026-11-15. Verified: 42 tables, 386 columns, 68 indexes, 66 FKs, 18 checks, 68 policies, 38 triggers — identical to `public`; 4 webhook triggers deliberately excluded; 0 references back to `public`. Vercel Preview env not switched yet (see below) |
 | N4 | Production move: one transaction `SET SCHEMA c2c` for the 42 tables + views; rewrite functions that reference `public.*`; move webhook triggers; switch prod env to `c2c`. Low-traffic window, backup first | pending |
 | N5 | Startup guard (done in N2) + post-move check that no c2c function references `public.<c2c table>` | partly done |
 
@@ -58,3 +58,11 @@ and staging would need a second prefix. A schema change touches ~10 client const
 | Cost Engineer | Same-DB staging costs nothing | Accepted |
 | Security Reviewer | Staging deploy writing to prod schema | Env guard in both runtimes |
 | Product Engineer | Demos must not show fake data as verified | ADR-002 / T2 |
+
+## Staging (`c2c_stg`) — how it works
+
+- **Refresh:** re-run `20261115000200_n3_build_c2c_stg.sql` then `20261115000300_n3_seed_c2c_stg.sql`. The first drops and rebuilds every object in `c2c_stg` from the current production structure; it is hard-wired to `c2c_stg` and cannot touch `public` or `c2c`.
+- **Not cloned:** production data; webhook triggers/functions (staging never calls production webhooks).
+- **Seed:** one tenant (`c2c-stg`), one institution (`stg.c2c.test`), 20 synthetic students, AI settings. The production item bank (`psychometric_items`) is empty — assessments run from `api/fallback_bank.json` in both environments.
+- **Using it:** set `C2C_DB_SCHEMA=c2c_stg` and `NEXT_PUBLIC_C2C_DB_SCHEMA=c2c_stg` for the Vercel **Preview** environment once PR #46 is merged. Until then previews keep using `public` so PR reviews still see demo data.
+- **Logins:** auth is shared. Staging users need `@stg.c2c.test` emails and a profile row in `c2c_stg` (students / institutions / employers / admins); none exist yet.
