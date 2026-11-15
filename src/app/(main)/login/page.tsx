@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Mail, Lock, KeyRound, ShieldAlert } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { pendingInvitePath } from "@/lib/pendingInvite";
 import {
   DEMO_ACCOUNTS,
   DEMO_AUTH_ENABLED,
@@ -28,6 +29,8 @@ export default function LoginPage() {
   const routeUser = (user: { app_metadata?: Record<string, unknown>; user_metadata?: Record<string, unknown> }) => {
     const role = (user.app_metadata?.role || user.user_metadata?.role) as string | undefined;
     const profileId = (user.app_metadata?.profile_id || user.user_metadata?.profile_id) as string | undefined;
+    const invite = pendingInvitePath();
+    if (invite) return router.push(invite);
     if (role === "admin") return router.push("/admin");
     if (role === "employer") return router.push("/employer");
     if (role === "student" && profileId) return router.push(`/dashboard/${profileId}`);

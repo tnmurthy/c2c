@@ -86,6 +86,7 @@ export default function AdminDashboard() {
               <Activity className="h-8 w-8 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
               Global Admin Root
             </h1>
+            <a href="/admin/tenancy" className="inline-block mt-2 text-xs font-mono uppercase tracking-widest text-cyan-400 hover:text-cyan-300">Colleges &amp; staff &rarr;</a>
             <p className="mt-2 font-mono text-sm text-cyan-500/70">
               REAL-TIME PLATFORM METRICS & MARKET INTELLIGENCE
             </p>

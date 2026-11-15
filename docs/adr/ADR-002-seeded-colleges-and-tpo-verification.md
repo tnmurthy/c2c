@@ -1,6 +1,6 @@
 # ADR-002 — Seeded colleges are prospects; TPOs are invited and verified, never self-claimed
 
-- Status: accepted (2026-11-15). T2 done; T1, T3–T6 pending.
+- Status: accepted (2026-11-15). T1, T2, T4 done (T4: M4-1, 2026-11-16); T3, T5, T6 pending.
 - Related: GO_LIVE B9 (institution takeover fix), tenancy model M1–M3.
 
 ## Context
@@ -17,7 +17,7 @@ A tenant is a **university or college group**; each campus is an institution und
 | T1 | Seeded colleges get `status = 'prospect'`: not claimable, not offered in onboarding, excluded from employer search | pending (with N4) |
 | T2 | Seeded students flagged `is_synthetic = true`, `is_verified = false` | ✅ migration `20261115000000` applied 2026-11-15 (guarded: exactly 450 rows) |
 | T3 | Each prospect college added to the CRM pipeline (`leads`) | pending |
-| T4 | On a signed LoI/MSA: admin creates the tenant (university), activates its institutions, and **invites** the TPO — single-use invite, 72 h expiry, official-domain address only. Acceptance creates a `tpo` membership with `verified_by` / `verified_at` | tenancy M3 |
+| T4 | On a signed LoI/MSA: admin creates the tenant (university), activates its institutions, and **invites** the TPO — single-use invite, 72 h expiry, official-domain address only. Acceptance creates a `tpo` membership with `verified_by` / `verified_at` | ✅ M4-1: `/admin/tenancy` (activate with agreement ref → invite TPO), `/invite/[token]`; table `invites` stores only sha256(token); migration `20261116000100` |
 | T5 | Admin verification SOP (below), logged in `audit_logs` | adopt now |
 | T6 | When the real roster arrives (CSV import), delete that college's synthetic students | first real college |
 
@@ -29,7 +29,8 @@ exports and any partner (eklav) sync.
 1. Take the TPO's name and email **only** from the signed LoI/MSA or the college's official website — never from the requester.
 2. Email must be on the institution's verified domain (no webmail).
 3. Call the placement cell via the college's official switchboard number to confirm the person and role.
-4. Send the invite from the admin console; record agreement reference, caller, date and outcome in `audit_logs`.
+4. Activate the college with its agreement reference, then send the invite from `/admin/tenancy`. Activation, invite, revoke, accept and verify are written to `audit_logs` automatically (`changes.actor` = admin login); note the switchboard call (caller, date, outcome) in the CRM lead.
+6. Legacy (unverified) TPOs: verify from `/admin/tenancy` only after steps 1–3; otherwise invite the right person.
 5. Re-verify when a TPO changes; revoke the old membership the same day.
 
 ## Board review (2026-11-15)
