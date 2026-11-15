@@ -101,3 +101,12 @@ def test_resolve_tenant_has_no_first_tenant_fallback():
     orphan = [dict(STUDENT, tenant_id=None, institution_id=None)]
     with pytest.raises(NotFoundError):
         resolve_tenant_id(db(students=orphan), "s1")
+
+
+def test_coordinator_profile_id_does_not_widen_to_whole_college():
+    """B12: invited coordinators get role=institution + profile_id; their membership decides."""
+    hod = m("dept_coordinator", tenant_id="T", institution_id=7, department_id="D-ECE")
+    with pytest.raises(PermissionDeniedError):
+        authorize_student_read(db([hod]), user("institution", profile_id="7"), "s1", allow_employer=False)
+    own = dict(STUDENT, department_id="D-ECE")
+    authorize_student_read(db([hod], students=[own]), user("institution", profile_id="7"), "s1", allow_employer=False)

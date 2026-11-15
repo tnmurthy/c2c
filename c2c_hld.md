@@ -318,6 +318,8 @@ sequenceDiagram
 - **Hierarchy:** tenant (university / college group — the contracting customer) → institution (campus; `prospect | active | suspended`) → department (mapped to a shared discipline code) → cohort (program + graduation year) → student.
 - **Access:** `memberships` grant a user a role at a scope — `tenant_admin` (whole tenant), `tpo` (institution), `dept_coordinator` / `faculty_mentor` (department), `student`. Scope consistency is enforced in the database. Email domains identify institutions but never grant access on their own (B9).
 - **Employers:** platform-wide; each tenant approves which employers see its students (`tenant_employer_access`).
+- **Onboarding a college (M4):** admin activates a prospect with its LoI/MSA reference → invites the TPO (single-use, 72 h, official domain; only `sha256(token)` stored) → acceptance creates a *verified* membership. A verified TPO manages departments (rename, discipline, merge, review queue) and invites coordinators/mentors. Changes need a verified TPO, group admin or c2c admin; legacy accounts without memberships are read-only.
+- **Roster import (M4-3):** off per college until c2c records the agreement clause covering student data; CSV → checked preview (≤ 24 h) → one-transaction commit. Imported students have no login, claim their record at sign-up (same confirmed email), and are hidden from employers until then. Runbook: `docs/runbooks/college-onboarding.md`.
 - **Downstream partners (eklav):** data flows only for tenants with `tenant_partner_links.enabled = true`; SSO tokens carry tenant/institution/department/discipline claims; seeded students (`is_synthetic`) never flow.
 
 

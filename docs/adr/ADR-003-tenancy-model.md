@@ -1,6 +1,6 @@
 # ADR-003 — Tenancy model: university → campus → department → cohort, with memberships
 
-- Status: accepted (2026-11-15). M1 + M2 applied to `c2c_stg` and verified; production pending (after N4 or applied to `public` on approval). M3–M4 pending.
+- Status: accepted (2026-11-15). M1–M4 complete and in production (2026-11-16). Runbook: `docs/runbooks/college-onboarding.md`.
 - Related: ADR-001 (schemas), ADR-002 (prospects, TPO verification), GO_LIVE B9.
 
 ## Context
@@ -78,7 +78,7 @@ sat on a test tenant, and a prospect college.
 | M4-1 | ✅ (2026-11-16) College activation (agreement ref), staff invites (single use, 72 h, official domain, hash-only storage) and acceptance → verified membership; admin verification of legacy TPOs; `institution_access()` now scopes `/cohort/{id}`, `/institution/{id}/cohort` and `/verify` to the college's staff (coordinators see their departments only — previously any TPO could read any college). API `api/routers/tenancy_router.py`; UI `/admin/tenancy`, `/invite/[token]` |
 | M4-2 | ✅ (2026-11-16) `/tpo-dashboard/[id]/departments`: rename, short code, discipline, add, merge (DB function `merge_departments`, one transaction: students, cohorts, staff, invites, aliases; old name kept as alias); review queue groups unlinked students by spelling → `assign_department_alias` links them and their cohorts and remembers the spelling; verified TPO invites coordinators/mentors. Changes need a verified TPO, group admin or c2c admin (`can_manage_college`); unverified TPOs are read-only; coordinators see only their departments. Migration `20261116000200` |
 | M4-3 | ✅ (2026-11-16) CSV roster import (G7) at `/tpo-dashboard/[id]/roster`: upload → check (no writes) → confirm → `commit_roster_import` writes in one transaction (sign-up webhook skipped for the import). Off by default; c2c admin switches it on per college on `/admin/tenancy` with the agreement clause covering student data (`roster_dpa_ref`). Imported students have no login: they claim their record at sign-up (same, confirmed email; never a record linked to another login) and stay hidden from employers until then (`real_students_only` also requires `auth_id`). Previews keep student rows ≤ 24 h; commit/discard clear them. Migration `20261116000300` |
-| M4-4 | E2E tests + docs |
+| M4-4 | ✅ (2026-11-16) `tests/test_m4_journey.py` runs the whole journey through the real app in CI (activate → invite → accept → coordinator → department edit → roster on → preview → commit → scoped reads → employer can't see → squatter blocked → student claims → employer sees → audit trail); it found B12 (coordinators widened to the whole college by the legacy TPO rule), fixed. Playwright `tests/e2e/college_onboarding.spec.ts` covers the four screens (local; CI doesn't run Playwright). Runbook `docs/runbooks/college-onboarding.md` |
 | Prod | ✅ Applied to `public` 2026-11-15 (owner-approved) after a snapshot to `c2c_backup_20261115`; see `20261115000600_m_prod_apply_record.sql`. 17 college tenants + 1 test; 15 prospects, 2 active; 75 departments all mapped; 200 cohorts; demo student linked to Demo Institute |
 
 ## Board review (2026-11-15)
