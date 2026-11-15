@@ -30,16 +30,52 @@ def get_existing_urls(table: str) -> set[str]:
         print(f"[Supabase] Error fetching existing URLs: {e}")
         return set()
 
+_MISSING = object()
+
+
+def get_existing_scores(table: str) -> dict:
+    """url -> ai_score (None = stored unscored). Empty dict on error."""
+    try:
+        resp = get_client().table(table).select("url, ai_score").execute()
+        return {row["url"]: row.get("ai_score") for row in resp.data}
+    except Exception as e:
+        print(f"[Supabase] Error fetching existing scores: {e}")
+        return {}
+
+
+def split_for_scoring(items: list[dict], existing: dict) -> tuple[list[dict], list[dict]]:
+    """(to_score, already_scored): only new URLs and stored-but-unscored ones go to the AI,
+    so each run does not spend the daily Gemini cap re-scoring known jobs."""
+    to_score, done = [], []
+    for item in items:
+        prior = existing.get(item.get("url"), _MISSING)
+        (to_score if prior is _MISSING or prior is None else done).append(item)
+    return to_score, done
+
+
 def sync(table: str, items: list[dict]) -> tuple[int, int]:
-    """Upsert items into Supabase. Returns (added, skipped)."""
+    """Insert new items; fill in AI fields for rows stored unscored. Returns (added, skipped)."""
     if not items:
         return 0, 0
-    
-    existing = get_existing_urls(table)
+
+    existing = get_existing_scores(table)
     to_insert = []
-    
+    rescored = 0
+
     for item in items:
-        if item.get("url") in existing:
+        url = item.get("url")
+        if url in existing:
+            # A row stored unscored (AI was unavailable) gets its score once one exists.
+            if existing[url] is None and item.get("ai_score") is not None:
+                try:
+                    get_client().table(table).update({
+                        "ai_score": item.get("ai_score"),
+                        "ai_summary": item.get("ai_summary"),
+                        "ai_notes": item.get("ai_notes"),
+                    }).eq("url", url).execute()
+                    rescored += 1
+                except Exception as e:
+                    print(f"[Supabase] Rescore failed for {url}: {e}")
             continue
         
         # Prepare record for Supabase
@@ -56,6 +92,8 @@ def sync(table: str, items: list[dict]) -> tuple[int, int]:
         }
         to_insert.append(record)
     
+    if rescored:
+        print(f"[Supabase] Filled in scores for {rescored} previously unscored rows.")
     if not to_insert:
         return 0, len(items)
     

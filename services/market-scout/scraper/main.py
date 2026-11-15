@@ -55,15 +55,20 @@ def main():
         print("Done - No new items found.")
         return
 
-    # 3. AI Enrichment (Scoring & Summarization)
+    # 3. AI Enrichment (Scoring & Summarization) - only new or still-unscored jobs
     if ai_enabled():
         from ai.pipeline import analyse_batch
-        
+        from storage.supabase_sync import get_existing_scores, split_for_scoring
+
+        table_name = config.get("storage", {}).get("table", "market_leads")
+        to_score, already_scored = split_for_scoring(deduped, get_existing_scores(table_name))
+        print(f"🧠 Scoring {len(to_score)} new/unscored items with Gemini "
+              f"({len(already_scored)} already scored, skipped)...")
+
         context_path = PROJECT_ROOT / "profile" / "context.md"
         context = context_path.read_text() if context_path.exists() else ""
-        
-        print(f"🧠 Enriching {len(deduped)} items with Gemini AI...")
-        enriched = analyse_batch(deduped, context=context)
+
+        enriched = analyse_batch(to_score, context=context) + already_scored
     else:
         print("⚠️ AI Enrichment skipped (GEMINI_API_KEY not set).")
         enriched = deduped

@@ -34,9 +34,10 @@ def analyse_batch(items: list[dict], context: str = "") -> list[dict]:
                     "ai_notes": ai.get("notes", "")
                 })
             else:
-                # If AI fails, we still keep it but with low/zero score if mandatory
-                if not min_score:
-                    enriched.append(item)
+                # No AI verdict (call failed, refused by the daily cap, or key rejected):
+                # store the item unscored. min_score only filters items that WERE scored -
+                # otherwise an AI outage silently drops every scraped job.
+                enriched.append({**item, "ai_score": None})
 
     return enriched
 
