@@ -13,12 +13,15 @@ except ImportError:  # pragma: no cover - exercised when loaded by path
 
 _last_call = 0.0
 
-MODEL_FALLBACK = [
-    "gemini-2.0-flash-lite",
-    "gemini-2.0-flash",
-    "gemini-2.0-pro-exp",
-    "gemini-1.5-flash",
-]
+# Gemini 2.0 / 1.5 models were shut down on 2026-06-01 (Gemini API deprecations page);
+# every call to them failed. Keep this list to current models only.
+# Override with GEMINI_MODEL without a code change.
+DEFAULT_MODEL = (os.environ.get("GEMINI_MODEL") or "gemini-3.5-flash-lite").strip()
+MODEL_FALLBACK = [DEFAULT_MODEL] + [m for m in ("gemini-3.5-flash-lite", "gemini-3.5-flash") if m != DEFAULT_MODEL]
+
+# Models that returned 404 in this process (retired / unknown): never retried, so a
+# dead model cannot burn the daily call cap on every batch.
+_dead_models = set()
 
 def generate(prompt: str, model: str = "", rate_limit: float = 7.0, source: str = "gemini_scout") -> dict:
     """
@@ -37,7 +40,11 @@ def generate(prompt: str, model: str = "", rate_limit: float = 7.0, source: str 
     if elapsed < rate_limit:
         time.sleep(rate_limit - elapsed)
 
-    models = [model] + [m for m in MODEL_FALLBACK if m != model] if model else MODEL_FALLBACK
+    models = [model] + [m for m in MODEL_FALLBACK if m != model] if model else list(MODEL_FALLBACK)
+    models = [m for m in models if m not in _dead_models]
+    if not models:
+        print("[AI] No usable Gemini model (all returned 404). Set GEMINI_MODEL to a current model.")
+        return {}
     _last_call = time.time()
 
     for m in models:
@@ -60,8 +67,12 @@ def generate(prompt: str, model: str = "", rate_limit: float = 7.0, source: str 
             budget.finish(ledger_id, ok=resp.status_code == 200)
             if resp.status_code == 200:
                 return _parse(resp)
-            if resp.status_code in (429, 404):
-                print(f"[AI] Model {m} throttled or unavailable, falling back...")
+            if resp.status_code == 404:
+                _dead_models.add(m)
+                print(f"[AI] Model {m} not found (retired or unknown) - skipping it for this run.")
+                continue
+            if resp.status_code == 429:
+                print(f"[AI] Model {m} throttled, falling back...")
                 time.sleep(1)
                 continue
             print(f"[AI] Error {resp.status_code}: {resp.text[:300]}")
