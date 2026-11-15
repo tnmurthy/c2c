@@ -312,6 +312,15 @@ sequenceDiagram
 
 ---
 
+### 4.5. Tenancy, Departments & Partner Scope (ADR-001, ADR-003)
+
+- **Database namespace:** c2c lives in its own Postgres schemas in the shared Talia project — `c2c` (production, after the N4 move) and `c2c_stg` (staging). Every client takes the schema from `C2C_DB_SCHEMA` / `NEXT_PUBLIC_C2C_DB_SCHEMA`.
+- **Hierarchy:** tenant (university / college group — the contracting customer) → institution (campus; `prospect | active | suspended`) → department (mapped to a shared discipline code) → cohort (program + graduation year) → student.
+- **Access:** `memberships` grant a user a role at a scope — `tenant_admin` (whole tenant), `tpo` (institution), `dept_coordinator` / `faculty_mentor` (department), `student`. Scope consistency is enforced in the database. Email domains identify institutions but never grant access on their own (B9).
+- **Employers:** platform-wide; each tenant approves which employers see its students (`tenant_employer_access`).
+- **Downstream partners (eklav):** data flows only for tenants with `tenant_partner_links.enabled = true`; SSO tokens carry tenant/institution/department/discipline claims; seeded students (`is_synthetic`) never flow.
+
+
 ## 5. Security Architecture & Access Control
 
 | Domain | Mechanism | Implementation Guarantee |
