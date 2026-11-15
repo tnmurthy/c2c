@@ -105,6 +105,7 @@ from api.routers.sso_router import router as sso_router
 from api.routers.tenancy_router import router as tenancy_router
 from api.routers.roster_router import router as roster_router
 from api.routers.consent_router import router as consent_router
+from api.routers.partner_api_router import router as partner_api_router
 
 app.include_router(student_router, prefix="/api")
 app.include_router(employer_router, prefix="/api")
@@ -120,6 +121,7 @@ app.include_router(sso_router, prefix="/api")
 app.include_router(tenancy_router, prefix="/api")
 app.include_router(roster_router, prefix="/api")
 app.include_router(consent_router, prefix="/api")
+app.include_router(partner_api_router, prefix="/api")
 
 # --- ROOT & HEALTH ENDPOINTS ---
 

@@ -571,3 +571,89 @@ def set_roster_access(institution_id: int, body: RosterAccessBody,
                  details={"institution_id": institution_id, "enabled": body.enabled,
                           "dpa_ref": changes.get("roster_dpa_ref", inst.get("roster_dpa_ref"))})
     return {"id": institution_id, "roster_import_enabled": body.enabled}
+
+
+# ------------------------------------------------------------------ R4: partner opt-in per tenant + partner keys (admin)
+from api.domain.partner_auth import new_key  # noqa: E402
+from api.integrations.partners import PARTNERS  # noqa: E402
+
+
+def _known_partner(partner_id: str):
+    if partner_id not in PARTNERS:
+        raise HTTPException(status_code=404, detail="Unknown partner")
+
+
+@router.get("/partners")
+def partner_overview(client=Depends(require_admin_supabase), user=Depends(require_role(["admin"]))):
+    links = client.table("tenant_partner_links").select("tenant_id, partner_id, enabled, agreement_ref, enabled_at") \
+        .execute().data or []
+    keys = (client.table("partner_credentials")
+            .select("id, partner_id, key_prefix, label, created_at, last_used_at, revoked_at")
+            .order("created_at", desc=True).execute().data or [])
+    # explicit fields: the key hash never leaves the backend
+    key_fields = ("id", "partner_id", "key_prefix", "label", "created_at", "last_used_at", "revoked_at")
+    link_fields = ("tenant_id", "partner_id", "enabled", "agreement_ref", "enabled_at")
+    return {"partners": sorted(PARTNERS),
+            "links": [{f: r.get(f) for f in link_fields} for r in links],
+            "keys": [{f: r.get(f) for f in key_fields} for r in keys]}
+
+
+class PartnerLinkBody(BaseModel):
+    enabled: bool
+    agreement_ref: Optional[str] = Field(None, max_length=200)
+
+
+@router.post("/tenants/{tenant_id}/partners/{partner_id}")
+def set_partner_link(tenant_id: str, partner_id: str, body: PartnerLinkBody,
+                     client=Depends(require_admin_supabase), user=Depends(require_role(["admin"]))):
+    _known_partner(partner_id)
+    if not _one(client, "tenants", "tenant_id", tenant_id, "tenant_id"):
+        raise HTTPException(status_code=404, detail="Tenant not found")
+    row = {"tenant_id": tenant_id, "partner_id": partner_id, "enabled": body.enabled}
+    if body.enabled:
+        ref = (body.agreement_ref or "").strip()
+        if len(ref) < 3:
+            raise HTTPException(status_code=400, detail="Record the agreement that covers this partner.")
+        row.update(agreement_ref=ref, enabled_by=_uid(user), enabled_at=datetime.now(timezone.utc).isoformat())
+    existing = (client.table("tenant_partner_links").select("tenant_id").eq("tenant_id", tenant_id)
+                .eq("partner_id", partner_id).execute().data or [])
+    if existing:
+        client.table("tenant_partner_links").update(row).eq("tenant_id", tenant_id).eq("partner_id", partner_id).execute()
+    else:
+        client.table("tenant_partner_links").insert(row).execute()
+    audit.record(client, "partner.link", actor_id=_uid(user), entity_type="tenant", tenant_id=tenant_id,
+                 details={"partner_id": partner_id, "enabled": body.enabled, "agreement_ref": row.get("agreement_ref")})
+    return {"tenant_id": tenant_id, "partner_id": partner_id, "enabled": body.enabled}
+
+
+class KeyBody(BaseModel):
+    label: str = Field(..., min_length=3, max_length=80)
+
+
+@router.post("/partners/{partner_id}/keys", status_code=201)
+def create_partner_key(partner_id: str, body: KeyBody,
+                       client=Depends(require_admin_supabase), user=Depends(require_role(["admin"]))):
+    _known_partner(partner_id)
+    key, prefix, key_hash = new_key(partner_id)
+    created = client.table("partner_credentials").insert({
+        "partner_id": partner_id, "key_prefix": prefix, "key_hash": key_hash,
+        "label": body.label.strip(), "created_by": _uid(user),
+    }).execute().data[0]
+    audit.record(client, "partner.key_create", actor_id=_uid(user), entity_type="partner_credential",
+                 entity_id=created["id"], details={"partner_id": partner_id, "key_prefix": prefix})
+    return {"id": created["id"], "partner_id": partner_id, "key_prefix": prefix, "label": body.label.strip(),
+            "key": key, "shown_once": True}
+
+
+@router.post("/partners/{partner_id}/keys/{key_id}/revoke")
+def revoke_partner_key(partner_id: str, key_id: str,
+                       client=Depends(require_admin_supabase), user=Depends(require_role(["admin"]))):
+    row = _one(client, "partner_credentials", "id", key_id, "id, partner_id, revoked_at")
+    if not row or row["partner_id"] != partner_id:
+        raise HTTPException(status_code=404, detail="Key not found")
+    if not row.get("revoked_at"):
+        client.table("partner_credentials").update({"revoked_at": datetime.now(timezone.utc).isoformat(),
+                                                    "revoked_by": _uid(user)}).eq("id", key_id).execute()
+        audit.record(client, "partner.key_revoke", actor_id=_uid(user), entity_type="partner_credential",
+                     entity_id=key_id, details={"partner_id": partner_id})
+    return {"id": key_id, "revoked": True}
