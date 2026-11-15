@@ -13,6 +13,7 @@ from api.db import get_service_client
 from services.matching.scorer import ROLE_WEIGHTS, calculate_match_score, score_candidates_for_job
 from api.schemas.employer import EmployerOnboard, JobCreate, MatchStatusUpdate
 from api.exceptions import NotFoundError, PermissionDeniedError, DatabaseConnectionError
+from api.synthetic import real_students_only
 
 router = APIRouter(tags=["Employer"])
 logger = logging.getLogger("c2c_api.employer")
@@ -75,7 +76,7 @@ async def onboard_employer(employer: EmployerOnboard, client = Depends(require_a
 @router.get("/employer/candidates")
 async def get_employer_candidates(client = Depends(require_admin_supabase), current_user = Depends(require_role(["employer", "admin"]))):
     try:
-        s_res = client.table("students").select("*").execute()
+        s_res = real_students_only(client.table("students").select("*")).execute()
         if not s_res.data: return []
         ids = [s["id"] for s in s_res.data]
         a_res = client.table("assessments").select("*").in_("student_id", ids).execute()

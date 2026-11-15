@@ -14,6 +14,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Depends, Response
 from pydantic import BaseModel
 from api.deps import get_supabase_client
+from api.synthetic import real_students_only
 
 
 from services.market_intelligence import (
@@ -190,7 +191,7 @@ async def skill_gap_report(body: SkillGapReportRequest):
             client = get_supabase_client()
             if client:
                 if not students:
-                    q = client.table("students").select("id, full_name, skills, department")
+                    q = real_students_only(client.table("students").select("id, full_name, skills, department"))
                     if body.institution_id:
                         q = q.eq("institution_id", body.institution_id)
                     s_res = q.limit(100).execute()
