@@ -93,7 +93,7 @@ def main():
         }
         
         # Get all students
-        students_res = client.table("students").select("id").execute()
+        students_res = client.table("students").select("id").eq("is_synthetic", False).execute()  # ADR-002: no seeded students
         if students_res.data:
             student_ids = [s["id"] for s in students_res.data]
             assessments_res = client.table("assessments").select("*").in_("student_id", student_ids).execute()
