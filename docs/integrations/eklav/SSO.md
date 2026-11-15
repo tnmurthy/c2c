@@ -33,10 +33,16 @@ Header: `alg=RS256`, `kid` (e.g. `c2c-sso-v1`).
 | `sub` | stable c2c user id | use as the link key to the eklav user |
 | `c2c_role` | `student` \| `institution` \| `employer` | map to Student / College Admin / HR portal |
 | `c2c_profile_id` | c2c student / institution / employer record id | store; used by later data sync |
-| `c2c_institution_id` | c2c institution id (when present) | tenant mapping |
+| `c2c_scope_role` | `student` \| `tpo` \| `dept_coordinator` \| `faculty_mentor` \| `tenant_admin` | finer portal permissions inside College Admin |
+| `c2c_tenant_id` | the university / college group (contracting customer) | **eklav tenant key** |
+| `c2c_institution_id` | campus id | campus within the tenant |
+| `c2c_department_id` | department id (students, coordinators, mentors) | department scope |
+| `discipline_code` | shared code, e.g. `CSE`, `CSE-AIDS`, `ECE`, `MBA` | key learning paths on this, not on department names |
 | `email` | user email | display/contact only — **do not** use as the link key |
 
 c2c platform admins cannot launch into eklav.
+
+A launch only succeeds when the user's university has enabled eklav on the c2c side (per-tenant opt-in, `tenant_partner_links`); otherwise c2c answers 403 and no token is issued.
 
 ## Verify in Node.js (Express)
 

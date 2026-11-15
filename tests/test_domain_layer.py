@@ -80,9 +80,11 @@ def test_development_report_flags_low_aq_and_high_spq():
 
 # --- policy -------------------------------------------------------------------
 
-def test_resolve_tenant_falls_back_to_first_tenant():
-    c = FakeClient({"students": [{"tenant_id": None}], "tenants": [{"tenant_id": "t9"}]})
-    assert resolve_tenant_id(c, "s1") == "t9"
+def test_resolve_tenant_never_falls_back_to_first_tenant():
+    """ADR-003 M3: the "first tenant" fallback is gone (see test_tenancy_access.py)."""
+    c = FakeClient({"students": [{"tenant_id": None, "institution_id": None}], "tenants": [{"tenant_id": "t9"}]})
+    with pytest.raises(NotFoundError):
+        resolve_tenant_id(c, "s1")
 
 
 def test_resolve_tenant_missing_student():
@@ -118,13 +120,18 @@ def test_institution_by_profile_or_domain():
     authorize_student_read(c, user("institution", profile_id="i1"), "s1", allow_employer=False)
     with pytest.raises(PermissionDeniedError):
         authorize_student_read(c, user("institution", profile_id="i2", email="tpo@college.edu"), "s1", allow_employer=False)
+    # ADR-003 M3: a shared email domain alone no longer grants access.
     same_domain = FakeClient({"students": [{"institution_id": "iX", "email": "a@college.edu"}]})
-    authorize_student_read(same_domain, user("institution", email="tpo@college.edu"), "s1", allow_employer=False)
+    with pytest.raises(PermissionDeniedError):
+        authorize_student_read(same_domain, user("institution", email="tpo@college.edu"), "s1", allow_employer=False)
 
 
 def test_employer_gate_and_unknown_role():
-    authorize_student_read(FakeClient({}), user("employer"), "s1", allow_employer=True)
+    c = FakeClient({"students": [{"id": "s1", "institution_id": 7}]})
+    authorize_student_read(c, user("employer"), "s1", allow_employer=True)
     with pytest.raises(PermissionDeniedError):
-        authorize_student_read(FakeClient({}), user("employer"), "s1", allow_employer=False)
+        authorize_student_read(c, user("employer"), "s1", allow_employer=False)
     with pytest.raises(PermissionDeniedError):
-        authorize_student_read(FakeClient({}), user("hacker"), "s1", allow_employer=True)
+        authorize_student_read(c, user("hacker"), "s1", allow_employer=True)
+    with pytest.raises(PermissionDeniedError):  # unknown student: denied, not revealed
+        authorize_student_read(FakeClient({}), user("employer"), "s1", allow_employer=True)

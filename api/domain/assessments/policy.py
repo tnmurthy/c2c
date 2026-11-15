@@ -6,22 +6,25 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from api.exceptions import NotFoundError
+from api.domain.tenancy import institution_tenant
 
 DEFAULT_RETAKE_COOLDOWN_DAYS = 90
 
 
 def resolve_tenant_id(client, student_id: str) -> str:
-    """Student's tenant, else the first tenant. Raises NotFoundError."""
-    student_res = client.table("students").select("tenant_id").eq("id", str(student_id)).execute()
+    """The student's tenant, else their institution's tenant. Raises NotFoundError.
+
+    No "first tenant in the table" fallback (ADR-003 M3): it attached students to
+    whichever tenant happened to come first - in production an E2E test tenant.
+    """
+    student_res = client.table("students").select("tenant_id, institution_id").eq("id", str(student_id)).execute()
     if not student_res.data:
         raise NotFoundError("Student not found")
-    tenant_id = student_res.data[0].get("tenant_id")
+    row = student_res.data[0]
+    tenant_id = row.get("tenant_id") or institution_tenant(client, row.get("institution_id"))
     if tenant_id:
         return tenant_id
-    tenants_res = client.table("tenants").select("tenant_id").limit(1).execute()
-    if tenants_res.data:
-        return tenants_res.data[0]["tenant_id"]
-    raise NotFoundError("No tenants available in the system")
+    raise NotFoundError("Student is not linked to an institution yet. Ask your placement office to add you.")
 
 
 def retake_cooldown_until(client, student_id: str, tenant_id: str, now: Optional[datetime] = None) -> Optional[str]:
